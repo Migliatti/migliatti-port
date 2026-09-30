@@ -5,7 +5,7 @@ export const tiposDeProjeto = ["destaque", "outro"] as const;
 /** `destaque` = Projeto em destaque (tem Estudo de caso); `outro` = Outro projeto. */
 export type TipoDeProjeto = (typeof tiposDeProjeto)[number];
 
-export const estadosDeProjeto = ["concluido", "em-desenvolvimento"] as const;
+export const estadosDeProjeto = ["concluido", "em-desenvolvimento", "evolucao-constante", "abandonado"] as const;
 export type EstadoDeProjeto = (typeof estadosDeProjeto)[number];
 
 export const tiposDeEvidencia = [

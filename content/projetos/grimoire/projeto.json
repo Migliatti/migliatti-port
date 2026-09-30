@@ -1,7 +1,7 @@
 {
   "ordem": 3,
   "tipo": "destaque",
-  "estado": "concluido",
+  "estado": "evolucao-constante",
   "stack": [
     "Python",
     "Markdown",

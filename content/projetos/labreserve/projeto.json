@@ -1,7 +1,7 @@
 {
   "ordem": 2,
   "tipo": "destaque",
-  "estado": "concluido",
+  "estado": "abandonado",
   "stack": [
     "TypeScript",
     "React",
