@@ -4,9 +4,10 @@ const homes = [
   {
     path: "/pt",
     htmlLang: "pt-BR",
-    title: "Gabriel Migliatti | Portfólio",
+    title:
+      "Gabriel Migliatti | Desenvolvedor full-stack que usa IA para entregar sites, automações e diagnósticos",
     posicionamento:
-      "Desenvolvedor full-stack júnior, com foco em back-end e automação",
+      "Desenvolvedor full-stack que usa IA para entregar sites, automações e diagnósticos",
     selectorLabel: "Idioma",
     current: "PT",
     repositorio: "Repositório",
@@ -16,9 +17,10 @@ const homes = [
   {
     path: "/en",
     htmlLang: "en",
-    title: "Gabriel Migliatti | Portfolio",
+    title:
+      "Gabriel Migliatti | Full-stack developer who uses AI to ship websites, automations and diagnostics",
     posicionamento:
-      "Junior full-stack developer, focused on back-end and automation",
+      "Full-stack developer who uses AI to ship websites, automations and diagnostics",
     selectorLabel: "Language",
     current: "EN",
     repositorio: "Repository",
