@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { listarDestaques, obterProjeto } from "@/lib/content";
-import { getDictionary, isLocale, locales } from "@/lib/dictionary";
+import { getDictionary, isLocale, locales, type Locale } from "@/lib/dictionary";
+import { metadadosDaPagina } from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -25,7 +26,12 @@ export async function generateMetadata({
   const { lang, id } = await params;
   const projeto = obterDestaque(lang, id);
   if (!projeto) return {};
-  return { title: projeto.titulo, description: projeto.resumo };
+  return metadadosDaPagina({
+    lang: lang as Locale,
+    caminho: `/projetos/${id}`,
+    titulo: projeto.titulo,
+    descricao: projeto.resumo,
+  });
 }
 
 export default async function EstudoDeCasoPage({
@@ -51,7 +57,7 @@ export default async function EstudoDeCasoPage({
         </Link>
         <LanguageSelector current={lang} caminho={`/projetos/${projeto.id}`} />
       </header>
-      <main className="flex flex-col gap-8">
+      <main id="conteudo" tabIndex={-1} className="flex flex-col gap-8">
         <div className="flex flex-col gap-3">
           <h1 className="text-4xl font-bold tracking-tight">{projeto.titulo}</h1>
           <p className="text-lg text-muted">{projeto.resumo}</p>

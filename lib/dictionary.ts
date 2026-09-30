@@ -20,6 +20,8 @@ export type Dictionary = {
   /** Nome do idioma, usado como descrição acessível no seletor. */
   languageName: string;
   languageSelectorLabel: string;
+  /** Link de atalho para pular direto ao conteúdo (teclado). */
+  pularParaConteudo: string;
   /** Rótulos da home e do Estudo de caso. */
   projetosEmDestaque: string;
   verEstudoDeCaso: string;
@@ -64,6 +66,7 @@ const dictionaries: Record<Locale, Dictionary> = {
     label: "PT",
     languageName: "Português",
     languageSelectorLabel: "Idioma",
+    pularParaConteudo: "Pular para o conteúdo",
     projetosEmDestaque: "Projetos em destaque",
     verEstudoDeCaso: "Ver estudo de caso",
     verDemo: "Ver demo",
@@ -99,6 +102,7 @@ const dictionaries: Record<Locale, Dictionary> = {
     label: "EN",
     languageName: "English",
     languageSelectorLabel: "Language",
+    pularParaConteudo: "Skip to content",
     projetosEmDestaque: "Featured projects",
     verEstudoDeCaso: "View case study",
     verDemo: "View demo",

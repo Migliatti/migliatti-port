@@ -48,3 +48,28 @@ body {
     transform: none;
   }
 }
+
+/* Foco visível para navegação por teclado. */
+:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 3px;
+}
+
+main:focus {
+  outline: none;
+}
+
+.pular-para-conteudo {
+  position: absolute;
+  left: 1rem;
+  top: 0;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background: var(--foreground);
+  color: var(--background);
+  transform: translateY(-120%);
+}
+
+.pular-para-conteudo:focus {
+  transform: none;
+}
