@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { obterTextosHome, validarConteudo } from "@/lib/content";
 import { getDictionary, isLocale, locales } from "@/lib/dictionary";
 import "../globals.css";
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
+  // Conteúdo incompleto lança erro aqui e faz `next build` falhar.
+  validarConteudo();
   return locales.map((lang) => ({ lang }));
 }
 
@@ -14,10 +17,10 @@ export async function generateMetadata({
 }: LayoutProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  const dict = getDictionary(lang);
+  const textos = obterTextosHome(lang);
   return {
-    title: dict.title,
-    description: dict.description,
+    title: textos.titulo,
+    description: textos.descricao,
     alternates: {
       languages: Object.fromEntries(
         locales.map((locale) => [getDictionary(locale).htmlLang, `/${locale}`]),

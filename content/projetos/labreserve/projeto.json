@@ -1,0 +1,21 @@
+{
+  "ordem": 2,
+  "tipo": "destaque",
+  "estado": "abandonado",
+  "stack": [
+    "TypeScript",
+    "React",
+    "SQLite"
+  ],
+  "repositorio": "https://github.com/Migliatti/labreserve",
+  "evidencias": [
+    {
+      "tipo": "repositorio",
+      "url": "https://github.com/Migliatti/labreserve",
+      "legenda": {
+        "pt": "Código-fonte, plano de implementação e registros de verificação no GitHub",
+        "en": "Source code, implementation plan and verification records on GitHub"
+      }
+    }
+  ]
+}

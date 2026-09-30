@@ -1,0 +1,15 @@
+{
+  "titulo": "LabReserve",
+  "resumo": "Sistema web para consultar disponibilidade e reservar laboratórios e equipamentos, com testes automatizados.",
+  "estudoDeCaso": {
+    "problema": "Reservar laboratórios e equipamentos sem um sistema central leva a conflitos de horário e controle manual. O projeto também testou como construir uma aplicação funcional com agentes de IA seguindo boas práticas de engenharia.",
+    "decisoes": [
+      "TypeScript de ponta a ponta, com React na interface e SQLite como banco simples, sem servidor à parte.",
+      "Plano antes do código: escopo quebrado em histórias pequenas com critérios de aceitação.",
+      "Test-first: cada mudança de comportamento começa com um teste falhando.",
+      "Gate de validação com typecheck, lint, build, testes e E2E antes de declarar algo pronto."
+    ],
+    "resultado": "Sistema local com consulta de disponibilidade, reservas com detecção de conflito de horário, filtros, cancelamento e histórico de eventos.",
+    "aprendizado": "Usar testes, plano e revisão para manter o controle sobre código produzido com agentes de IA."
+  }
+}

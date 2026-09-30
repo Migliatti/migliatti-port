@@ -1,0 +1,40 @@
+[
+  {
+    "nome": "Development",
+    "itens": [
+      "Python",
+      "TypeScript",
+      "JavaScript",
+      "React",
+      "Node.js",
+      "HTML5",
+      "SQL",
+      "PostgreSQL",
+      "REST APIs",
+      "JSON",
+      "HTTP"
+    ]
+  },
+  {
+    "nome": "Tools",
+    "itens": [
+      "Git/GitHub",
+      "Docker",
+      "Linux",
+      "Windows",
+      "PowerShell",
+      "Vercel",
+      "Microsoft 365"
+    ]
+  },
+  {
+    "nome": "Practices",
+    "itens": [
+      "Automated testing",
+      "Technical documentation",
+      "Automation",
+      "AI agents",
+      "Incident diagnosis"
+    ]
+  }
+]

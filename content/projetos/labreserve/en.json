@@ -1,0 +1,15 @@
+{
+  "titulo": "LabReserve",
+  "resumo": "Web system to check availability and book labs and equipment, with automated tests.",
+  "estudoDeCaso": {
+    "problema": "Booking labs and equipment without a central system leads to schedule conflicts and manual control. The project also tested how to build a working app with AI agents following good engineering practices.",
+    "decisoes": [
+      "TypeScript end to end, with React for the interface and SQLite as a simple database with no separate server.",
+      "Plan before code: scope split into small stories with acceptance criteria.",
+      "Test-first: every behavior change starts with a failing test.",
+      "Validation gate with typecheck, lint, build, tests and E2E before calling anything done."
+    ],
+    "resultado": "Local system with availability search, bookings with schedule conflict detection, filters, cancellation and event history.",
+    "aprendizado": "Using tests, planning and review to stay in control of code written with AI agents."
+  }
+}

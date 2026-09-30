@@ -1,0 +1,13 @@
+{
+  "ordem": 4,
+  "tipo": "outro",
+  "estado": "concluido",
+  "stack": [
+    "HTML",
+    "CSS",
+    "JavaScript"
+  ],
+  "repositorio": "https://github.com/Migliatti/rubicon-archive",
+  "demo": "https://rubicon-archive.vercel.app",
+  "evidencias": []
+}
