@@ -146,3 +146,16 @@ it("a home em cada idioma traz o Posicionamento", () => {
     "Junior full-stack developer, focused on back-end and automation",
   );
 });
+
+describe.each(locales)("kepler-lab em %s", (lang) => {
+  it("é Projeto em destaque com Demo, repositório e Estudo de caso completo", () => {
+    const projeto = listarDestaques(lang).find((p) => p.id === "kepler-lab");
+    expect(projeto).toBeDefined();
+    expect(projeto!.demo).toBe("https://kepler-lab-gamma.vercel.app");
+    expect(projeto!.repositorio).toBe("https://github.com/Migliatti/kepler-lab");
+    expect(projeto!.estudoDeCaso.decisoes.length).toBeGreaterThan(0);
+    naoVazio(projeto!.estudoDeCaso.problema);
+    naoVazio(projeto!.estudoDeCaso.resultado);
+    naoVazio(projeto!.estudoDeCaso.aprendizado);
+  });
+});
