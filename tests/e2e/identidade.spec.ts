@@ -348,3 +348,11 @@ test.describe("movimento dos botões", () => {
     expect(nome).toBe("marca-acento");
   });
 });
+
+test("a moldura da Vitrine usa o raio de 12px dos blocos", async ({ page }) => {
+  await page.goto("/pt");
+  const raio = await page
+    .getByTestId("vitrine-peca")
+    .evaluate((n) => getComputedStyle(n).borderTopLeftRadius);
+  expect(raio).toBe("12px");
+});

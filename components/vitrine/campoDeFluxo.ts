@@ -58,8 +58,8 @@ export function iniciarPeca(canvas: HTMLCanvasElement): Peca {
   function lerCores() {
     const estilo = getComputedStyle(canvas);
     return {
-      fundo: estilo.getPropertyValue("--background").trim() || "#ffffff",
-      traco: estilo.getPropertyValue("--foreground").trim() || "#171717",
+      fundo: estilo.getPropertyValue("--background").trim() || "#f3f4ef",
+      traco: estilo.getPropertyValue("--foreground").trim() || "#11120e",
       destaque: estilo.getPropertyValue("--accent-text").trim() || "#3f5a00",
     };
   }
