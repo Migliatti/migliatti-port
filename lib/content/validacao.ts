@@ -55,6 +55,24 @@ export function link(
   return valor;
 }
 
+const CAMINHO_LOCAL = /^\/[a-z0-9]+(?:-[a-z0-9]+)*\/[a-z0-9]+(?:-[a-z0-9]+)*\.(?:svg|png|webp|gif)$/;
+
+/** Caminho de arquivo público do próprio site (ex.: `/ilustracoes/x.svg`). */
+export function caminhoLocal(
+  obj: Record<string, unknown>,
+  campo: string,
+  onde: string,
+  erros: Erros,
+): string {
+  const valor = texto(obj, campo, onde, erros);
+  if (valor !== "" && !CAMINHO_LOCAL.test(valor)) {
+    erros.push(
+      `${onde}: "${campo}" não é um caminho local válido (ex.: "/ilustracoes/nome.svg"): "${valor}"`,
+    );
+  }
+  return valor;
+}
+
 const EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Endereço de e-mail simples (sem `mailto:`), usado para montar o link. */

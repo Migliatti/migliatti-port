@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img">
+<rect width="760" height="420" fill="#f8fafc"/>
+<defs><marker id="s" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker></defs>
+<rect x="20" y="150" width="200" height="120" rx="6" fill="#fef9c3" stroke="#334155" stroke-width="1.5"/><text x="120.0" y="214.0" text-anchor="middle" font-size="13" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a" font-weight="700">skills/&lt;nome&gt;/SKILL.md</text>
+<text x="120" y="290" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">implementação canônica</text>
+<line x1="220" y1="210" x2="330" y2="65" stroke="#334155" stroke-width="1.5" marker-end="url(#s)"/>
+<rect x="335" y="30" width="405" height="70" rx="6" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="350" y="52" font-size="14" font-weight="700" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">Claude Code</text>
+<text x="350" y="72" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">.claude-plugin/plugin.json</text>
+<text x="350" y="90" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">marketplace.json: grimoire@migliatti</text>
+<line x1="220" y1="210" x2="330" y2="157" stroke="#334155" stroke-width="1.5" marker-end="url(#s)"/>
+<rect x="335" y="122" width="405" height="70" rx="6" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="350" y="144" font-size="14" font-weight="700" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">Codex</text>
+<text x="350" y="164" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">.codex-plugin/plugin.json</text>
+<text x="350" y="182" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">skills: ./skills/</text>
+<line x1="220" y1="210" x2="330" y2="249" stroke="#334155" stroke-width="1.5" marker-end="url(#s)"/>
+<rect x="335" y="214" width="405" height="70" rx="6" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="350" y="236" font-size="14" font-weight="700" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">Pi</text>
+<text x="350" y="256" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">.pi/settings.json</text>
+<text x="350" y="274" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">skills: ../skills + extensions/</text>
+<line x1="220" y1="210" x2="330" y2="341" stroke="#334155" stroke-width="1.5" marker-end="url(#s)"/>
+<rect x="335" y="306" width="405" height="70" rx="6" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
+<text x="350" y="328" font-size="14" font-weight="700" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">Hermes Agent</text>
+<text x="350" y="348" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">docs/installation/hermes-agent.md</text>
+<text x="350" y="366" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">external_dirs ou tap do GitHub</text>
+<text x="380" y="408" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">Fonte: README.md, docs/installation/ e manifestos do repositório</text>
+</svg>

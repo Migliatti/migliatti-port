@@ -1,5 +1,7 @@
 // Verifica o conteúdo real do Portfólio pela interface pública do módulo.
 
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { locales } from "../dictionary";
 import {
@@ -67,7 +69,9 @@ describe.each(locales)("conteúdo em %s", (lang) => {
       if (projeto.demo !== undefined) linkValido(projeto.demo);
       for (const evidencia of projeto.evidencias) {
         naoVazio(evidencia.legenda);
-        linkValido(evidencia.url);
+        // Ilustração é arquivo local do site; as demais apontam para http(s).
+        if (evidencia.tipo === "ilustracao") naoVazio(evidencia.url);
+        else linkValido(evidencia.url);
       }
     }
   });
@@ -210,5 +214,50 @@ describe.each(locales)("kepler-lab em %s", (lang) => {
     naoVazio(projeto!.estudoDeCaso.problema);
     naoVazio(projeto!.estudoDeCaso.resultado);
     naoVazio(projeto!.estudoDeCaso.aprendizado);
+  });
+});
+
+describe.each(locales)("grimoire em %s", (lang) => {
+  const grimoire = () => {
+    const projeto = listarDestaques(lang).find((p) => p.id === "grimoire");
+    expect(projeto).toBeDefined();
+    return projeto!;
+  };
+
+  it("é Projeto em destaque sem Demo, com repositório e Estudo de caso completo", () => {
+    const projeto = grimoire();
+    expect(projeto.demo).toBeUndefined();
+    expect(projeto.repositorio).toBe("https://github.com/Migliatti/grimoire");
+    expect(projeto.estudoDeCaso.decisoes.length).toBeGreaterThan(0);
+    naoVazio(projeto.estudoDeCaso.problema);
+    naoVazio(projeto.estudoDeCaso.resultado);
+    naoVazio(projeto.estudoDeCaso.aprendizado);
+  });
+
+  it("tem duas Ilustrações com texto alternativo e imagem existente", () => {
+    const ilustracoes = grimoire().evidencias.filter((e) => e.tipo === "ilustracao");
+    expect(ilustracoes.map((e) => e.url)).toEqual([
+      "/ilustracoes/grimoire-catalogo.svg",
+      "/ilustracoes/grimoire-empacotamento.svg",
+    ]);
+    for (const ilustracao of ilustracoes) {
+      naoVazio(ilustracao.legenda);
+      naoVazio(ilustracao.alt ?? "");
+      expect(existsSync(path.join(process.cwd(), "public", ilustracao.url))).toBe(true);
+    }
+  });
+
+  it("tem o resultado real dos testes e trechos de código do repositório", () => {
+    const evidencias = grimoire().evidencias;
+    const testes = evidencias.find((e) => e.tipo === "testes");
+    expect(testes?.saida).toContain("Ran 41 tests");
+    expect(testes?.saida).toContain("OK");
+    linkValido(testes!.url);
+    const codigos = evidencias.filter((e) => e.tipo === "codigo");
+    expect(codigos.length).toBeGreaterThan(0);
+    for (const codigo of codigos) {
+      naoVazio(codigo.trecho ?? "");
+      expect(codigo.url).toContain("https://github.com/Migliatti/grimoire/blob/");
+    }
   });
 });

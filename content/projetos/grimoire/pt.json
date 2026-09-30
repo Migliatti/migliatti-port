@@ -5,10 +5,10 @@
     "problema": "Skills e workflows de agentes de IA costumam ficar presos a uma única ferramenta e são copiados à mão de uma para outra.",
     "decisoes": [
       "Arquitetura agnóstica de plataforma: uma implementação canônica por skill e empacotamento documentado por ferramenta.",
-      "Contratos de repositório e avaliações comportamentais automatizadas.",
+      "Contratos de repositório verificados por testes em Python e avaliações comportamentais com cenários e resultados registrados.",
       "Separar implementação, documentação, testes e integração por plataforma."
     ],
-    "resultado": "Dez skills e um workflow composto, publicados como open source, com suíte de 30 testes em Python.",
+    "resultado": "Catálogo open source com 15 skills, uma delas orquestrando um workflow composto (chain), empacotado para Claude Code, Codex, Pi e Hermes Agent, com suíte de 41 testes em Python.",
     "aprendizado": "Definir contratos estáveis entre ferramentas diferentes e testar o comportamento de agentes, não só o código."
   }
 }
