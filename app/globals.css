@@ -149,6 +149,11 @@ main:focus {
   transform-origin: left;
 }
 
+/* A barra de uma palavra que não é a última cobre também o espaço depois dela. */
+.marca-acento:not(:last-child)::after {
+  right: -0.25em;
+}
+
 /*
  * Movimento da identidade (estende docs/adr/0001-animacao-de-entrada.md):
  * mesmas regras, sem atraso, opacity inicial >= 0.7, só transform e opacity.

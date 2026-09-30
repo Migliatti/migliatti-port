@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { getDictionary, type Locale } from "@/lib/dictionary";
 
 type Props = {
@@ -17,7 +18,12 @@ export function Hero({ lang, nome, posicionamento }: Props) {
   return (
     <>
       <h1 className="animacao-titulo text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-7xl">
-        <span className="marca-acento">{nome}</span>
+        {nome.split(" ").map((palavra, i) => (
+          <Fragment key={`${palavra}-${i}`}>
+            {i > 0 && " "}
+            <span className="marca-acento">{palavra}</span>
+          </Fragment>
+        ))}
       </h1>
       <p
         data-testid="posicionamento"

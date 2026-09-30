@@ -246,3 +246,30 @@ test.describe("correções da revisão final", () => {
     expect(r.barra).toBe("rgb(63, 90, 0)");
   });
 });
+
+for (const path of paths) {
+  test(`em 375px cada palavra do nome tem a própria barra, numa linha só ${path}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto(path);
+    await page.evaluate(() => document.fonts.ready);
+    const trechos = await page.locator("h1 .marca-acento").evaluateAll((els) =>
+      els.map((el) => {
+        const css = getComputedStyle(el);
+        return {
+          altura: el.getBoundingClientRect().height,
+          largura: el.getBoundingClientRect().width,
+          linha: parseFloat(css.lineHeight),
+          fonte: parseFloat(css.fontSize),
+          barra: parseFloat(getComputedStyle(el, "::after").width),
+        };
+      }),
+    );
+    expect(trechos.length).toBeGreaterThan(1);
+    for (const t of trechos) {
+      expect(t.altura).toBeLessThanOrEqual(t.linha * 1.1);
+      expect(t.barra).toBeLessThanOrEqual(t.largura + t.fonte * 0.25 + 1);
+    }
+  });
+}
