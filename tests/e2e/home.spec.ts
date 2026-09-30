@@ -9,6 +9,8 @@ const homes = [
       "Desenvolvedor full-stack júnior, com foco em back-end e automação",
     selectorLabel: "Idioma",
     current: "PT",
+    repositorio: "Repositório",
+    emDesenvolvimento: "em desenvolvimento",
     other: { label: "EN", path: "/en" },
   },
   {
@@ -19,6 +21,8 @@ const homes = [
       "Junior full-stack developer, focused on back-end and automation",
     selectorLabel: "Language",
     current: "EN",
+    repositorio: "Repository",
+    emDesenvolvimento: "in development",
     other: { label: "PT", path: "/pt" },
   },
 ] as const;
@@ -33,6 +37,39 @@ for (const home of homes) {
       await expect(page.getByTestId("posicionamento")).toHaveText(
         home.posicionamento,
       );
+    });
+
+    test("lista os 4 Outros projetos com links", async ({ page }) => {
+      await page.goto(home.path);
+
+      const itens = page.getByTestId("outro-projeto");
+      await expect(itens).toHaveCount(4);
+
+      const rubicon = page.locator('[data-projeto="rubicon-archive"]');
+      await expect(rubicon.getByRole("link", { name: "Demo" })).toHaveAttribute(
+        "href",
+        "https://rubicon-archive.vercel.app",
+      );
+      await expect(
+        rubicon.getByRole("link", { name: home.repositorio }),
+      ).toHaveAttribute("href", "https://github.com/Migliatti/rubicon-archive");
+
+      await expect(
+        page.locator('[data-projeto="sciencily"]').getByTestId("em-desenvolvimento"),
+      ).toHaveText(home.emDesenvolvimento);
+      await expect(page.getByTestId("em-desenvolvimento")).toHaveCount(1);
+
+      for (const id of [
+        "sciencily",
+        "relogio-do-lead",
+        "ong-maos-que-transformam",
+      ]) {
+        const item = page.locator(`[data-projeto="${id}"]`);
+        await expect(
+          item.getByRole("link", { name: home.repositorio }),
+        ).toHaveAttribute("href", `https://github.com/Migliatti/${id}`);
+        await expect(item.getByRole("link", { name: "Demo" })).toHaveCount(0);
+      }
     });
 
     test(`seletor de idioma leva para ${home.other.path}`, async ({ page }) => {

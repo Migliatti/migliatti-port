@@ -6,6 +6,9 @@
 //   <raiz>/home/{pt,en}.json
 //   <raiz>/experiencia/{pt,en}.json
 //   <raiz>/competencias/{pt,en}.json
+//   <raiz>/formacao/{pt,en}.json
+//   <raiz>/contato/contato.json         Canais de contato e CV público
+//   <raiz>/contato/{pt,en}.json         textos da seção de contato
 //   <raiz>/projetos/<id>/projeto.json   dados comuns aos idiomas
 //   <raiz>/projetos/<id>/{pt,en}.json   textos do projeto
 
@@ -16,15 +19,18 @@ import {
   estadosDeProjeto,
   tiposDeEvidencia,
   tiposDeProjeto,
+  type CanaisDeContato,
   type Cargo,
   type EstudoDeCaso,
   type Evidencia,
+  type Formacao,
   type GrupoDeCompetencias,
   type Projeto,
   type TextosHome,
 } from "./tipos";
 import {
   ehObjeto,
+  email,
   link,
   listaDeTextos,
   texto,
@@ -38,6 +44,8 @@ export type Conteudo = Record<
     home: TextosHome;
     experiencia: Cargo[];
     competencias: GrupoDeCompetencias[];
+    formacao: Formacao;
+    contato: CanaisDeContato;
     /** Todos os projetos, na ordem definida em `projeto.json`. */
     projetos: Projeto[];
   }
@@ -64,6 +72,7 @@ export function carregarConteudo(raiz: string): Conteudo {
   const erros: Erros = [];
 
   const projetosPorIdioma = carregarProjetos(raiz, erros);
+  const contatoPorIdioma = carregarContato(raiz, erros);
 
   const conteudo = Object.fromEntries(
     locales.map((lang) => [
@@ -72,6 +81,8 @@ export function carregarConteudo(raiz: string): Conteudo {
         home: carregarHome(raiz, lang, erros),
         experiencia: carregarExperiencia(raiz, lang, erros),
         competencias: carregarCompetencias(raiz, lang, erros),
+        formacao: carregarFormacao(raiz, lang, erros),
+        contato: contatoPorIdioma[lang],
         projetos: projetosPorIdioma[lang],
       },
     ]),
@@ -158,6 +169,81 @@ function carregarCompetencias(
       itens: listaDeTextos(item, "itens", local, erros),
     };
   });
+}
+
+function carregarFormacao(raiz: string, lang: Locale, erros: Erros): Formacao {
+  const onde = `formacao/${lang}.json`;
+  const vazia: Formacao = { curso: "", instituicao: "", previsao: "", ingles: "" };
+  const bruto = lerJson(path.join(raiz, "formacao", `${lang}.json`), raiz, erros);
+  if (bruto === undefined) return vazia;
+  if (!ehObjeto(bruto)) {
+    erros.push(`${onde}: deve ser um objeto`);
+    return vazia;
+  }
+  return {
+    curso: texto(bruto, "curso", onde, erros),
+    instituicao: texto(bruto, "instituicao", onde, erros),
+    previsao: texto(bruto, "previsao", onde, erros),
+    ingles: texto(bruto, "ingles", onde, erros),
+  };
+}
+
+const CAMINHO_DO_CV_PUBLICO = /^\/cv\/[a-z0-9]+(?:-[a-z0-9]+)*\.pdf$/;
+
+function carregarContato(raiz: string, erros: Erros): Record<Locale, CanaisDeContato> {
+  const onde = "contato/contato.json";
+  const bruto = lerJson(path.join(raiz, "contato", "contato.json"), raiz, erros);
+  const comum = ehObjeto(bruto) ? bruto : {};
+  if (bruto !== undefined && !ehObjeto(bruto)) erros.push(`${onde}: deve ser um objeto`);
+  const valido = bruto !== undefined && ehObjeto(bruto);
+
+  // Campos comuns aos idiomas: valida uma vez só.
+  const errosComuns: Erros = valido ? erros : [];
+  const enderecoDeEmail = email(comum, "email", onde, errosComuns);
+  const linkedin = link(comum, "linkedin", onde, errosComuns);
+  const github = link(comum, "github", onde, errosComuns);
+  if (linkedin !== "" && !ehDoDominio(linkedin, "linkedin.com")) {
+    errosComuns.push(`${onde}: "linkedin" deve apontar para linkedin.com`);
+  }
+  if (github !== "" && !ehDoDominio(github, "github.com")) {
+    errosComuns.push(`${onde}: "github" deve apontar para github.com`);
+  }
+  const cvs = ehObjeto(comum.cvPublico) ? comum.cvPublico : {};
+  if (valido && !ehObjeto(comum.cvPublico)) {
+    erros.push(`${onde}: "cvPublico" deve ter um caminho por idioma (${locales.join(", ")})`);
+  }
+
+  const porIdioma = {} as Record<Locale, CanaisDeContato>;
+  for (const lang of locales) {
+    const cvPublico = valido ? texto(cvs, lang, `${onde} cvPublico`, erros) : "";
+    if (cvPublico !== "" && !CAMINHO_DO_CV_PUBLICO.test(cvPublico)) {
+      erros.push(`${onde} cvPublico: "${lang}" deve ser um PDF em /cv/ (ex.: "/cv/nome-${lang}.pdf")`);
+    }
+
+    const ondeTextos = `contato/${lang}.json`;
+    const textos = lerJson(path.join(raiz, "contato", `${lang}.json`), raiz, erros);
+    if (textos !== undefined && !ehObjeto(textos)) erros.push(`${ondeTextos}: deve ser um objeto`);
+    const ok = textos !== undefined && ehObjeto(textos);
+
+    porIdioma[lang] = {
+      titulo: ok ? texto(textos, "titulo", ondeTextos, erros) : "",
+      email: enderecoDeEmail,
+      linkedin,
+      github,
+      cvPublico,
+      rotuloCvPublico: ok ? texto(textos, "rotuloCvPublico", ondeTextos, erros) : "",
+    };
+  }
+  return porIdioma;
+}
+
+function ehDoDominio(url: string, dominio: string): boolean {
+  try {
+    const host = new URL(url).hostname;
+    return host === dominio || host.endsWith(`.${dominio}`);
+  } catch {
+    return false;
+  }
 }
 
 function carregarProjetos(raiz: string, erros: Erros): Record<Locale, Projeto[]> {

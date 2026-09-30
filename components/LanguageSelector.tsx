@@ -3,9 +3,11 @@ import { getDictionary, locales, type Locale } from "@/lib/dictionary";
 
 type Props = {
   current: Locale;
+  /** Trecho da rota depois do idioma (ex.: `/projetos/kepler-lab`). */
+  caminho?: string;
 };
 
-export function LanguageSelector({ current }: Props) {
+export function LanguageSelector({ current, caminho = "" }: Props) {
   const dict = getDictionary(current);
 
   return (
@@ -22,7 +24,7 @@ export function LanguageSelector({ current }: Props) {
                 </span>
               )}
               <Link
-                href={`/${locale}`}
+                href={`/${locale}${caminho}`}
                 hrefLang={target.htmlLang}
                 lang={target.htmlLang}
                 title={target.languageName}

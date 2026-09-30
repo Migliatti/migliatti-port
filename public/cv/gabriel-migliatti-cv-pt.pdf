@@ -1,0 +1,82 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R /Lang (pt-BR) >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [6 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Length 3949 >>
+stream
+BT /F2 20 Tf 45 772.0 Td (Gabriel Migliatti) Tj ET
+BT /F1 11 Tf 45 752.3 Td (Desenvolvedor full-stack que usa IA para entregar sites, automa\347\365es e diagn\363sticos) Tj ET
+BT /F1 10 Tf 45 735.8 Td (Em busca de est\341gio ou vaga j\372nior em desenvolvimento. Tamb\351m aberto a projetos freelance.) Tj ET
+BT /F1 10 Tf 45 715.3 Td (S\343o Paulo, SP  \225  gabriel.migliatti@icloud.com) Tj ET
+BT /F1 10 Tf 45 700.8 Td (LinkedIn: https://www.linkedin.com/in/gabriel-migliatti) Tj ET
+BT /F1 10 Tf 45 686.3 Td (GitHub: https://github.com/Migliatti) Tj ET
+BT /F2 12 Tf 45 657.3 Td (Experi\352ncia profissional) Tj ET
+BT /F2 10 Tf 45 638.8 Td (Analista de Implementa\347\343o | Speedpro Consultoria, alocado em Trio Engenharia + Arquitetura) Tj ET
+BT /F1 10 Tf 45 624.3 Td (Jun/2025 \226 Atual) Tj ET
+BT /F1 10 Tf 55 609.8 Td (\225  Suporte t\351cnico e diagn\363stico de incidentes em Windows, Microsoft 365, acesso remoto, redes e) Tj ET
+BT /F1 10 Tf 65 597.3 Td (softwares corporativos.) Tj ET
+BT /F1 10 Tf 55 582.8 Td (\225  Automa\347\343o e padroniza\347\343o de rotinas administrativas com PowerShell, documenta\347\343o t\351cnica e) Tj ET
+BT /F1 10 Tf 65 570.3 Td (procedimentos reutiliz\341veis.) Tj ET
+BT /F1 10 Tf 55 555.8 Td (\225  An\341lise de logs e falhas recorrentes: eventos do Windows, autentica\347\343o, e-mail corporativo e) Tj ET
+BT /F1 10 Tf 65 543.3 Td (integra\347\365es de software.) Tj ET
+BT /F1 10 Tf 55 528.8 Td (\225  Mapeamento de equipamentos, licen\347as e ativos de TI, com base de controle em Excel e identifica\347\343o de) Tj ET
+BT /F1 10 Tf 65 516.3 Td (ferramentas subutilizadas.) Tj ET
+BT /F2 10 Tf 45 497.8 Td (Analista de Performance | Aloha011 \226 Varejo de Moda) Tj ET
+BT /F1 10 Tf 45 483.3 Td (Abr/2024 \226 Fev/2025) Tj ET
+BT /F1 10 Tf 55 468.8 Td (\225  Monitoramento de indicadores em Google Sheets, an\341lise de desvios e reportes para apoio \340 decis\343o) Tj ET
+BT /F1 10 Tf 65 456.3 Td (comercial.) Tj ET
+BT /F1 10 Tf 55 441.8 Td (\225  Mapeamento de falhas no fluxo de relacionamento com clientes e proposta de melhoria adotada pela) Tj ET
+BT /F1 10 Tf 65 429.3 Td (equipe.) Tj ET
+BT /F2 12 Tf 45 400.3 Td (Projetos em destaque) Tj ET
+BT /F2 10 Tf 45 381.8 Td (Kepler Lab | React, Vite, Three.js, TypeScript) Tj ET
+BT /F1 10 Tf 45 367.3 Td (Experi\352ncia web 3D para explorar a Via L\341ctea, com 22 destinos astron\364micos e conte\372do cient\355fico curado.) Tj ET
+BT /F1 10 Tf 45 352.8 Td (https://github.com/Migliatti/kepler-lab) Tj ET
+BT /F2 10 Tf 45 334.3 Td (LabReserve | TypeScript, React, SQLite) Tj ET
+BT /F1 10 Tf 45 319.8 Td (Sistema web para consultar disponibilidade e reservar laborat\363rios e equipamentos, com testes) Tj ET
+BT /F1 10 Tf 45 307.3 Td (automatizados.) Tj ET
+BT /F1 10 Tf 45 292.8 Td (https://github.com/Migliatti/labreserve) Tj ET
+BT /F2 10 Tf 45 274.3 Td (Grimoire | Python, Markdown, Claude Code, Codex) Tj ET
+BT /F1 10 Tf 45 259.8 Td (Cat\341logo open source de skills e workflows reutiliz\341veis para agentes de IA, instal\341vel em Claude Code e) Tj ET
+BT /F1 10 Tf 45 247.3 Td (Codex.) Tj ET
+BT /F1 10 Tf 45 232.8 Td (https://github.com/Migliatti/grimoire) Tj ET
+BT /F2 12 Tf 45 203.8 Td (Compet\352ncias t\351cnicas) Tj ET
+BT /F1 10 Tf 45 189.3 Td (Desenvolvimento: Python, TypeScript, JavaScript, React, Node.js, HTML5, SQL, PostgreSQL, APIs REST, JSON,) Tj ET
+BT /F1 10 Tf 45 176.8 Td (HTTP) Tj ET
+BT /F1 10 Tf 45 162.3 Td (Ferramentas: Git/GitHub, Docker, Linux, Windows, PowerShell, Vercel, Microsoft 365) Tj ET
+BT /F1 10 Tf 45 147.8 Td (Pr\341ticas: Testes automatizados, Documenta\347\343o t\351cnica, Automa\347\343o, Agentes de IA, Diagn\363stico de incidentes) Tj ET
+BT /F2 12 Tf 45 118.8 Td (Forma\347\343o) Tj ET
+BT /F1 10 Tf 45 104.3 Td (Ci\352ncia da Computa\347\343o | Universidade Cruzeiro do Sul \(previs\343o de conclus\343o: Jun/2030\)) Tj ET
+BT /F1 10 Tf 45 89.8 Td (Ingl\352s t\351cnico: leitura e comunica\347\343o b\341sica) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Title (Gabriel Migliatti - CV) /Author (Gabriel Migliatti) >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000072 00000 n 
+0000000129 00000 n 
+0000000226 00000 n 
+0000000328 00000 n 
+0000004329 00000 n 
+0000004465 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R /Info 7 0 R >>
+startxref
+4546
+%%EOF
