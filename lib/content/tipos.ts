@@ -10,8 +10,8 @@ export type EstadoDeProjeto = (typeof estadosDeProjeto)[number];
 
 export const tiposDeEvidencia = [
   "captura",
-  "gif",
   "ilustracao",
+  "gif",
   "codigo",
   "testes",
   "repositorio",
@@ -19,59 +19,24 @@ export const tiposDeEvidencia = [
 export type TipoDeEvidencia = (typeof tiposDeEvidencia)[number];
 
 /**
- * Evidência que é só um link com legenda: repositório, ou captura de tela e
- * GIF reais do projeto rodando.
+ * O que substitui o Demo quando não há um.
+ *
+ * - `ilustracao`: imagem desenhada por nós (não é captura de tela). `url` é um
+ *   caminho local em `/ilustracoes/` e `alt` é obrigatório.
+ * - `codigo`: `trecho` é o código exibido; `url` leva ao arquivo no repositório.
+ * - `testes`: `saida` é o resultado real da execução, quando disponível.
  */
-export type EvidenciaDeLink = {
-  tipo: "captura" | "gif" | "repositorio";
+export type Evidencia = {
+  tipo: TipoDeEvidencia;
   legenda: string;
   url: string;
+  /** Texto alternativo da imagem (obrigatório em `ilustracao`). */
+  alt?: string;
+  /** Código exibido (obrigatório em `codigo`). */
+  trecho?: string;
+  /** Saída real da execução dos testes. */
+  saida?: string;
 };
-
-/**
- * Diagrama ou desenho feito para o Portfólio (arquitetura, fluxo). Nunca é
- * apresentado como captura do projeto rodando: o site mostra o rótulo
- * "Ilustração" junto da legenda.
- */
-export type EvidenciaIlustracao = {
-  tipo: "ilustracao";
-  legenda: string;
-  /** Texto alternativo da imagem, no idioma. */
-  alt: string;
-  /** Caminho público da imagem, em `/evidencias/` (ex.: `/evidencias/x/fluxo.svg`). */
-  url: string;
-  largura: number;
-  altura: number;
-};
-
-/** Trecho de código copiado sem alteração do repositório real. */
-export type EvidenciaCodigo = {
-  tipo: "codigo";
-  legenda: string;
-  /** Caminho do arquivo no repositório (ex.: `src/domain/time-interval.ts`). */
-  arquivo: string;
-  /** Link para o arquivo (de preferência fixado num commit e nas linhas). */
-  url: string;
-  trecho: string;
-};
-
-/**
- * Testes do projeto: link para a suíte e, quando houver, a saída real de uma
- * execução (`comando` e `resultado` vêm sempre juntos).
- */
-export type EvidenciaTestes = {
-  tipo: "testes";
-  legenda: string;
-  /** Link para os testes no repositório. */
-  url: string;
-} & ({ comando: string; resultado: string } | { comando?: undefined; resultado?: undefined });
-
-/** O que substitui o Demo quando não há um. */
-export type Evidencia =
-  | EvidenciaDeLink
-  | EvidenciaIlustracao
-  | EvidenciaCodigo
-  | EvidenciaTestes;
 
 export type EstudoDeCaso = {
   problema: string;

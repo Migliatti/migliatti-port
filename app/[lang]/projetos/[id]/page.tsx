@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Evidencias } from "@/components/Evidencias";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { listarDestaques, obterProjeto } from "@/lib/content";
 import { getDictionary, isLocale, locales } from "@/lib/dictionary";
@@ -115,7 +114,85 @@ export default async function EstudoDeCasoPage({
         {projeto.evidencias.length > 0 && (
           <section className={secao}>
             <h2 className={tituloSecao}>{dict.evidencias}</h2>
-            <Evidencias evidencias={projeto.evidencias} lang={lang} />
+            <ul className="flex flex-col gap-6">
+              {projeto.evidencias.map((evidencia, i) => (
+                <li
+                  key={i}
+                  data-testid={`evidencia-${evidencia.tipo}`}
+                  className="flex flex-col gap-2"
+                >
+                  {evidencia.tipo === "ilustracao" && (
+                    <figure className="flex flex-col gap-2">
+                      {/* eslint-disable-next-line @next/next/no-img-element -- SVG local, sem otimização */}
+                      <img
+                        src={evidencia.url}
+                        alt={evidencia.alt ?? ""}
+                        className="w-full rounded border border-muted/40"
+                      />
+                      <figcaption className="text-sm text-muted">
+                        <span
+                          data-testid="rotulo-ilustracao"
+                          className="mr-2 rounded border border-muted/40 px-1.5 py-0.5 text-xs uppercase"
+                        >
+                          {dict.ilustracao}
+                        </span>
+                        {evidencia.legenda}
+                      </figcaption>
+                    </figure>
+                  )}
+                  {evidencia.tipo === "codigo" && (
+                    <>
+                      <pre className="overflow-x-auto rounded border border-muted/40 p-3 text-sm">
+                        <code>{evidencia.trecho}</code>
+                      </pre>
+                      <p className="text-sm text-muted">
+                        {evidencia.legenda}{" "}
+                        <a
+                          href={evidencia.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline underline-offset-4"
+                        >
+                          {dict.verNoRepositorio}
+                        </a>
+                      </p>
+                    </>
+                  )}
+                  {evidencia.tipo === "testes" && (
+                    <>
+                      {evidencia.saida && (
+                        <pre
+                          aria-label={dict.resultadoDosTestes}
+                          className="overflow-x-auto rounded border border-muted/40 p-3 text-sm"
+                        >
+                          <code>{evidencia.saida}</code>
+                        </pre>
+                      )}
+                      <a
+                        href={evidencia.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-4"
+                      >
+                        {evidencia.legenda}
+                      </a>
+                    </>
+                  )}
+                  {evidencia.tipo !== "ilustracao" &&
+                    evidencia.tipo !== "codigo" &&
+                    evidencia.tipo !== "testes" && (
+                      <a
+                        href={evidencia.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-4"
+                      >
+                        {evidencia.legenda}
+                      </a>
+                    )}
+                </li>
+              ))}
+            </ul>
           </section>
         )}
       </main>

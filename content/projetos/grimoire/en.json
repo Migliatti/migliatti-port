@@ -5,10 +5,10 @@
     "problema": "AI agent skills and workflows are usually tied to a single tool and copied by hand from one tool to another.",
     "decisoes": [
       "Platform-agnostic architecture: one canonical implementation per skill and documented packaging per tool.",
-      "Repository contracts and automated behavior evaluations.",
+      "Repository contracts verified by Python tests and behavior evaluations with recorded scenarios and results.",
       "Implementation, documentation, tests and platform integration kept separate."
     ],
-    "resultado": "Ten skills and one composed workflow, published as open source, with a suite of 30 Python tests.",
+    "resultado": "Open source catalog with 15 skills, one of them orchestrating a composed workflow (chain), packaged for Claude Code, Codex, Pi and Hermes Agent, with a suite of 41 Python tests.",
     "aprendizado": "Defining stable contracts across different tools and testing agent behavior, not only code."
   }
 }

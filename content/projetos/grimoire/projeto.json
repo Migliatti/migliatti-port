@@ -20,10 +20,53 @@
     },
     {
       "tipo": "testes",
-      "url": "https://github.com/Migliatti/grimoire",
+      "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/test_repository.py",
       "legenda": {
-        "pt": "Suíte com 30 testes em Python e avaliações comportamentais automatizadas",
-        "en": "Suite with 30 Python tests and automated behavior evaluations"
+        "pt": "Suíte com 41 testes em Python (tests/test_repository.py): todos passam em execução local no commit d15acbb",
+        "en": "Suite with 41 Python tests (tests/test_repository.py): all pass in a local run at commit d15acbb"
+      },
+      "saida": "$ python -m unittest discover -s tests\n...\nRan 41 tests in 0.035s\n\nOK"
+    },
+    {
+      "tipo": "ilustracao",
+      "url": "/ilustracoes/grimoire-catalogo.svg",
+      "legenda": {
+        "pt": "Estrutura do catálogo: 15 skills em skills/, 8 delas compostas pelo manifesto da chain business-direction e 7 avulsas",
+        "en": "Catalog structure: 15 skills under skills/, 8 composed by the business-direction chain manifest and 7 standalone"
+      },
+      "alt": {
+        "pt": "Diagrama com duas colunas. À esquerda, o manifesto chains/business-direction.md e as 8 skills da chain, com business-direction como entrypoint. À direita, as 7 skills avulsas: route-context, evolve-skills, model-routing-policy, project-design, web-design-psychology, github-issues e gamification-psychology.",
+        "en": "Two-column diagram. On the left, the chains/business-direction.md manifest and the chain's 8 skills, with business-direction as the entrypoint. On the right, the 7 standalone skills: route-context, evolve-skills, model-routing-policy, project-design, web-design-psychology, github-issues and gamification-psychology."
+      }
+    },
+    {
+      "tipo": "ilustracao",
+      "url": "/ilustracoes/grimoire-empacotamento.svg",
+      "legenda": {
+        "pt": "Empacotamento por plataforma: a mesma implementação canônica em skills/ é exposta a Claude Code, Codex, Pi e Hermes Agent",
+        "en": "Per-platform packaging: the same canonical implementation under skills/ is exposed to Claude Code, Codex, Pi and Hermes Agent"
+      },
+      "alt": {
+        "pt": "Diagrama com a pasta skills/<nome>/SKILL.md à esquerda, com setas para quatro plataformas: Claude Code (.claude-plugin/plugin.json e marketplace.json), Codex (.codex-plugin/plugin.json apontando para ./skills/), Pi (.pi/settings.json apontando para ../skills) e Hermes Agent (guia de instalação com external_dirs ou tap do GitHub).",
+        "en": "Diagram with the skills/<name>/SKILL.md folder on the left, with arrows to four platforms: Claude Code (.claude-plugin/plugin.json and marketplace.json), Codex (.codex-plugin/plugin.json pointing to ./skills/), Pi (.pi/settings.json pointing to ../skills) and Hermes Agent (installation guide with external_dirs or a GitHub tap)."
+      }
+    },
+    {
+      "tipo": "codigo",
+      "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/test_repository.py#L523-L531",
+      "trecho": "    def test_packaged_version_is_consistent(self) -> None:\n        claude = self.load(\".claude-plugin/plugin.json\")\n        codex = self.load(\".codex-plugin/plugin.json\")\n        marketplace = self.load(\".claude-plugin/marketplace.json\")\n        entry = next(\n            item for item in marketplace[\"plugins\"] if item[\"name\"] == PLUGIN_NAME\n        )\n        self.assertEqual(claude[\"version\"], codex[\"version\"])\n        self.assertEqual(claude[\"version\"], entry[\"version\"])",
+      "legenda": {
+        "pt": "Teste que garante a mesma versão nos manifestos de Claude Code, Codex e marketplace (tests/test_repository.py)",
+        "en": "Test that enforces the same version across the Claude Code, Codex and marketplace manifests (tests/test_repository.py)"
+      }
+    },
+    {
+      "tipo": "codigo",
+      "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/test_repository.py#L450-L455",
+      "trecho": "    def test_canonical_skills_are_vendor_neutral(self) -> None:\n        banned = (\"~/.claude\", \".codex/skills\", \"AskUserQuestion\")\n        for path in (ROOT / \"skills\").glob(\"*/SKILL.md\"):\n            text = path.read_text(encoding=\"utf-8\")\n            for token in banned:\n                self.assertNotIn(token, text, f\"{token} in {path}\")",
+      "legenda": {
+        "pt": "Teste que impede referências a uma plataforma específica nas skills canônicas (tests/test_repository.py)",
+        "en": "Test that keeps platform-specific references out of the canonical skills (tests/test_repository.py)"
       }
     }
   ]

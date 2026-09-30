@@ -109,6 +109,40 @@ describe("rejeita conteúdo incompleto", () => {
     expect(errosAoCarregar()).toContainEqual(expect.stringContaining('legenda: campo obrigatório "en"'));
   });
 
+  it("Ilustração sem texto alternativo em um dos idiomas", () => {
+    editarJson("projetos/grimoire/projeto.json", (d) => {
+      const evidencia = (d.evidencias as Record<string, unknown>[]).find(
+        (e) => e.tipo === "ilustracao",
+      )!;
+      delete (evidencia.alt as Record<string, unknown>).en;
+    });
+    expect(errosAoCarregar()).toContainEqual(expect.stringContaining('alt: campo obrigatório "en"'));
+  });
+
+  it("Ilustração com caminho que não é local", () => {
+    editarJson("projetos/grimoire/projeto.json", (d) => {
+      const evidencia = (d.evidencias as Record<string, unknown>[]).find(
+        (e) => e.tipo === "ilustracao",
+      )!;
+      evidencia.url = "https://exemplo.com/imagem.svg";
+    });
+    expect(errosAoCarregar()).toContainEqual(
+      expect.stringContaining('"url" não é um caminho local válido'),
+    );
+  });
+
+  it("Evidência de código sem trecho", () => {
+    editarJson("projetos/grimoire/projeto.json", (d) => {
+      const evidencia = (d.evidencias as Record<string, unknown>[]).find(
+        (e) => e.tipo === "codigo",
+      )!;
+      delete evidencia.trecho;
+    });
+    expect(errosAoCarregar()).toContainEqual(
+      expect.stringContaining('campo obrigatório "trecho"'),
+    );
+  });
+
   it("projeto sem Demo e sem Evidência", () => {
     editarJson("projetos/labreserve/projeto.json", (d) => {
       d.evidencias = [];
@@ -181,83 +215,6 @@ describe("rejeita conteúdo incompleto", () => {
     expect(errosAoCarregar()).toContainEqual(
       expect.stringContaining('formacao/pt.json: campo obrigatório "ingles" ausente ou vazio'),
     );
-  });
-
-  function editarEvidencia(tipo: string, editar: (ev: Record<string, unknown>) => void) {
-    editarJson("projetos/labreserve/projeto.json", (d) => {
-      const ev = (d.evidencias as Record<string, unknown>[]).find((e) => e.tipo === tipo);
-      if (!ev) throw new Error(`labreserve sem Evidência do tipo ${tipo}`);
-      editar(ev);
-    });
-  }
-
-  it("ilustração sem texto alternativo", () => {
-    editarEvidencia("ilustracao", (ev) => {
-      delete ev.alt;
-    });
-    expect(errosAoCarregar()).toContainEqual(
-      expect.stringContaining('"alt" deve ter um texto por idioma'),
-    );
-  });
-
-  it("ilustração sem texto alternativo em um dos idiomas", () => {
-    editarEvidencia("ilustracao", (ev) => {
-      delete (ev.alt as Record<string, unknown>).en;
-    });
-    expect(errosAoCarregar()).toContainEqual(expect.stringContaining('alt: campo obrigatório "en"'));
-  });
-
-  it("ilustração fora de /evidencias/ ou vinda de outro site", () => {
-    editarEvidencia("ilustracao", (ev) => {
-      ev.url = "https://exemplo.com/imagem.png";
-    });
-    expect(errosAoCarregar()).toContainEqual(
-      expect.stringContaining('"url" de ilustração deve ser uma imagem em /evidencias/'),
-    );
-  });
-
-  it("ilustração sem dimensões", () => {
-    editarEvidencia("ilustracao", (ev) => {
-      delete ev.largura;
-      ev.altura = -1;
-    });
-    const erros = errosAoCarregar();
-    expect(erros).toContainEqual(expect.stringContaining('"largura" deve ser um inteiro positivo'));
-    expect(erros).toContainEqual(expect.stringContaining('"altura" deve ser um inteiro positivo'));
-  });
-
-  it("trecho de código sem o código ou sem o arquivo", () => {
-    editarEvidencia("codigo", (ev) => {
-      ev.trecho = "";
-      delete ev.arquivo;
-    });
-    const erros = errosAoCarregar();
-    expect(erros).toContainEqual(expect.stringContaining('campo obrigatório "trecho"'));
-    expect(erros).toContainEqual(expect.stringContaining('campo obrigatório "arquivo"'));
-  });
-
-  it("trecho de código com link inválido", () => {
-    editarEvidencia("codigo", (ev) => {
-      ev.url = "src/domain/time-interval.ts";
-    });
-    expect(errosAoCarregar()).toContainEqual(expect.stringContaining('"url" não é um link http(s) válido'));
-  });
-
-  it("resultado de testes sem a saída ou sem o comando", () => {
-    editarEvidencia("testes", (ev) => {
-      delete ev.resultado;
-      ev.comando = " ";
-    });
-    const erros = errosAoCarregar();
-    expect(erros).toContainEqual(expect.stringContaining('campo obrigatório "resultado"'));
-    expect(erros).toContainEqual(expect.stringContaining('campo obrigatório "comando"'));
-  });
-
-  it("tipo de Evidência desconhecido", () => {
-    editarEvidencia("repositorio", (ev) => {
-      ev.tipo = "screenshot";
-    });
-    expect(errosAoCarregar()).toContainEqual(expect.stringContaining('"tipo" deve ser um de'));
   });
 
   it("lista todos os problemas de uma vez", () => {

@@ -10,6 +10,7 @@ const idiomas = [
     problema: "Problema",
     evidencias: "Evidências",
     ilustracao: "Ilustração",
+    verNoRepositorio: "Ver no repositório",
     outro: "EN",
   },
   {
@@ -19,11 +20,12 @@ const idiomas = [
     problema: "Problem",
     evidencias: "Evidence",
     ilustracao: "Illustration",
+    verNoRepositorio: "View in repository",
     outro: "PT",
   },
 ] as const;
 
-for (const { lang, outraLang, rascunho, problema, evidencias, ilustracao, outro } of idiomas) {
+for (const { lang, outraLang, rascunho, problema, evidencias, ilustracao, verNoRepositorio, outro } of idiomas) {
   test.describe(`labreserve /${lang}`, () => {
     test("card na home leva ao Estudo de caso e não tem Demo", async ({ page }) => {
       await page.goto(`/${lang}`);
@@ -67,7 +69,7 @@ for (const { lang, outraLang, rascunho, problema, evidencias, ilustracao, outro 
       }
       await expect(figuras.first().locator("img")).toHaveAttribute(
         "src",
-        /\/evidencias\/labreserve\/arquitetura\.svg$/,
+        /\/ilustracoes\/labreserve-arquitetura\.svg$/,
       );
     });
 
@@ -79,7 +81,7 @@ for (const { lang, outraLang, rascunho, problema, evidencias, ilustracao, outro 
       await expect(codigos.first().locator("pre code")).toContainText(
         "return this.startAt < other.endAt && this.endAt > other.startAt;",
       );
-      await expect(codigos.first().getByRole("link", { name: "src/domain/time-interval.ts" }))
+      await expect(codigos.first().getByRole("link", { name: verNoRepositorio }))
         .toHaveAttribute("href", new RegExp(`^${REPOSITORIO}/blob/`));
 
       const testes = page.getByTestId("evidencia-testes");
@@ -89,7 +91,7 @@ for (const { lang, outraLang, rascunho, problema, evidencias, ilustracao, outro 
       await expect(testes.nth(0).locator("pre")).toContainText("ℹ fail 0");
       await expect(testes.nth(1).locator("pre")).toContainText("3 passed");
 
-      await expect(page.getByTestId("evidencia-repositorio")).toHaveAttribute("href", REPOSITORIO);
+      await expect(page.getByTestId("evidencia-repositorio").getByRole("link")).toHaveAttribute("href", REPOSITORIO);
     });
   });
 }

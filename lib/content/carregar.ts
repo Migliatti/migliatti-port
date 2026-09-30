@@ -29,6 +29,7 @@ import {
   type TextosHome,
 } from "./tipos";
 import {
+  caminhoLocal,
   ehObjeto,
   email,
   link,
@@ -314,9 +315,43 @@ function carregarProjeto(
 
   const porIdioma = {} as Record<Locale, Projeto>;
   for (const lang of locales) {
-    const evidencias: Evidencia[] = listaEvidencias.map((ev, i) =>
-      carregarEvidencia(ev, `${onde} evidencias[${i}]`, lang, erros),
-    );
+    const evidencias: Evidencia[] = listaEvidencias.map((ev, i) => {
+      const local = `${onde} evidencias[${i}]`;
+      if (!ehObjeto(ev)) {
+        if (lang === locales[0]) erros.push(`${local}: deve ser um objeto`);
+        return { tipo: "repositorio", legenda: "", url: "" };
+      }
+      // Campos comuns aos idiomas: valida uma vez só.
+      const errosComuns: Erros = lang === locales[0] ? erros : [];
+      const legendas = ehObjeto(ev.legenda) ? ev.legenda : {};
+      if (!ehObjeto(ev.legenda) && lang === locales[0]) {
+        erros.push(`${local}: "legenda" deve ter um texto por idioma (${locales.join(", ")})`);
+      }
+      const tipoDaEvidencia = umDe(ev, "tipo", tiposDeEvidencia, local, errosComuns);
+      const ilustracao = tipoDaEvidencia === "ilustracao";
+      const evidencia: Evidencia = {
+        tipo: tipoDaEvidencia,
+        url: ilustracao
+          ? caminhoLocal(ev, "url", local, errosComuns)
+          : link(ev, "url", local, errosComuns),
+        legenda: texto(legendas, lang, `${local} legenda`, erros),
+      };
+      if (ilustracao) {
+        // O texto alternativo é por idioma, como a legenda.
+        const alts = ehObjeto(ev.alt) ? ev.alt : {};
+        if (!ehObjeto(ev.alt) && lang === locales[0]) {
+          erros.push(`${local}: "alt" deve ter um texto por idioma (${locales.join(", ")})`);
+        }
+        evidencia.alt = texto(alts, lang, `${local} alt`, erros);
+      }
+      if (tipoDaEvidencia === "codigo") {
+        evidencia.trecho = texto(ev, "trecho", local, errosComuns);
+      }
+      if (tipoDaEvidencia === "testes" && "saida" in ev) {
+        evidencia.saida = texto(ev, "saida", local, errosComuns);
+      }
+      return evidencia;
+    });
 
     const textos = carregarTextosDoProjeto(raiz, id, lang, tipo, erros);
     const comum = {
@@ -345,94 +380,6 @@ function carregarProjeto(
   }
 
   return { ordem, id, porIdioma };
-}
-
-const CAMINHO_DE_ILUSTRACAO = /^\/evidencias\/[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*\.(?:svg|png|webp)$/;
-
-/** Texto obrigatório com uma versão por idioma (`{ "pt": ..., "en": ... }`). */
-function textoPorIdioma(
-  ev: Record<string, unknown>,
-  campo: string,
-  local: string,
-  lang: Locale,
-  erros: Erros,
-): string {
-  const textos = ehObjeto(ev[campo]) ? ev[campo] : {};
-  if (!ehObjeto(ev[campo]) && lang === locales[0]) {
-    erros.push(`${local}: "${campo}" deve ter um texto por idioma (${locales.join(", ")})`);
-  }
-  return texto(textos, lang, `${local} ${campo}`, erros);
-}
-
-function dimensao(
-  ev: Record<string, unknown>,
-  campo: string,
-  local: string,
-  erros: Erros,
-): number {
-  const valor = ev[campo];
-  if (typeof valor !== "number" || !Number.isInteger(valor) || valor <= 0) {
-    erros.push(`${local}: campo obrigatório "${campo}" deve ser um inteiro positivo (pixels)`);
-    return 0;
-  }
-  return valor;
-}
-
-function carregarEvidencia(
-  ev: unknown,
-  local: string,
-  lang: Locale,
-  erros: Erros,
-): Evidencia {
-  if (!ehObjeto(ev)) {
-    if (lang === locales[0]) erros.push(`${local}: deve ser um objeto`);
-    return { tipo: "repositorio", legenda: "", url: "" };
-  }
-  // Campos comuns aos idiomas: valida uma vez só.
-  const errosComuns: Erros = lang === locales[0] ? erros : [];
-  const tipo = umDe(ev, "tipo", tiposDeEvidencia, local, errosComuns);
-  const legenda = textoPorIdioma(ev, "legenda", local, lang, erros);
-
-  switch (tipo) {
-    case "ilustracao": {
-      const url = texto(ev, "url", local, errosComuns);
-      if (url !== "" && !CAMINHO_DE_ILUSTRACAO.test(url)) {
-        errosComuns.push(
-          `${local}: "url" de ilustração deve ser uma imagem em /evidencias/ (ex.: "/evidencias/projeto/fluxo.svg")`,
-        );
-      }
-      return {
-        tipo,
-        legenda,
-        alt: textoPorIdioma(ev, "alt", local, lang, erros),
-        url,
-        largura: dimensao(ev, "largura", local, errosComuns),
-        altura: dimensao(ev, "altura", local, errosComuns),
-      };
-    }
-    case "codigo":
-      return {
-        tipo,
-        legenda,
-        arquivo: texto(ev, "arquivo", local, errosComuns),
-        url: link(ev, "url", local, errosComuns),
-        trecho: texto(ev, "trecho", local, errosComuns),
-      };
-    case "testes": {
-      const url = link(ev, "url", local, errosComuns);
-      // A saída é opcional, mas comando e resultado vêm sempre juntos.
-      if (!("comando" in ev) && !("resultado" in ev)) return { tipo, legenda, url };
-      return {
-        tipo,
-        legenda,
-        url,
-        comando: texto(ev, "comando", local, errosComuns),
-        resultado: texto(ev, "resultado", local, errosComuns),
-      };
-    }
-    default:
-      return { tipo, legenda, url: link(ev, "url", local, errosComuns) };
-  }
 }
 
 function carregarTextosDoProjeto(

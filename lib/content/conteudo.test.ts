@@ -34,12 +34,6 @@ function linkValido(valor: string) {
   expect(new URL(valor).protocol).toMatch(/^https?:$/);
 }
 
-/** Ilustrações são arquivos do próprio site, em public/evidencias/. */
-function ilustracaoPublicada(url: string) {
-  expect(url).toMatch(/^\/evidencias\//);
-  expect(existsSync(path.join(process.cwd(), "public", url)), url).toBe(true);
-}
-
 function todosOsProjetos(lang: (typeof locales)[number]): Projeto[] {
   return [...listarDestaques(lang), ...listarOutrosProjetos(lang)];
 }
@@ -75,7 +69,8 @@ describe.each(locales)("conteúdo em %s", (lang) => {
       if (projeto.demo !== undefined) linkValido(projeto.demo);
       for (const evidencia of projeto.evidencias) {
         naoVazio(evidencia.legenda);
-        if (evidencia.tipo === "ilustracao") ilustracaoPublicada(evidencia.url);
+        // Ilustração é arquivo local do site; as demais apontam para http(s).
+        if (evidencia.tipo === "ilustracao") naoVazio(evidencia.url);
         else linkValido(evidencia.url);
       }
     }
@@ -222,38 +217,79 @@ describe.each(locales)("kepler-lab em %s", (lang) => {
   });
 });
 
+describe.each(locales)("grimoire em %s", (lang) => {
+  const grimoire = () => {
+    const projeto = listarDestaques(lang).find((p) => p.id === "grimoire");
+    expect(projeto).toBeDefined();
+    return projeto!;
+  };
+
+  it("é Projeto em destaque sem Demo, com repositório e Estudo de caso completo", () => {
+    const projeto = grimoire();
+    expect(projeto.demo).toBeUndefined();
+    expect(projeto.repositorio).toBe("https://github.com/Migliatti/grimoire");
+    expect(projeto.estudoDeCaso.decisoes.length).toBeGreaterThan(0);
+    naoVazio(projeto.estudoDeCaso.problema);
+    naoVazio(projeto.estudoDeCaso.resultado);
+    naoVazio(projeto.estudoDeCaso.aprendizado);
+  });
+
+  it("tem duas Ilustrações com texto alternativo e imagem existente", () => {
+    const ilustracoes = grimoire().evidencias.filter((e) => e.tipo === "ilustracao");
+    expect(ilustracoes.map((e) => e.url)).toEqual([
+      "/ilustracoes/grimoire-catalogo.svg",
+      "/ilustracoes/grimoire-empacotamento.svg",
+    ]);
+    for (const ilustracao of ilustracoes) {
+      naoVazio(ilustracao.legenda);
+      naoVazio(ilustracao.alt ?? "");
+      expect(existsSync(path.join(process.cwd(), "public", ilustracao.url))).toBe(true);
+    }
+  });
+
+  it("tem o resultado real dos testes e trechos de código do repositório", () => {
+    const evidencias = grimoire().evidencias;
+    const testes = evidencias.find((e) => e.tipo === "testes");
+    expect(testes?.saida).toContain("Ran 41 tests");
+    expect(testes?.saida).toContain("OK");
+    linkValido(testes!.url);
+    const codigos = evidencias.filter((e) => e.tipo === "codigo");
+    expect(codigos.length).toBeGreaterThan(0);
+    for (const codigo of codigos) {
+      naoVazio(codigo.trecho ?? "");
+      expect(codigo.url).toContain("https://github.com/Migliatti/grimoire/blob/");
+    }
+  });
+});
+
 describe.each(locales)("labreserve em %s", (lang) => {
   const REPOSITORIO = "https://github.com/Migliatti/labreserve";
-
-  function labreserve() {
+  const labreserve = () => {
     const projeto = listarDestaques(lang).find((p) => p.id === "labreserve");
     expect(projeto).toBeDefined();
     return projeto!;
-  }
+  };
 
   it("é Projeto em destaque sem Demo, com repositório e Estudo de caso completo", () => {
     const projeto = labreserve();
     expect(projeto.demo).toBeUndefined();
     expect(projeto.repositorio).toBe(REPOSITORIO);
-    naoVazio(projeto.titulo);
-    naoVazio(projeto.resumo);
+    expect(projeto.estudoDeCaso.decisoes.length).toBeGreaterThan(0);
     naoVazio(projeto.estudoDeCaso.problema);
     naoVazio(projeto.estudoDeCaso.resultado);
     naoVazio(projeto.estudoDeCaso.aprendizado);
-    expect(projeto.estudoDeCaso.decisoes.length).toBeGreaterThan(0);
   });
 
-  it("tem ilustrações de arquitetura e de fluxo de reserva, com texto alternativo", () => {
+  it("tem duas Ilustrações com texto alternativo e imagem existente", () => {
     const ilustracoes = labreserve().evidencias.filter((e) => e.tipo === "ilustracao");
     expect(ilustracoes.map((e) => e.url)).toEqual([
-      "/evidencias/labreserve/arquitetura.svg",
-      "/evidencias/labreserve/fluxo-de-reserva.svg",
+      "/ilustracoes/labreserve-arquitetura.svg",
+      "/ilustracoes/labreserve-fluxo-de-reserva.svg",
     ]);
     for (const ilustracao of ilustracoes) {
-      naoVazio(ilustracao.alt);
       naoVazio(ilustracao.legenda);
-      expect(ilustracao.largura).toBeGreaterThan(0);
-      expect(ilustracao.altura).toBeGreaterThan(0);
+      naoVazio(ilustracao.alt ?? "");
+      expect(existsSync(path.join(process.cwd(), "public", ilustracao.url))).toBe(true);
     }
   });
 
@@ -263,29 +299,19 @@ describe.each(locales)("labreserve em %s", (lang) => {
     expect(tipos).not.toContain("gif");
   });
 
-  it("tem trechos de código com arquivo e link para o repositório real", () => {
-    const codigos = labreserve().evidencias.filter((e) => e.tipo === "codigo");
+  it("tem trechos do código real, os resultados reais dos testes e o repositório", () => {
+    const evidencias = labreserve().evidencias;
+    const codigos = evidencias.filter((e) => e.tipo === "codigo");
     expect(codigos.length).toBeGreaterThan(0);
     for (const codigo of codigos) {
-      naoVazio(codigo.trecho);
+      naoVazio(codigo.trecho ?? "");
       expect(codigo.url.startsWith(`${REPOSITORIO}/blob/`)).toBe(true);
-      expect(codigo.url).toContain(`/${codigo.arquivo}#L`);
     }
-    expect(codigos.map((c) => c.arquivo)).toContain("src/domain/time-interval.ts");
-  });
-
-  it("tem resultados de testes unitários/API e E2E, todos aprovados", () => {
-    const testes = labreserve().evidencias.filter((e) => e.tipo === "testes");
-    expect(testes.map((t) => t.comando)).toEqual(["npm test", "npm run test:e2e"]);
-    const [unitarios, e2e] = testes;
-    expect(unitarios.resultado).toMatch(/^ℹ pass 19$/m);
-    expect(unitarios.resultado).toMatch(/^ℹ fail 0$/m);
-    expect(e2e.resultado).toMatch(/^3 passed/m);
-    for (const teste of testes) expect(teste.url.startsWith(REPOSITORIO)).toBe(true);
-  });
-
-  it("tem link do repositório como Evidência", () => {
-    const repositorio = labreserve().evidencias.find((e) => e.tipo === "repositorio");
-    expect(repositorio?.url).toBe(REPOSITORIO);
+    const testes = evidencias.filter((e) => e.tipo === "testes");
+    expect(testes.map((t) => t.saida?.split("\n")[0])).toEqual(["$ npm test", "$ npm run test:e2e"]);
+    expect(testes[0].saida).toMatch(/^ℹ pass 19$/m);
+    expect(testes[0].saida).toMatch(/^ℹ fail 0$/m);
+    expect(testes[1].saida).toMatch(/^3 passed/m);
+    expect(evidencias.find((e) => e.tipo === "repositorio")?.url).toBe(REPOSITORIO);
   });
 });
