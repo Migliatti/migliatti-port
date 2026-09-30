@@ -32,7 +32,11 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           {textos.posicionamento}
         </p>
         <OutrosProjetos lang={lang} />
-        <section aria-labelledby="destaques" className="mt-12 flex flex-col gap-4">
+        <section
+          aria-labelledby="destaques"
+          data-testid="projetos-em-destaque"
+          className="animacao-entrada mt-12 flex flex-col gap-4"
+        >
           <h2 id="destaques" className="text-2xl font-semibold">
             {dict.projetosEmDestaque}
           </h2>

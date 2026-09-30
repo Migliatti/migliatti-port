@@ -12,7 +12,7 @@ export function ExperienciaProfissional({ lang }: { lang: Locale }) {
     <section
       aria-labelledby="experiencia"
       data-testid="experiencia"
-      className="mt-8"
+      className="animacao-entrada mt-8"
     >
       <h2 id="experiencia" className="text-2xl font-semibold tracking-tight">
         {t.secoes.experiencia}

@@ -16,7 +16,7 @@ export function Contato({ lang }: Props) {
       id="contato"
       aria-labelledby="contato-titulo"
       data-testid="contato"
-      className="mt-12 flex flex-col gap-4"
+      className="animacao-entrada mt-12 flex flex-col gap-4"
     >
       <h2 id="contato-titulo" className="text-2xl font-semibold">
         {contato.titulo}
