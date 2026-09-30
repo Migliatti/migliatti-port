@@ -154,6 +154,13 @@ main:focus {
   right: -0.25em;
 }
 
+/* Hover só onde existe ponteiro que passa o mouse: no toque o botão não fica levantado. */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .botao:hover {
+    transform: translateY(-3px);
+  }
+}
+
 /*
  * Movimento da identidade (estende docs/adr/0001-animacao-de-entrada.md):
  * mesmas regras, sem atraso, opacity inicial >= 0.7, só transform e opacity.
@@ -161,10 +168,6 @@ main:focus {
 @media (prefers-reduced-motion: no-preference) {
   .botao {
     transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .botao:hover {
-    transform: translateY(-3px);
   }
 
   .botao:active {

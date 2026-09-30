@@ -273,3 +273,78 @@ for (const path of paths) {
     }
   });
 }
+
+test.describe("movimento dos botões", () => {
+  const transformar = (n: Element) => getComputedStyle(n).transform;
+
+  test("hover eleva 3px e o clique afunda, com movimento normal", async ({
+    page,
+  }) => {
+    await page.goto("/pt");
+    const botao = page.locator("a.botao-secundario").first();
+    await botao.hover();
+    await expect
+      .poll(() => botao.evaluate(transformar))
+      .toBe("matrix(1, 0, 0, 1, 0, -3)");
+    await page.mouse.down();
+    await expect
+      .poll(() => botao.evaluate(transformar))
+      .toBe("matrix(0.97, 0, 0, 0.97, 0, 0)");
+    await page.mouse.up();
+  });
+
+  test("com movimento reduzido hover e clique não movem o botão", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/pt");
+    const botao = page.locator("a.botao-secundario").first();
+    await botao.hover();
+    expect(await botao.evaluate(transformar)).toBe("none");
+    await page.mouse.down();
+    expect(await botao.evaluate(transformar)).toBe("none");
+    await page.mouse.up();
+  });
+
+  test("a elevação por hover só vale para ponteiro com hover", async ({
+    page,
+  }) => {
+    await page.goto("/pt");
+    const condicoes = await page.evaluate(() => {
+      const achadas: string[] = [];
+      const visitar = (lista: CSSRuleList, pais: string[]) => {
+        for (const regra of Array.from(lista)) {
+          const nova =
+            regra instanceof CSSMediaRule
+              ? [...pais, regra.media.mediaText]
+              : pais;
+          if (
+            regra instanceof CSSStyleRule &&
+            regra.selectorText.includes(".botao:hover")
+          ) {
+            achadas.push(pais.join(" | "));
+          }
+          if ("cssRules" in regra) {
+            visitar((regra as CSSGroupingRule).cssRules, nova);
+          }
+        }
+      };
+      for (const folha of Array.from(document.styleSheets)) {
+        visitar(folha.cssRules, []);
+      }
+      return achadas;
+    });
+    expect(condicoes.length).toBeGreaterThan(0);
+    for (const c of condicoes) expect(c).toContain("hover: hover");
+  });
+
+  test("a barra do nome anima com movimento normal", async ({ page }) => {
+    await page.goto("/pt");
+    const nome = await page.evaluate(
+      () =>
+        getComputedStyle(document.querySelector("h1 .marca-acento")!, "::after")
+          .animationName,
+    );
+    expect(nome).toBe("marca-acento");
+  });
+});
