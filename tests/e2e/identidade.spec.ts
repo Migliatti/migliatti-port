@@ -114,6 +114,7 @@ for (const path of paths) {
     test("em 320px o hero não gera rolagem horizontal", async ({ page }) => {
       await page.setViewportSize({ width: 320, height: 700 });
       await page.goto(path);
+      await page.evaluate(() => document.fonts.ready);
       const estoura = await page.evaluate(
         () => document.documentElement.scrollWidth > window.innerWidth,
       );
@@ -121,22 +122,34 @@ for (const path of paths) {
     });
 
     for (const tema of ["dark", "light"] as const) {
-      test(`botão primário tem foco visível no tema ${tema}`, async ({
-        page,
-      }) => {
-        await page.emulateMedia({ colorScheme: tema });
-        await page.goto(path);
-        const primario = page.locator("a.botao-primario").first();
-        await primario.focus();
-        await page.keyboard.press("Tab");
-        await page.keyboard.press("Shift+Tab");
-        const foco = await primario.evaluate((n) => {
-          const css = getComputedStyle(n);
-          return { estilo: css.outlineStyle, largura: css.outlineWidth };
+      for (const [nome, seletor] of [
+        ["primário", "a.botao-primario"],
+        ["secundário", "a.botao-secundario"],
+        ["do cartão", '[data-testid="projeto-card-kepler-lab"] a.botao'],
+      ] as const) {
+        test(`botão ${nome} tem foco visível e contrastado no tema ${tema}`, async ({
+          page,
+        }) => {
+          await page.emulateMedia({ colorScheme: tema });
+          await page.goto(path);
+          const botao = page.locator(seletor).first();
+          await botao.focus();
+          await page.keyboard.press("Tab");
+          await page.keyboard.press("Shift+Tab");
+          const foco = await botao.evaluate((n) => {
+            const css = getComputedStyle(n);
+            return {
+              estilo: css.outlineStyle,
+              largura: parseFloat(css.outlineWidth),
+              cor: css.outlineColor,
+              texto: getComputedStyle(document.body).color,
+            };
+          });
+          expect(foco.estilo).not.toBe("none");
+          expect(foco.largura).toBeGreaterThanOrEqual(2);
+          expect(foco.cor).toBe(foco.texto);
         });
-        expect(foco.estilo).not.toBe("none");
-        expect(foco.largura).not.toBe("0px");
-      });
+      }
     }
   });
 }
@@ -356,3 +369,19 @@ test("a moldura da Vitrine usa o raio de 12px dos blocos", async ({ page }) => {
     .evaluate((n) => getComputedStyle(n).borderTopLeftRadius);
   expect(raio).toBe("12px");
 });
+
+for (const path of paths) {
+  test(`com as fontes bloqueadas o texto continua legível ${path}`, async ({
+    page,
+  }) => {
+    await page.route("**/*.woff2", (rota) => rota.abort());
+    await page.goto(path);
+    const h1 = page.locator("h1").first();
+    await expect(h1).toBeVisible();
+    await expect(h1).toHaveText("Gabriel Migliatti");
+    await expect(page.getByTestId("posicionamento")).toBeVisible();
+    expect(
+      await h1.evaluate((n) => getComputedStyle(n).fontFamily),
+    ).toContain("ui-sans-serif");
+  });
+}
