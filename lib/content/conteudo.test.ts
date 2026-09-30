@@ -197,11 +197,22 @@ it("todo projeto existe em português e em inglês, com os mesmos dados comuns",
 
 it("a home em cada idioma traz o Posicionamento", () => {
   expect(obterTextosHome("pt").posicionamento).toBe(
-    "Desenvolvedor full-stack júnior, com foco em back-end e automação",
+    "Desenvolvedor full-stack que usa IA para entregar sites, automações e diagnósticos",
   );
   expect(obterTextosHome("en").posicionamento).toBe(
-    "Junior full-stack developer, focused on back-end and automation",
+    "Full-stack developer who uses AI to ship websites, automations and diagnostics",
   );
+});
+
+describe.each(locales)("SEO da home em %s", (lang) => {
+  it("título e descrição acompanham o Posicionamento e não citam nível", () => {
+    const { posicionamento, titulo, descricao } = obterTextosHome(lang);
+    expect(titulo).toContain(posicionamento);
+    expect(descricao.toLowerCase()).toContain(posicionamento.toLowerCase());
+    for (const texto of [posicionamento, titulo, descricao]) {
+      expect(texto).not.toMatch(/j[uú]nior/i);
+    }
+  });
 });
 
 describe.each(locales)("kepler-lab em %s", (lang) => {
