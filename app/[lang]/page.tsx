@@ -27,7 +27,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           {textos.nome}
         </h1>
-        <p data-testid="posicionamento" className="text-lg text-muted sm:text-xl">
+        <p data-testid="posicionamento" className="animacao-entrada text-lg text-muted sm:text-xl">
           {textos.posicionamento}
         </p>
         <OutrosProjetos lang={lang} />

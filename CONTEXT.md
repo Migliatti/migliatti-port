@@ -40,6 +40,10 @@ _Avoid_: Currículo completo, CV atual
 Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. É o único lugar onde a animação pode ser o conteúdo. O resto do site também tem várias animações, mas nenhuma atrasa ou esconde texto: o conteúdo já está legível antes de animar. Toda animação respeita `prefers-reduced-motion` e não pesa no celular de quem lê.
 _Avoid_: Demo (já significa projeto publicado), Galeria
 
+**Animação de entrada**:
+Animação curta (transform e opacity) aplicada com a classe `animacao-entrada`. Texto legível desde o primeiro quadro, desligada com `prefers-reduced-motion`. Regra completa em `docs/adr/0001-animacao-de-entrada.md`.
+_Avoid_: Efeito, transição de página
+
 **Experiência profissional**:
 Seção curta com os cargos de Speedpro/Trio Engenharia e Aloha011, focada em automação e diagnóstico.
 _Avoid_: Trabalhos, histórico
