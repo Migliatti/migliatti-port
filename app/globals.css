@@ -7,6 +7,7 @@
   --accent: #c4f25a;
   --on-accent: #11120e;
   --accent-text: #3f5a00;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -29,6 +30,7 @@
     --accent: #c4f25a;
     --on-accent: #0e0f0c;
     --accent-text: #c4f25a;
+    color-scheme: dark;
   }
 }
 
@@ -44,6 +46,8 @@ body {
   h3 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
+    text-wrap: balance;
+    scroll-margin-top: 1.5rem;
   }
 }
 

@@ -189,3 +189,21 @@ test("estudo de caso usa a fonte de títulos e chips na stack", async ({
   expect(h1).toContain("Bricolage");
   await expect(page.locator("main .chip").first()).toBeVisible();
 });
+
+test.describe("auditoria de design", () => {
+  test("color-scheme acompanha o tema e títulos usam text-wrap balance", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.goto("/pt");
+    expect(
+      await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme),
+    ).toContain("dark");
+    expect(
+      await page.locator("h1").first().evaluate((n) => getComputedStyle(n).textWrapStyle),
+    ).toBe("balance");
+    expect(
+      await page.locator("#destaques").evaluate((n) => getComputedStyle(n).scrollMarginTop),
+    ).not.toBe("0px");
+  });
+});
