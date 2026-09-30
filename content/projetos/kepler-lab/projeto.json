@@ -1,0 +1,23 @@
+{
+  "ordem": 1,
+  "tipo": "destaque",
+  "estado": "concluido",
+  "stack": [
+    "React",
+    "Vite",
+    "Three.js",
+    "TypeScript"
+  ],
+  "repositorio": "https://github.com/Migliatti/kepler-lab",
+  "demo": "https://kepler-lab-gamma.vercel.app",
+  "evidencias": [
+    {
+      "tipo": "repositorio",
+      "url": "https://github.com/Migliatti/kepler-lab",
+      "legenda": {
+        "pt": "Código-fonte e testes unitários no GitHub",
+        "en": "Source code and unit tests on GitHub"
+      }
+    }
+  ]
+}

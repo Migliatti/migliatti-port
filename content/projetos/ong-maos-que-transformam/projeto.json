@@ -1,0 +1,21 @@
+{
+  "ordem": 6,
+  "tipo": "outro",
+  "estado": "concluido",
+  "stack": [
+    "HTML5",
+    "CSS",
+    "JavaScript"
+  ],
+  "repositorio": "https://github.com/Migliatti/ong-maos-que-transformam",
+  "evidencias": [
+    {
+      "tipo": "repositorio",
+      "url": "https://github.com/Migliatti/ong-maos-que-transformam",
+      "legenda": {
+        "pt": "Código-fonte no GitHub",
+        "en": "Source code on GitHub"
+      }
+    }
+  ]
+}

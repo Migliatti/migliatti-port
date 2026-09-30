@@ -1,0 +1,30 @@
+{
+  "ordem": 3,
+  "tipo": "destaque",
+  "estado": "concluido",
+  "stack": [
+    "Python",
+    "Markdown",
+    "Claude Code",
+    "Codex"
+  ],
+  "repositorio": "https://github.com/Migliatti/grimoire",
+  "evidencias": [
+    {
+      "tipo": "repositorio",
+      "url": "https://github.com/Migliatti/grimoire",
+      "legenda": {
+        "pt": "Código-fonte e guias de instalação no GitHub",
+        "en": "Source code and installation guides on GitHub"
+      }
+    },
+    {
+      "tipo": "testes",
+      "url": "https://github.com/Migliatti/grimoire",
+      "legenda": {
+        "pt": "Suíte com 30 testes em Python e avaliações comportamentais automatizadas",
+        "en": "Suite with 30 Python tests and automated behavior evaluations"
+      }
+    }
+  ]
+}

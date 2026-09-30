@@ -1,0 +1,22 @@
+[
+  {
+    "cargo": "Analista de Implementação",
+    "empresa": "Speedpro Consultoria, alocado em Trio Engenharia + Arquitetura",
+    "periodo": "Jun/2025 – Atual",
+    "atividades": [
+      "Suporte técnico e diagnóstico de incidentes em Windows, Microsoft 365, acesso remoto, redes e softwares corporativos.",
+      "Automação e padronização de rotinas administrativas com PowerShell, documentação técnica e procedimentos reutilizáveis.",
+      "Análise de logs e falhas recorrentes: eventos do Windows, autenticação, e-mail corporativo e integrações de software.",
+      "Mapeamento de equipamentos, licenças e ativos de TI, com base de controle em Excel e identificação de ferramentas subutilizadas."
+    ]
+  },
+  {
+    "cargo": "Analista de Performance",
+    "empresa": "Aloha011 – Varejo de Moda",
+    "periodo": "Abr/2024 – Fev/2025",
+    "atividades": [
+      "Monitoramento de indicadores em Google Sheets, análise de desvios e reportes para apoio à decisão comercial.",
+      "Mapeamento de falhas no fluxo de relacionamento com clientes e proposta de melhoria adotada pela equipe."
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "titulo": "Kepler Lab",
+  "resumo": "Experiência web 3D para explorar a Via Láctea, com 22 destinos astronômicos e conteúdo científico curado.",
+  "estudoDeCaso": {
+    "problema": "Conteúdo de astronomia costuma estar em textos longos ou em simuladores difíceis de usar. A ideia foi criar um jeito visual, em português, de explorar a Via Láctea com informação confiável.",
+    "decisoes": [
+      "Three.js com React para renderizar a cena 3D e manter a interface organizada em componentes.",
+      "Vite e TypeScript para build rápido e tipagem estrita.",
+      "Conteúdo científico curado de fontes institucionais.",
+      "Suporte a movimento reduzido e modo de alto contraste desde o início."
+    ],
+    "resultado": "Aplicação publicada na Vercel com 22 destinos astronômicos, testes unitários e recursos de acessibilidade.",
+    "aprendizado": "Equilibrar gráficos 3D com acessibilidade e organizar conteúdo científico para quem não é especialista."
+  }
+}

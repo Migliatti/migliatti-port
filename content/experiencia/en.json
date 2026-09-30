@@ -1,0 +1,22 @@
+[
+  {
+    "cargo": "Implementation Analyst",
+    "empresa": "Speedpro Consultoria, assigned to Trio Engenharia + Arquitetura",
+    "periodo": "Jun 2025 – Present",
+    "atividades": [
+      "Technical support and incident diagnosis for Windows, Microsoft 365, remote access, networks and business software.",
+      "Automation and standardization of administrative routines with PowerShell, technical documentation and reusable procedures.",
+      "Analysis of logs and recurring failures: Windows events, authentication, corporate email and software integrations.",
+      "Inventory of equipment, licenses and IT assets, with an Excel control base and detection of underused tools."
+    ]
+  },
+  {
+    "cargo": "Performance Analyst",
+    "empresa": "Aloha011 – Fashion Retail",
+    "periodo": "Apr 2024 – Feb 2025",
+    "atividades": [
+      "Tracking of metrics in Google Sheets, analysis of deviations and reports to support sales decisions.",
+      "Mapping of failures in the customer relationship flow and an improvement proposal adopted by the team."
+    ]
+  }
+]
