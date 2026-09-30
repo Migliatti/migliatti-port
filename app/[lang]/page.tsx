@@ -1,5 +1,12 @@
 import { notFound } from "next/navigation";
+import { Contato } from "@/components/Contato";
+import {
+  Competencias,
+  ExperienciaProfissional,
+  Formacao,
+} from "@/components/Curriculo";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { OutrosProjetos } from "@/components/OutrosProjetos";
 import { ProjetoCard } from "@/components/ProjetoCard";
 import { listarDestaques, obterTextosHome } from "@/lib/content";
 import { getDictionary, isLocale } from "@/lib/dictionary";
@@ -23,6 +30,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         <p data-testid="posicionamento" className="text-lg text-muted sm:text-xl">
           {textos.posicionamento}
         </p>
+        <OutrosProjetos lang={lang} />
         <section aria-labelledby="destaques" className="mt-12 flex flex-col gap-4">
           <h2 id="destaques" className="text-2xl font-semibold">
             {dict.projetosEmDestaque}
@@ -35,6 +43,10 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
             ))}
           </ul>
         </section>
+        <ExperienciaProfissional lang={lang} />
+        <Competencias lang={lang} />
+        <Formacao lang={lang} />
+        <Contato lang={lang} />
       </main>
     </div>
   );

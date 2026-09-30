@@ -1,0 +1,78 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R /Lang (en) >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [6 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Length 3534 >>
+stream
+BT /F2 20 Tf 45 772.0 Td (Gabriel Migliatti) Tj ET
+BT /F1 11 Tf 45 752.3 Td (Full-stack developer who uses AI to deliver websites, automations and diagnostics) Tj ET
+BT /F1 10 Tf 45 735.8 Td (Looking for an internship or junior developer role. Also open to freelance projects.) Tj ET
+BT /F1 10 Tf 45 715.3 Td (S\343o Paulo, SP  \225  gabriel.migliatti@icloud.com) Tj ET
+BT /F1 10 Tf 45 700.8 Td (LinkedIn: https://www.linkedin.com/in/gabriel-migliatti) Tj ET
+BT /F1 10 Tf 45 686.3 Td (GitHub: https://github.com/Migliatti) Tj ET
+BT /F2 12 Tf 45 657.3 Td (Work experience) Tj ET
+BT /F2 10 Tf 45 638.8 Td (Implementation Analyst | Speedpro Consultoria, assigned to Trio Engenharia + Arquitetura) Tj ET
+BT /F1 10 Tf 45 624.3 Td (Jun 2025 \226 Present) Tj ET
+BT /F1 10 Tf 55 609.8 Td (\225  Technical support and incident diagnosis for Windows, Microsoft 365, remote access, networks and) Tj ET
+BT /F1 10 Tf 65 597.3 Td (business software.) Tj ET
+BT /F1 10 Tf 55 582.8 Td (\225  Automation and standardization of administrative routines with PowerShell, technical documentation and) Tj ET
+BT /F1 10 Tf 65 570.3 Td (reusable procedures.) Tj ET
+BT /F1 10 Tf 55 555.8 Td (\225  Analysis of logs and recurring failures: Windows events, authentication, corporate email and software) Tj ET
+BT /F1 10 Tf 65 543.3 Td (integrations.) Tj ET
+BT /F1 10 Tf 55 528.8 Td (\225  Inventory of equipment, licenses and IT assets, with an Excel control base and detection of underused) Tj ET
+BT /F1 10 Tf 65 516.3 Td (tools.) Tj ET
+BT /F2 10 Tf 45 497.8 Td (Performance Analyst | Aloha011 \226 Fashion Retail) Tj ET
+BT /F1 10 Tf 45 483.3 Td (Apr 2024 \226 Feb 2025) Tj ET
+BT /F1 10 Tf 55 468.8 Td (\225  Tracking of metrics in Google Sheets, analysis of deviations and reports to support sales decisions.) Tj ET
+BT /F1 10 Tf 55 454.3 Td (\225  Mapping of failures in the customer relationship flow and an improvement proposal adopted by the team.) Tj ET
+BT /F2 12 Tf 45 425.3 Td (Featured projects) Tj ET
+BT /F2 10 Tf 45 406.8 Td (Kepler Lab | React, Vite, Three.js, TypeScript) Tj ET
+BT /F1 10 Tf 45 392.3 Td (3D web experience to explore the Milky Way, with 22 astronomical destinations and curated scientific) Tj ET
+BT /F1 10 Tf 45 379.8 Td (content.) Tj ET
+BT /F1 10 Tf 45 365.3 Td (https://github.com/Migliatti/kepler-lab) Tj ET
+BT /F2 10 Tf 45 346.8 Td (LabReserve | TypeScript, React, SQLite) Tj ET
+BT /F1 10 Tf 45 332.3 Td (Web system to check availability and book labs and equipment, with automated tests.) Tj ET
+BT /F1 10 Tf 45 317.8 Td (https://github.com/Migliatti/labreserve) Tj ET
+BT /F2 10 Tf 45 299.3 Td (Grimoire | Python, Markdown, Claude Code, Codex) Tj ET
+BT /F1 10 Tf 45 284.8 Td (Open source catalog of reusable skills and workflows for AI agents, installable in Claude Code and Codex.) Tj ET
+BT /F1 10 Tf 45 270.3 Td (https://github.com/Migliatti/grimoire) Tj ET
+BT /F2 12 Tf 45 241.3 Td (Technical skills) Tj ET
+BT /F1 10 Tf 45 226.8 Td (Development: Python, TypeScript, JavaScript, React, Node.js, HTML5, SQL, PostgreSQL, REST APIs, JSON, HTTP) Tj ET
+BT /F1 10 Tf 45 212.3 Td (Tools: Git/GitHub, Docker, Linux, Windows, PowerShell, Vercel, Microsoft 365) Tj ET
+BT /F1 10 Tf 45 197.8 Td (Practices: Automated testing, Technical documentation, Automation, AI agents, Incident diagnosis) Tj ET
+BT /F2 12 Tf 45 168.8 Td (Education) Tj ET
+BT /F1 10 Tf 45 154.3 Td (Computer Science | Universidade Cruzeiro do Sul \(expected graduation: Jun 2030\)) Tj ET
+BT /F1 10 Tf 45 139.8 Td (Technical English: reading and basic communication) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Title (Gabriel Migliatti - CV) /Author (Gabriel Migliatti) >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000069 00000 n 
+0000000126 00000 n 
+0000000223 00000 n 
+0000000325 00000 n 
+0000003911 00000 n 
+0000004047 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R /Info 7 0 R >>
+startxref
+4128
+%%EOF

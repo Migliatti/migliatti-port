@@ -55,6 +55,22 @@ export function link(
   return valor;
 }
 
+const EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Endereço de e-mail simples (sem `mailto:`), usado para montar o link. */
+export function email(
+  obj: Record<string, unknown>,
+  campo: string,
+  onde: string,
+  erros: Erros,
+): string {
+  const valor = texto(obj, campo, onde, erros);
+  if (valor !== "" && !EMAIL_VALIDO.test(valor)) {
+    erros.push(`${onde}: "${campo}" não é um e-mail válido: "${valor}"`);
+  }
+  return valor;
+}
+
 export function umDe<T extends string>(
   obj: Record<string, unknown>,
   campo: string,

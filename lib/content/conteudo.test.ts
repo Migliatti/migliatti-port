@@ -7,6 +7,7 @@ import {
   listarOutrosProjetos,
   obterCompetencias,
   obterExperiencia,
+  obterFormacao,
   obterProjeto,
   obterTextosHome,
   validarConteudo,
@@ -14,7 +15,12 @@ import {
 } from "./index";
 
 const DESTAQUES = ["kepler-lab", "labreserve", "grimoire"];
-const OUTROS = ["rubicon-archive", "sciencily", "ong-maos-que-transformam"];
+const OUTROS = [
+  "rubicon-archive",
+  "sciencily",
+  "relogio-do-lead",
+  "ong-maos-que-transformam",
+];
 const COM_DEMO = ["kepler-lab", "rubicon-archive"];
 
 function naoVazio(valor: string) {
@@ -96,6 +102,22 @@ describe.each(locales)("conteúdo em %s", (lang) => {
     }
   });
 
+  it("lista 4 Outros projetos, com links de repositório e Demo onde há", () => {
+    const outros = listarOutrosProjetos(lang);
+    expect(outros).toHaveLength(4);
+    const rubicon = outros.find((p) => p.id === "rubicon-archive")!;
+    expect(rubicon.demo).toBe("https://rubicon-archive.vercel.app");
+    expect(rubicon.repositorio).toBe(
+      "https://github.com/Migliatti/rubicon-archive",
+    );
+    const relogio = outros.find((p) => p.id === "relogio-do-lead")!;
+    expect(relogio.repositorio).toBe(
+      "https://github.com/Migliatti/relogio-do-lead",
+    );
+    expect(relogio.demo).toBeUndefined();
+    expect(relogio.stack).toContain("n8n");
+  });
+
   it("sciencily está marcado como em desenvolvimento", () => {
     expect(obterProjeto("sciencily", lang)?.estado).toBe("em-desenvolvimento");
   });
@@ -123,6 +145,37 @@ describe.each(locales)("conteúdo em %s", (lang) => {
       naoVazio(grupo.nome);
       expect(grupo.itens.length).toBeGreaterThan(0);
     }
+  });
+
+  it("a Experiência profissional traz Speedpro/Trio e Aloha011", () => {
+    const empresas = obterExperiencia(lang).map((c) => c.empresa);
+    expect(empresas[0]).toContain("Speedpro");
+    expect(empresas[0]).toContain("Trio");
+    expect(empresas[1]).toContain("Aloha011");
+  });
+
+  it("tem a Formação completa, sem 'júnior'", () => {
+    const formacao = obterFormacao(lang);
+    naoVazio(formacao.curso);
+    expect(formacao.instituicao).toBe("Universidade Cruzeiro do Sul");
+    expect(formacao.previsao).toContain("2030");
+    naoVazio(formacao.ingles);
+    expect(JSON.stringify(formacao)).not.toMatch(/j[úu]nior/i);
+  });
+});
+
+it("a Formação traz o curso e o nível de inglês honesto em cada idioma", () => {
+  expect(obterFormacao("pt")).toEqual({
+    curso: "Ciência da Computação",
+    instituicao: "Universidade Cruzeiro do Sul",
+    previsao: "Jun/2030",
+    ingles: "Inglês técnico: leitura e comunicação básica",
+  });
+  expect(obterFormacao("en")).toEqual({
+    curso: "Computer Science",
+    instituicao: "Universidade Cruzeiro do Sul",
+    previsao: "Jun 2030",
+    ingles: "Technical English: reading and basic communication",
   });
 });
 

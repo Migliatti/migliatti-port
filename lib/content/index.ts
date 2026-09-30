@@ -10,7 +10,9 @@ import path from "node:path";
 import type { Locale } from "../dictionary";
 import { carregarConteudo, type Conteudo } from "./carregar";
 import type {
+  CanaisDeContato,
   Cargo,
+  Formacao,
   GrupoDeCompetencias,
   OutroProjeto,
   Projeto,
@@ -70,4 +72,14 @@ export function obterExperiencia(lang: Locale): Cargo[] {
 /** Competências técnicas agrupadas. */
 export function obterCompetencias(lang: Locale): GrupoDeCompetencias[] {
   return conteudo()[lang].competencias;
+}
+
+/** Formação acadêmica e nível de inglês. */
+export function obterFormacao(lang: Locale): Formacao {
+  return conteudo()[lang].formacao;
+}
+
+/** Canais de contato (e-mail, LinkedIn, GitHub) e o CV público do idioma. */
+export function obterContato(lang: Locale): CanaisDeContato {
+  return conteudo()[lang].contato;
 }

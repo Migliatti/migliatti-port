@@ -167,6 +167,22 @@ describe("rejeita conteúdo incompleto", () => {
     );
   });
 
+  it("Formação sem a versão em inglês", () => {
+    rmSync(path.join(raiz, "formacao", "en.json"));
+    expect(errosAoCarregar()).toContainEqual(
+      expect.stringContaining("formacao/en.json: arquivo ausente"),
+    );
+  });
+
+  it("Formação sem o nível de inglês", () => {
+    editarJson("formacao/pt.json", (d) => {
+      d.ingles = "";
+    });
+    expect(errosAoCarregar()).toContainEqual(
+      expect.stringContaining('formacao/pt.json: campo obrigatório "ingles" ausente ou vazio'),
+    );
+  });
+
   it("lista todos os problemas de uma vez", () => {
     rmSync(path.join(raiz, "projetos", "grimoire", "en.json"));
     rmSync(path.join(raiz, "home", "en.json"));

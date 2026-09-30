@@ -75,3 +75,30 @@ export type GrupoDeCompetencias = {
   nome: string;
   itens: string[];
 };
+
+/** Formação acadêmica e nível de inglês. */
+export type Formacao = {
+  curso: string;
+  instituicao: string;
+  /** Previsão de conclusão (mês/ano). */
+  previsao: string;
+  /** Frase honesta sobre o nível de inglês. */
+  ingles: string;
+};
+
+/**
+ * Canais de contato (e-mail, LinkedIn, GitHub) e o CV público do idioma.
+ * Não há formulário nem telefone.
+ */
+export type CanaisDeContato = {
+  /** Título da seção de contato. */
+  titulo: string;
+  /** Endereço de e-mail, exibido e usado em `mailto:`. */
+  email: string;
+  linkedin: string;
+  github: string;
+  /** Caminho público do PDF do CV público neste idioma (ex.: `/cv/...pdf`). */
+  cvPublico: string;
+  /** Rótulo do botão que baixa o CV público. */
+  rotuloCvPublico: string;
+};

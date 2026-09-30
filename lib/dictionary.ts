@@ -35,6 +35,20 @@ export type Dictionary = {
   /** Marca de texto ainda não revisado (até a revisão final). */
   rascunho: string;
   avisoRascunho: string;
+  /** Títulos das seções de currículo da home. */
+  secoes: {
+    experiencia: string;
+    competencias: string;
+    formacao: string;
+  };
+  /** Rótulo da previsão de conclusão da Formação. */
+  previsaoDeConclusao: string;
+  outrosProjetos: {
+    titulo: string;
+    emDesenvolvimento: string;
+    repositorio: string;
+    demo: string;
+  };
 };
 
 const dictionaries: Record<Locale, Dictionary> = {
@@ -56,6 +70,18 @@ const dictionaries: Record<Locale, Dictionary> = {
     evidencias: "Evidências",
     rascunho: "Rascunho",
     avisoRascunho: "Rascunho: texto ainda em revisão.",
+    secoes: {
+      experiencia: "Experiência profissional",
+      competencias: "Competências técnicas",
+      formacao: "Formação",
+    },
+    previsaoDeConclusao: "Previsão de conclusão",
+    outrosProjetos: {
+      titulo: "Outros projetos",
+      emDesenvolvimento: "em desenvolvimento",
+      repositorio: "Repositório",
+      demo: "Demo",
+    },
   },
   en: {
     htmlLang: "en",
@@ -75,6 +101,18 @@ const dictionaries: Record<Locale, Dictionary> = {
     evidencias: "Evidence",
     rascunho: "Draft",
     avisoRascunho: "Draft: text still under review.",
+    secoes: {
+      experiencia: "Work experience",
+      competencias: "Technical skills",
+      formacao: "Education",
+    },
+    previsaoDeConclusao: "Expected completion",
+    outrosProjetos: {
+      titulo: "Other projects",
+      emDesenvolvimento: "in development",
+      repositorio: "Repository",
+      demo: "Demo",
+    },
   },
 };
 
