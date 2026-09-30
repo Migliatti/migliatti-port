@@ -54,3 +54,89 @@ test.describe("controles e movimento", () => {
     ).toBe("0s");
   });
 });
+
+for (const path of paths) {
+  test.describe(`hero ${path}`, () => {
+    test("título anima legível, sem atraso, e para com movimento reduzido", async ({
+      page,
+    }) => {
+      await page.goto(path);
+      const h1 = page.locator("h1").first();
+      await expect(h1).toBeVisible();
+      const inicio = await h1.evaluate((node) => {
+        const anim = node
+          .getAnimations()
+          .find((a) => (a as CSSAnimation).animationName === "animacao-titulo");
+        if (!anim) return null;
+        anim.pause();
+        anim.currentTime = 0;
+        const css = getComputedStyle(node);
+        return {
+          opacity: Number(css.opacity),
+          visibility: css.visibility,
+          delay: css.animationDelay,
+        };
+      });
+      if (inicio) {
+        expect(inicio.opacity).toBeGreaterThanOrEqual(0.7);
+        expect(inicio.visibility).toBe("visible");
+        expect(inicio.delay).toBe("0s");
+      }
+      expect(
+        await h1.evaluate((n) => getComputedStyle(n).animationName),
+      ).toBe("animacao-titulo");
+
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.reload();
+      const parado = page.locator("h1").first();
+      expect(
+        await parado.evaluate((n) => getComputedStyle(n).animationName),
+      ).toBe("none");
+      expect(
+        await parado.evaluate(
+          (n) =>
+            getComputedStyle(n.querySelector(".marca-acento")!, "::after")
+              .animationName,
+        ),
+      ).toBe("none");
+    });
+
+    test("CTAs levam ao contato e aos projetos", async ({ page }) => {
+      await page.goto(path);
+      const primario = page.locator("a.botao-primario").first();
+      const secundario = page.locator("a.botao-secundario").first();
+      await expect(primario).toHaveAttribute("href", "#contato");
+      await expect(secundario).toHaveAttribute("href", "#destaques");
+      await expect(primario).not.toBeEmpty();
+      await expect(secundario).not.toBeEmpty();
+    });
+
+    test("em 320px o hero não gera rolagem horizontal", async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 700 });
+      await page.goto(path);
+      const estoura = await page.evaluate(
+        () => document.documentElement.scrollWidth > window.innerWidth,
+      );
+      expect(estoura).toBe(false);
+    });
+
+    for (const tema of ["dark", "light"] as const) {
+      test(`botão primário tem foco visível no tema ${tema}`, async ({
+        page,
+      }) => {
+        await page.emulateMedia({ colorScheme: tema });
+        await page.goto(path);
+        const primario = page.locator("a.botao-primario").first();
+        await primario.focus();
+        await page.keyboard.press("Tab");
+        await page.keyboard.press("Shift+Tab");
+        const foco = await primario.evaluate((n) => {
+          const css = getComputedStyle(n);
+          return { estilo: css.outlineStyle, largura: css.outlineWidth };
+        });
+        expect(foco.estilo).not.toBe("none");
+        expect(foco.largura).not.toBe("0px");
+      });
+    }
+  });
+}
