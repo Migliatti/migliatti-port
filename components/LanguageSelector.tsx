@@ -1,0 +1,44 @@
+import Link from "next/link";
+import { getDictionary, locales, type Locale } from "@/lib/dictionary";
+
+type Props = {
+  current: Locale;
+};
+
+export function LanguageSelector({ current }: Props) {
+  const dict = getDictionary(current);
+
+  return (
+    <nav aria-label={dict.languageSelectorLabel}>
+      <ul className="flex items-center gap-2 text-sm">
+        {locales.map((locale, index) => {
+          const target = getDictionary(locale);
+          const isCurrent = locale === current;
+          return (
+            <li key={locale} className="flex items-center gap-2">
+              {index > 0 && (
+                <span aria-hidden="true" className="text-muted">
+                  |
+                </span>
+              )}
+              <Link
+                href={`/${locale}`}
+                hrefLang={target.htmlLang}
+                lang={target.htmlLang}
+                title={target.languageName}
+                aria-current={isCurrent ? "page" : undefined}
+                className={
+                  isCurrent
+                    ? "font-semibold underline underline-offset-4"
+                    : "text-muted hover:text-foreground"
+                }
+              >
+                {target.label}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
