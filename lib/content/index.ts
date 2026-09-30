@@ -17,6 +17,7 @@ import type {
   OutroProjeto,
   Projeto,
   ProjetoEmDestaque,
+  TextosDaVitrine,
   TextosHome,
 } from "./tipos";
 
@@ -82,4 +83,9 @@ export function obterFormacao(lang: Locale): Formacao {
 /** Canais de contato (e-mail, LinkedIn, GitHub) e o CV público do idioma. */
 export function obterContato(lang: Locale): CanaisDeContato {
   return conteudo()[lang].contato;
+}
+
+/** Textos da Vitrine (título, descrição e rótulo acessível da peça). */
+export function obterVitrine(lang: Locale): TextosDaVitrine {
+  return conteudo()[lang].vitrine;
 }

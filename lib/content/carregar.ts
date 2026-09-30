@@ -9,6 +9,7 @@
 //   <raiz>/formacao/{pt,en}.json
 //   <raiz>/contato/contato.json         Canais de contato e CV público
 //   <raiz>/contato/{pt,en}.json         textos da seção de contato
+//   <raiz>/vitrine/{pt,en}.json         textos da Vitrine
 //   <raiz>/projetos/<id>/projeto.json   dados comuns aos idiomas
 //   <raiz>/projetos/<id>/{pt,en}.json   textos do projeto
 
@@ -27,6 +28,7 @@ import {
   type GrupoDeCompetencias,
   type Projeto,
   type TextosHome,
+  type TextosDaVitrine,
   type UsoDeIA,
 } from "./tipos";
 import {
@@ -48,6 +50,7 @@ export type Conteudo = Record<
     competencias: GrupoDeCompetencias[];
     formacao: Formacao;
     contato: CanaisDeContato;
+    vitrine: TextosDaVitrine;
     /** Todos os projetos, na ordem definida em `projeto.json`. */
     projetos: Projeto[];
   }
@@ -85,6 +88,7 @@ export function carregarConteudo(raiz: string): Conteudo {
         competencias: carregarCompetencias(raiz, lang, erros),
         formacao: carregarFormacao(raiz, lang, erros),
         contato: contatoPorIdioma[lang],
+        vitrine: carregarVitrine(raiz, lang, erros),
         projetos: projetosPorIdioma[lang],
       },
     ]),
@@ -187,6 +191,22 @@ function carregarFormacao(raiz: string, lang: Locale, erros: Erros): Formacao {
     instituicao: texto(bruto, "instituicao", onde, erros),
     previsao: texto(bruto, "previsao", onde, erros),
     ingles: texto(bruto, "ingles", onde, erros),
+  };
+}
+
+function carregarVitrine(raiz: string, lang: Locale, erros: Erros): TextosDaVitrine {
+  const onde = `vitrine/${lang}.json`;
+  const vazia: TextosDaVitrine = { titulo: "", descricao: "", rotuloDaPeca: "" };
+  const bruto = lerJson(path.join(raiz, "vitrine", `${lang}.json`), raiz, erros);
+  if (bruto === undefined) return vazia;
+  if (!ehObjeto(bruto)) {
+    erros.push(`${onde}: deve ser um objeto`);
+    return vazia;
+  }
+  return {
+    titulo: texto(bruto, "titulo", onde, erros),
+    descricao: texto(bruto, "descricao", onde, erros),
+    rotuloDaPeca: texto(bruto, "rotuloDaPeca", onde, erros),
   };
 }
 

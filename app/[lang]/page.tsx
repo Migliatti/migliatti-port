@@ -8,6 +8,7 @@ import {
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { OutrosProjetos } from "@/components/OutrosProjetos";
 import { ProjetoCard } from "@/components/ProjetoCard";
+import { Vitrine } from "@/components/Vitrine";
 import { listarDestaques, obterTextosHome } from "@/lib/content";
 import { getDictionary, isLocale } from "@/lib/dictionary";
 
@@ -43,6 +44,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
             ))}
           </ul>
         </section>
+        <Vitrine lang={lang} />
         <ExperienciaProfissional lang={lang} />
         <Competencias lang={lang} />
         <Formacao lang={lang} />
