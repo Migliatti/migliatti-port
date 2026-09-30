@@ -24,7 +24,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
       <header className="flex justify-end">
         <LanguageSelector current={lang} />
       </header>
-      <main className="flex flex-1 flex-col justify-center gap-4 py-8">
+      <main id="conteudo" tabIndex={-1} className="flex flex-1 flex-col justify-center gap-4 py-8">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           {textos.nome}
         </h1>

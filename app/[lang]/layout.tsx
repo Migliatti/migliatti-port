@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { obterTextosHome, validarConteudo } from "@/lib/content";
 import { getDictionary, isLocale, locales } from "@/lib/dictionary";
+import { metadadosDaPagina, urlDoSite } from "@/lib/seo";
 import "../globals.css";
 
 export const dynamicParams = false;
@@ -19,13 +20,13 @@ export async function generateMetadata({
   if (!isLocale(lang)) return {};
   const textos = obterTextosHome(lang);
   return {
-    title: textos.titulo,
-    description: textos.descricao,
-    alternates: {
-      languages: Object.fromEntries(
-        locales.map((locale) => [getDictionary(locale).htmlLang, `/${locale}`]),
-      ),
-    },
+    metadataBase: urlDoSite(),
+    ...metadadosDaPagina({
+      lang,
+      caminho: "",
+      titulo: textos.titulo,
+      descricao: textos.descricao,
+    }),
   };
 }
 
@@ -39,7 +40,12 @@ export default async function RootLayout({
 
   return (
     <html lang={dict.htmlLang}>
-      <body className="min-h-screen antialiased">{children}</body>
+      <body className="min-h-screen antialiased">
+        <a href="#conteudo" className="pular-para-conteudo">
+          {dict.pularParaConteudo}
+        </a>
+        {children}
+      </body>
     </html>
   );
 }
