@@ -261,3 +261,57 @@ describe.each(locales)("grimoire em %s", (lang) => {
     }
   });
 });
+
+describe.each(locales)("labreserve em %s", (lang) => {
+  const REPOSITORIO = "https://github.com/Migliatti/labreserve";
+  const labreserve = () => {
+    const projeto = listarDestaques(lang).find((p) => p.id === "labreserve");
+    expect(projeto).toBeDefined();
+    return projeto!;
+  };
+
+  it("é Projeto em destaque sem Demo, com repositório e Estudo de caso completo", () => {
+    const projeto = labreserve();
+    expect(projeto.demo).toBeUndefined();
+    expect(projeto.repositorio).toBe(REPOSITORIO);
+    expect(projeto.estudoDeCaso.decisoes.length).toBeGreaterThan(0);
+    naoVazio(projeto.estudoDeCaso.problema);
+    naoVazio(projeto.estudoDeCaso.resultado);
+    naoVazio(projeto.estudoDeCaso.aprendizado);
+  });
+
+  it("tem duas Ilustrações com texto alternativo e imagem existente", () => {
+    const ilustracoes = labreserve().evidencias.filter((e) => e.tipo === "ilustracao");
+    expect(ilustracoes.map((e) => e.url)).toEqual([
+      "/ilustracoes/labreserve-arquitetura.svg",
+      "/ilustracoes/labreserve-fluxo-de-reserva.svg",
+    ]);
+    for (const ilustracao of ilustracoes) {
+      naoVazio(ilustracao.legenda);
+      naoVazio(ilustracao.alt ?? "");
+      expect(existsSync(path.join(process.cwd(), "public", ilustracao.url))).toBe(true);
+    }
+  });
+
+  it("não apresenta nada gerado como captura ou GIF do projeto rodando", () => {
+    const tipos = labreserve().evidencias.map((e) => e.tipo);
+    expect(tipos).not.toContain("captura");
+    expect(tipos).not.toContain("gif");
+  });
+
+  it("tem trechos do código real, os resultados reais dos testes e o repositório", () => {
+    const evidencias = labreserve().evidencias;
+    const codigos = evidencias.filter((e) => e.tipo === "codigo");
+    expect(codigos.length).toBeGreaterThan(0);
+    for (const codigo of codigos) {
+      naoVazio(codigo.trecho ?? "");
+      expect(codigo.url.startsWith(`${REPOSITORIO}/blob/`)).toBe(true);
+    }
+    const testes = evidencias.filter((e) => e.tipo === "testes");
+    expect(testes.map((t) => t.saida?.split("\n")[0])).toEqual(["$ npm test", "$ npm run test:e2e"]);
+    expect(testes[0].saida).toMatch(/^ℹ pass 19$/m);
+    expect(testes[0].saida).toMatch(/^ℹ fail 0$/m);
+    expect(testes[1].saida).toMatch(/^3 passed/m);
+    expect(evidencias.find((e) => e.tipo === "repositorio")?.url).toBe(REPOSITORIO);
+  });
+});

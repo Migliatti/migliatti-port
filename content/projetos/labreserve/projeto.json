@@ -10,6 +10,75 @@
   "repositorio": "https://github.com/Migliatti/labreserve",
   "evidencias": [
     {
+      "tipo": "ilustracao",
+      "url": "/ilustracoes/labreserve-arquitetura.svg",
+      "legenda": {
+        "pt": "Arquitetura: monólito modular com dependências apontando para dentro, conforme docs/ARCHITECTURE.md do repositório.",
+        "en": "Architecture: modular monolith with dependencies pointing inward, as described in the repository's docs/ARCHITECTURE.md."
+      },
+      "alt": {
+        "pt": "Diagrama com os módulos web, server, application, domain e persistence. web e server dependem de application; application depende de domain; persistence implementa os contratos de application com SQLite. O domain não importa HTTP, React nem SQLite.",
+        "en": "Diagram of the web, server, application, domain and persistence modules. web and server depend on application; application depends on domain; persistence implements application's contracts with SQLite. The domain imports no HTTP, React or SQLite."
+      }
+    },
+    {
+      "tipo": "ilustracao",
+      "url": "/ilustracoes/labreserve-fluxo-de-reserva.svg",
+      "legenda": {
+        "pt": "Fluxo de criação de reserva: validação do intervalo, checagem de conflito e gravação atômica da reserva e do evento.",
+        "en": "Booking creation flow: interval validation, conflict check and atomic write of the booking and its event."
+      },
+      "alt": {
+        "pt": "Fluxograma: POST /api/reservations valida o intervalo (inválido: 400 INVALID_TIME_RANGE). Numa transação, verifica o recurso (ausente: 404), procura reserva CONFIRMED do mesmo recurso com novoInício < fimExistente e novoFim > inícioExistente (conflito: 409 RESERVATION_CONFLICT) e grava a reserva e o evento RESERVATION_CREATED, respondendo 201. Reservas canceladas não bloqueiam e limites iguais são permitidos.",
+        "en": "Flowchart: POST /api/reservations validates the interval (invalid: 400 INVALID_TIME_RANGE). In one transaction it checks the resource (missing: 404), looks for a CONFIRMED booking of the same resource with newStart < existingEnd and newEnd > existingStart (conflict: 409 RESERVATION_CONFLICT) and writes the booking and the RESERVATION_CREATED event, answering 201. Cancelled bookings don't block and equal limits are allowed."
+      }
+    },
+    {
+      "tipo": "codigo",
+      "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/src/domain/time-interval.ts#L52-L54",
+      "trecho": "  overlaps(other: TimeInterval): boolean {\n    return this.startAt < other.endAt && this.endAt > other.startAt;\n  }",
+      "legenda": {
+        "pt": "Regra de sobreposição no domínio: limites iguais não conflitam.",
+        "en": "Overlap rule in the domain: equal limits don't conflict."
+      }
+    },
+    {
+      "tipo": "codigo",
+      "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/src/application/lab-reserve-service.ts#L37-L64",
+      "trecho": "  createReservation(input: CreateReservationInput): Reservation {\n    const interval = TimeInterval.create(input.startAt, input.endAt);\n    return this.repository.transaction(() => {\n      if (!this.repository.findResource(input.resourceId)) {\n        throw new ApplicationError('RESOURCE_NOT_FOUND', 'Recurso não encontrado.');\n      }\n      const conflict = this.repository.findConflict(input.resourceId, interval.startAt, interval.endAt);\n      if (conflict) {\n        throw new ApplicationError(\n          'RESERVATION_CONFLICT',\n          'O recurso já está reservado nesse período.',\n          { conflictingReservationId: conflict.id },\n        );\n      }\n      const createdAt = this.clock.now().toISOString();\n      const reservation = createConfirmedReservation({\n        id: this.ids.generate(), resourceId: input.resourceId,\n        startAt: interval.startAt, endAt: interval.endAt, createdAt,\n      });\n      const event: ReservationEvent = {\n        id: this.ids.generate(), reservationId: reservation.id,\n        type: 'RESERVATION_CREATED', occurredAt: createdAt,\n      };\n      this.repository.insertReservation(reservation);\n      this.repository.insertEvent(event);\n      return reservation;\n    });\n  }",
+      "legenda": {
+        "pt": "Caso de uso de criação: conflito e gravação da reserva e do evento na mesma transação.",
+        "en": "Creation use case: conflict check and write of the booking and its event in the same transaction."
+      }
+    },
+    {
+      "tipo": "codigo",
+      "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/tests/domain/time-interval.test.ts#L36-L47",
+      "trecho": "test('detecta sobreposição estrita e permite intervalos consecutivos', () => {\n  const existing = TimeInterval.create('2026-09-16T10:00:00Z', '2026-09-16T11:00:00Z');\n\n  assert.equal(\n    existing.overlaps(TimeInterval.create('2026-09-16T10:30:00Z', '2026-09-16T11:30:00Z')),\n    true,\n  );\n  assert.equal(\n    existing.overlaps(TimeInterval.create('2026-09-16T11:00:00Z', '2026-09-16T12:00:00Z')),\n    false,\n  );\n});",
+      "legenda": {
+        "pt": "Teste de domínio que fixa a regra: sobreposição parcial conflita, horário consecutivo não.",
+        "en": "Domain test pinning the rule: partial overlap conflicts, back-to-back slots don't."
+      }
+    },
+    {
+      "tipo": "testes",
+      "url": "https://github.com/Migliatti/labreserve/tree/204de0894720dfa3929f746d8b22b3eb17284bf7/tests",
+      "legenda": {
+        "pt": "Saída real dos testes de domínio, integração e API (node:test), executados em 30/09/2026 no commit 204de08, Node 24.20.0.",
+        "en": "Real output of the domain, integration and API tests (node:test), run on 2026-09-30 at commit 204de08, Node 24.20.0."
+      },
+      "saida": "$ npm test\n✔ responde 413 legível para corpos realmente grandes sem resetar a conexão (386.123ms)\n✔ lista recursos e cria reserva pelo contrato HTTP (55.2194ms)\n✔ lista, cancela e mostra histórico com erros estruturados (77.333ms)\n✔ responde 404 para o histórico de uma reserva inexistente (10.1546ms)\n✔ protege respostas e rejeita corpos que não sejam JSON (89.2057ms)\n✔ registra falhas inesperadas sem expor seus detalhes (8.7134ms)\n✔ mantém a resposta interna segura quando o logger falha (12.5998ms)\n✔ informa disponibilidade, histórico global e erros de domínio pelo contrato (42.4548ms)\n✔ cancela uma reserva confirmada uma única vez (4.9019ms)\n✔ normaliza um intervalo ISO 8601 com offset para UTC (3.9276ms)\n✔ rejeita um intervalo cujo término seja igual ao início (1.2695ms)\n✔ rejeita uma data que não esteja em ISO 8601 com fuso explícito (0.5249ms)\n✔ rejeita datas ISO 8601 sintaticamente válidas, mas inexistentes (0.415ms)\n✔ detecta sobreposição estrita e permite intervalos consecutivos (0.5614ms)\n✔ o projeto declara scripts reproduzíveis sem versões flutuantes (3.5348ms)\n✔ cancelamento gera evento, libera intervalo e suporta filtros (9.6265ms)\n✔ cria reserva e evento atomicamente, recusa conflito e aceita horário consecutivo (6.282ms)\n✔ reverte a reserva quando a gravação do evento falha (1.5119ms)\n✔ um banco novo recebe laboratório e equipamento determinísticos (5.8135ms)\nℹ tests 19\nℹ suites 0\nℹ pass 19\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1194.8207"
+    },
+    {
+      "tipo": "testes",
+      "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/tests/e2e/reservations.spec.ts",
+      "legenda": {
+        "pt": "Saída real dos cenários E2E com Playwright (Chromium), na mesma execução.",
+        "en": "Real output of the Playwright E2E scenarios (Chromium), in the same run."
+      },
+      "saida": "$ npm run test:e2e\nRunning 3 tests using 2 workers\nok 1 tests\\e2e\\reservations.spec.ts:73:1 › consulta período com data vazia sem deixar carregamento pendente (3.0s)\nok 2 tests\\e2e\\reservations.spec.ts:31:1 › cria, rejeita conflito, permite período consecutivo, cancela e mostra histórico (4.1s)\nok 3 tests\\e2e\\reservations.spec.ts:85:1 › aplica filtros de reserva (3.1s)\n3 passed (12.5s)"
+    },
+    {
       "tipo": "repositorio",
       "url": "https://github.com/Migliatti/labreserve",
       "legenda": {
