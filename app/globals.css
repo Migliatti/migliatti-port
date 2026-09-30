@@ -26,3 +26,25 @@ body {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     Arial, sans-serif;
 }
+
+/*
+ * Animação de entrada (regra em docs/adr/0001-animacao-de-entrada.md).
+ * Só transform e opacity; o texto nunca começa invisível (opacity inicial
+ * >= 0.7) e a duração é curta. Com prefers-reduced-motion: reduce, nada anima.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .animacao-entrada {
+    animation: animacao-entrada 500ms ease-out both;
+  }
+}
+
+@keyframes animacao-entrada {
+  from {
+    opacity: 0.7;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
