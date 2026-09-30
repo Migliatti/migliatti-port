@@ -34,3 +34,23 @@ for (const path of paths) {
     });
   });
 }
+
+test.describe("controles e movimento", () => {
+  test("botão eleva no hover com movimento normal e fica parado com movimento reduzido", async ({
+    page,
+  }) => {
+    await page.goto("/pt");
+    const botao = page.locator(".botao").first();
+    await expect(botao).toBeVisible();
+    expect(
+      await botao.evaluate((n) => getComputedStyle(n).transitionDuration),
+    ).not.toBe("0s");
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.reload();
+    const parado = page.locator(".botao").first();
+    expect(
+      await parado.evaluate((n) => getComputedStyle(n).transitionDuration),
+    ).toBe("0s");
+  });
+});

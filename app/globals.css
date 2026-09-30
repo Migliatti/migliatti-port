@@ -93,3 +93,99 @@ main:focus {
 .pular-para-conteudo:focus {
   transform: none;
 }
+
+/* Controles da identidade Sinal: pílula, um acento só. */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.botao-primario {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.botao-secundario {
+  border: 1px solid var(--foreground);
+  color: var(--foreground);
+}
+
+.chip {
+  display: inline-block;
+  border: 1px solid color-mix(in srgb, var(--foreground) 25%, transparent);
+  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+/* Marca do acento sob o nome: barra decorativa, nunca fundo de texto. */
+.marca-acento {
+  position: relative;
+  display: inline-block;
+}
+
+.marca-acento::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.06em;
+  height: 0.1em;
+  border-radius: 9999px;
+  background: var(--accent);
+  transform-origin: left;
+}
+
+/*
+ * Movimento da identidade (estende docs/adr/0001-animacao-de-entrada.md):
+ * mesmas regras, sem atraso, opacity inicial >= 0.7, só transform e opacity.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .botao {
+    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .botao:hover {
+    transform: translateY(-3px);
+  }
+
+  .botao:active {
+    transform: scale(0.97);
+  }
+
+  .animacao-titulo {
+    animation: animacao-titulo 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .marca-acento::after {
+    animation: marca-acento 700ms ease-out both;
+  }
+}
+
+@keyframes animacao-titulo {
+  from {
+    opacity: 0.7;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes marca-acento {
+  from {
+    transform: scaleX(0.15);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

@@ -17,3 +17,13 @@ O site terá várias animações, mas o conteúdo precisa ser lido por quem cont
 ## Consequências
 
 Sem dependências novas. Componentes seguem server components.
+
+## Extensão: identidade visual Sinal
+
+Novos movimentos, todos sob as regras acima (sem atraso, `opacity` inicial >= 0.7, só `transform` e `opacity`, dentro de `no-preference`):
+
+- `animacao-titulo`: título do hero sobe 24px em 600ms.
+- `marca-acento`: barra do acento sob o nome cresce de `scaleX(0.15)` a 1 em 700ms (decorativa, não cobre texto).
+- `.botao`: sobe 3px no hover e afunda (`scale(0.97)`) no clique, com `transition` de 250ms.
+
+O escalonamento por `animation-delay` (palavras entrando em sequência) foi descartado por violar a regra 1.
