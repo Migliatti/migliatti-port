@@ -57,3 +57,77 @@ for (const path of ["/pt", "/en"]) {
     });
   });
 }
+
+const secoesAnimadas = ["projetos-em-destaque", "experiencia", "contato"];
+
+for (const path of ["/pt", "/en"]) {
+  test.describe(`animação nas demais seções ${path}`, () => {
+    test("ordem final da home", async ({ page }) => {
+      await page.goto(path);
+      const ordem = await page.evaluate(() =>
+        Array.from(document.querySelectorAll("main > *"))
+          .map((el) => (el as HTMLElement).dataset.testid)
+          .filter((id) =>
+            [
+              "posicionamento",
+              "projetos-em-destaque",
+              "vitrine",
+              "experiencia",
+              "contato",
+            ].includes(id ?? ""),
+          ),
+      );
+      expect(ordem).toEqual([
+        "posicionamento",
+        "projetos-em-destaque",
+        "vitrine",
+        "experiencia",
+        "contato",
+      ]);
+    });
+
+    for (const id of secoesAnimadas) {
+      test(`${id} anima e o texto já está legível no primeiro quadro`, async ({
+        page,
+      }) => {
+        await page.goto(path);
+        const el = page.getByTestId(id);
+        await expect(el).toBeVisible();
+        expect(
+          await el.evaluate((n) => getComputedStyle(n).animationName),
+        ).toBe("animacao-entrada");
+
+        const inicio = await el.evaluate((node) => {
+          const anim = node
+            .getAnimations()
+            .find((a) => (a as CSSAnimation).animationName === "animacao-entrada");
+          if (!anim) return null;
+          anim.pause();
+          anim.currentTime = 0;
+          const css = getComputedStyle(node);
+          return {
+            opacity: Number(css.opacity),
+            visibility: css.visibility,
+            delay: css.animationDelay,
+          };
+        });
+        if (inicio) {
+          expect(inicio.opacity).toBeGreaterThanOrEqual(0.7);
+          expect(inicio.visibility).toBe("visible");
+          expect(inicio.delay).toBe("0s");
+        }
+      });
+
+      test(`${id} fica parado com movimento reduzido`, async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        await page.goto(path);
+        const el = page.getByTestId(id);
+        await expect(el).toBeVisible();
+        expect(
+          await el.evaluate((n) => getComputedStyle(n).animationName),
+        ).toBe("none");
+        expect(await el.evaluate((n) => n.getAnimations().length)).toBe(0);
+      });
+    }
+  });
+}
