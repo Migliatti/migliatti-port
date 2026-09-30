@@ -29,7 +29,7 @@ Versão do projeto publicada online e navegável. Só `kepler-lab` e `rubicon-ar
 _Avoid_: Preview, deploy
 
 **Evidência**:
-O que substitui o demo quando não há um: capturas de tela, GIF, trecho de código, resultado de testes e link do repositório.
+O que substitui o demo quando não há um: capturas de tela, GIF, ilustração, trecho de código, resultado de testes e link do repositório. Captura e GIF mostram só o projeto rodando de verdade; diagrama ou imagem feita para o site é **ilustração** e aparece com esse rótulo visível e texto alternativo. Trecho de código e resultado de testes vêm do repositório real, sem alteração.
 _Avoid_: Prova, screenshot
 
 **CV público**:

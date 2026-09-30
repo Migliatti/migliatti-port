@@ -1,5 +1,7 @@
 // Verifica o conteúdo real do Portfólio pela interface pública do módulo.
 
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { locales } from "../dictionary";
 import {
@@ -30,6 +32,12 @@ function naoVazio(valor: string) {
 function linkValido(valor: string) {
   naoVazio(valor);
   expect(new URL(valor).protocol).toMatch(/^https?:$/);
+}
+
+/** Ilustrações são arquivos do próprio site, em public/evidencias/. */
+function ilustracaoPublicada(url: string) {
+  expect(url).toMatch(/^\/evidencias\//);
+  expect(existsSync(path.join(process.cwd(), "public", url)), url).toBe(true);
 }
 
 function todosOsProjetos(lang: (typeof locales)[number]): Projeto[] {
@@ -67,7 +75,8 @@ describe.each(locales)("conteúdo em %s", (lang) => {
       if (projeto.demo !== undefined) linkValido(projeto.demo);
       for (const evidencia of projeto.evidencias) {
         naoVazio(evidencia.legenda);
-        linkValido(evidencia.url);
+        if (evidencia.tipo === "ilustracao") ilustracaoPublicada(evidencia.url);
+        else linkValido(evidencia.url);
       }
     }
   });
@@ -210,5 +219,73 @@ describe.each(locales)("kepler-lab em %s", (lang) => {
     naoVazio(projeto!.estudoDeCaso.problema);
     naoVazio(projeto!.estudoDeCaso.resultado);
     naoVazio(projeto!.estudoDeCaso.aprendizado);
+  });
+});
+
+describe.each(locales)("labreserve em %s", (lang) => {
+  const REPOSITORIO = "https://github.com/Migliatti/labreserve";
+
+  function labreserve() {
+    const projeto = listarDestaques(lang).find((p) => p.id === "labreserve");
+    expect(projeto).toBeDefined();
+    return projeto!;
+  }
+
+  it("é Projeto em destaque sem Demo, com repositório e Estudo de caso completo", () => {
+    const projeto = labreserve();
+    expect(projeto.demo).toBeUndefined();
+    expect(projeto.repositorio).toBe(REPOSITORIO);
+    naoVazio(projeto.titulo);
+    naoVazio(projeto.resumo);
+    naoVazio(projeto.estudoDeCaso.problema);
+    naoVazio(projeto.estudoDeCaso.resultado);
+    naoVazio(projeto.estudoDeCaso.aprendizado);
+    expect(projeto.estudoDeCaso.decisoes.length).toBeGreaterThan(0);
+  });
+
+  it("tem ilustrações de arquitetura e de fluxo de reserva, com texto alternativo", () => {
+    const ilustracoes = labreserve().evidencias.filter((e) => e.tipo === "ilustracao");
+    expect(ilustracoes.map((e) => e.url)).toEqual([
+      "/evidencias/labreserve/arquitetura.svg",
+      "/evidencias/labreserve/fluxo-de-reserva.svg",
+    ]);
+    for (const ilustracao of ilustracoes) {
+      naoVazio(ilustracao.alt);
+      naoVazio(ilustracao.legenda);
+      expect(ilustracao.largura).toBeGreaterThan(0);
+      expect(ilustracao.altura).toBeGreaterThan(0);
+    }
+  });
+
+  it("não apresenta nada gerado como captura ou GIF do projeto rodando", () => {
+    const tipos = labreserve().evidencias.map((e) => e.tipo);
+    expect(tipos).not.toContain("captura");
+    expect(tipos).not.toContain("gif");
+  });
+
+  it("tem trechos de código com arquivo e link para o repositório real", () => {
+    const codigos = labreserve().evidencias.filter((e) => e.tipo === "codigo");
+    expect(codigos.length).toBeGreaterThan(0);
+    for (const codigo of codigos) {
+      naoVazio(codigo.trecho);
+      expect(codigo.url.startsWith(`${REPOSITORIO}/blob/`)).toBe(true);
+      expect(codigo.url).toContain(`/${codigo.arquivo}#L`);
+    }
+    expect(codigos.map((c) => c.arquivo)).toContain("src/domain/time-interval.ts");
+  });
+
+  it("tem resultados de testes unitários/API e E2E, todos aprovados", () => {
+    const testes = labreserve().evidencias.filter((e) => e.tipo === "testes");
+    expect(testes.map((t) => t.comando)).toEqual(["npm test", "npm run test:e2e"]);
+    const [unitarios, e2e] = testes;
+    expect(unitarios.resultado).toMatch(/^ℹ pass 19$/m);
+    expect(unitarios.resultado).toMatch(/^ℹ fail 0$/m);
+    expect(e2e.resultado).toMatch(/^3 passed/m);
+    for (const teste of testes) expect(teste.url.startsWith(REPOSITORIO)).toBe(true);
+  });
+
+  it("tem link do repositório como Evidência", () => {
+    const repositorio = labreserve().evidencias.find((e) => e.tipo === "repositorio");
+    expect(repositorio?.url).toBe(REPOSITORIO);
   });
 });

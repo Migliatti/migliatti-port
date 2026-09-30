@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Evidencias } from "@/components/Evidencias";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { listarDestaques, obterProjeto } from "@/lib/content";
 import { getDictionary, isLocale, locales } from "@/lib/dictionary";
@@ -114,20 +115,7 @@ export default async function EstudoDeCasoPage({
         {projeto.evidencias.length > 0 && (
           <section className={secao}>
             <h2 className={tituloSecao}>{dict.evidencias}</h2>
-            <ul className="list-disc pl-5">
-              {projeto.evidencias.map((evidencia) => (
-                <li key={evidencia.url}>
-                  <a
-                    href={evidencia.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-4"
-                  >
-                    {evidencia.legenda}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <Evidencias evidencias={projeto.evidencias} lang={lang} />
           </section>
         )}
       </main>

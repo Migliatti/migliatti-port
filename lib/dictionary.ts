@@ -32,6 +32,9 @@ export type Dictionary = {
   resultado: string;
   aprendizado: string;
   evidencias: string;
+  /** Rótulo visível de toda Evidência que é ilustração (não é captura). */
+  ilustracao: string;
+  verTestesNoRepositorio: string;
   /** Marca de texto ainda não revisado (até a revisão final). */
   rascunho: string;
   avisoRascunho: string;
@@ -68,6 +71,8 @@ const dictionaries: Record<Locale, Dictionary> = {
     resultado: "Resultado",
     aprendizado: "Aprendizado",
     evidencias: "Evidências",
+    ilustracao: "Ilustração",
+    verTestesNoRepositorio: "Ver os testes no repositório",
     rascunho: "Rascunho",
     avisoRascunho: "Rascunho: texto ainda em revisão.",
     secoes: {
@@ -99,6 +104,8 @@ const dictionaries: Record<Locale, Dictionary> = {
     resultado: "Result",
     aprendizado: "Learnings",
     evidencias: "Evidence",
+    ilustracao: "Illustration",
+    verTestesNoRepositorio: "View the tests in the repository",
     rascunho: "Draft",
     avisoRascunho: "Draft: text still under review.",
     secoes: {
