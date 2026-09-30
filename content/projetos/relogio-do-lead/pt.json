@@ -1,4 +1,4 @@
 {
   "titulo": "Relógio do Lead",
-  "resumo": "Automação em n8n que responde leads de portais imobiliários e mede o tempo de resposta."
+  "resumo": "Protótipo de automação em n8n que responde leads de portais imobiliários e mede o tempo de resposta, validado com dados de exemplo."
 }
