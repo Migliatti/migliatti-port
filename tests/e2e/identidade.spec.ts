@@ -282,7 +282,7 @@ for (const path of paths) {
     expect(trechos.length).toBeGreaterThan(1);
     for (const t of trechos) {
       expect(t.altura).toBeLessThanOrEqual(t.linha * 1.1);
-      expect(t.barra).toBeLessThanOrEqual(t.largura + t.fonte * 0.25 + 1);
+      expect(t.barra).toBeLessThanOrEqual(t.largura + 1);
     }
   });
 }
@@ -383,5 +383,26 @@ for (const path of paths) {
     expect(
       await h1.evaluate((n) => getComputedStyle(n).fontFamily),
     ).toContain("ui-sans-serif");
+  });
+}
+
+for (const path of paths) {
+  test(`em desktop a barra da primeira palavra cobre o espaço e a da última não passa do texto ${path}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(path);
+    await page.evaluate(() => document.fonts.ready);
+    const trechos = await page.locator("h1 .marca-acento").evaluateAll((els) =>
+      els.map((el) => ({
+        largura: el.getBoundingClientRect().width,
+        fonte: parseFloat(getComputedStyle(el).fontSize),
+        barra: parseFloat(getComputedStyle(el, "::after").width),
+      })),
+    );
+    const primeira = trechos[0];
+    const ultima = trechos[trechos.length - 1];
+    expect(primeira.barra).toBeGreaterThan(primeira.largura + primeira.fonte * 0.2);
+    expect(ultima.barra).toBeLessThanOrEqual(ultima.largura + 1);
   });
 }

@@ -149,9 +149,15 @@ main:focus {
   transform-origin: left;
 }
 
-/* A barra de uma palavra que não é a última cobre também o espaço depois dela. */
-.marca-acento:not(:last-child)::after {
-  right: -0.25em;
+/*
+ * Onde o nome cabe numa linha (sm em diante), a barra de uma palavra que não é
+ * a última cobre também o espaço depois dela. Em tela estreita o nome quebra e
+ * cada barra fica do tamanho da própria palavra.
+ */
+@media (min-width: 40rem) {
+  .marca-acento:not(:last-child)::after {
+    right: -0.25em;
+  }
 }
 
 /* Hover só onde existe ponteiro que passa o mouse: no toque o botão não fica levantado. */
