@@ -111,6 +111,7 @@ main:focus {
 }
 
 .botao-primario {
+  border: 1px solid var(--accent-text);
   background: var(--accent);
   color: var(--on-accent);
 }
@@ -144,7 +145,7 @@ main:focus {
   bottom: -0.06em;
   height: 0.1em;
   border-radius: 9999px;
-  background: var(--accent);
+  background: var(--accent-text);
   transform-origin: left;
 }
 
@@ -166,11 +167,11 @@ main:focus {
   }
 
   .animacao-titulo {
-    animation: animacao-titulo 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: animacao-titulo 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   .marca-acento::after {
-    animation: marca-acento 700ms ease-out both;
+    animation: marca-acento 500ms ease-out both;
   }
 }
 

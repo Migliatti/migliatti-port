@@ -31,7 +31,7 @@ export function LanguageSelector({ current, caminho = "" }: Props) {
                 aria-current={isCurrent ? "page" : undefined}
                 className={
                   isCurrent
-                    ? "rounded-full bg-accent px-3 py-1 font-medium text-on-accent"
+                    ? "rounded-full border border-accent-text bg-accent px-3 py-1 font-medium text-on-accent"
                     : "px-3 py-1 text-muted hover:text-foreground"
                 }
               >

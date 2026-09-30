@@ -207,3 +207,42 @@ test.describe("auditoria de design", () => {
     ).not.toBe("0px");
   });
 });
+
+test.describe("correções da revisão final", () => {
+  test("animações novas respeitam o limite de 500ms do ADR 0001", async ({
+    page,
+  }) => {
+    await page.goto("/pt");
+    const duracoes = await page.evaluate(() => {
+      const h1 = document.querySelector("h1")!;
+      const marca = h1.querySelector(".marca-acento")!;
+      return [
+        getComputedStyle(h1).animationDuration,
+        getComputedStyle(marca, "::after").animationDuration,
+      ].map((d) => parseFloat(d));
+    });
+    for (const d of duracoes) expect(d).toBeLessThanOrEqual(0.5);
+  });
+
+  test("no tema claro o acento ganha contorno e a barra usa o tom escuro", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto("/pt");
+    const r = await page.evaluate(() => {
+      const botao = getComputedStyle(document.querySelector("a.botao-primario")!);
+      const barra = getComputedStyle(
+        document.querySelector(".marca-acento")!,
+        "::after",
+      );
+      return {
+        borda: botao.borderTopColor,
+        larguraBorda: botao.borderTopWidth,
+        barra: barra.backgroundColor,
+      };
+    });
+    expect(r.larguraBorda).toBe("1px");
+    expect(r.borda).toBe("rgb(63, 90, 0)");
+    expect(r.barra).toBe("rgb(63, 90, 0)");
+  });
+});
