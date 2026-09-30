@@ -133,3 +133,16 @@ export type CanaisDeContato = {
   /** Rótulo do botão que baixa o CV público. */
   rotuloCvPublico: string;
 };
+
+/**
+ * Textos da Vitrine: a seção com a peça de animação de assinatura. Os textos
+ * são lidos sem esperar a peça carregar.
+ */
+export type TextosDaVitrine = {
+  /** Título da seção. */
+  titulo: string;
+  /** O que é a peça e como foi feita com IA. */
+  descricao: string;
+  /** Descrição acessível da peça (rótulo da imagem animada). */
+  rotuloDaPeca: string;
+};

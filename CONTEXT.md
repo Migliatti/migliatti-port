@@ -37,7 +37,7 @@ PDF baixável pelo site, sem telefone e com cidade só como "São Paulo, SP". De
 _Avoid_: Currículo completo, CV atual
 
 **Vitrine**:
-Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. É o único lugar onde a animação pode ser o conteúdo. O resto do site também tem várias animações, mas nenhuma atrasa ou esconde texto: o conteúdo já está legível antes de animar. Toda animação respeita `prefers-reduced-motion` e não pesa no celular de quem lê.
+Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. É o único lugar onde a animação pode ser o conteúdo. O resto do site também tem várias animações, mas nenhuma atrasa ou esconde texto: o conteúdo já está legível antes de animar. Toda animação respeita `prefers-reduced-motion` e não pesa no celular de quem lê. A peça só carrega quando a seção entra na tela; regra em `docs/adr/0002-vitrine.md`.
 _Avoid_: Demo (já significa projeto publicado), Galeria
 
 **Animação de entrada**:
