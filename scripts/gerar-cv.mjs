@@ -5,8 +5,8 @@
 // Escreve `public/<caminho de contato.json cvPublico>` para cada idioma.
 // O CV público deriva do Portfólio: os textos vêm de `content/` (Canais de
 // contato, Experiência profissional, Projetos em destaque, competências,
-// formação). Só o Posicionamento e o nível ficam aqui, porque o nível
-// aparece apenas no CV público (ver CONTEXT.md). Nunca inclui telefone; a
+// formação), inclusive o Posicionamento (`content/home`). Só o nível fica
+// aqui, porque aparece apenas no CV público (ver CONTEXT.md). Nunca inclui telefone; a
 // cidade é só "São Paulo, SP".
 //
 // Sem dependências: escreve um PDF simples, com fontes padrão (Helvetica) e
@@ -21,7 +21,6 @@ const PUBLICO = path.join(RAIZ, "public");
 
 const TEXTOS = {
   pt: {
-    posicionamento: "Desenvolvedor full-stack que usa IA para entregar sites, automações e diagnósticos",
     nivel: "Em busca de estágio ou vaga júnior em desenvolvimento. Também aberto a projetos freelance.",
     cidade: "São Paulo, SP",
     secoes: {
@@ -33,7 +32,6 @@ const TEXTOS = {
     previsao: "previsão de conclusão",
   },
   en: {
-    posicionamento: "Full-stack developer who uses AI to deliver websites, automations and diagnostics",
     nivel: "Looking for an internship or junior developer role. Also open to freelance projects.",
     cidade: "São Paulo, SP",
     secoes: {
@@ -80,7 +78,7 @@ function linhasDoCv(lang) {
   const paragrafo = (texto, extra = {}) => linhas.push({ texto, fonte: "F1", tamanho: 10, antes: 2, ...extra });
 
   linhas.push({ texto: home.nome, fonte: "F2", tamanho: 20, antes: 0 });
-  paragrafo(t.posicionamento, { tamanho: 11, antes: 6 });
+  paragrafo(home.posicionamento, { tamanho: 11, antes: 6 });
   paragrafo(t.nivel, { antes: 4 });
   paragrafo(`${t.cidade}  •  ${contato.email}`, { antes: 8 });
   paragrafo(`LinkedIn: ${contato.linkedin}`);
