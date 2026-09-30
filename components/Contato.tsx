@@ -53,7 +53,7 @@ export function Contato({ lang }: Props) {
           href={contato.cvPublico}
           download
           type="application/pdf"
-          className="inline-block rounded-md bg-foreground px-4 py-2 font-medium text-background hover:opacity-90"
+          className="botao botao-primario"
         >
           {contato.rotuloCvPublico}
         </a>

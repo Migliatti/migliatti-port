@@ -60,7 +60,7 @@ export function iniciarPeca(canvas: HTMLCanvasElement): Peca {
     return {
       fundo: estilo.getPropertyValue("--background").trim() || "#ffffff",
       traco: estilo.getPropertyValue("--foreground").trim() || "#171717",
-      destaque: estilo.getPropertyValue("--muted").trim() || "#525252",
+      destaque: estilo.getPropertyValue("--accent-text").trim() || "#3f5a00",
     };
   }
 

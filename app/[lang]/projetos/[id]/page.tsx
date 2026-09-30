@@ -59,7 +59,7 @@ export default async function EstudoDeCasoPage({
       </header>
       <main id="conteudo" tabIndex={-1} className="flex flex-col gap-8">
         <div className="flex flex-col gap-3">
-          <h1 className="text-4xl font-bold tracking-tight">{projeto.titulo}</h1>
+          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">{projeto.titulo}</h1>
           <p className="text-lg text-muted">{projeto.resumo}</p>
           <p data-testid="rascunho" className="text-sm text-muted">
             {dict.avisoRascunho}
@@ -101,9 +101,9 @@ export default async function EstudoDeCasoPage({
         </section>
         <section className={secao}>
           <h2 className={tituloSecao}>{dict.stack}</h2>
-          <ul className="flex flex-wrap gap-2 text-sm">
+          <ul className="flex flex-wrap gap-2">
             {projeto.stack.map((item) => (
-              <li key={item} className="rounded border border-muted/40 px-2 py-0.5">
+              <li key={item} className="chip">
                 {item}
               </li>
             ))}

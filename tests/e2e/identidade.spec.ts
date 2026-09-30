@@ -140,3 +140,52 @@ for (const path of paths) {
     }
   });
 }
+
+for (const path of paths) {
+  test.describe(`demais seções ${path}`, () => {
+    test("cartões de destaque e competências usam chips e botão da identidade", async ({
+      page,
+    }) => {
+      await page.goto(path);
+      const card = page.getByTestId("projeto-card-kepler-lab");
+      await expect(card.locator(".chip").first()).toBeVisible();
+      await expect(card.locator("a.botao").first()).toBeVisible();
+      await expect(
+        page
+          .getByTestId("grupo-de-competencias")
+          .first()
+          .locator(".chip")
+          .first(),
+      ).toBeVisible();
+    });
+
+    test("botão do CV público usa o acento", async ({ page }) => {
+      await page.goto(path);
+      await expect(
+        page.getByTestId("contato").locator("a.botao-primario"),
+      ).toBeVisible();
+    });
+
+    test("seletor de idioma marca o idioma atual com o acento", async ({
+      page,
+    }) => {
+      await page.goto(path);
+      const atual = page.locator('nav a[aria-current="page"]').first();
+      expect(
+        await atual.evaluate((n) => getComputedStyle(n).backgroundColor),
+      ).toBe("rgb(196, 242, 90)");
+    });
+  });
+}
+
+test("estudo de caso usa a fonte de títulos e chips na stack", async ({
+  page,
+}) => {
+  await page.goto("/pt/projetos/kepler-lab");
+  const h1 = await page
+    .locator("h1")
+    .first()
+    .evaluate((n) => getComputedStyle(n).fontFamily);
+  expect(h1).toContain("Bricolage");
+  await expect(page.locator("main .chip").first()).toBeVisible();
+});

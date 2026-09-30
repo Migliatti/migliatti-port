@@ -13,7 +13,7 @@ export function ProjetoCard({ projeto, lang }: Props) {
   return (
     <article
       data-testid={`projeto-card-${projeto.id}`}
-      className="flex flex-col gap-3 rounded-lg border border-muted/40 p-5"
+      className="flex flex-col gap-3 rounded-xl border border-foreground/20 p-5"
     >
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-xl font-semibold">{projeto.titulo}</h3>
@@ -22,17 +22,17 @@ export function ProjetoCard({ projeto, lang }: Props) {
         </span>
       </div>
       <p className="text-muted">{projeto.resumo}</p>
-      <ul className="flex flex-wrap gap-2 text-sm text-muted">
+      <ul className="flex flex-wrap gap-2">
         {projeto.stack.map((item) => (
-          <li key={item} className="rounded border border-muted/40 px-2 py-0.5">
+          <li key={item} className="chip">
             {item}
           </li>
         ))}
       </ul>
-      <div className="flex flex-wrap gap-4 text-sm">
+      <div className="flex flex-wrap items-center gap-4 text-sm">
         <Link
           href={`/${lang}/projetos/${projeto.id}`}
-          className="font-semibold underline underline-offset-4"
+          className="botao botao-secundario"
         >
           {dict.verEstudoDeCaso}
         </Link>

@@ -57,7 +57,7 @@ export function Competencias({ lang }: { lang: Locale }) {
               {grupo.itens.map((item) => (
                 <li
                   key={item}
-                  className="rounded border border-current px-2 py-0.5 text-sm text-muted"
+                  className="chip"
                 >
                   {item}
                 </li>
