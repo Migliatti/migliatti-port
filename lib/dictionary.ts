@@ -32,6 +32,7 @@ export type Dictionary = {
   resultado: string;
   aprendizado: string;
   evidencias: string;
+  usoDeIA: string;
   /** Marca visível de imagem desenhada, que não é captura de tela. */
   ilustracao: string;
   /** Rótulo do link para o arquivo de um trecho de código no repositório. */
@@ -74,6 +75,7 @@ const dictionaries: Record<Locale, Dictionary> = {
     resultado: "Resultado",
     aprendizado: "Aprendizado",
     evidencias: "Evidências",
+    usoDeIA: "Como usei IA",
     ilustracao: "Ilustração",
     verNoRepositorio: "Ver no repositório",
     resultadoDosTestes: "Resultado dos testes",
@@ -108,6 +110,7 @@ const dictionaries: Record<Locale, Dictionary> = {
     resultado: "Result",
     aprendizado: "Learnings",
     evidencias: "Evidence",
+    usoDeIA: "How I used AI",
     ilustracao: "Illustration",
     verNoRepositorio: "View in repository",
     resultadoDosTestes: "Test result",

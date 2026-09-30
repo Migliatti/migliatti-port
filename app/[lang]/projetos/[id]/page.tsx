@@ -111,6 +111,24 @@ export default async function EstudoDeCasoPage({
           <h2 className={tituloSecao}>{dict.aprendizado}</h2>
           <p>{estudo.aprendizado}</p>
         </section>
+        <section className={secao} data-testid="uso-de-ia">
+          <h2 className={tituloSecao}>{dict.usoDeIA}</h2>
+          <p>{estudo.usoDeIA.texto}</p>
+          <ul className="flex flex-col gap-1">
+            {estudo.usoDeIA.links.map((link) => (
+              <li key={link.url}>
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4"
+                >
+                  {link.rotulo}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
         {projeto.evidencias.length > 0 && (
           <section className={secao}>
             <h2 className={tituloSecao}>{dict.evidencias}</h2>
