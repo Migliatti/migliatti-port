@@ -109,6 +109,40 @@ describe("rejeita conteúdo incompleto", () => {
     expect(errosAoCarregar()).toContainEqual(expect.stringContaining('legenda: campo obrigatório "en"'));
   });
 
+  it("Ilustração sem texto alternativo em um dos idiomas", () => {
+    editarJson("projetos/grimoire/projeto.json", (d) => {
+      const evidencia = (d.evidencias as Record<string, unknown>[]).find(
+        (e) => e.tipo === "ilustracao",
+      )!;
+      delete (evidencia.alt as Record<string, unknown>).en;
+    });
+    expect(errosAoCarregar()).toContainEqual(expect.stringContaining('alt: campo obrigatório "en"'));
+  });
+
+  it("Ilustração com caminho que não é local", () => {
+    editarJson("projetos/grimoire/projeto.json", (d) => {
+      const evidencia = (d.evidencias as Record<string, unknown>[]).find(
+        (e) => e.tipo === "ilustracao",
+      )!;
+      evidencia.url = "https://exemplo.com/imagem.svg";
+    });
+    expect(errosAoCarregar()).toContainEqual(
+      expect.stringContaining('"url" não é um caminho local válido'),
+    );
+  });
+
+  it("Evidência de código sem trecho", () => {
+    editarJson("projetos/grimoire/projeto.json", (d) => {
+      const evidencia = (d.evidencias as Record<string, unknown>[]).find(
+        (e) => e.tipo === "codigo",
+      )!;
+      delete evidencia.trecho;
+    });
+    expect(errosAoCarregar()).toContainEqual(
+      expect.stringContaining('campo obrigatório "trecho"'),
+    );
+  });
+
   it("projeto sem Demo e sem Evidência", () => {
     editarJson("projetos/labreserve/projeto.json", (d) => {
       d.evidencias = [];

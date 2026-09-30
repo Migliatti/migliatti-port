@@ -29,6 +29,7 @@ import {
   type TextosHome,
 } from "./tipos";
 import {
+  caminhoLocal,
   ehObjeto,
   email,
   link,
@@ -326,11 +327,30 @@ function carregarProjeto(
       if (!ehObjeto(ev.legenda) && lang === locales[0]) {
         erros.push(`${local}: "legenda" deve ter um texto por idioma (${locales.join(", ")})`);
       }
-      return {
-        tipo: umDe(ev, "tipo", tiposDeEvidencia, local, errosComuns),
-        url: link(ev, "url", local, errosComuns),
+      const tipoDaEvidencia = umDe(ev, "tipo", tiposDeEvidencia, local, errosComuns);
+      const ilustracao = tipoDaEvidencia === "ilustracao";
+      const evidencia: Evidencia = {
+        tipo: tipoDaEvidencia,
+        url: ilustracao
+          ? caminhoLocal(ev, "url", local, errosComuns)
+          : link(ev, "url", local, errosComuns),
         legenda: texto(legendas, lang, `${local} legenda`, erros),
       };
+      if (ilustracao) {
+        // O texto alternativo é por idioma, como a legenda.
+        const alts = ehObjeto(ev.alt) ? ev.alt : {};
+        if (!ehObjeto(ev.alt) && lang === locales[0]) {
+          erros.push(`${local}: "alt" deve ter um texto por idioma (${locales.join(", ")})`);
+        }
+        evidencia.alt = texto(alts, lang, `${local} alt`, erros);
+      }
+      if (tipoDaEvidencia === "codigo") {
+        evidencia.trecho = texto(ev, "trecho", local, errosComuns);
+      }
+      if (tipoDaEvidencia === "testes" && "saida" in ev) {
+        evidencia.saida = texto(ev, "saida", local, errosComuns);
+      }
+      return evidencia;
     });
 
     const textos = carregarTextosDoProjeto(raiz, id, lang, tipo, erros);
