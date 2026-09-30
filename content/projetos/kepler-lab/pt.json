@@ -10,6 +10,27 @@
       "Suporte a movimento reduzido e modo de alto contraste desde o início."
     ],
     "resultado": "Aplicação publicada na Vercel com 22 destinos astronômicos, testes unitários e recursos de acessibilidade.",
-    "aprendizado": "Equilibrar gráficos 3D com acessibilidade e organizar conteúdo científico para quem não é especialista."
+    "aprendizado": "Equilibrar gráficos 3D com acessibilidade e organizar conteúdo científico para quem não é especialista.",
+    "usoDeIA": {
+      "texto": "Desenvolvido com Claude Code a partir de um CLAUDE.md com os princípios, a arquitetura e os comandos do projeto; o AGENTS.md só aponta para ele. Cada fase seguiu um plano em docs/superpowers/plans, executado tarefa a tarefa com TDD. Um skill de projeto, /verify, roda testes, build e lint antes de qualquer mudança ser declarada pronta, e um hook em .claude/settings.json roda o lint depois de cada edição.",
+      "links": [
+        {
+          "rotulo": "CLAUDE.md: instruções do projeto para o agente",
+          "url": "https://github.com/Migliatti/kepler-lab/blob/3a2debfde50cc86875c8833511fa6bd47f6fb55c/CLAUDE.md"
+        },
+        {
+          "rotulo": ".claude/settings.json: permissões e hook de lint após cada edição",
+          "url": "https://github.com/Migliatti/kepler-lab/blob/3a2debfde50cc86875c8833511fa6bd47f6fb55c/.claude/settings.json"
+        },
+        {
+          "rotulo": ".claude/skills/verify/SKILL.md: verificação obrigatória antes de concluir",
+          "url": "https://github.com/Migliatti/kepler-lab/blob/3a2debfde50cc86875c8833511fa6bd47f6fb55c/.claude/skills/verify/SKILL.md"
+        },
+        {
+          "rotulo": "Plano da Fase 1 (catálogo), executado tarefa a tarefa",
+          "url": "https://github.com/Migliatti/kepler-lab/blob/3a2debfde50cc86875c8833511fa6bd47f6fb55c/docs/superpowers/plans/2026-09-16-phase-1-catalogue.md"
+        }
+      ]
+    }
   }
 }

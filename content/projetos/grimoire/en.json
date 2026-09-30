@@ -9,6 +9,31 @@
       "Implementation, documentation, tests and platform integration kept separate."
     ],
     "resultado": "Open source catalog with 15 skills, one of them orchestrating a composed workflow (chain), packaged for Claude Code, Codex, Pi and Hermes Agent, with a suite of 41 Python tests.",
-    "aprendizado": "Defining stable contracts across different tools and testing agent behavior, not only code."
+    "aprendizado": "Defining stable contracts across different tools and testing agent behavior, not only code.",
+    "usoDeIA": {
+      "texto": "The product is instructions for AI agents, so skill changes are evaluated with agents: each scenario has observable criteria, runs against the current skills to record the RED result, and runs again after the smallest fix to record the GREEN result, in a fresh context and an isolated sandbox. No scenario is marked as passing from reading SKILL.md alone. The repository's structural contracts are checked by Python tests.",
+      "links": [
+        {
+          "rotulo": "docs/authoring.md: authoring rules and RED/GREEN evaluation",
+          "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/docs/authoring.md"
+        },
+        {
+          "rotulo": "Behavioral scenarios for the business-direction chain",
+          "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/business-direction/scenarios.md"
+        },
+        {
+          "rotulo": "RED results: failures observed before the fixes",
+          "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/business-direction/red-results.md"
+        },
+        {
+          "rotulo": "GREEN results: evidence after the fixes",
+          "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/business-direction/green-results.md"
+        },
+        {
+          "rotulo": "tests/test_repository.py: repository contract tests",
+          "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/test_repository.py"
+        }
+      ]
+    }
   }
 }

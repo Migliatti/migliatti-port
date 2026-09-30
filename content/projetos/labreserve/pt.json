@@ -10,6 +10,31 @@
       "Gate de validação com typecheck, lint, build, testes e E2E antes de declarar algo pronto."
     ],
     "resultado": "Sistema local com consulta de disponibilidade, reservas com detecção de conflito de horário, filtros, cancelamento e histórico de eventos.",
-    "aprendizado": "Usar testes, plano e revisão para manter o controle sobre código produzido com agentes de IA."
+    "aprendizado": "Usar testes, plano e revisão para manter o controle sobre código produzido com agentes de IA.",
+    "usoDeIA": {
+      "texto": "Construído com agentes de IA. O CLAUDE.md fixa a arquitetura, as regras de negócio que precisam continuar valendo, o trabalho test-first e o gate completo (typecheck, lint, build, testes e E2E). O AGENT_ISSUES.md é o quadro persistente de handoff entre sessões. A entrega da interface passou por uma autoauditoria e por duas revisões independentes e cegas, em paralelo, registradas em docs/verification/; foi aprovada na sexta rodada.",
+      "links": [
+        {
+          "rotulo": "CLAUDE.md: instruções, regras de negócio e gate de validação",
+          "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/CLAUDE.md"
+        },
+        {
+          "rotulo": "AGENT_ISSUES.md: quadro persistente de tarefas e handoff",
+          "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/AGENT_ISSUES.md"
+        },
+        {
+          "rotulo": "Autoauditoria local antes das revisões independentes",
+          "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/docs/verification/ai-002-local-audit.md"
+        },
+        {
+          "rotulo": "Revisão independente, rodada 6: aprovada",
+          "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/docs/verification/ai-002-independent-review-round-6.md"
+        },
+        {
+          "rotulo": "Desenho da reestruturação Claude-first do projeto",
+          "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/docs/superpowers/specs/2026-09-18-claude-first-restructure-design.md"
+        }
+      ]
+    }
   }
 }

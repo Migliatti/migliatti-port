@@ -10,6 +10,31 @@
       "Validation gate with typecheck, lint, build, tests and E2E before calling anything done."
     ],
     "resultado": "Local system with availability search, bookings with schedule conflict detection, filters, cancellation and event history.",
-    "aprendizado": "Using tests, planning and review to stay in control of code written with AI agents."
+    "aprendizado": "Using tests, planning and review to stay in control of code written with AI agents.",
+    "usoDeIA": {
+      "texto": "Built with AI agents. CLAUDE.md pins down the architecture, the business rules that must stay true, test-first work and the full gate (typecheck, lint, build, tests and E2E). AGENT_ISSUES.md is the persistent handoff board between sessions. The UI delivery went through a self-audit and two independent, blind reviews run in parallel, recorded under docs/verification/; it was approved in the sixth round.",
+      "links": [
+        {
+          "rotulo": "CLAUDE.md: instructions, business rules and validation gate",
+          "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/CLAUDE.md"
+        },
+        {
+          "rotulo": "AGENT_ISSUES.md: persistent task and handoff board",
+          "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/AGENT_ISSUES.md"
+        },
+        {
+          "rotulo": "Local self-audit before the independent reviews",
+          "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/docs/verification/ai-002-local-audit.md"
+        },
+        {
+          "rotulo": "Independent review, round 6: approved",
+          "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/docs/verification/ai-002-independent-review-round-6.md"
+        },
+        {
+          "rotulo": "Design of the project's Claude-first restructure",
+          "url": "https://github.com/Migliatti/labreserve/blob/204de0894720dfa3929f746d8b22b3eb17284bf7/docs/superpowers/specs/2026-09-18-claude-first-restructure-design.md"
+        }
+      ]
+    }
   }
 }

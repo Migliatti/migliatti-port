@@ -9,6 +9,31 @@
       "Separar implementação, documentação, testes e integração por plataforma."
     ],
     "resultado": "Catálogo open source com 15 skills, uma delas orquestrando um workflow composto (chain), empacotado para Claude Code, Codex, Pi e Hermes Agent, com suíte de 41 testes em Python.",
-    "aprendizado": "Definir contratos estáveis entre ferramentas diferentes e testar o comportamento de agentes, não só o código."
+    "aprendizado": "Definir contratos estáveis entre ferramentas diferentes e testar o comportamento de agentes, não só o código.",
+    "usoDeIA": {
+      "texto": "O produto são instruções para agentes de IA, então as mudanças nas skills são avaliadas com agentes: cada cenário tem critérios observáveis, roda contra as skills atuais para registrar o resultado RED e roda de novo depois da menor correção para registrar o GREEN, em contexto novo e sandbox isolado. Nenhum cenário é dado como aprovado só pela leitura do SKILL.md. Os contratos estruturais do repositório são verificados por testes em Python.",
+      "links": [
+        {
+          "rotulo": "docs/authoring.md: regras de autoria e avaliação RED/GREEN",
+          "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/docs/authoring.md"
+        },
+        {
+          "rotulo": "Cenários comportamentais da chain business-direction",
+          "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/business-direction/scenarios.md"
+        },
+        {
+          "rotulo": "Resultados RED: falhas observadas antes das correções",
+          "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/business-direction/red-results.md"
+        },
+        {
+          "rotulo": "Resultados GREEN: evidência depois das correções",
+          "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/business-direction/green-results.md"
+        },
+        {
+          "rotulo": "tests/test_repository.py: testes dos contratos do repositório",
+          "url": "https://github.com/Migliatti/grimoire/blob/d15acbb1caa5fb26e4a0a17ae899d465460ae4e2/tests/test_repository.py"
+        }
+      ]
+    }
   }
 }
