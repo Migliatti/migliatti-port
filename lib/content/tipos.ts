@@ -38,11 +38,28 @@ export type Evidencia = {
   saida?: string;
 };
 
+/** Link para um arquivo real do repositório do próprio projeto. */
+export type LinkDeArquivo = {
+  rotulo: string;
+  /** `<repositorio>/blob/<ref>/<caminho>`. */
+  url: string;
+};
+
+/**
+ * Como a IA foi usada no projeto (harness, CONTEXT.md, ADRs, testes...).
+ * Só afirma o que os arquivos linkados mostram.
+ */
+export type UsoDeIA = {
+  texto: string;
+  links: LinkDeArquivo[];
+};
+
 export type EstudoDeCaso = {
   problema: string;
   decisoes: string[];
   resultado: string;
   aprendizado: string;
+  usoDeIA: UsoDeIA;
 };
 
 type ProjetoBase = {

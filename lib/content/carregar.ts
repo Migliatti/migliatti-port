@@ -27,6 +27,7 @@ import {
   type GrupoDeCompetencias,
   type Projeto,
   type TextosHome,
+  type UsoDeIA,
 } from "./tipos";
 import {
   caminhoLocal,
@@ -314,6 +315,7 @@ function carregarProjeto(
   }
 
   const porIdioma = {} as Record<Locale, Projeto>;
+  const temUsoDeIA = {} as Record<Locale, boolean | undefined>;
   for (const lang of locales) {
     const evidencias: Evidencia[] = listaEvidencias.map((ev, i) => {
       const local = `${onde} evidencias[${i}]`;
@@ -353,7 +355,8 @@ function carregarProjeto(
       return evidencia;
     });
 
-    const textos = carregarTextosDoProjeto(raiz, id, lang, tipo, erros);
+    const textos = carregarTextosDoProjeto(raiz, id, lang, tipo, repositorio, erros);
+    temUsoDeIA[lang] = textos.temUsoDeIA;
     const comum = {
       id,
       estado,
@@ -374,9 +377,20 @@ function carregarProjeto(
               decisoes: [],
               resultado: "",
               aprendizado: "",
+              usoDeIA: { texto: "", links: [] },
             },
           }
         : { ...comum, tipo };
+  }
+
+  // Só compara idiomas cujo Estudo de caso foi lido; a falta dele já é erro.
+  const lidos = locales.filter((l) => temUsoDeIA[l] !== undefined);
+  if (tipo === "destaque" && new Set(lidos.map((l) => temUsoDeIA[l])).size > 1) {
+    const com = lidos.filter((l) => temUsoDeIA[l]).join(", ");
+    const sem = lidos.filter((l) => !temUsoDeIA[l]).join(", ");
+    erros.push(
+      `${base}: idiomas divergem quanto ao bloco "usoDeIA" do Estudo de caso (presente em ${com}; ausente em ${sem})`,
+    );
   }
 
   return { ordem, id, porIdioma };
@@ -387,8 +401,15 @@ function carregarTextosDoProjeto(
   id: string,
   lang: Locale,
   tipo: Projeto["tipo"],
+  repositorio: string,
   erros: Erros,
-): { titulo: string; resumo: string; estudoDeCaso?: EstudoDeCaso } {
+): {
+  titulo: string;
+  resumo: string;
+  estudoDeCaso?: EstudoDeCaso;
+  /** Se o Estudo de caso traz o bloco de IA; `undefined` se não há Estudo de caso. */
+  temUsoDeIA?: boolean;
+} {
   const onde = `projetos/${id}/${lang}.json`;
   const bruto = lerJson(path.join(raiz, "projetos", id, `${lang}.json`), raiz, erros);
   if (bruto === undefined) return { titulo: "", resumo: "" };
@@ -421,6 +442,55 @@ function carregarTextosDoProjeto(
       decisoes: listaDeTextos(estudo, "decisoes", local, erros),
       resultado: texto(estudo, "resultado", local, erros),
       aprendizado: texto(estudo, "aprendizado", local, erros),
+      usoDeIA: carregarUsoDeIA(estudo, local, repositorio, erros),
     },
+    temUsoDeIA: "usoDeIA" in estudo,
   };
+}
+
+/**
+ * Bloco "como usei IA" do Estudo de caso: um texto e links para arquivos
+ * reais do repositório do próprio projeto (`<repositorio>/blob/<ref>/<caminho>`).
+ */
+function carregarUsoDeIA(
+  estudo: Record<string, unknown>,
+  onde: string,
+  repositorio: string,
+  erros: Erros,
+): UsoDeIA {
+  const bruto = estudo.usoDeIA;
+  if (!ehObjeto(bruto)) {
+    erros.push(`${onde}: Estudo de caso precisa do bloco "usoDeIA" (como a IA foi usada)`);
+    return { texto: "", links: [] };
+  }
+  const local = `${onde} usoDeIA`;
+  const linksBrutos = bruto.links;
+  if (!Array.isArray(linksBrutos) || linksBrutos.length === 0) {
+    erros.push(`${local}: campo obrigatório "links" deve ser uma lista não vazia`);
+  }
+  const lista = Array.isArray(linksBrutos) ? linksBrutos : [];
+  return {
+    texto: texto(bruto, "texto", local, erros),
+    links: lista.map((item, i) => {
+      const ondeLink = `${local} links[${i}]`;
+      if (!ehObjeto(item)) {
+        erros.push(`${ondeLink}: deve ser um objeto`);
+        return { rotulo: "", url: "" };
+      }
+      const url = link(item, "url", ondeLink, erros);
+      if (url !== "" && repositorio !== "" && !ehArquivoDoRepositorio(url, repositorio)) {
+        erros.push(
+          `${ondeLink}: "url" deve apontar para um arquivo do repositório do projeto (${repositorio}/blob/<ref>/<caminho>): "${url}"`,
+        );
+      }
+      return { rotulo: texto(item, "rotulo", ondeLink, erros), url };
+    }),
+  };
+}
+
+function ehArquivoDoRepositorio(url: string, repositorio: string): boolean {
+  const prefixo = `${repositorio.replace(/\/+$/, "")}/blob/`;
+  if (!url.startsWith(prefixo)) return false;
+  // Depois do prefixo: <ref>/<caminho>, os dois não vazios.
+  return /^[^/?#]+\/[^?#]+$/.test(url.slice(prefixo.length).split("#")[0]);
 }

@@ -154,7 +154,16 @@ describe("rejeita conteúdo incompleto", () => {
 
   it("Outro projeto com Estudo de caso", () => {
     editarJson("projetos/rubicon-archive/pt.json", (d) => {
-      d.estudoDeCaso = { problema: "x", decisoes: ["y"], resultado: "z", aprendizado: "w" };
+      d.estudoDeCaso = {
+        problema: "x",
+        decisoes: ["y"],
+        resultado: "z",
+        aprendizado: "w",
+        usoDeIA: {
+          texto: "t",
+          links: [{ rotulo: "r", url: "https://github.com/Migliatti/rubicon-archive/blob/main/README.md" }],
+        },
+      };
     });
     expect(errosAoCarregar()).toContainEqual(
       expect.stringContaining("só Projetos em destaque têm Estudo de caso"),
@@ -175,6 +184,113 @@ describe("rejeita conteúdo incompleto", () => {
       (d.estudoDeCaso as Record<string, unknown>).decisoes = [];
     });
     expect(errosAoCarregar()).toContainEqual(expect.stringContaining('"decisoes" deve ser uma lista não vazia'));
+  });
+
+  describe("bloco de IA do Estudo de caso", () => {
+    const usoDeIA = (d: Record<string, unknown>) =>
+      (d.estudoDeCaso as Record<string, unknown>).usoDeIA as Record<string, unknown>;
+    const primeiroLink = (d: Record<string, unknown>) =>
+      (usoDeIA(d).links as Record<string, unknown>[])[0];
+
+    it("Estudo de caso sem o bloco, em português", () => {
+      editarJson("projetos/kepler-lab/pt.json", (d) => {
+        delete (d.estudoDeCaso as Record<string, unknown>).usoDeIA;
+      });
+      expect(errosAoCarregar()).toContainEqual(
+        expect.stringContaining(
+          'projetos/kepler-lab/pt.json estudoDeCaso: Estudo de caso precisa do bloco "usoDeIA"',
+        ),
+      );
+    });
+
+    it("Estudo de caso sem o bloco, em inglês", () => {
+      editarJson("projetos/grimoire/en.json", (d) => {
+        delete (d.estudoDeCaso as Record<string, unknown>).usoDeIA;
+      });
+      expect(errosAoCarregar()).toContainEqual(
+        expect.stringContaining(
+          'projetos/grimoire/en.json estudoDeCaso: Estudo de caso precisa do bloco "usoDeIA"',
+        ),
+      );
+    });
+
+    it("sem o bloco nos dois idiomas", () => {
+      for (const lang of ["pt", "en"]) {
+        editarJson(`projetos/labreserve/${lang}.json`, (d) => {
+          delete (d.estudoDeCaso as Record<string, unknown>).usoDeIA;
+        });
+      }
+      const erros = errosAoCarregar();
+      expect(erros).toContainEqual(expect.stringContaining('projetos/labreserve/pt.json estudoDeCaso: Estudo de caso precisa do bloco "usoDeIA"'));
+      expect(erros).toContainEqual(expect.stringContaining('projetos/labreserve/en.json estudoDeCaso: Estudo de caso precisa do bloco "usoDeIA"'));
+    });
+
+    it("PT e EN divergem quanto à presença do bloco", () => {
+      editarJson("projetos/labreserve/en.json", (d) => {
+        delete (d.estudoDeCaso as Record<string, unknown>).usoDeIA;
+      });
+      expect(errosAoCarregar()).toContainEqual(
+        expect.stringContaining(
+          'projetos/labreserve: idiomas divergem quanto ao bloco "usoDeIA" do Estudo de caso (presente em pt; ausente em en)',
+        ),
+      );
+    });
+
+    it("bloco sem texto", () => {
+      editarJson("projetos/grimoire/pt.json", (d) => {
+        usoDeIA(d).texto = " ";
+      });
+      expect(errosAoCarregar()).toContainEqual(
+        expect.stringContaining('estudoDeCaso usoDeIA: campo obrigatório "texto" ausente ou vazio'),
+      );
+    });
+
+    it("bloco sem links", () => {
+      editarJson("projetos/grimoire/en.json", (d) => {
+        usoDeIA(d).links = [];
+      });
+      expect(errosAoCarregar()).toContainEqual(
+        expect.stringContaining('estudoDeCaso usoDeIA: campo obrigatório "links" deve ser uma lista não vazia'),
+      );
+    });
+
+    it("link que não é http(s)", () => {
+      editarJson("projetos/kepler-lab/en.json", (d) => {
+        primeiroLink(d).url = "CLAUDE.md";
+      });
+      expect(errosAoCarregar()).toContainEqual(
+        expect.stringContaining('usoDeIA links[0]: "url" não é um link http(s) válido'),
+      );
+    });
+
+    it("link para fora do repositório do projeto", () => {
+      editarJson("projetos/kepler-lab/pt.json", (d) => {
+        primeiroLink(d).url = "https://github.com/Migliatti/grimoire/blob/main/README.md";
+      });
+      expect(errosAoCarregar()).toContainEqual(
+        expect.stringContaining(
+          'projetos/kepler-lab/pt.json estudoDeCaso usoDeIA links[0]: "url" deve apontar para um arquivo do repositório do projeto',
+        ),
+      );
+    });
+
+    it("link para a raiz do repositório, não para um arquivo", () => {
+      editarJson("projetos/labreserve/pt.json", (d) => {
+        primeiroLink(d).url = "https://github.com/Migliatti/labreserve";
+      });
+      expect(errosAoCarregar()).toContainEqual(
+        expect.stringContaining('"url" deve apontar para um arquivo do repositório do projeto'),
+      );
+    });
+
+    it("link sem rótulo", () => {
+      editarJson("projetos/labreserve/en.json", (d) => {
+        delete primeiroLink(d).rotulo;
+      });
+      expect(errosAoCarregar()).toContainEqual(
+        expect.stringContaining('usoDeIA links[0]: campo obrigatório "rotulo" ausente ou vazio'),
+      );
+    });
   });
 
   it("tipo ou estado desconhecido", () => {

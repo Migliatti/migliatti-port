@@ -90,6 +90,19 @@ describe.each(locales)("conteúdo em %s", (lang) => {
     }
   });
 
+  it("todo Estudo de caso diz como a IA foi usada, com links para arquivos do próprio repositório", () => {
+    for (const projeto of listarDestaques(lang)) {
+      const { texto, links } = projeto.estudoDeCaso.usoDeIA;
+      naoVazio(texto);
+      expect(links.length, projeto.id).toBeGreaterThan(0);
+      for (const { rotulo, url } of links) {
+        naoVazio(rotulo);
+        linkValido(url);
+        expect(url.startsWith(`${projeto.repositorio}/blob/`), url).toBe(true);
+      }
+    }
+  });
+
   it("só kepler-lab e rubicon-archive têm Demo", () => {
     const comDemo = todosOsProjetos(lang)
       .filter((p) => p.demo !== undefined)
@@ -192,6 +205,15 @@ it("todo projeto existe em português e em inglês, com os mesmos dados comuns",
     expect(projetoEn.repositorio).toBe(projetoPt.repositorio);
     expect(projetoEn.demo).toBe(projetoPt.demo);
     expect(projetoEn.titulo).not.toBe("");
+  }
+});
+
+it("o bloco de IA de cada Projeto em destaque aponta para os mesmos arquivos em PT e EN", () => {
+  for (const projetoPt of listarDestaques("pt")) {
+    const projetoEn = listarDestaques("en").find((p) => p.id === projetoPt.id)!;
+    expect(projetoEn.estudoDeCaso.usoDeIA.links.map((l) => l.url)).toEqual(
+      projetoPt.estudoDeCaso.usoDeIA.links.map((l) => l.url),
+    );
   }
 });
 
