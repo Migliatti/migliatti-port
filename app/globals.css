@@ -383,6 +383,77 @@ li:first-child > .projeto-cartao {
   }
 }
 
+/*
+ * Estudo de caso no layout editorial (issue #37): mesma barra fixa e mesmo
+ * grid de seção numerada da home. O cabeçalho não ocupa a tela inteira; o
+ * texto já vem no HTML e só usa as animações curtas existentes.
+ */
+
+/* Link de volta na barra: em tela estreita só a seta fica visível. */
+.barra-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 63.999rem) {
+  .barra-voltar {
+    padding: 0.25rem;
+  }
+
+  .barra-voltar-texto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.estudo {
+  overflow-wrap: break-word;
+}
+
+.estudo-cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-top: calc(var(--altura-barra) + 4rem);
+  padding-bottom: 1rem;
+}
+
+.estudo-titulo {
+  font-size: clamp(2.75rem, 8vw, 5.5rem);
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+/* Apoio deslocado à direita em telas largas, como o do Hero. */
+@media (min-width: 48rem) {
+  .estudo-apoio {
+    margin-left: 25%;
+  }
+}
+
+/* Texto corrido com medida confortável de leitura. */
+.estudo-texto {
+  max-width: 42rem;
+  line-height: 1.65;
+}
+
+.estudo-evidencia {
+  min-width: 0;
+}
+
+/* O código rola por dentro; a página nunca ganha rolagem horizontal. */
+.estudo-codigo {
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: normal;
+}
+
 /* Espaço reservado para a Evidência (captura futura); vazio, não ocupa lugar. */
 .projeto-evidencia:empty {
   display: none;
