@@ -18,6 +18,7 @@ import path from "node:path";
 import { locales, type Locale } from "../dictionary";
 import {
   estadosDeProjeto,
+  pilaresDaVitrine,
   tiposDeEvidencia,
   tiposDeProjeto,
   type CanaisDeContato,
@@ -26,6 +27,7 @@ import {
   type Evidencia,
   type Formacao,
   type GrupoDeCompetencias,
+  type PilarDaVitrine,
   type Projeto,
   type TextosHome,
   type TextosDaVitrine,
@@ -196,7 +198,7 @@ function carregarFormacao(raiz: string, lang: Locale, erros: Erros): Formacao {
 
 function carregarVitrine(raiz: string, lang: Locale, erros: Erros): TextosDaVitrine {
   const onde = `vitrine/${lang}.json`;
-  const vazia: TextosDaVitrine = { titulo: "", descricao: "", rotuloDaPeca: "" };
+  const vazia: TextosDaVitrine = { titulo: "", descricao: "", rotuloDaPeca: "", pilares: [] };
   const bruto = lerJson(path.join(raiz, "vitrine", `${lang}.json`), raiz, erros);
   if (bruto === undefined) return vazia;
   if (!ehObjeto(bruto)) {
@@ -207,7 +209,39 @@ function carregarVitrine(raiz: string, lang: Locale, erros: Erros): TextosDaVitr
     titulo: texto(bruto, "titulo", onde, erros),
     descricao: texto(bruto, "descricao", onde, erros),
     rotuloDaPeca: texto(bruto, "rotuloDaPeca", onde, erros),
+    pilares: carregarPilares(bruto, onde, erros),
   };
+}
+
+/** Exatamente um pilar por item de `pilaresDaVitrine`, nessa ordem. */
+function carregarPilares(
+  bruto: Record<string, unknown>,
+  onde: string,
+  erros: Erros,
+): PilarDaVitrine[] {
+  const lista = bruto.pilares;
+  const esperados = pilaresDaVitrine.map((id) => `"${id}"`).join(", ");
+  if (!Array.isArray(lista)) {
+    erros.push(`${onde}: campo obrigatório "pilares" deve ser uma lista (${esperados})`);
+    return [];
+  }
+  const pilares = lista.map((item, i): PilarDaVitrine => {
+    const ondeItem = `${onde} pilares[${i}]`;
+    if (!ehObjeto(item)) {
+      erros.push(`${ondeItem}: deve ser um objeto`);
+      return { id: pilaresDaVitrine[0], nome: "", texto: "" };
+    }
+    return {
+      id: umDe(item, "id", pilaresDaVitrine, ondeItem, erros),
+      nome: texto(item, "nome", ondeItem, erros),
+      texto: texto(item, "texto", ondeItem, erros),
+    };
+  });
+  const ids = pilares.map((p) => p.id).join(",");
+  if (ids !== pilaresDaVitrine.join(",")) {
+    erros.push(`${onde}: "pilares" deve ter exatamente ${esperados}, nessa ordem`);
+  }
+  return pilares;
 }
 
 const CAMINHO_DO_CV_PUBLICO = /^\/cv\/[a-z0-9]+(?:-[a-z0-9]+)*\.pdf$/;

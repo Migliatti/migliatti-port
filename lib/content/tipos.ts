@@ -143,6 +143,23 @@ export type TextosDaVitrine = {
   titulo: string;
   /** O que é a peça e como foi feita com IA. */
   descricao: string;
-  /** Descrição acessível da peça (rótulo da imagem animada). */
+  /** Descrição acessível da peça (rótulo do grupo com o sistema orbital). */
   rotuloDaPeca: string;
+  /**
+   * Os três pilares do Posicionamento, na ordem de `pilaresDaVitrine`. Cada
+   * um é um corpo orbital da peça e um item de texto da seção.
+   */
+  pilares: PilarDaVitrine[];
+};
+
+/** Pilares do Posicionamento representados na Vitrine, um por corpo orbital. */
+export const pilaresDaVitrine = ["site", "automacao", "diagnostico"] as const;
+export type IdDoPilar = (typeof pilaresDaVitrine)[number];
+
+export type PilarDaVitrine = {
+  id: IdDoPilar;
+  /** Nome curto do pilar (ex.: "Sites"); também nomeia o corpo orbital. */
+  nome: string;
+  /** O que Gabriel entrega nesse pilar, em uma frase. */
+  texto: string;
 };

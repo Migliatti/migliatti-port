@@ -1,5 +1,22 @@
 {
   "titulo": "Vitrine",
-  "descricao": "Uma peça de animação de assinatura, desenvolvida com IA: um campo de fluxo em que centenas de traços seguem correntes invisíveis. É Canvas puro, sem bibliotecas; só carrega quando você chega até aqui, pausa fora da tela e fica parada se o seu sistema pede menos movimento.",
-  "rotuloDaPeca": "Animação abstrata: traços finos que fluem em correntes suaves pela área da Vitrine."
+  "descricao": "Uma peça de animação de assinatura, desenvolvida com IA: um pequeno sistema orbital em SVG, animado com anime.js, em que cada corpo é uma das três coisas que eu entrego. Passe o mouse ou use o Tab num corpo para destacar o que ele representa. A peça só carrega quando você chega até aqui, pausa fora da tela, fica mais leve no celular e fica parada se o seu sistema pede menos movimento.",
+  "rotuloDaPeca": "Sistema orbital: três corpos giram em órbitas ao redor de um núcleo, um para sites, um para automações e um para diagnósticos.",
+  "pilares": [
+    {
+      "id": "site",
+      "nome": "Sites",
+      "texto": "Sites rápidos, acessíveis e bilíngues, do layout ao deploy."
+    },
+    {
+      "id": "automacao",
+      "nome": "Automações",
+      "texto": "Fluxos que tiram trabalho repetitivo das mãos de alguém."
+    },
+    {
+      "id": "diagnostico",
+      "nome": "Diagnósticos",
+      "texto": "Análise do que existe hoje e do que vale a pena mudar primeiro."
+    }
+  ]
 }
