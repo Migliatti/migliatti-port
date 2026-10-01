@@ -1,30 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --muted: #525252;
+  --background: #f3f4ef;
+  --foreground: #11120e;
+  --muted: #4b4e43;
+  --accent: #c4f25a;
+  --on-accent: #11120e;
+  --accent-text: #3f5a00;
+  color-scheme: light;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-text: var(--accent-text);
+  --font-sans: var(--fonte-corpo), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--fonte-titulo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--fonte-mono), ui-monospace, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --muted: #a3a3a3;
+    --background: #0e0f0c;
+    --foreground: #ecede6;
+    --muted: #a9aba0;
+    --accent: #c4f25a;
+    --on-accent: #0e0f0c;
+    --accent-text: #c4f25a;
+    color-scheme: dark;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    Arial, sans-serif;
+  font-family: var(--font-sans);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    scroll-margin-top: 1.5rem;
+  }
 }
 
 /*
@@ -72,4 +96,115 @@ main:focus {
 
 .pular-para-conteudo:focus {
   transform: none;
+}
+
+/* Controles da identidade Sinal: pílula, um acento só. */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.botao-primario {
+  border: 1px solid var(--accent-text);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.botao-secundario {
+  border: 1px solid var(--foreground);
+  color: var(--foreground);
+}
+
+.chip {
+  display: inline-block;
+  border: 1px solid color-mix(in srgb, var(--foreground) 25%, transparent);
+  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+/* Marca do acento sob o nome: barra decorativa, nunca fundo de texto. */
+.marca-acento {
+  position: relative;
+  display: inline-block;
+}
+
+.marca-acento::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.06em;
+  height: 0.1em;
+  border-radius: 9999px;
+  background: var(--accent-text);
+  transform-origin: left;
+}
+
+/*
+ * Onde o nome cabe numa linha (sm em diante), a barra de uma palavra que não é
+ * a última cobre também o espaço depois dela. Em tela estreita o nome quebra e
+ * cada barra fica do tamanho da própria palavra.
+ */
+@media (min-width: 40rem) {
+  .marca-acento:not(:last-child)::after {
+    right: -0.25em;
+  }
+}
+
+/* Hover só onde existe ponteiro que passa o mouse: no toque o botão não fica levantado. */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .botao:hover {
+    transform: translateY(-3px);
+  }
+}
+
+/*
+ * Movimento da identidade (estende docs/adr/0001-animacao-de-entrada.md):
+ * mesmas regras, sem atraso, opacity inicial >= 0.7, só transform e opacity.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .botao {
+    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .botao:active {
+    transform: scale(0.97);
+  }
+
+  .animacao-titulo {
+    animation: animacao-titulo 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .marca-acento::after {
+    animation: marca-acento 500ms ease-out both;
+  }
+}
+
+@keyframes animacao-titulo {
+  from {
+    opacity: 0.7;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes marca-acento {
+  from {
+    transform: scaleX(0.15);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }

@@ -121,7 +121,7 @@ export function PecaDaVitrine({ rotulo }: Props) {
       aria-label={rotulo}
       data-testid="vitrine-peca"
       data-estado="aguardando"
-      className="group relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-muted/30 bg-background"
+      className="group relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-muted/30 bg-background"
     >
       <ImagemEstatica />
       <canvas

@@ -5,6 +5,7 @@ import {
   ExperienciaProfissional,
   Formacao,
 } from "@/components/Curriculo";
+import { Hero } from "@/components/Hero";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { OutrosProjetos } from "@/components/OutrosProjetos";
 import { ProjetoCard } from "@/components/ProjetoCard";
@@ -20,17 +21,16 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
   const destaques = listarDestaques(lang);
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-3xl flex-col px-6 py-8">
+    <div className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-8">
       <header className="flex justify-end">
         <LanguageSelector current={lang} />
       </header>
       <main id="conteudo" tabIndex={-1} className="flex flex-1 flex-col justify-center gap-4 py-8">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          {textos.nome}
-        </h1>
-        <p data-testid="posicionamento" className="animacao-entrada text-lg text-muted sm:text-xl">
-          {textos.posicionamento}
-        </p>
+        <Hero
+          lang={lang}
+          nome={textos.nome}
+          posicionamento={textos.posicionamento}
+        />
         <OutrosProjetos lang={lang} />
         <section
           aria-labelledby="destaques"

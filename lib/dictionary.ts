@@ -26,6 +26,9 @@ export type Dictionary = {
   projetosEmDestaque: string;
   verEstudoDeCaso: string;
   verDemo: string;
+  /** Rótulos dos botões do hero. */
+  falarComigo: string;
+  verProjetos: string;
   repositorio: string;
   voltar: string;
   problema: string;
@@ -70,6 +73,8 @@ const dictionaries: Record<Locale, Dictionary> = {
     projetosEmDestaque: "Projetos em destaque",
     verEstudoDeCaso: "Ver estudo de caso",
     verDemo: "Ver demo",
+    falarComigo: "Falar comigo",
+    verProjetos: "Ver projetos",
     repositorio: "Repositório",
     voltar: "Voltar para a home",
     problema: "Problema",
@@ -106,6 +111,8 @@ const dictionaries: Record<Locale, Dictionary> = {
     projetosEmDestaque: "Featured projects",
     verEstudoDeCaso: "View case study",
     verDemo: "View demo",
+    falarComigo: "Talk to me",
+    verProjetos: "See projects",
     repositorio: "Repository",
     voltar: "Back to home",
     problema: "Problem",

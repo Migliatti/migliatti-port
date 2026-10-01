@@ -22,7 +22,7 @@ export function OutrosProjetos({ lang }: { lang: Locale }) {
               {projeto.estado === "em-desenvolvimento" && (
                 <span
                   data-testid="em-desenvolvimento"
-                  className="ml-2 rounded border border-current px-1.5 py-0.5 text-xs text-muted"
+                  className="chip ml-2"
                 >
                   {t.emDesenvolvimento}
                 </span>

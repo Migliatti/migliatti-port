@@ -15,14 +15,22 @@ export function imagemDeCompartilhamento(titulo: string, subtitulo: string) {
           justifyContent: "center",
           gap: 24,
           padding: 80,
-          background: "#0a0a0a",
-          color: "#ededed",
+          background: "#0e0f0c",
+          color: "#ecede6",
         }}
       >
+        <div
+          style={{
+            width: 120,
+            height: 10,
+            borderRadius: 9999,
+            background: "#c4f25a",
+          }}
+        />
         <div style={{ fontSize: 64, fontWeight: 700, lineHeight: 1.1 }}>
           {titulo}
         </div>
-        <div style={{ fontSize: 32, color: "#a3a3a3", lineHeight: 1.3 }}>
+        <div style={{ fontSize: 32, color: "#a9aba0", lineHeight: 1.3 }}>
           {subtitulo}
         </div>
       </div>
