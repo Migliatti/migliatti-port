@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BarraFixa } from "@/components/BarraFixa";
 import { NumeroDaSecao } from "@/components/NumeroDaSecao";
+import { IlustracaoAnimada } from "@/components/ilustracao/IlustracaoAnimada";
 import { listarDestaques, obterProjeto } from "@/lib/content";
 import { getDictionary, isLocale, locales, type Locale } from "@/lib/dictionary";
+import { carregarIlustracao } from "@/lib/ilustracoes";
 import { metadadosDaPagina } from "@/lib/seo";
 
 export const dynamicParams = false;
@@ -191,11 +193,13 @@ export default async function EstudoDeCasoPage({
                 >
                   {evidencia.tipo === "ilustracao" && (
                     <figure className="flex min-w-0 flex-col gap-3">
-                      {/* eslint-disable-next-line @next/next/no-img-element -- SVG local, sem otimização */}
-                      <img
-                        src={evidencia.url}
-                        alt={evidencia.alt ?? ""}
-                        className="h-auto w-full max-w-full rounded border border-muted/40"
+                      {/* SVG inline (lido no build) para o pulso poder animá-lo. */}
+                      <IlustracaoAnimada
+                        origem={evidencia.url}
+                        svg={carregarIlustracao(evidencia.url, {
+                          prefixo: `ilustracao-${i}`,
+                          alt: evidencia.alt ?? "",
+                        })}
                       />
                       <figcaption className="text-sm text-muted">
                         <span

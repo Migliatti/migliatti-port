@@ -295,6 +295,8 @@ main:focus {
 
 /* Hero em tela cheia: o texto já está no HTML e não depende de JavaScript. */
 .hero {
+  position: relative;
+  isolation: isolate;
   display: flex;
   min-height: 100vh;
   min-height: 100svh;
@@ -308,6 +310,56 @@ main:focus {
 .hero-nome {
   font-size: clamp(3rem, 9vw, 6.5rem);
   overflow-wrap: anywhere;
+}
+
+/*
+ * Fundo estrelado da Hero (components/hero/ceu.ts): atrás do texto, sem
+ * receber ponteiro, estendido até a borda do container (o mesmo recuo do
+ * padding da página). Vazio sem JavaScript e com movimento reduzido.
+ */
+.hero-ceu {
+  position: absolute;
+  inset: 0 -1rem;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--foreground);
+}
+
+@media (min-width: 40rem) {
+  .hero-ceu {
+    inset: 0 -1.5rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  .hero-ceu {
+    inset: 0 -2.5rem;
+  }
+}
+
+.hero-ceu-camada {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+}
+
+/*
+ * Ilustração dos estudos de caso: SVG inline (lib/ilustracoes.ts), que já
+ * aparece parado sem JavaScript; o pulso (components/ilustracao/pulso.ts) só
+ * acrescenta decoração por cima das setas e caixas que já existem.
+ */
+.ilustracao {
+  overflow: hidden;
+}
+
+.ilustracao > svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 /* Grid assimétrico: o apoio do Hero começa deslocado à direita em telas largas. */
