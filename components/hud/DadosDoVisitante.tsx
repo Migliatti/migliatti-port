@@ -33,12 +33,11 @@ export function DadosDoVisitante({ rotulos, secoes, variante }: Props) {
   if (variante === "resumo") {
     itens.push(["rolagem", rotulos.rolagem, rolagem]);
   } else {
-    const tema = dados?.tema === "escuro" ? rotulos.escuro : rotulos.claro;
     const ponteiro =
       dados?.ponteiro === "toque" ? rotulos.ponteiroToque : rotulos.ponteiroFino;
     itens.push(
       ["viewport", rotulos.viewport, dados?.viewport],
-      ["tema", rotulos.tema, dados ? tema : undefined],
+      ["tema", rotulos.tema, dados ? rotulos.escuro : undefined],
       ["rolagem", rotulos.rolagem, rolagem],
       ["ponteiro", rotulos.ponteiro, dados ? ponteiro : undefined],
       ["idioma", rotulos.idioma, dados?.idioma],

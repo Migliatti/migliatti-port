@@ -33,6 +33,16 @@ describe("cores no código", () => {
     ).toEqual([]);
   });
 
+  it("não usa o verde-limão nem os tons dos temas antigos", () => {
+    expect(
+      ocorrencias(/#(c4f25a|3f5a00|0e0f0c|f3f4ef|ecede6|a9aba0|11120e|4b4e43)\b/i),
+    ).toEqual([]);
+  });
+
+  it("não acompanha a preferência de tema do sistema", () => {
+    expect(ocorrencias(/prefers-color-scheme/)).toEqual([]);
+  });
+
   it("não usa o acento como cor de texto", () => {
     expect(ocorrencias(/(?<![-\w])text-accent(?![-\w])/)).toEqual([]);
     expect(ocorrencias(/(?<![-\w])color:\s*var\(--accent\)/)).toEqual([]);

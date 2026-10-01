@@ -6,7 +6,7 @@
 // Regras em docs/adr/0003-editorial-espacial-animejs.md.
 //
 // Custo: as estrelas são desenhadas uma vez (e de novo só quando a Hero muda
-// de tamanho ou de tema). A rolagem e o cintilar mexem apenas em `transform` e
+// de tamanho). A rolagem e o cintilar mexem apenas em `transform` e
 // `opacity` das camadas, sem layout nem repintura contínua. Tudo pausa fora
 // da tela e com a aba oculta.
 //
@@ -82,7 +82,6 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
   moldura.dataset.versao = versao;
 
   const densidadeMaxima = versao === "leve" ? 1 : 2;
-  const temaEscuro = window.matchMedia("(prefers-color-scheme: dark)");
 
   const camadas: Camada[] = CAMADAS[versao].map((def, i) => {
     const canvas = document.createElement("canvas");
@@ -128,7 +127,7 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
     }
   }
 
-  // Redesenho por mudança de tamanho ou de tema, no máximo uma vez por quadro.
+  // Redesenho por mudança de tamanho, no máximo uma vez por quadro.
   let quadroDoDesenho = 0;
   const agendarDesenho = () => {
     if (quadroDoDesenho) return;
@@ -139,7 +138,6 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
   };
   const observadorDeTamanho = new ResizeObserver(agendarDesenho);
   observadorDeTamanho.observe(moldura);
-  temaEscuro.addEventListener("change", agendarDesenho);
   desenhar();
 
   // Parallax: cada camada desce uma fração do quanto a Hero já subiu.
@@ -180,7 +178,6 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
       pausar();
       cancelAnimationFrame(quadroDoDesenho);
       observadorDeTamanho.disconnect();
-      temaEscuro.removeEventListener("change", agendarDesenho);
       entrada.cancel();
       for (const { canvas, cintilar } of camadas) {
         cintilar?.cancel();

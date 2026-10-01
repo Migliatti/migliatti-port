@@ -214,7 +214,7 @@ export default async function EstudoDeCasoPage({
                   )}
                   {evidencia.tipo === "codigo" && (
                     <>
-                      <pre className="estudo-codigo overflow-x-auto rounded border border-muted/40 p-3 text-sm">
+                      <pre className="estudo-codigo overflow-x-auto rounded border border-muted/40 bg-surface p-3 text-sm">
                         <code>{evidencia.trecho}</code>
                       </pre>
                       <p className="text-sm text-muted">
@@ -235,7 +235,7 @@ export default async function EstudoDeCasoPage({
                       {evidencia.saida && (
                         <pre
                           aria-label={dict.resultadoDosTestes}
-                          className="estudo-codigo overflow-x-auto rounded border border-muted/40 p-3 text-sm"
+                          className="estudo-codigo overflow-x-auto rounded border border-muted/40 bg-surface p-3 text-sm"
                         >
                           <code>{evidencia.saida}</code>
                         </pre>

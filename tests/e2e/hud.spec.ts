@@ -58,7 +58,7 @@ for (const home of homes) {
       await expect(dado(page, "visitante", "hora")).toHaveText(/^\[\d{2}:\d{2}\]$/);
       await expect(dado(page, "visitante", "viewport")).toHaveText("[1360x800]");
       await expect(dado(page, "visitante", "tema")).toHaveText(
-        /^\[(claro|light)\]$/,
+        /^\[(escuro|dark)\]$/,
       );
       await expect(dado(page, "visitante", "rolagem")).toHaveText(/^\[\d+%\]$/);
       await expect(dado(page, "visitante", "ponteiro")).toHaveText(
@@ -110,8 +110,9 @@ for (const home of homes) {
       await expect(page.locator(".hud-cursor")).toHaveCount(1);
     });
 
+    // O site tem um tema só: com preferência clara ou escura, mesmos tokens.
     for (const tema of ["light", "dark"] as const) {
-      test(`o HUD usa os tokens do tema ${tema}`, async ({ page }) => {
+      test(`o HUD usa os tokens do tema com preferência ${tema}`, async ({ page }) => {
         await page.emulateMedia({ colorScheme: tema });
         await page.setViewportSize({ width: 1440, height: 800 });
         await page.goto(home.path);
@@ -126,6 +127,9 @@ for (const home of homes) {
             prompt: de('[data-hud-faixa="build"] .hud-prompt'),
             accentText: raiz.getPropertyValue("--accent-text").trim(),
             foreground: raiz.getPropertyValue("--foreground").trim(),
+            moldura: getComputedStyle(
+              document.querySelector('[data-testid="vitrine-hud"]')!,
+            ).backgroundColor,
           };
         });
         const rgb = (hex: string) => {
@@ -135,6 +139,9 @@ for (const home of homes) {
         expect(cores.rotulo).toBe(rgb(cores.muted));
         expect(cores.valor).toBe(rgb(cores.foreground));
         expect(cores.prompt).toBe(rgb(cores.accentText));
+        expect(cores.prompt).toBe("rgb(214, 168, 95)");
+        expect(cores.moldura).toBe("rgb(25, 21, 15)");
+        await expect(dado(page, "visitante", "tema")).toHaveText(/^\[(escuro|dark)\]$/);
       });
     }
 

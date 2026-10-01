@@ -1,19 +1,26 @@
 @import "tailwindcss";
 
+/*
+ * Tema único, escuro e dourado (issue #54): o site não acompanha a
+ * preferência de tema do sistema. Fundo quase preto, superfícies em marrom
+ * escuro e um acento dourado; contraste em lib/design/contraste.test.ts.
+ */
 :root {
-  --background: #f3f4ef;
-  --foreground: #11120e;
-  --muted: #4b4e43;
-  --accent: #c4f25a;
-  --on-accent: #11120e;
-  --accent-text: #3f5a00;
-  color-scheme: light;
+  --background: #05070a;
+  --surface: #19150f;
+  --foreground: #ece8df;
+  --muted: #b3ab9c;
+  --accent: #d6a85f;
+  --on-accent: #05070a;
+  --accent-text: #d6a85f;
+  color-scheme: dark;
   /* Altura da barra fixa da home; âncoras e foco descontam este valor. */
   --altura-barra: 3rem;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
@@ -22,18 +29,6 @@
   --font-sans: var(--fonte-corpo), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--fonte-titulo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--fonte-mono), ui-monospace, monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0e0f0c;
-    --foreground: #ecede6;
-    --muted: #a9aba0;
-    --accent: #c4f25a;
-    --on-accent: #0e0f0c;
-    --accent-text: #c4f25a;
-    color-scheme: dark;
-  }
 }
 
 body {
@@ -54,6 +49,11 @@ body {
 
   html {
     scroll-padding-top: calc(var(--altura-barra) + 1rem);
+  }
+
+  /* Links sublinhados em dourado; o texto segue a cor do contexto. */
+  a {
+    text-decoration-color: var(--accent-text);
   }
 }
 
@@ -129,8 +129,9 @@ main:focus {
 
 .chip {
   display: inline-block;
-  border: 1px solid color-mix(in srgb, var(--foreground) 25%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-text) 35%, transparent);
   border-radius: 9999px;
+  background: var(--surface);
   padding: 0.2rem 0.65rem;
   color: var(--muted);
   font-family: var(--font-mono);
@@ -425,7 +426,7 @@ li:first-child > .projeto-cartao {
 .projeto-cartao-numero {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-  color: var(--muted);
+  color: var(--accent-text);
 }
 
 @media (min-width: 48rem) {
@@ -588,6 +589,7 @@ li:first-child > .projeto-cartao {
   flex-direction: column;
   gap: 0.75rem;
   padding: 0.75rem;
+  background: var(--surface);
   --hud-canto: color-mix(in srgb, var(--accent-text) 80%, transparent);
 }
 
