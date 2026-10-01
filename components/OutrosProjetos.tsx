@@ -1,21 +1,30 @@
 import { listarOutrosProjetos } from "@/lib/content";
+import { NumeroDaSecao } from "@/components/NumeroDaSecao";
 import { getDictionary, type Locale } from "@/lib/dictionary";
 
-export function OutrosProjetos({ lang }: { lang: Locale }) {
+export function OutrosProjetos({
+  lang,
+  numero,
+}: {
+  lang: Locale;
+  numero: string;
+}) {
   const t = getDictionary(lang).outrosProjetos;
   const projetos = listarOutrosProjetos(lang);
 
   return (
-    <section aria-labelledby="outros-projetos" className="mt-8">
-      <h2 id="outros-projetos" className="text-2xl font-semibold tracking-tight">
+    <section aria-labelledby="outros-projetos" className="secao">
+      <NumeroDaSecao numero={numero} />
+      <h2 id="outros-projetos" className="text-2xl font-semibold tracking-tight sm:text-3xl">
         {t.titulo}
       </h2>
-      <ul className="mt-4 flex flex-col gap-4">
+      <ul className="flex flex-col divide-y divide-foreground/15">
         {projetos.map((projeto) => (
           <li
             key={projeto.id}
             data-testid="outro-projeto"
             data-projeto={projeto.id}
+            className="py-4 first:pt-0"
           >
             <p>
               <span className="font-medium">{projeto.titulo}</span>

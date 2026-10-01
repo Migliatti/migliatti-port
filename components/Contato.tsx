@@ -1,14 +1,16 @@
+import { NumeroDaSecao } from "@/components/NumeroDaSecao";
 import { obterContato } from "@/lib/content";
 import type { Locale } from "@/lib/dictionary";
 
 type Props = {
   lang: Locale;
+  numero: string;
 };
 
 const estiloDoLink = "underline underline-offset-4 hover:text-muted";
 
 /** Canais de contato (e-mail, LinkedIn, GitHub) e o botão do CV público. */
-export function Contato({ lang }: Props) {
+export function Contato({ lang, numero }: Props) {
   const contato = obterContato(lang);
 
   return (
@@ -16,9 +18,10 @@ export function Contato({ lang }: Props) {
       id="contato"
       aria-labelledby="contato-titulo"
       data-testid="contato"
-      className="animacao-entrada mt-12 flex flex-col gap-4"
+      className="secao animacao-entrada"
     >
-      <h2 id="contato-titulo" className="text-2xl font-semibold">
+      <NumeroDaSecao numero={numero} />
+      <h2 id="contato-titulo" className="text-2xl font-semibold sm:text-3xl">
         {contato.titulo}
       </h2>
       <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">

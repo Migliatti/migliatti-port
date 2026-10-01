@@ -62,10 +62,11 @@ const secoesAnimadas = ["projetos-em-destaque", "experiencia", "contato"];
 
 for (const path of ["/pt", "/en"]) {
   test.describe(`animação nas demais seções ${path}`, () => {
+    // O Posicionamento agora fica dentro da Hero (section), não filho direto de main.
     test("ordem final da home", async ({ page }) => {
       await page.goto(path);
       const ordem = await page.evaluate(() =>
-        Array.from(document.querySelectorAll("main > *"))
+        Array.from(document.querySelectorAll("main [data-testid]"))
           .map((el) => (el as HTMLElement).dataset.testid)
           .filter((id) =>
             [
