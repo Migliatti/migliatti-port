@@ -5,6 +5,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { locales } from "../dictionary";
 import {
+  estatisticasDoConteudo,
   listarDestaques,
   listarOutrosProjetos,
   obterCompetencias,
@@ -347,4 +348,19 @@ describe.each(locales)("labreserve em %s", (lang) => {
     expect(testes[1].saida).toMatch(/^3 passed/m);
     expect(evidencias.find((e) => e.tipo === "repositorio")?.url).toBe(REPOSITORIO);
   });
+});
+
+describe.each(locales)("estatísticas do conteúdo em %s", (lang) => {
+  it("conta projetos, destaques e itens de stack distintos", () => {
+    const projetos = todosOsProjetos(lang);
+    expect(estatisticasDoConteudo(lang)).toEqual({
+      projetos: DESTAQUES.length + OUTROS.length,
+      destaques: DESTAQUES.length,
+      tecnologias: new Set(projetos.flatMap((p) => p.stack)).size,
+    });
+  });
+});
+
+it("as estatísticas não mudam com o idioma", () => {
+  expect(estatisticasDoConteudo("pt")).toEqual(estatisticasDoConteudo("en"));
 });

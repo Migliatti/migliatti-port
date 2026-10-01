@@ -66,7 +66,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
             ))}
           </ul>
         </section>
-        <Vitrine lang={lang} numero={numero("vitrine")} />
+        <Vitrine lang={lang} numero={numero("vitrine")} secoes={secoes} />
         <OutrosProjetos lang={lang} numero={numero("outros-projetos")} />
         <ExperienciaProfissional lang={lang} numero={numero("experiencia")} />
         <Competencias lang={lang} numero={numero("competencias")} />

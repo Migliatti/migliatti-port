@@ -458,3 +458,121 @@ li:first-child > .projeto-cartao {
 .projeto-evidencia:empty {
   display: none;
 }
+
+/*
+ * HUD (dados verificáveis, estética de terminal). Decorativo: fica em
+ * contêineres aria-hidden e nunca é necessário para ler a página. Só usa os
+ * tokens de cor (muted, foreground, accent-text sobre o fundo); o contraste
+ * está em lib/design/contraste.test.ts. Movimento só sem prefers-reduced-motion.
+ */
+.hud {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.25;
+  color: var(--muted);
+}
+
+.hud-item {
+  display: inline-flex;
+  gap: 0.5ch;
+  white-space: nowrap;
+}
+
+.hud-valor {
+  color: var(--foreground);
+}
+
+.hud-prompt,
+.hud-titulo {
+  color: var(--accent-text);
+}
+
+/* Cursor do prompt: o único elemento piscante do site (na barra fixa). */
+.hud-cursor {
+  display: inline-block;
+  width: 0.6ch;
+  height: 1em;
+  margin-left: 0.25ch;
+  vertical-align: -0.15em;
+  background: var(--accent-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hud-cursor {
+    animation: hud-cursor 1.1s step-end infinite;
+  }
+}
+
+@keyframes hud-cursor {
+  50% {
+    opacity: 0;
+  }
+}
+
+/*
+ * Resumo na barra fixa: só cabe a partir de 90rem (a barra alarga junto, em
+ * BarraFixa.tsx); abaixo disso some, e a Vitrine mostra os dados completos.
+ */
+.hud-barra {
+  display: none;
+  min-width: 0;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem 1.25rem;
+  overflow: hidden;
+}
+
+@media (min-width: 90rem) {
+  .hud-barra {
+    display: flex;
+  }
+}
+
+/* Moldura da Vitrine: cantos marcados e scanlines estáticas. */
+.hud-moldura {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  --hud-canto: color-mix(in srgb, var(--accent-text) 80%, transparent);
+}
+
+.hud-moldura::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--hud-canto), var(--hud-canto)) top left / 1rem 2px no-repeat,
+    linear-gradient(var(--hud-canto), var(--hud-canto)) top left / 2px 1rem no-repeat,
+    linear-gradient(var(--hud-canto), var(--hud-canto)) top right / 1rem 2px no-repeat,
+    linear-gradient(var(--hud-canto), var(--hud-canto)) top right / 2px 1rem no-repeat,
+    linear-gradient(var(--hud-canto), var(--hud-canto)) bottom left / 1rem 2px no-repeat,
+    linear-gradient(var(--hud-canto), var(--hud-canto)) bottom left / 2px 1rem no-repeat,
+    linear-gradient(var(--hud-canto), var(--hud-canto)) bottom right / 1rem 2px no-repeat,
+    linear-gradient(var(--hud-canto), var(--hud-canto)) bottom right / 2px 1rem no-repeat;
+}
+
+/* Scanlines: linhas finas e sutis, paradas (sem animação, nem com movimento liberado). */
+.hud-moldura::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--foreground) 5%, transparent) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+.hud-faixa {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
