@@ -1,8 +1,10 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 // Marca gravada pelo módulo da peça (components/vitrine/orbitas.ts).
 // Os nomes dos chunks têm hash, então o chunk da peça é achado pelo conteúdo.
 const MARCA_DA_PECA = "vitrine-orbitas";
+// Marca do chunk das camadas extras (components/vitrine/constelacao.ts).
+const MARCA_DA_CONSTELACAO = "vitrine-constelacao";
 const PILARES = ["site", "automacao", "diagnostico"] as const;
 
 /** Guarda o corpo de todo chunk JS baixado pela página. */
@@ -19,10 +21,49 @@ function registrarChunks(page: Page) {
       const textos = await Promise.all(corpos);
       return textos.some((t) => t.includes(MARCA_DA_PECA));
     },
+    async constelacaoBaixada() {
+      const textos = await Promise.all(corpos);
+      return textos.some((t) => t.includes(MARCA_DA_CONSTELACAO));
+    },
     async total() {
       return (await Promise.all(corpos)).length;
     },
   };
+}
+
+/** Posição atual (cx, cy) de uma estrela da constelação. */
+async function posicaoDaEstrela(estrela: Locator) {
+  return estrela.evaluate((el) => ({
+    x: Number(el.getAttribute("cx")),
+    y: Number(el.getAttribute("cy")),
+  }));
+}
+
+/** Retrato de tudo o que as camadas extras movem, para comparar no tempo. */
+async function retratoDasCamadas(peca: Locator) {
+  return peca.evaluate((el) =>
+    [...el.querySelectorAll('[data-camada="parallax"], [data-estrela]')]
+      .map((n) => `${n.getAttribute("transform")}|${n.getAttribute("cx")},${n.getAttribute("cy")}`)
+      .join(";"),
+  );
+}
+
+/** Rola até a peça e espera a versão completa com as camadas extras. */
+async function abrirPecaCompleta(page: Page, path: string) {
+  await aparelhoForte(page);
+  await page.goto(path);
+  const peca = page.getByTestId("vitrine-peca");
+  await peca.scrollIntoViewIfNeeded();
+  await expect(peca).toHaveAttribute("data-estado", "carregada");
+  await expect(peca).toHaveAttribute("data-versao", "completa");
+  await expect(peca.locator(`[data-camadas="${MARCA_DA_CONSTELACAO}"]`)).toHaveCount(1);
+  return peca;
+}
+
+/** Desloca (x, y) de `translate(x y)`. */
+function translado(transform: string | null) {
+  const [, x = "0", y = "0"] = /translate\(([-\d.]+)[ ,]+([-\d.]+)\)/.exec(transform ?? "") ?? [];
+  return { x: Number(x), y: Number(y) };
 }
 
 /**
@@ -80,11 +121,16 @@ for (const path of ["/pt", "/en"]) {
       await expect(peca).toHaveAttribute("data-estado", "aguardando");
       expect(await chunks.total()).toBeGreaterThan(0);
       expect(await chunks.pecaBaixada()).toBe(false);
+      expect(await chunks.constelacaoBaixada()).toBe(false);
+      await expect(peca.locator("[data-camada]")).toHaveCount(0);
 
       await secao.scrollIntoViewIfNeeded();
       await expect(peca).toHaveAttribute("data-estado", "carregada");
+      // As camadas extras chegam num chunk próprio, depois da peça.
+      await expect(peca.locator('[data-camada="constelacao"]')).toHaveCount(1);
       await page.waitForLoadState("networkidle");
       expect(await chunks.pecaBaixada()).toBe(true);
+      expect(await chunks.constelacaoBaixada()).toBe(true);
 
       // A peça é o sistema orbital em SVG, sem canvas, na versão completa.
       await expect(peca).toHaveAttribute("data-peca", MARCA_DA_PECA);
@@ -124,6 +170,8 @@ for (const path of ["/pt", "/en"]) {
 
       await expect(peca).toHaveAttribute("data-estado", "reduzida");
       expect(await chunks.pecaBaixada()).toBe(false);
+      expect(await chunks.constelacaoBaixada()).toBe(false);
+      await expect(peca.locator("[data-camada]")).toHaveCount(0);
       await expect(peca).not.toHaveAttribute("data-peca", /.*/);
       expect(await corpo.getAttribute("transform")).toBe(posicao);
 
@@ -195,6 +243,150 @@ for (const path of ["/pt", "/en"]) {
       await page.locator('[data-corpo="diagnostico"] [data-astro]').hover();
       await expect(item).toHaveCSS("border-left-color", acento);
     });
+
+    test("as camadas extras são decorativas e não tomam o ponteiro", async ({ page }) => {
+      const peca = await abrirPecaCompleta(page, path);
+      const camadas = peca.locator(`[data-camadas="${MARCA_DA_CONSTELACAO}"]`);
+      await expect(camadas).toHaveAttribute("aria-hidden", "true");
+      await expect(camadas).toHaveCSS("pointer-events", "none");
+      await expect(peca.locator('[data-camada="parallax"]')).toHaveCount(3);
+      expect(await peca.locator("[data-estrela]").count()).toBeGreaterThan(3);
+
+      // Ficam atrás dos corpos: o ponteiro sobre cada corpo (que está em
+      // movimento) ainda acerta o próprio corpo, não as camadas.
+      for (const id of PILARES) {
+        const acertado = await peca.evaluate((el, corpo) => {
+          const astro = el.querySelector(`[data-corpo="${corpo}"] [data-astro]`)!;
+          const r = astro.getBoundingClientRect();
+          const alvo = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+          return alvo?.closest("[data-corpo]")?.getAttribute("data-corpo") ?? null;
+        }, id);
+        expect(acertado).toBe(id);
+      }
+    });
+
+    test("o ponteiro puxa a constelação, que volta ao lugar", async ({ page }) => {
+      const peca = await abrirPecaCompleta(page, path);
+      const estrela = peca.locator("[data-estrela]").nth(2);
+      const origem = await posicaoDaEstrela(estrela);
+      const caixa = (await estrela.boundingBox())!;
+
+      // Ponteiro perto da estrela, um pouco ao lado: ela sai da origem.
+      await page.mouse.move(caixa.x + caixa.width / 2 + 30, caixa.y + caixa.height / 2 + 20);
+      await expect
+        .poll(async () => {
+          const p = await posicaoDaEstrela(estrela);
+          return Math.hypot(p.x - origem.x, p.y - origem.y);
+        })
+        .toBeGreaterThan(2);
+
+      // Ponteiro fora da peça: a estrela volta para a origem.
+      await page.mouse.move(1, 1);
+      await expect
+        .poll(async () => {
+          const p = await posicaoDaEstrela(estrela);
+          return Math.hypot(p.x - origem.x, p.y - origem.y);
+        })
+        .toBeLessThan(0.5);
+    });
+
+    test("as estrelas de fundo se deslocam em camadas, cada uma no seu ritmo", async ({
+      page,
+    }) => {
+      const peca = await abrirPecaCompleta(page, path);
+      const caixa = (await peca.boundingBox())!;
+      await page.mouse.move(caixa.x + 12, caixa.y + 12);
+
+      const deslocamentos = () =>
+        peca.locator('[data-camada="parallax"]').evaluateAll((camadas) =>
+          camadas.map((c) => ({
+            profundidade: Number(c.getAttribute("data-profundidade")),
+            transform: c.getAttribute("transform"),
+          })),
+        );
+
+      // Quanto mais próxima a camada, maior o deslocamento.
+      await expect
+        .poll(async () => {
+          const lista = (await deslocamentos())
+            .sort((a, b) => a.profundidade - b.profundidade)
+            .map(({ transform }) => {
+              const { x, y } = translado(transform);
+              return Math.hypot(x, y);
+            });
+          return (
+            lista.length === 3 &&
+            lista[0] > 0.5 &&
+            lista[0] < lista[1] &&
+            lista[1] < lista[2]
+          );
+        })
+        .toBe(true);
+    });
+
+    test("as camadas extras param fora da tela e com a aba oculta", async ({ page }) => {
+      const peca = await abrirPecaCompleta(page, path);
+      const caixa = (await peca.boundingBox())!;
+      await page.mouse.move(caixa.x + caixa.width / 3, caixa.y + caixa.height / 3);
+
+      /** Verdadeiro quando nada nas camadas mudou num intervalo curto. */
+      const parado = async () => {
+        const antes = await retratoDasCamadas(peca);
+        await page.waitForTimeout(300);
+        return (await retratoDasCamadas(peca)) === antes;
+      };
+
+      // Na tela, as camadas se movem.
+      await expect.poll(parado).toBe(false);
+
+      // Fora da tela, param.
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await expect.poll(parado).toBe(true);
+      expect(await parado()).toBe(true);
+
+      // De volta à tela, voltam a se mover.
+      await peca.scrollIntoViewIfNeeded();
+      await expect.poll(parado).toBe(false);
+
+      // Com a aba oculta, param de novo.
+      await page.evaluate(() => {
+        Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
+        document.dispatchEvent(new Event("visibilitychange"));
+      });
+      await expect.poll(parado).toBe(true);
+      expect(await parado()).toBe(true);
+
+      // A aba volta a aparecer: as camadas retomam.
+      await page.evaluate(() => {
+        Object.defineProperty(document, "hidden", { configurable: true, get: () => false });
+        document.dispatchEvent(new Event("visibilitychange"));
+      });
+      await expect.poll(parado).toBe(false);
+    });
+
+    test("com movimento reduzido não há constelação nem parallax", async ({ page }) => {
+      await aparelhoForte(page);
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      const chunks = registrarChunks(page);
+      await page.goto(path);
+      const peca = page.getByTestId("vitrine-peca");
+      await peca.scrollIntoViewIfNeeded();
+      await page.waitForLoadState("networkidle");
+      await page.waitForTimeout(300);
+
+      await expect(peca).toHaveAttribute("data-estado", "reduzida");
+      await expect(peca.locator("[data-camadas], [data-camada], [data-estrela]")).toHaveCount(0);
+      expect(await chunks.constelacaoBaixada()).toBe(false);
+    });
+
+    test("ao pedir movimento reduzido com a peça rodando, as camadas somem", async ({
+      page,
+    }) => {
+      const peca = await abrirPecaCompleta(page, path);
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await expect(peca).toHaveAttribute("data-estado", "reduzida");
+      await expect(peca.locator("[data-camadas], [data-camada], [data-estrela]")).toHaveCount(0);
+    });
   });
 
   test.describe(`Vitrine ${path} em celular (pointer: coarse)`, () => {
@@ -202,6 +394,7 @@ for (const path of ["/pt", "/en"]) {
 
     test("mostra a versão leve: menos órbitas e sem filtros", async ({ page }) => {
       await aparelhoForte(page);
+      const chunks = registrarChunks(page);
       await page.goto(path);
       expect(await page.evaluate(() => matchMedia("(pointer: coarse)").matches)).toBe(true);
 
@@ -218,6 +411,12 @@ for (const path of ["/pt", "/en"]) {
         await expect(astro).not.toHaveAttribute("filter", /.*/);
       }
       await expect(peca.locator("[data-corpo]")).toHaveCount(3);
+
+      // A peça leve é baixada, mas a constelação e o parallax não.
+      await page.waitForLoadState("networkidle");
+      expect(await chunks.pecaBaixada()).toBe(true);
+      expect(await chunks.constelacaoBaixada()).toBe(false);
+      await expect(peca.locator("[data-camada]")).toHaveCount(0);
     });
   });
 

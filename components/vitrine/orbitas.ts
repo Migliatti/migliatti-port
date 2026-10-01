@@ -11,8 +11,11 @@
 //
 // Celular fraco (`pointer: coarse`, poucos núcleos ou pouca memória): versão
 // leve, sem as órbitas extras e sem filtros. Não se mede FPS em runtime.
+// Só a versão completa pede o chunk da constelação e do parallax
+// (constelacao.ts), que segue a mesma pausa desta peça.
 
 import { animate, createTimeline, stagger, svg, type JSAnimation, type Timeline } from "animejs";
+import type { Camadas } from "./constelacao";
 import { pontoNaOrbita } from "./geometria";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk desta peça. */
@@ -118,6 +121,23 @@ export function iniciarPeca(moldura: HTMLElement): Peca {
   // Quem passa o mouse ou foca um corpo consegue lê-lo parado.
   let pausadaPorFora = false;
   let emDestaque = false;
+  let destruida = false;
+
+  // Só a versão completa ganha a constelação e o parallax, num chunk à parte:
+  // a versão leve nem chega a pedi-lo. Se a peça for pausada ou destruída
+  // antes de o chunk chegar, o estado é aplicado (ou nada é criado) na chegada.
+  let camadas: Camadas | null = null;
+  if (versao === "completa") {
+    import("./constelacao")
+      .then(({ iniciarCamadas }) => {
+        if (destruida) return;
+        camadas = iniciarCamadas(moldura);
+        if (pausadaPorFora) camadas?.pausar();
+      })
+      .catch(() => {
+        // Sem as camadas extras, a peça segue só com as órbitas.
+      });
+  }
 
   function aplicar() {
     const rodar = !pausadaPorFora && !emDestaque;
@@ -147,12 +167,17 @@ export function iniciarPeca(moldura: HTMLElement): Peca {
     pausar() {
       pausadaPorFora = true;
       aplicar();
+      camadas?.pausar();
     },
     retomar() {
       pausadaPorFora = false;
       aplicar();
+      camadas?.retomar();
     },
     destruir() {
+      destruida = true;
+      camadas?.destruir();
+      camadas = null;
       for (const a of animacoes) a.revert();
       for (const corpo of corpos) {
         corpo.removeEventListener("pointerenter", aoDestacar);
