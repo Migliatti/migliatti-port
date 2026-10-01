@@ -63,6 +63,28 @@ export type Dictionary = {
     repositorio: string;
     demo: string;
   };
+  /** Rótulos do HUD (barra fixa e moldura da Vitrine). Decorativo: aria-hidden. */
+  hud: {
+    hora: string;
+    viewport: string;
+    tema: string;
+    claro: string;
+    escuro: string;
+    rolagem: string;
+    ponteiro: string;
+    ponteiroFino: string;
+    ponteiroToque: string;
+    idioma: string;
+    secao: string;
+    projetos: string;
+    stack: string;
+    destaques: string;
+    data: string;
+    sha: string;
+    indisponivel: string;
+    visitante: string;
+    build: string;
+  };
 };
 
 const dictionaries: Record<Locale, Dictionary> = {
@@ -104,6 +126,27 @@ const dictionaries: Record<Locale, Dictionary> = {
       repositorio: "Repositório",
       demo: "Demo",
     },
+    hud: {
+      hora: "hora sp",
+      viewport: "viewport",
+      tema: "tema",
+      claro: "claro",
+      escuro: "escuro",
+      rolagem: "rolagem",
+      ponteiro: "ponteiro",
+      ponteiroFino: "mouse",
+      ponteiroToque: "toque",
+      idioma: "idioma",
+      secao: "seção",
+      projetos: "projetos",
+      stack: "stack",
+      destaques: "destaques",
+      data: "build",
+      sha: "sha",
+      indisponivel: "indisponível",
+      visitante: "visitante",
+      build: "build",
+    },
   },
   en: {
     htmlLang: "en",
@@ -142,6 +185,27 @@ const dictionaries: Record<Locale, Dictionary> = {
       emDesenvolvimento: "in development",
       repositorio: "Repository",
       demo: "Demo",
+    },
+    hud: {
+      hora: "sp time",
+      viewport: "viewport",
+      tema: "theme",
+      claro: "light",
+      escuro: "dark",
+      rolagem: "scroll",
+      ponteiro: "pointer",
+      ponteiroFino: "mouse",
+      ponteiroToque: "touch",
+      idioma: "lang",
+      secao: "section",
+      projetos: "projects",
+      stack: "stack",
+      destaques: "featured",
+      data: "build",
+      sha: "sha",
+      indisponivel: "unavailable",
+      visitante: "visitor",
+      build: "build",
     },
   },
 };

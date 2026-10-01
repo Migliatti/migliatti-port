@@ -89,3 +89,26 @@ export function obterContato(lang: Locale): CanaisDeContato {
 export function obterVitrine(lang: Locale): TextosDaVitrine {
   return conteudo()[lang].vitrine;
 }
+
+/** Números do conteúdo publicado, exibidos no HUD. Tudo é contado do conteúdo. */
+export type EstatisticasDoConteudo = {
+  /** Todos os projetos (destaques e outros). */
+  projetos: number;
+  /** Itens de stack distintos entre os projetos. */
+  tecnologias: number;
+  /** Projetos em destaque. */
+  destaques: number;
+};
+
+/**
+ * Conta projetos, itens de stack distintos e destaques. A stack não muda com
+ * o idioma, então o resultado é o mesmo em pt e en.
+ */
+export function estatisticasDoConteudo(lang: Locale): EstatisticasDoConteudo {
+  const projetos = conteudo()[lang].projetos;
+  return {
+    projetos: projetos.length,
+    tecnologias: new Set(projetos.flatMap((p) => p.stack)).size,
+    destaques: projetos.filter((p) => p.tipo === "destaque").length,
+  };
+}
