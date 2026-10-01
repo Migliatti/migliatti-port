@@ -18,7 +18,7 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 8. **Pausa (mantido)**: tudo pausa fora da tela e com a aba oculta.
 9. **Carga preguiçosa (mantido)**: nada de anime.js no bundle inicial; nenhum `import` estático dele na home. A Hero e as ilustrações podem ter um chunk próprio pequeno.
 10. **Entradas CSS (mantido)**: duração até ~500ms.
-11. **Orçamento de tamanho**: até ~25 kB gzip no chunk da Vitrine. Medido na issue #38 com `npm run build` e inspeção de `.next/static/chunks`: o chunk da peça (anime.js usado + `orbitas.ts`) tem ~40,5 kB sem compressão e ~16,1 kB gzip. Nada do anime.js aparece em outro chunk.
+11. **Orçamento de tamanho**: até ~25 kB gzip no chunk da Vitrine. Medido na issue #38 com `npm run build` e inspeção de `.next/static/chunks`: o chunk da peça (anime.js usado + `orbitas.ts`) tem ~40,5 kB sem compressão e ~16,1 kB gzip. Nada do anime.js aparece em outro chunk. A constelação e o parallax (issue #39, `constelacao.ts`) vivem num chunk próprio, sem anime.js (laço de `requestAnimationFrame` com mola), pedido por `orbitas.ts` só na versão completa: ~3,2 kB sem compressão e ~1,6 kB gzip. Somados, ~17,8 kB gzip na versão completa.
 
 ## Consequências
 
