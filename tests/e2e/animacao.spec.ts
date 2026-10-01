@@ -28,7 +28,7 @@ for (const path of ["/pt", "/en"]) {
 
       // Se a animação já terminou, o texto está no estado final (legível).
       if (inicio) {
-        expect(inicio.opacity).toBeGreaterThanOrEqual(0.5);
+        expect(inicio.opacity).toBeGreaterThanOrEqual(0.7);
         expect(inicio.visibility).toBe("visible");
         expect(inicio.display).not.toBe("none");
       }
@@ -108,13 +108,11 @@ for (const path of ["/pt", "/en"]) {
           return {
             opacity: Number(css.opacity),
             visibility: css.visibility,
-            delay: css.animationDelay,
           };
         });
         if (inicio) {
           expect(inicio.opacity).toBeGreaterThanOrEqual(0.7);
           expect(inicio.visibility).toBe("visible");
-          expect(inicio.delay).toBe("0s");
         }
       });
 

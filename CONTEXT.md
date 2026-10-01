@@ -37,11 +37,19 @@ PDF baixável pelo site, sem telefone e com cidade só como "São Paulo, SP". De
 _Avoid_: Currículo completo, CV atual
 
 **Vitrine**:
-Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. É o único lugar onde a animação pode ser o conteúdo. O resto do site também tem várias animações, mas nenhuma atrasa ou esconde texto: o conteúdo já está legível antes de animar. Toda animação respeita `prefers-reduced-motion` e não pesa no celular de quem lê. A peça só carrega quando a seção entra na tela; regra em `docs/adr/0002-vitrine.md`.
+Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. Só a Vitrine tem animação como conteúdo. O resto do site tem apenas **Animação decorativa**, e nenhuma esconde texto: o conteúdo já está legível antes de animar. Toda animação respeita `prefers-reduced-motion` e tem versão leve para celular fraco. A peça usa anime.js e só carrega quando a seção entra na tela; regras em `docs/adr/0003-editorial-espacial-animejs.md` (que substitui em parte `docs/adr/0002-vitrine.md`).
 _Avoid_: Demo (já significa projeto publicado), Galeria
 
+**Animação decorativa**:
+Animação cuja remoção não muda o significado do conteúdo. É tudo o que fica fora da **Vitrine**. Nunca esconde texto; segue as regras do ADR 0003.
+_Avoid_: Efeito
+
+**HUD**:
+Painel de dados só verificáveis. Cliente: hora local de São Paulo, viewport, tema, idioma, progresso de rolagem, ponteiro e seção atual. Build: número de projetos, destaque, stack distinta, data do build e SHA. Sem API externa em runtime. Sem JavaScript mostra os dados de build como texto estático. Barra fixa resumida; na Vitrine, versão densa.
+_Avoid_: Dashboard, métricas
+
 **Animação de entrada**:
-Animação curta (transform e opacity) aplicada com a classe `animacao-entrada`. Texto legível desde o primeiro quadro, desligada com `prefers-reduced-motion`. Regra completa em `docs/adr/0001-animacao-de-entrada.md`.
+Animação curta (até ~500ms, em CSS) aplicada com a classe `animacao-entrada`. Texto legível desde o primeiro quadro, desligada com `prefers-reduced-motion`. Regra em `docs/adr/0001-animacao-de-entrada.md`, revista em parte por `docs/adr/0003-editorial-espacial-animejs.md`.
 _Avoid_: Efeito, transição de página
 
 **Experiência profissional**:
