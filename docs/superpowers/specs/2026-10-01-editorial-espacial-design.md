@@ -1,6 +1,6 @@
 # Editorial espacial: design
 
-Status: rascunho para revisão
+Status: implementado (issues #35 a #41)
 
 Origem: revisão da #11 ("Revisão final e lançamento"). Gabriel aprovou os textos, mas achou o design básico. Este spec evolui a identidade **Sinal** (`2026-09-30-identidade-visual-sinal-design.md`); não a substitui.
 
