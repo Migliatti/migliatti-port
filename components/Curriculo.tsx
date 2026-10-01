@@ -2,9 +2,12 @@
 // técnicas e Formação. Os dados vêm do módulo de conteúdo.
 
 import { obterCompetencias, obterExperiencia, obterFormacao } from "@/lib/content";
+import { NumeroDaSecao } from "@/components/NumeroDaSecao";
 import { getDictionary, type Locale } from "@/lib/dictionary";
 
-export function ExperienciaProfissional({ lang }: { lang: Locale }) {
+type Props = { lang: Locale; numero: string };
+
+export function ExperienciaProfissional({ lang, numero }: Props) {
   const t = getDictionary(lang);
   const cargos = obterExperiencia(lang);
 
@@ -12,12 +15,13 @@ export function ExperienciaProfissional({ lang }: { lang: Locale }) {
     <section
       aria-labelledby="experiencia"
       data-testid="experiencia"
-      className="animacao-entrada mt-8"
+      className="secao animacao-entrada"
     >
-      <h2 id="experiencia" className="text-2xl font-semibold tracking-tight">
+      <NumeroDaSecao numero={numero} />
+      <h2 id="experiencia" className="text-2xl font-semibold tracking-tight sm:text-3xl">
         {t.secoes.experiencia}
       </h2>
-      <ol className="mt-4 flex flex-col gap-6">
+      <ol className="flex flex-col gap-6">
         {cargos.map((cargo) => (
           <li key={`${cargo.empresa}-${cargo.periodo}`} data-testid="cargo">
             <h3 className="font-medium">{cargo.cargo}</h3>
@@ -36,7 +40,7 @@ export function ExperienciaProfissional({ lang }: { lang: Locale }) {
   );
 }
 
-export function Competencias({ lang }: { lang: Locale }) {
+export function Competencias({ lang, numero }: Props) {
   const t = getDictionary(lang);
   const grupos = obterCompetencias(lang);
 
@@ -44,12 +48,13 @@ export function Competencias({ lang }: { lang: Locale }) {
     <section
       aria-labelledby="competencias"
       data-testid="competencias"
-      className="mt-8"
+      className="secao"
     >
-      <h2 id="competencias" className="text-2xl font-semibold tracking-tight">
+      <NumeroDaSecao numero={numero} />
+      <h2 id="competencias" className="text-2xl font-semibold tracking-tight sm:text-3xl">
         {t.secoes.competencias}
       </h2>
-      <div className="mt-4 flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
         {grupos.map((grupo) => (
           <div key={grupo.nome} data-testid="grupo-de-competencias">
             <h3 className="font-medium">{grupo.nome}</h3>
@@ -70,16 +75,21 @@ export function Competencias({ lang }: { lang: Locale }) {
   );
 }
 
-export function Formacao({ lang }: { lang: Locale }) {
+export function Formacao({ lang, numero }: Props) {
   const t = getDictionary(lang);
   const formacao = obterFormacao(lang);
 
   return (
-    <section aria-labelledby="formacao" data-testid="formacao" className="mt-8">
-      <h2 id="formacao" className="text-2xl font-semibold tracking-tight">
+    <section
+      aria-labelledby="formacao"
+      data-testid="formacao"
+      className="secao"
+    >
+      <NumeroDaSecao numero={numero} />
+      <h2 id="formacao" className="text-2xl font-semibold tracking-tight sm:text-3xl">
         {t.secoes.formacao}
       </h2>
-      <div className="mt-4">
+      <div>
         <h3 className="font-medium">{formacao.curso}</h3>
         <p className="text-muted">
           {formacao.instituicao} · {t.previsaoDeConclusao}: {formacao.previsao}

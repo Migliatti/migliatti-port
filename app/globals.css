@@ -8,6 +8,8 @@
   --on-accent: #11120e;
   --accent-text: #3f5a00;
   color-scheme: light;
+  /* Altura da barra fixa da home; âncoras e foco descontam este valor. */
+  --altura-barra: 3rem;
 }
 
 @theme inline {
@@ -47,7 +49,11 @@ body {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
     text-wrap: balance;
-    scroll-margin-top: 1.5rem;
+    scroll-margin-top: calc(var(--altura-barra) + 1.5rem);
+  }
+
+  html {
+    scroll-padding-top: calc(var(--altura-barra) + 1rem);
   }
 }
 
@@ -271,4 +277,113 @@ main:focus {
       color 200ms ease-out,
       opacity 200ms ease-out;
   }
+}
+
+
+/* Layout editorial (docs/superpowers/specs/2026-10-01-editorial-espacial-design.md, item 3). */
+
+.barra-fixa {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 20;
+  height: var(--altura-barra);
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+  background: color-mix(in srgb, var(--background) 90%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Hero em tela cheia: o texto já está no HTML e não depende de JavaScript. */
+.hero {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  padding-top: calc(var(--altura-barra) + 2rem);
+  padding-bottom: 3rem;
+}
+
+.hero-nome {
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  overflow-wrap: anywhere;
+}
+
+/* Grid assimétrico: o apoio do Hero começa deslocado à direita em telas largas. */
+@media (min-width: 48rem) {
+  .hero-apoio {
+    margin-left: 25%;
+  }
+}
+
+/* Seção numerada: linha fina no topo, número em coluna estreita à esquerda. */
+.secao {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 1.25rem;
+  margin-top: 4rem;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 25%, transparent);
+  padding-top: 1.25rem;
+  scroll-margin-top: calc(var(--altura-barra) + 1rem);
+}
+
+.secao > * {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.secao-numero {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  color: var(--accent-text);
+}
+
+@media (min-width: 48rem) {
+  .secao {
+    grid-template-columns: 25% minmax(0, 1fr);
+    column-gap: 1.5rem;
+  }
+
+  .secao > * {
+    grid-column: 2;
+  }
+
+  .secao > .secao-numero {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}
+
+/* Cartão tipográfico de Projeto em destaque: sem caixa, só linhas finas. */
+.projeto-cartao {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+  padding: 1.75rem 0;
+}
+
+li:first-child > .projeto-cartao {
+  border-top: 0;
+  padding-top: 0.5rem;
+}
+
+.projeto-cartao-numero {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+@media (min-width: 48rem) {
+  .projeto-cartao {
+    grid-template-columns: 3rem minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Espaço reservado para a Evidência (captura futura); vazio, não ocupa lugar. */
+.projeto-evidencia:empty {
+  display: none;
 }
