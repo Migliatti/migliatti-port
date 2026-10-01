@@ -112,8 +112,9 @@ for (const idioma of idiomas) {
       await expect(figura.getByTestId("rotulo-ilustracao")).toHaveText(
         idioma.ilustracao,
       );
-      expect((await figura.locator("img").getAttribute("alt"))?.trim()).toBeTruthy();
-      const larguras = await figura.locator("img").evaluate((img) => ({
+      const imagem = figura.getByRole("img");
+      expect((await imagem.getAttribute("aria-label"))?.trim()).toBeTruthy();
+      const larguras = await imagem.evaluate((img) => ({
         imagem: img.getBoundingClientRect().right,
         janela: window.innerWidth,
       }));

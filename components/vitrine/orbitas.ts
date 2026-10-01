@@ -16,6 +16,7 @@
 
 import { animate, createTimeline, stagger, svg, type JSAnimation, type Timeline } from "animejs";
 import type { Camadas } from "./constelacao";
+import { versaoParaEsteAparelho } from "../animacao/aparelho";
 import { pontoNaOrbita } from "./geometria";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk desta peça. */
@@ -28,19 +29,9 @@ export type Peca = {
   destruir(): void;
 };
 
-/** `leve` em celular fraco; `completa` no resto. Exposta em `data-versao`. */
-export type Versao = "leve" | "completa";
-
-const NUCLEOS_MINIMOS = 4;
-const MEMORIA_MINIMA_GB = 4;
-
-export function versaoParaEsteAparelho(): Versao {
-  const nav = navigator as Navigator & { deviceMemory?: number };
-  const toque = window.matchMedia("(pointer: coarse)").matches;
-  const poucosNucleos = (nav.hardwareConcurrency ?? 8) <= NUCLEOS_MINIMOS;
-  const poucaMemoria = (nav.deviceMemory ?? 8) <= MEMORIA_MINIMA_GB;
-  return toque || poucosNucleos || poucaMemoria ? "leve" : "completa";
-}
+// A classificação do aparelho é compartilhada com o céu da Hero e o pulso
+// das ilustrações (components/animacao/aparelho.ts).
+export { versaoParaEsteAparelho, type Versao } from "../animacao/aparelho";
 
 /** Lê a órbita gravada no elemento pelo quadro parado. */
 function lerOrbita(el: Element) {

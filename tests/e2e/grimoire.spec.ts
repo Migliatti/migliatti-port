@@ -70,9 +70,10 @@ for (const {
       await expect(catalogo).toBeVisible();
       await expect(empacotamento).toBeVisible();
       for (const imagem of [catalogo, empacotamento]) {
-        expect(
-          await imagem.evaluate((el) => (el as HTMLImageElement).naturalWidth),
-        ).toBeGreaterThan(0);
+        // SVG inline (para poder animar), com o desenho de fato dentro.
+        expect(await imagem.evaluate((el) => el.tagName.toLowerCase())).toBe("svg");
+        expect(await imagem.locator("text").count()).toBeGreaterThan(0);
+        expect((await imagem.boundingBox())?.width ?? 0).toBeGreaterThan(0);
       }
 
       // Resultado real dos testes e trechos de código.

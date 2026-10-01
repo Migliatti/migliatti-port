@@ -61,14 +61,17 @@ for (const { lang, outraLang, rascunho, problema, evidencias, ilustracao, verNoR
       for (const figura of await figuras.all()) {
         await expect(figura.getByTestId("rotulo-ilustracao")).toBeVisible();
         await expect(figura.getByTestId("rotulo-ilustracao")).toHaveText(ilustracao);
-        const imagem = figura.locator("img");
+        // SVG inline (para poder animar), com o texto alternativo como nome.
+        const imagem = figura.getByRole("img");
         await expect(imagem).toBeVisible();
-        expect((await imagem.getAttribute("alt"))?.trim()).toBeTruthy();
-        // A imagem carregou de fato (não é um link quebrado).
-        expect(await imagem.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
+        expect((await imagem.getAttribute("aria-label"))?.trim()).toBeTruthy();
+        // O desenho veio de fato (não é uma moldura vazia).
+        expect(await imagem.evaluate((el) => el.tagName.toLowerCase())).toBe("svg");
+        expect(await imagem.locator("text").count()).toBeGreaterThan(0);
+        expect((await imagem.boundingBox())?.width ?? 0).toBeGreaterThan(0);
       }
-      await expect(figuras.first().locator("img")).toHaveAttribute(
-        "src",
+      await expect(figuras.first().getByTestId("ilustracao")).toHaveAttribute(
+        "data-origem",
         /\/ilustracoes\/labreserve-arquitetura\.svg$/,
       );
     });
