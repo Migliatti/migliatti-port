@@ -20,17 +20,27 @@ for (const path of paths) {
       expect(corpo).toContain("system-ui");
     });
 
-    test("paleta Sinal nos dois temas", async ({ page }) => {
-      await page.emulateMedia({ colorScheme: "dark" });
-      await page.goto(path);
-      expect(
-        await page.evaluate(() => getComputedStyle(document.body).backgroundColor),
-      ).toBe("rgb(14, 15, 12)");
-
-      await page.emulateMedia({ colorScheme: "light" });
-      expect(
-        await page.evaluate(() => getComputedStyle(document.body).backgroundColor),
-      ).toBe("rgb(243, 244, 239)");
+    test("tema único escuro e dourado, igual com preferência clara ou escura", async ({
+      page,
+    }) => {
+      for (const tema of ["dark", "light"] as const) {
+        await page.emulateMedia({ colorScheme: tema });
+        await page.goto(path);
+        const cores = await page.evaluate(() => ({
+          fundo: getComputedStyle(document.body).backgroundColor,
+          esquema: getComputedStyle(document.documentElement).colorScheme,
+          primario: getComputedStyle(document.querySelector("a.botao-primario")!)
+            .backgroundColor,
+          marca: getComputedStyle(document.querySelector(".marca-acento")!, "::after")
+            .backgroundColor,
+        }));
+        expect(cores, tema).toEqual({
+          fundo: "rgb(5, 7, 10)",
+          esquema: "dark",
+          primario: "rgb(214, 168, 95)",
+          marca: "rgb(214, 168, 95)",
+        });
+      }
     });
   });
 }
@@ -184,7 +194,24 @@ for (const path of paths) {
       const atual = page.locator('nav a[aria-current="page"]').first();
       expect(
         await atual.evaluate((n) => getComputedStyle(n).backgroundColor),
-      ).toBe("rgb(196, 242, 90)");
+      ).toBe("rgb(214, 168, 95)");
+    });
+  });
+}
+
+for (const path of ["/pt/projetos/kepler-lab", "/en/projetos/kepler-lab"]) {
+  test(`estudo de caso usa o tema escuro e dourado ${path}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto(path);
+    const cores = await page.evaluate(() => ({
+      fundo: getComputedStyle(document.body).backgroundColor,
+      chip: getComputedStyle(document.querySelector("main .chip")!).backgroundColor,
+      numero: getComputedStyle(document.querySelector(".secao-numero")!).color,
+    }));
+    expect(cores).toEqual({
+      fundo: "rgb(5, 7, 10)",
+      chip: "rgb(25, 21, 15)",
+      numero: "rgb(214, 168, 95)",
     });
   });
 }
@@ -202,10 +229,10 @@ test("estudo de caso usa a fonte de títulos e chips na stack", async ({
 });
 
 test.describe("auditoria de design", () => {
-  test("color-scheme acompanha o tema e títulos usam text-wrap balance", async ({
+  test("color-scheme é sempre escuro e títulos usam text-wrap balance", async ({
     page,
   }) => {
-    await page.emulateMedia({ colorScheme: "dark" });
+    await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/pt");
     expect(
       await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme),
@@ -235,10 +262,9 @@ test.describe("correções da revisão final", () => {
     for (const d of duracoes) expect(d).toBeLessThanOrEqual(0.5);
   });
 
-  test("no tema claro o acento ganha contorno e a barra usa o tom escuro", async ({
+  test("o botão primário tem contorno dourado e texto escuro, e a barra do nome é dourada", async ({
     page,
   }) => {
-    await page.emulateMedia({ colorScheme: "light" });
     await page.goto("/pt");
     const r = await page.evaluate(() => {
       const botao = getComputedStyle(document.querySelector("a.botao-primario")!);
@@ -249,12 +275,14 @@ test.describe("correções da revisão final", () => {
       return {
         borda: botao.borderTopColor,
         larguraBorda: botao.borderTopWidth,
+        texto: botao.color,
         barra: barra.backgroundColor,
       };
     });
     expect(r.larguraBorda).toBe("1px");
-    expect(r.borda).toBe("rgb(63, 90, 0)");
-    expect(r.barra).toBe("rgb(63, 90, 0)");
+    expect(r.borda).toBe("rgb(214, 168, 95)");
+    expect(r.texto).toBe("rgb(5, 7, 10)");
+    expect(r.barra).toBe("rgb(214, 168, 95)");
   });
 });
 

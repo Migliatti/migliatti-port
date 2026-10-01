@@ -10,7 +10,7 @@ Sair do visual "coluna única de texto": layout editorial largo, Hero em tela ch
 
 ## O que não muda
 
-- Textos em `content/`, rotas, SEO, bilíngue pt/en, tema claro/escuro (`prefers-color-scheme`).
+- Textos em `content/`, rotas, SEO, bilíngue pt/en, tema único escuro e dourado (issue #54; o site não segue a preferência de tema do sistema).
 - Cores, fontes (Bricolage 800, Geist, Geist Mono) e botões em pílula do Sinal.
 - Texto legível antes de qualquer animação e sem JavaScript.
 - `prefers-reduced-motion: reduce` desliga o movimento; ninguém é forçado a receber animação.
@@ -49,7 +49,7 @@ Fica:
 
 - Rótulos e dados em Geist Mono, colchetes, prompt `>`, cursor piscando em um ponto só.
 - Painéis com cantos marcados e scanlines sutis na Vitrine.
-- Corpo e títulos continuam Bricolage/Geist. No tema claro o HUD usa `--accent-text` (contraste AA).
+- Corpo e títulos continuam Bricolage/Geist. O HUD usa `--accent-text` (contraste AA sobre o fundo e a superfície).
 - Não é "site inteiro como terminal".
 
 ### 5. HUD de dados (só dados verificáveis)
@@ -99,7 +99,7 @@ Segue o molde de `tests/e2e/vitrine.spec.ts` e `tests/e2e/animacao.spec.ts`. Sem
 - Carga preguiçosa: o chunk só é baixado quando a seção entra na tela; marca no conteúdo do chunk, como hoje.
 - Foco por teclado em cada corpo orbital e em todos os botões.
 - HUD: dados de build presentes e coerentes com `content/` (nº de projetos); sem requisições a hosts externos.
-- Contraste AA do HUD nos dois temas (`lib/design/contraste.test.ts`).
+- Contraste AA do HUD sobre o fundo e a superfície do tema único (`lib/design/contraste.test.ts`).
 - 320px sem rolagem horizontal; barra fixa não cobre âncoras (`scroll-margin-top`).
 - Testes existentes que dependem das regras antigas (ex.: transform/opacity, DPR) são atualizados na issue 1 ou 3, não removidos em silêncio.
 

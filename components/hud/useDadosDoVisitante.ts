@@ -7,7 +7,8 @@ export type DadosDoVisitante = {
   hora: string;
   /** Largura x altura da janela, em pixels. */
   viewport: string;
-  tema: "claro" | "escuro";
+  /** O site tem um tema só, escuro (issue #54). */
+  tema: "escuro";
   /** Rolagem da página, de 0 a 100. */
   rolagem: number;
   ponteiro: "fino" | "toque";
@@ -32,9 +33,7 @@ function lerDados(): DadosDoVisitante {
   return {
     hora,
     viewport: `${window.innerWidth}x${window.innerHeight}`,
-    tema: window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "escuro"
-      : "claro",
+    tema: "escuro",
     rolagem,
     ponteiro: window.matchMedia("(pointer: coarse)").matches ? "toque" : "fino",
     idioma: navigator.language,
@@ -86,14 +85,12 @@ export function useDadosDoVisitante(): DadosDoVisitante | null {
       }
     };
 
-    const escuro = window.matchMedia("(prefers-color-scheme: dark)");
     const toque = window.matchMedia("(pointer: coarse)");
 
     atualizar();
     iniciarRelogio();
     window.addEventListener("scroll", agendar, { passive: true });
     window.addEventListener("resize", agendar);
-    escuro.addEventListener("change", agendar);
     toque.addEventListener("change", agendar);
     document.addEventListener("visibilitychange", aoMudarVisibilidade);
 
@@ -102,7 +99,6 @@ export function useDadosDoVisitante(): DadosDoVisitante | null {
       pararRelogio();
       window.removeEventListener("scroll", agendar);
       window.removeEventListener("resize", agendar);
-      escuro.removeEventListener("change", agendar);
       toque.removeEventListener("change", agendar);
       document.removeEventListener("visibilitychange", aoMudarVisibilidade);
     };

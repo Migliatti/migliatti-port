@@ -68,7 +68,6 @@ export type Dictionary = {
     hora: string;
     viewport: string;
     tema: string;
-    claro: string;
     escuro: string;
     rolagem: string;
     ponteiro: string;
@@ -130,7 +129,6 @@ const dictionaries: Record<Locale, Dictionary> = {
       hora: "hora sp",
       viewport: "viewport",
       tema: "tema",
-      claro: "claro",
       escuro: "escuro",
       rolagem: "rolagem",
       ponteiro: "ponteiro",
@@ -190,7 +188,6 @@ const dictionaries: Record<Locale, Dictionary> = {
       hora: "sp time",
       viewport: "viewport",
       tema: "theme",
-      claro: "light",
       escuro: "dark",
       rolagem: "scroll",
       ponteiro: "pointer",

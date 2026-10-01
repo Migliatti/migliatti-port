@@ -7,7 +7,7 @@ type Props = {
   numero: string;
 };
 
-const estiloDoLink = "underline underline-offset-4 hover:text-muted";
+const estiloDoLink = "underline underline-offset-4 hover:text-accent-text";
 
 /** Canais de contato (e-mail, LinkedIn, GitHub) e o botão do CV público. */
 export function Contato({ lang, numero }: Props) {
