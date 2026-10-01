@@ -215,6 +215,70 @@ main:focus {
   }
 }
 
+/*
+ * Vitrine (docs/adr/0003-editorial-espacial-animejs.md). O quadro parado do
+ * sistema orbital vem do servidor; o módulo animado só move o que já existe.
+ * Destaque de pilar é CSS puro: funciona sem JavaScript e com movimento
+ * reduzido. Corpo sob o ponteiro ou em foco destaca o pilar do texto, e o
+ * pilar sob o ponteiro destaca o corpo.
+ */
+.vitrine-pilar {
+  border-left: 2px solid color-mix(in srgb, var(--foreground) 20%, transparent);
+  padding-left: 0.75rem;
+}
+
+.vitrine-corpo {
+  cursor: default;
+}
+
+.vitrine-corpo:focus {
+  outline: none;
+}
+
+.vitrine-halo {
+  opacity: 0;
+}
+
+.vitrine-corpo:is(:hover, :focus) .vitrine-halo,
+#vitrine:has([data-pilar="site"]:hover) [data-corpo="site"] .vitrine-halo,
+#vitrine:has([data-pilar="automacao"]:hover) [data-corpo="automacao"] .vitrine-halo,
+#vitrine:has([data-pilar="diagnostico"]:hover) [data-corpo="diagnostico"] .vitrine-halo {
+  opacity: 1;
+}
+
+#vitrine:has([data-corpo="site"]:is(:hover, :focus)) [data-pilar="site"],
+#vitrine:has([data-corpo="automacao"]:is(:hover, :focus)) [data-pilar="automacao"],
+#vitrine:has([data-corpo="diagnostico"]:is(:hover, :focus)) [data-pilar="diagnostico"] {
+  border-left-color: var(--accent-text);
+}
+
+#vitrine:has([data-corpo="site"]:is(:hover, :focus)) [data-pilar="site"] strong,
+#vitrine:has([data-corpo="automacao"]:is(:hover, :focus)) [data-pilar="automacao"] strong,
+#vitrine:has([data-corpo="diagnostico"]:is(:hover, :focus)) [data-pilar="diagnostico"] strong {
+  color: var(--accent-text);
+}
+
+/* O rastro de luz só existe com a peça animada. */
+.vitrine-peca:not([data-estado="carregada"]) .vitrine-rastro {
+  display: none;
+}
+
+/* Versão leve (celular fraco): sem as órbitas extras. */
+.vitrine-peca[data-versao="leve"] [data-orbita-extra] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .vitrine-pilar,
+  .vitrine-pilar strong,
+  .vitrine-halo {
+    transition:
+      border-color 200ms ease-out,
+      color 200ms ease-out,
+      opacity 200ms ease-out;
+  }
+}
+
 
 /* Layout editorial (docs/superpowers/specs/2026-10-01-editorial-espacial-design.md, item 3). */
 

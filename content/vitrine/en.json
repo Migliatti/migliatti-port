@@ -1,5 +1,22 @@
 {
   "titulo": "Showcase",
-  "descricao": "A signature animation piece built with AI: a flow field where hundreds of strokes follow invisible currents. It is plain Canvas, no libraries; it only loads when you get here, pauses off-screen and stays still if your system asks for reduced motion.",
-  "rotuloDaPeca": "Abstract animation: thin strokes flowing in soft currents across the Showcase area."
+  "descricao": "A signature animation piece built with AI: a small orbital system in SVG, animated with anime.js, where each body is one of the three things I deliver. Hover or Tab to a body to highlight what it stands for. The piece only loads when you get here, pauses off-screen, goes lighter on phones and stays still if your system asks for reduced motion.",
+  "rotuloDaPeca": "Orbital system: three bodies circle a core on their own orbits, one for websites, one for automations and one for diagnostics.",
+  "pilares": [
+    {
+      "id": "site",
+      "nome": "Websites",
+      "texto": "Fast, accessible, bilingual websites, from layout to deploy."
+    },
+    {
+      "id": "automacao",
+      "nome": "Automations",
+      "texto": "Workflows that take repetitive work off someone's hands."
+    },
+    {
+      "id": "diagnostico",
+      "nome": "Diagnostics",
+      "texto": "A look at what exists today and what is worth changing first."
+    }
+  ]
 }

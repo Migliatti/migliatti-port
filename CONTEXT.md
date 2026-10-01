@@ -37,7 +37,7 @@ PDF baixável pelo site, sem telefone e com cidade só como "São Paulo, SP". De
 _Avoid_: Currículo completo, CV atual
 
 **Vitrine**:
-Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. Só a Vitrine tem animação como conteúdo. O resto do site tem apenas **Animação decorativa**, e nenhuma esconde texto: o conteúdo já está legível antes de animar. Toda animação respeita `prefers-reduced-motion` e tem versão leve para celular fraco. A peça usa anime.js e só carrega quando a seção entra na tela; regras em `docs/adr/0003-editorial-espacial-animejs.md` (que substitui em parte `docs/adr/0002-vitrine.md`).
+Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. Só a Vitrine tem animação como conteúdo. O resto do site tem apenas **Animação decorativa**, e nenhuma esconde texto: o conteúdo já está legível antes de animar. Toda animação respeita `prefers-reduced-motion` e tem versão leve para celular fraco. A peça é um sistema orbital em SVG com três corpos, um por pilar do **Posicionamento** (site, automação, diagnóstico); passar o mouse ou focar um corpo destaca o pilar no texto. Usa anime.js e só carrega quando a seção entra na tela; regras em `docs/adr/0003-editorial-espacial-animejs.md` (que substitui em parte `docs/adr/0002-vitrine.md`).
 _Avoid_: Demo (já significa projeto publicado), Galeria
 
 **Animação decorativa**:
