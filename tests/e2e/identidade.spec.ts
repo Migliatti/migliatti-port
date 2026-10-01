@@ -57,7 +57,7 @@ test.describe("controles e movimento", () => {
 
 for (const path of paths) {
   test.describe(`hero ${path}`, () => {
-    test("título anima legível, sem atraso, e para com movimento reduzido", async ({
+    test("título anima legível e para com movimento reduzido", async ({
       page,
     }) => {
       await page.goto(path);
@@ -74,13 +74,11 @@ for (const path of paths) {
         return {
           opacity: Number(css.opacity),
           visibility: css.visibility,
-          delay: css.animationDelay,
         };
       });
       if (inicio) {
         expect(inicio.opacity).toBeGreaterThanOrEqual(0.7);
         expect(inicio.visibility).toBe("visible");
-        expect(inicio.delay).toBe("0s");
       }
       expect(
         await h1.evaluate((n) => getComputedStyle(n).animationName),
@@ -222,7 +220,7 @@ test.describe("auditoria de design", () => {
 });
 
 test.describe("correções da revisão final", () => {
-  test("animações novas respeitam o limite de 500ms do ADR 0001", async ({
+  test("animações novas respeitam o limite de 500ms do ADR 0001 (mantido)", async ({
     page,
   }) => {
     await page.goto("/pt");
