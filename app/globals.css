@@ -14,8 +14,9 @@
   --on-accent: #05070a;
   --accent-text: #d6a85f;
   color-scheme: dark;
-  /* Altura da barra fixa da home; âncoras e foco descontam este valor. */
-  --altura-barra: 3rem;
+  /* Altura da barra fixa; âncoras e foco descontam este valor. Em tela estreita
+     a barra tem duas linhas (idioma e âncoras), e as âncoras podem quebrar. */
+  --altura-barra: 6rem;
 }
 
 @theme inline {
@@ -287,11 +288,42 @@ main:focus {
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 20;
-  height: var(--altura-barra);
+  min-height: var(--altura-barra);
   border-bottom: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
   background: color-mix(in srgb, var(--background) 90%, transparent);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --altura-barra: 3rem;
+  }
+}
+
+/* Âncoras da barra: segunda linha em tela estreita (podem quebrar), uma linha só no md. */
+.barra-secoes {
+  flex: 1 0 100%;
+  min-width: 0;
+}
+
+.barra-ancoras {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 0.75rem;
+  line-height: 1.5rem;
+}
+
+@media (min-width: 48rem) {
+  .barra-secoes {
+    flex: 0 1 auto;
+  }
+
+  .barra-ancoras {
+    flex-wrap: nowrap;
+    gap: 0 1.25rem;
+  }
 }
 
 /* Hero em tela cheia: o texto já está no HTML e não depende de JavaScript. */
@@ -559,26 +591,6 @@ li:first-child > .projeto-cartao {
 @keyframes hud-cursor {
   50% {
     opacity: 0;
-  }
-}
-
-/*
- * Resumo na barra fixa: só cabe a partir de 90rem (a barra alarga junto, em
- * BarraFixa.tsx); abaixo disso some, e a Vitrine mostra os dados completos.
- */
-.hud-barra {
-  display: none;
-  min-width: 0;
-  flex: 1 1 0;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem 1.25rem;
-  overflow: hidden;
-}
-
-@media (min-width: 90rem) {
-  .hud-barra {
-    display: flex;
   }
 }
 

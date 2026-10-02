@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { expectBarraSemTransbordo, LARGURAS } from "./barra-util";
 
 // Estudo de caso no layout editorial (issue #37): mesma barra fixa da home,
 // seções numeradas no grid, sem rolagem horizontal em 320px.
@@ -61,7 +62,7 @@ for (const idioma of idiomas) {
           );
 
           const nav = barra.getByRole("navigation", { name: idioma.barra });
-          await expect(nav.getByRole("link")).toHaveCount(numeros.length);
+          await expect(nav.getByRole("link")).toHaveCount(5);
 
           // O título não fica escondido sob a barra fixa.
           const topoDoTitulo = await page
@@ -79,6 +80,20 @@ for (const idioma of idiomas) {
           expect(
             await barra.evaluate((n) => n.getBoundingClientRect().top),
           ).toBe(0);
+        });
+      }
+
+      for (const largura of LARGURAS) {
+        test(`barra sem transbordo nem item cortado em ${largura}px`, async ({
+          page,
+        }) => {
+          await page.setViewportSize({ width: largura, height: 800 });
+          await page.goto(caminho);
+          await page.evaluate(() => document.fonts.ready);
+          await expectBarraSemTransbordo(page, 5);
+          const voltar = page.getByTestId("link-voltar");
+          await expect(voltar).toBeVisible();
+          await expect(page.getByTestId("hud-barra")).toHaveCount(0);
         });
       }
 

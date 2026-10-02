@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BarraFixa } from "@/components/BarraFixa";
+import type { ItemDeSecao } from "@/components/hud/useSecaoAtual";
 import { NumeroDaSecao } from "@/components/NumeroDaSecao";
 import { IlustracaoAnimada } from "@/components/ilustracao/IlustracaoAnimada";
 import { listarDestaques, obterProjeto } from "@/lib/content";
@@ -45,17 +46,18 @@ export default async function EstudoDeCasoPage({
   const dict = getDictionary(lang);
   const estudo = projeto.estudoDeCaso;
 
-  // Seções numeradas do Estudo de caso, na ordem da página; a barra fixa usa
-  // a mesma lista. Os ids são os dos títulos de cada seção.
-  const secoes = [
-    { id: "problema", rotulo: dict.problema },
-    { id: "decisoes", rotulo: dict.decisoes },
-    { id: "stack", rotulo: dict.stack },
-    { id: "resultado", rotulo: dict.resultado },
-    { id: "aprendizado", rotulo: dict.aprendizado },
-    { id: "uso-de-ia", rotulo: dict.usoDeIA },
+  // Seções numeradas do Estudo de caso, na ordem da página. As com
+  // `rotuloDaBarra` viram as 5 âncoras da barra fixa; Aprendizado e Evidências
+  // ficam só na página e marcam a âncora vizinha. Os ids são os dos títulos.
+  const secoes: ItemDeSecao[] = [
+    { id: "problema", rotulo: dict.problema, rotuloDaBarra: dict.problema },
+    { id: "decisoes", rotulo: dict.decisoes, rotuloDaBarra: dict.decisoes },
+    { id: "stack", rotulo: dict.stack, rotuloDaBarra: dict.stack },
+    { id: "resultado", rotulo: dict.resultado, rotuloDaBarra: dict.resultado },
+    { id: "aprendizado", rotulo: dict.aprendizado, ancora: "resultado" },
+    { id: "uso-de-ia", rotulo: dict.usoDeIA, rotuloDaBarra: dict.usoDeIA },
     ...(projeto.evidencias.length > 0
-      ? [{ id: "evidencias", rotulo: dict.evidencias }]
+      ? [{ id: "evidencias", rotulo: dict.evidencias, ancora: "uso-de-ia" }]
       : []),
   ];
   const numero = (id: string) =>

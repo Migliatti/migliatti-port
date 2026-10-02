@@ -21,15 +21,17 @@ export function HudDaVitrine({ lang, secoes, children }: Props) {
   return (
     <div data-testid="vitrine-hud" className="hud hud-moldura">
       <div aria-hidden="true" data-hud-faixa="visitante" className="hud-faixa">
-        <span className="hud-prompt">&gt;</span>
+        <span className="hud-prompt">
+          &gt;<span className="hud-cursor" />
+        </span>
         <span className="hud-titulo">[{hud.visitante}]</span>
-        <DadosDoVisitante rotulos={hud} secoes={secoes} variante="completo" />
+        <DadosDoVisitante rotulos={hud} secoes={secoes} />
       </div>
       {children}
       <div aria-hidden="true" data-hud-faixa="build" className="hud-faixa">
         <span className="hud-prompt">&gt;</span>
         <span className="hud-titulo">[{hud.build}]</span>
-        <DadosDoBuild lang={lang} variante="completo" />
+        <DadosDoBuild lang={lang} />
       </div>
     </div>
   );

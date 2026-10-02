@@ -13,44 +13,39 @@ type Props = {
 };
 
 /**
- * Navegação por seção da barra fixa. Renderiza no servidor com links de
- * âncora que funcionam sem JavaScript; depois da hidratação marca a seção
- * atual (`aria-current="location"`) com IntersectionObserver. Em tela estreita
- * mostra só o rótulo da seção atual.
+ * Navegação por seção da barra fixa: só as seções com `rotuloDaBarra`. Renderiza
+ * no servidor com links de âncora que funcionam sem JavaScript; depois da
+ * hidratação marca a seção atual (`aria-current="location"`) com
+ * IntersectionObserver. Seção sem âncora própria marca a âncora do `ancora`.
  */
 export function NavegacaoDasSecoes({ rotulo, itens }: Props) {
-  const atual = useSecaoAtual(itens);
-
-  const itemAtual = itens.find((item) => item.id === atual);
+  const idAtual = useSecaoAtual(itens);
+  const atual = itens.find((item) => item.id === idAtual);
+  const idDaAncora = atual ? (atual.ancora ?? atual.id) : null;
 
   return (
-    <nav aria-label={rotulo} className="min-w-0">
-      <p
-        data-testid="secao-atual"
-        aria-hidden={itemAtual ? undefined : true}
-        className="truncate font-mono text-xs text-accent-text md:hidden"
-      >
-        {itemAtual?.rotulo}
-      </p>
-      <ul className="hidden items-center gap-5 font-mono text-xs md:flex">
-        {itens.map((item) => {
-          const ehAtual = item.id === atual;
-          return (
-            <li key={item.id}>
-              <a
-                href={`#${item.id}`}
-                aria-current={ehAtual ? "location" : undefined}
-                className={
-                  ehAtual
-                    ? "text-accent-text underline underline-offset-8"
-                    : "text-muted hover:text-foreground"
-                }
-              >
-                {item.rotulo}
-              </a>
-            </li>
-          );
-        })}
+    <nav aria-label={rotulo} className="barra-secoes">
+      <ul className="barra-ancoras font-mono text-xs">
+        {itens
+          .filter((item) => item.rotuloDaBarra)
+          .map((item) => {
+            const ehAtual = item.id === idDaAncora;
+            return (
+              <li key={item.id}>
+                <a
+                  href={`#${item.id}`}
+                  aria-current={ehAtual ? "location" : undefined}
+                  className={
+                    ehAtual
+                      ? "text-accent-text underline underline-offset-8"
+                      : "text-muted hover:text-foreground"
+                  }
+                >
+                  {item.rotuloDaBarra}
+                </a>
+              </li>
+            );
+          })}
       </ul>
     </nav>
   );

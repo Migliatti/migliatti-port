@@ -55,6 +55,12 @@ export type Dictionary = {
     competencias: string;
     formacao: string;
   };
+  /** Rótulos curtos das âncoras da barra fixa da home. */
+  barra: {
+    projetos: string;
+    experiencia: string;
+    competencias: string;
+  };
   /** Rótulo da previsão de conclusão da Formação. */
   previsaoDeConclusao: string;
   outrosProjetos: {
@@ -63,12 +69,10 @@ export type Dictionary = {
     repositorio: string;
     demo: string;
   };
-  /** Rótulos do HUD (barra fixa e moldura da Vitrine). Decorativo: aria-hidden. */
+  /** Rótulos do HUD (só na moldura da Vitrine). Decorativo: aria-hidden. */
   hud: {
     hora: string;
     viewport: string;
-    tema: string;
-    escuro: string;
     rolagem: string;
     ponteiro: string;
     ponteiroFino: string;
@@ -118,6 +122,11 @@ const dictionaries: Record<Locale, Dictionary> = {
       competencias: "Competências técnicas",
       formacao: "Formação",
     },
+    barra: {
+      projetos: "Projetos",
+      experiencia: "Experiência",
+      competencias: "Competências",
+    },
     previsaoDeConclusao: "Previsão de conclusão",
     outrosProjetos: {
       titulo: "Outros projetos",
@@ -128,8 +137,6 @@ const dictionaries: Record<Locale, Dictionary> = {
     hud: {
       hora: "hora sp",
       viewport: "viewport",
-      tema: "tema",
-      escuro: "escuro",
       rolagem: "rolagem",
       ponteiro: "ponteiro",
       ponteiroFino: "mouse",
@@ -177,6 +184,11 @@ const dictionaries: Record<Locale, Dictionary> = {
       competencias: "Technical skills",
       formacao: "Education",
     },
+    barra: {
+      projetos: "Projects",
+      experiencia: "Experience",
+      competencias: "Skills",
+    },
     previsaoDeConclusao: "Expected completion",
     outrosProjetos: {
       titulo: "Other projects",
@@ -187,8 +199,6 @@ const dictionaries: Record<Locale, Dictionary> = {
     hud: {
       hora: "sp time",
       viewport: "viewport",
-      tema: "theme",
-      escuro: "dark",
       rolagem: "scroll",
       ponteiro: "pointer",
       ponteiroFino: "mouse",

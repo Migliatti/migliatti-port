@@ -6,6 +6,7 @@ import {
   ExperienciaProfissional,
   Formacao,
 } from "@/components/Curriculo";
+import type { ItemDeSecao } from "@/components/hud/useSecaoAtual";
 import { Hero } from "@/components/Hero";
 import { NumeroDaSecao } from "@/components/NumeroDaSecao";
 import { OutrosProjetos } from "@/components/OutrosProjetos";
@@ -26,16 +27,17 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
   const dict = getDictionary(lang);
   const destaques = listarDestaques(lang);
 
-  // Ordem das seções numeradas; a barra fixa usa a mesma lista. Os ids são os
-  // dos títulos (ou da seção) de cada componente.
-  const secoes = [
-    { id: "destaques", rotulo: dict.projetosEmDestaque },
-    { id: "vitrine", rotulo: obterVitrine(lang).titulo },
-    { id: "outros-projetos", rotulo: dict.outrosProjetos.titulo },
-    { id: "experiencia", rotulo: dict.secoes.experiencia },
-    { id: "competencias", rotulo: dict.secoes.competencias },
-    { id: "formacao", rotulo: dict.secoes.formacao },
-    { id: "contato", rotulo: obterContato(lang).titulo },
+  // Ordem das seções numeradas (página inteira). As com `rotuloDaBarra` viram
+  // as 5 âncoras da barra fixa; "Outros projetos" e "Formação" ficam só na
+  // página e marcam a âncora vizinha. Os ids são os dos títulos de cada seção.
+  const secoes: ItemDeSecao[] = [
+    { id: "destaques", rotulo: dict.projetosEmDestaque, rotuloDaBarra: dict.barra.projetos },
+    { id: "vitrine", rotulo: obterVitrine(lang).titulo, rotuloDaBarra: obterVitrine(lang).titulo },
+    { id: "outros-projetos", rotulo: dict.outrosProjetos.titulo, ancora: "destaques" },
+    { id: "experiencia", rotulo: dict.secoes.experiencia, rotuloDaBarra: dict.barra.experiencia },
+    { id: "competencias", rotulo: dict.secoes.competencias, rotuloDaBarra: dict.barra.competencias },
+    { id: "formacao", rotulo: dict.secoes.formacao, ancora: "competencias" },
+    { id: "contato", rotulo: obterContato(lang).titulo, rotuloDaBarra: obterContato(lang).titulo },
   ];
   const numero = (id: string) =>
     String(secoes.findIndex((s) => s.id === id) + 1).padStart(2, "0");

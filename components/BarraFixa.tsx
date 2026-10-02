@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { HudDaBarra } from "@/components/hud/HudDaBarra";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import {
   NavegacaoDasSecoes,
@@ -20,17 +19,17 @@ type Props = {
 };
 
 /**
- * Barra fixa fina da home e do Estudo de caso: seletor de idioma e navegação
- * por seção. Em tela estreita fica só o idioma e a seção atual (e, no Estudo
- * de caso, a seta de volta para a home). A partir de 90rem entra o HUD
- * resumido, decorativo.
+ * Barra fixa da home e do Estudo de caso: seletor de idioma e 5 âncoras (as
+ * seções com `rotuloDaBarra`), mais a seta de volta no Estudo de caso. Em tela
+ * estreita as âncoras descem para uma segunda linha. Sem HUD: ele vive só na
+ * Vitrine (ADR 0003).
  */
 export function BarraFixa({ lang, secoes, caminho = "", comVoltar = false }: Props) {
   const dict = getDictionary(lang);
 
   return (
     <header className="barra-fixa">
-      <div className="mx-auto flex h-full max-w-[75rem] items-center min-[90rem]:max-w-[90rem] justify-between gap-4 px-4 sm:px-6 md:px-10">
+      <div className="mx-auto flex min-h-[var(--altura-barra)] max-w-[75rem] flex-wrap content-center items-center justify-between gap-x-4 px-4 md:flex-nowrap sm:px-6 md:px-10">
         <div className="flex shrink-0 items-center gap-3">
           {comVoltar && (
             <Link
@@ -44,7 +43,6 @@ export function BarraFixa({ lang, secoes, caminho = "", comVoltar = false }: Pro
           )}
           <LanguageSelector current={lang} caminho={caminho} />
         </div>
-        <HudDaBarra lang={lang} secoes={secoes} />
         <NavegacaoDasSecoes rotulo={dict.navegacaoDasSecoes} itens={secoes} />
       </div>
     </header>
