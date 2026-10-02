@@ -61,17 +61,15 @@ describe("cor decorativa aleatória (issue #56)", () => {
       )
       .sort();
     expect(usos).toEqual([
-      // .hero-ceu, .hero-buraco-negro e .cor-decorativa
-      "app/globals.css: color: var(--cor-decorativa);",
+      // .hero-ceu e .cor-decorativa
       "app/globals.css: color: var(--cor-decorativa);",
       "app/globals.css: color: var(--cor-decorativa);",
     ]);
   });
 
-  it("só o céu, o buraco negro, a constelação e a Vitrine sorteiam cores", () => {
+  it("só o céu, a constelação e a Vitrine sorteiam cores", () => {
     expect(ocorrencias(/corAleatoria\(/).sort()).toEqual([
       "components/animacao/cor-aleatoria.ts",
-      "components/hero/buraco-negro.ts",
       "components/hero/ceu.ts",
       "components/vitrine/constelacao.ts",
       "components/vitrine/orbitas.ts",

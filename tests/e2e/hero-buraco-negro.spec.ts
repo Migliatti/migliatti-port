@@ -3,7 +3,8 @@ import { expect, test, type Page } from "@playwright/test";
 // Buraco negro da Hero (issue #57). Regras em
 // docs/adr/0003-editorial-espacial-animejs.md (emenda da issue #57).
 const MARCA = "buraco-negro-animado"; // components/hero/buraco-negro.ts
-const DOURADO = "rgb(214, 168, 95)";
+// Cor fixa, complementar ao dourado (--cor-buraco-negro).
+const AZUL = "rgb(102, 164, 245)";
 
 function registrarChunks(page: Page) {
   const corpos: Promise<string>[] = [];
@@ -49,7 +50,8 @@ for (const path of ["/pt", "/en"]) {
       await expect(camada).toHaveAttribute("data-estado", "carregada");
       await expect(camada).toHaveAttribute("data-buraco-negro", MARCA);
       await expect(camada).toHaveAttribute("data-versao", "completa");
-      await expect(camada.locator("svg [data-anel]")).toHaveCount(4);
+      await expect(camada.locator("svg [data-faixa]")).toHaveCount(1);
+      await expect(camada.locator("svg [data-filete]")).toHaveCount(4);
       await expect(page.getByTestId("hero-ceu")).toHaveAttribute("data-estado", "carregada");
 
       // Por cima do céu (vem depois no DOM) e atrás do texto.
@@ -76,7 +78,7 @@ for (const path of ["/pt", "/en"]) {
       expect(acerto.every(Boolean)).toBe(true);
     });
 
-    test("usa uma cor sorteada, e só transform e opacity se movem", async ({ page }) => {
+    test("usa cor fixa e só transform e opacity se movem", async ({ page }) => {
       await aparelhoForte(page);
       await page.addInitScript(() => {
         let n = 0;
@@ -85,12 +87,15 @@ for (const path of ["/pt", "/en"]) {
       await page.goto(path);
       const camada = page.getByTestId("hero-buraco-negro");
       await expect(camada).toHaveAttribute("data-estado", "carregada");
-      expect(await camada.evaluate((el) => getComputedStyle(el).color)).not.toBe(DOURADO);
+      // Não é sorteada nem dourada: é a cor fixa do buraco negro.
+      await expect(camada).toHaveCSS("color", AZUL);
 
-      const disco = camada.locator("[data-disco]");
-      const giro = () => disco.evaluate((el) => getComputedStyle(el).transform);
-      const antes = await giro();
-      await expect.poll(giro).not.toBe(antes);
+      // Os filetes deslizam ao longo da faixa (translateX).
+      const filete = camada.locator("[data-filete]").first();
+      const deslocamento = () =>
+        filete.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
+      const antes = await deslocamento();
+      await expect.poll(deslocamento, { timeout: 8000 }).not.toBe(antes);
 
       const props = await camada.evaluate((el) => {
         const usadas = new Set<string>();
@@ -102,7 +107,48 @@ for (const path of ["/pt", "/en"]) {
         return [...usadas];
       });
       for (const p of props)
-        expect(["offset", "easing", "composite", "computedOffset", "opacity", "transform", "rotate", "scale"]).toContain(p);
+        expect([
+          "offset", "easing", "composite", "computedOffset",
+          "opacity", "transform", "rotate", "scale", "translate",
+        ]).toContain(p);
+    });
+
+    test("a luz vai de ponta a ponta da tela, não só da coluna do conteúdo", async ({ page }) => {
+      await aparelhoForte(page);
+      await page.setViewportSize({ width: 1600, height: 900 });
+      await page.goto(path);
+      const camada = page.getByTestId("hero-buraco-negro");
+      await expect(camada).toHaveAttribute("data-estado", "carregada");
+
+      const medidas = await page.evaluate(() => {
+        const moldura = document.querySelector('[data-testid="hero-buraco-negro"]')!.getBoundingClientRect();
+        const ceu = document.querySelector('[data-testid="hero-ceu"]')!.getBoundingClientRect();
+        const svg = document
+          .querySelector('[data-testid="hero-buraco-negro"] svg')!
+          .getBoundingClientRect();
+        return {
+          larguraDaTela: document.documentElement.clientWidth,
+          moldura: [moldura.left, moldura.right],
+          ceu: [ceu.left, ceu.right],
+          svgCobreATela: svg.left <= 0 || svg.right >= document.documentElement.clientWidth,
+          estoura: document.documentElement.scrollWidth > window.innerWidth,
+        };
+      });
+      expect(medidas.moldura[0]).toBeLessThanOrEqual(0);
+      expect(medidas.moldura[1]).toBeGreaterThanOrEqual(medidas.larguraDaTela);
+      expect(medidas.ceu[0]).toBeLessThanOrEqual(0);
+      expect(medidas.ceu[1]).toBeGreaterThanOrEqual(medidas.larguraDaTela);
+      expect(medidas.estoura).toBe(false);
+
+      // O centro do buraco negro cai dentro da tela, à direita do meio.
+      const centro = await camada
+        .locator("[data-fotons]")
+        .evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          return (r.left + r.right) / 2 / document.documentElement.clientWidth;
+        });
+      expect(centro).toBeGreaterThan(0.5);
+      expect(centro).toBeLessThan(0.85);
     });
 
     test("pausa com a aba oculta", async ({ page }) => {
@@ -110,7 +156,7 @@ for (const path of ["/pt", "/en"]) {
       await page.goto(path);
       const camada = page.getByTestId("hero-buraco-negro");
       await expect(camada).toHaveAttribute("data-estado", "carregada");
-      const disco = camada.locator("[data-disco]");
+      const disco = camada.locator("[data-filete]").first();
       const giro = () => disco.evaluate((el) => getComputedStyle(el).transform);
 
       await abaOculta(page, true);
@@ -118,7 +164,7 @@ for (const path of ["/pt", "/en"]) {
       await page.waitForTimeout(500);
       expect(await giro()).toBe(parado);
       await abaOculta(page, false);
-      await expect.poll(giro).not.toBe(parado);
+      await expect.poll(giro, { timeout: 8000 }).not.toBe(parado);
     });
 
     test("com movimento reduzido fica vazio e o chunk nunca é baixado", async ({ page }) => {
@@ -131,7 +177,7 @@ for (const path of ["/pt", "/en"]) {
       const camada = page.getByTestId("hero-buraco-negro");
       await expect(camada).toHaveAttribute("data-estado", "reduzida");
       await expect(camada).toBeEmpty();
-      await expect(camada).toHaveCSS("color", DOURADO);
+      await expect(camada).toHaveCSS("color", AZUL);
       expect(await chunks.baixado(MARCA)).toBe(false);
     });
   });
@@ -139,18 +185,19 @@ for (const path of ["/pt", "/en"]) {
   test.describe(`buraco negro da Hero ${path} em celular (pointer: coarse)`, () => {
     test.use({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
 
-    test("mostra a versão leve: menos anéis, sem giro", async ({ page }) => {
+    test("mostra a versão leve: menos filetes, sem deslizar", async ({ page }) => {
       await aparelhoForte(page);
       await page.goto(path);
       const camada = page.getByTestId("hero-buraco-negro");
       await expect(camada).toHaveAttribute("data-estado", "carregada");
       await expect(camada).toHaveAttribute("data-versao", "leve");
-      await expect(camada.locator("[data-anel]")).toHaveCount(2);
+      await expect(camada.locator("[data-filete]")).toHaveCount(2);
       await page.waitForTimeout(600);
-      const giro = await camada
-        .locator("[data-disco]")
-        .evaluate((el) => getComputedStyle(el).transform);
-      expect(giro === "none" || giro === "matrix(1, 0, 0, 1, 0, 0)").toBe(true);
+      const deslocamento = await camada
+        .locator("[data-filete]")
+        .first()
+        .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
+      expect(deslocamento).toBe(0);
     });
   });
 }
@@ -158,13 +205,12 @@ for (const path of ["/pt", "/en"]) {
 test.describe("buraco negro sem JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
-  test("a Hero está completa e a camada vem vazia e dourada", async ({ page }) => {
+  test("a Hero está completa e a camada vem vazia", async ({ page }) => {
     await page.goto("/pt");
     await expect(page.locator("h1")).toBeVisible();
     await expect(page.getByTestId("posicionamento")).toBeVisible();
     const camada = page.getByTestId("hero-buraco-negro");
     await expect(camada).toHaveAttribute("aria-hidden", "true");
     await expect(camada).toBeEmpty();
-    await expect(camada).toHaveCSS("color", DOURADO);
   });
 });

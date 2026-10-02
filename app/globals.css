@@ -18,6 +18,10 @@
      sorteado por ponto (components/animacao/cor-aleatoria.ts). Nunca em texto,
      link, botão ou borda. */
   --cor-decorativa: var(--accent);
+  /* Buraco negro da Hero (issue #57): cor fixa, complementar ao dourado (matiz
+     ~215° contra ~37°), mais um núcleo quase branco. Só decoração. */
+  --cor-buraco-negro: hsl(214 88% 68%);
+  --cor-buraco-negro-nucleo: hsl(208 100% 93%);
   color-scheme: dark;
   /* Altura da barra fixa; âncoras e foco descontam este valor. Em tela estreita
      a barra tem duas linhas (idioma e âncoras), e as âncoras podem quebrar. */
@@ -38,6 +42,9 @@
 }
 
 body {
+  /* As camadas decorativas da Hero vão de ponta a ponta da tela (100vw, que
+     inclui a barra de rolagem); o excesso é cortado, sem rolagem horizontal. */
+  overflow-x: clip;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
@@ -390,23 +397,15 @@ main:focus {
  */
 .hero-ceu {
   position: absolute;
-  inset: 0 -1rem;
+  top: 0;
+  bottom: 0;
+  left: 50%;
   z-index: -1;
+  width: 100vw;
+  margin-left: -50vw;
   overflow: hidden;
   pointer-events: none;
   color: var(--cor-decorativa);
-}
-
-@media (min-width: 40rem) {
-  .hero-ceu {
-    inset: 0 -1.5rem;
-  }
-}
-
-@media (min-width: 48rem) {
-  .hero-ceu {
-    inset: 0 -2.5rem;
-  }
 }
 
 .hero-ceu-camada {
@@ -425,34 +424,30 @@ main:focus {
  */
 .hero-buraco-negro {
   position: absolute;
-  inset: 0 -1rem;
+  top: 0;
+  bottom: 0;
+  left: 50%;
   z-index: -1;
+  width: 100vw;
+  margin-left: -50vw;
   overflow: hidden;
   pointer-events: none;
-  color: var(--cor-decorativa);
+  color: var(--cor-buraco-negro);
 }
 
-@media (min-width: 40rem) {
-  .hero-buraco-negro {
-    inset: 0 -1.5rem;
-  }
-}
-
-@media (min-width: 48rem) {
-  .hero-buraco-negro {
-    inset: 0 -2.5rem;
-  }
-}
-
-/* O disco é maior que a Hero e fica ancorado à direita; a moldura corta o excesso. */
+/*
+ * O centro do buraco negro fica a 65% da largura do SVG (viewBox -520 a 280) e
+ * é ancorado a 68% da tela; em tela estreita o SVG tem 56rem e o excesso é
+ * cortado pela moldura. A luz nunca é cortada pela coluna do conteúdo.
+ */
 .hero-buraco-negro-svg {
   position: absolute;
   top: 50%;
-  right: -12vmin;
+  left: calc(68% - 0.65 * max(100%, 56rem));
   display: block;
-  width: min(120vmin, 60rem);
+  width: max(100%, 56rem);
   height: auto;
-  aspect-ratio: 1;
+  aspect-ratio: 2 / 1;
   transform: translateY(-50%);
   overflow: visible;
 }
