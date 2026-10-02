@@ -60,3 +60,9 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 - O pulso lê a cor da decoração de `data-cor-do-pulso` no `<svg>` raiz; sem o atributo segue o índigo `#4f46e5` das ilustrações ainda em tema claro. Nenhum custo novo de chunk além de poucos bytes.
 - A ilustração do `labreserve` é gerada por `npm run ilustracoes` (`scripts/gerar-ilustracao-labreserve.mjs`): o Graphviz (`@viz-js/viz`, WASM, só devDependency) calcula o layout e o script monta o SVG no tema, mantendo as classes e marcas acima. O SVG gerado é versionado e estático, então segue valendo "completa sem JS e parada com movimento reduzido" e não há custo de bundle. Uma lib que renderiza no navegador (Mermaid, React Flow) foi descartada: exigiria JS para o desenho aparecer, estouraria o orçamento do item 11 e obrigaria a reescrever o pulso.
 - `data-compacta` no `<svg>` (desenho quase quadrado) faz o recorte da ilustração ter no máximo 34rem e acompanhar o desenho, em vez de ficar na largura toda.
+
+## Emenda (issue #63): fluxo de reserva do `labreserve`
+
+- A ilustração do fluxo de criação de reserva segue a linguagem do #62 (fundo `#05070A`→`#19150F`, grade, brilho, estrelas, rótulo "ILUSTRAÇÃO · ILLUSTRATION") e é gerada pelo mesmo `npm run ilustracoes`. É uma coluna simples com posições fixas, então não passa pelo Graphviz. Erros ganham borda rosada (`#d98a7a`) para se distinguirem sem depender só de posição; a legenda diz isso nos dois idiomas.
+- Mantém as classes `caixa`/`decisao`/`ok`/`erro`/`linha` (8 setas contínuas) e a moldura `transacao`, que não é caixa nem seta. Textos e dados vêm de `src/application/lab-reserve-service.ts` do repositório; nada foi acrescentado. Sem custo de chunk.
+
