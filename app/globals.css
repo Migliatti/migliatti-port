@@ -437,13 +437,13 @@ main:focus {
 
 /*
  * O centro do buraco negro fica a 65% da largura do SVG (viewBox -520 a 280) e
- * é ancorado a 68% da tela; em tela estreita o SVG tem 56rem e o excesso é
+ * é ancorado a 76% da tela, um pouco acima do meio; em tela estreita o SVG tem 56rem e o excesso é
  * cortado pela moldura. A luz nunca é cortada pela coluna do conteúdo.
  */
 .hero-buraco-negro-svg {
   position: absolute;
-  top: 50%;
-  left: calc(68% - 0.65 * max(100%, 56rem));
+  top: 42%;
+  left: calc(76% - 0.65 * max(100%, 56rem));
   display: block;
   width: max(100%, 56rem);
   height: auto;

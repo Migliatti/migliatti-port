@@ -1,6 +1,8 @@
-// Buraco negro ao fundo da Hero, no estilo do Gargantua de Interestelar: um
-// centro preto com anel de fótons, o disco visto de lado como uma faixa de luz
-// que cruza o meio, e os arcos de luz que o disco curva por cima e por baixo.
+// Buraco negro ao fundo da Hero, no estilo do Gargantua de Interestelar, com
+// perspectiva 3D falsa: um centro preto com anel de fótons, o anel de luz que o
+// disco curva ao redor da sombra (mais forte em cima) e o disco inclinado,
+// grosso no meio e mais largo do lado que está perto de nós, passando na frente
+// da parte de baixo da sombra.
 // Animado com anime.js v4, por cima do céu estrelado e atrás do texto.
 //
 // Só é importado (via `import()`) por BuracoNegroDaHero depois da montagem, e
@@ -32,19 +34,26 @@ const R = 64;
 
 const NUCLEO = "var(--cor-buraco-negro-nucleo)";
 
-/** Filetes de luz ao longo da faixa: posição vertical, comprimento e brilho. */
-type Filete = { y: number; x1: number; x2: number; largura: number; opacidade: number };
+/** Disco inclinado: ângulo (graus, negativo sobe à direita) e deslocamento vertical. */
+const INCLINACAO = -16;
+const DESLOCAMENTO_Y = 10;
+
+/** Contorno do disco: uma elipse achatada, de pontas arredondadas. */
+const LENTE = "M -260 0 A 260 24 0 0 1 250 0 A 260 24 0 0 1 -260 0 Z";
+
+/** Filetes de luz: contornos da lente em escalas menores, que deslizam pelo disco. */
+type Filete = { escala: number; largura: number; opacidade: number };
 
 const FILETES: Record<Versao, Filete[]> = {
   completa: [
-    { y: -6, x1: -300, x2: 120, largura: 1.1, opacidade: 0.5 },
-    { y: -2, x1: -380, x2: 240, largura: 1.5, opacidade: 0.75 },
-    { y: 2, x1: -280, x2: 200, largura: 1.1, opacidade: 0.65 },
-    { y: 5, x1: -220, x2: 100, largura: 1, opacidade: 0.4 },
+    { escala: 0.9, largura: 1, opacidade: 0.45 },
+    { escala: 0.68, largura: 1.3, opacidade: 0.6 },
+    { escala: 0.46, largura: 1.2, opacidade: 0.7 },
+    { escala: 0.26, largura: 1, opacidade: 0.55 },
   ],
   leve: [
-    { y: -2, x1: -380, x2: 240, largura: 1.5, opacidade: 0.75 },
-    { y: 3, x1: -280, x2: 200, largura: 1.1, opacidade: 0.55 },
+    { escala: 0.68, largura: 1.3, opacidade: 0.6 },
+    { escala: 0.34, largura: 1.1, opacidade: 0.6 },
   ],
 };
 
@@ -61,24 +70,15 @@ function gradiente(
   tipo: "linearGradient" | "radialGradient",
   atributos: Record<string, string | number>,
   paradas: Array<[number, number]>,
+  cor = "currentColor",
 ) {
   const g = elemento(tipo, atributos);
   for (const [offset, opacidade] of paradas) {
-    g.appendChild(
-      elemento("stop", { offset, "stop-color": "currentColor", "stop-opacity": opacidade }),
-    );
+    const parada = elemento("stop", { offset, "stop-opacity": opacidade });
+    parada.style.stopColor = cor;
+    g.appendChild(parada);
   }
   return g;
-}
-
-/** Arco de círculo de raio `r`, do ângulo `de` ao ângulo `ate` (graus, 0 = direita). */
-function arco(r: number, de: number, ate: number) {
-  const ponto = (graus: number) => {
-    const rad = (graus * Math.PI) / 180;
-    return `${(r * Math.cos(rad)).toFixed(2)} ${(r * Math.sin(rad)).toFixed(2)}`;
-  };
-  const varredura = ate > de ? 1 : 0;
-  return `M ${ponto(de)} A ${r} ${r} 0 0 ${varredura} ${ponto(ate)}`;
 }
 
 export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
@@ -103,20 +103,36 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
         [1, 0],
       ],
     ),
-    // A faixa é mais forte do lado esquerdo (o lado que vem na nossa direção).
-    gradiente(
-      "linearGradient",
-      { id: "bn-faixa", gradientUnits: "userSpaceOnUse", x1: -900, y1: 0, x2: 700, y2: 0 },
-      [
-        [0, 0],
-        [0.28, 0.1],
-        [0.44, 0.55],
-        [0.54, 1],
-        [0.625, 0.85],
-        [0.75, 0.4],
-        [0.875, 0.12],
-        [1, 0],
-      ],
+    // O anel de luz é forte em cima e se apaga embaixo.
+    ...(["bn-anel", "bn-anel-miolo"] as const).map((id) =>
+      gradiente(
+        "linearGradient",
+        { id, gradientUnits: "userSpaceOnUse", x1: 0, y1: -100, x2: 0, y2: 100 },
+        [
+          [0, 1],
+          [0.35, 0.8],
+          [0.6, 0.3],
+          [1, 0.12],
+        ],
+        id === "bn-anel-miolo" ? NUCLEO : "currentColor",
+      ),
+    ),
+    // O disco é mais forte perto do buraco e do lado esquerdo (o que vem na
+    // nossa direção) e se apaga nas pontas; o miolo claro segue o mesmo desenho.
+    ...(["bn-faixa", "bn-miolo"] as const).map((id) =>
+      gradiente(
+        "linearGradient",
+        { id, gradientUnits: "userSpaceOnUse", x1: -260, y1: 0, x2: 250, y2: 0 },
+        [
+          [0, 0],
+          [0.18, 0.12],
+          [0.42, 0.85],
+          [0.58, 0.8],
+          [0.82, 0.2],
+          [1, 0],
+        ],
+        id === "bn-miolo" ? NUCLEO : "currentColor",
+      ),
     ),
   );
   svg.appendChild(defs);
@@ -125,30 +141,25 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
   halo.dataset.halo = "";
   svg.appendChild(halo);
 
-  // Arcos do disco curvado: por cima do buraco, forte; por baixo, mais fraco.
+  // Anel de luz curvado ao redor da sombra: um anel completo e espesso, forte em
+  // cima (onde o disco de trás se curva por cima) e mais fraco embaixo.
   const arcos = elemento("g", {});
   arcos.dataset.arcos = "";
-  const tracos: Array<{ d: string; largura: number; opacidade: number; nucleo: boolean }> = [
-    // Os arcos nascem na faixa (ângulos 180 e 360) e voltam a ela; as pontas
-    // ficam por baixo da faixa.
-    { d: arco(R * 1.55, 180, 360), largura: 26, opacidade: 0.12, nucleo: false },
-    { d: arco(R * 1.55, 180, 360), largura: 11, opacidade: 0.35, nucleo: false },
-    { d: arco(R * 1.55, 180, 360), largura: 3.5, opacidade: 0.95, nucleo: true },
-    { d: arco(R * 1.3, 180, 360), largura: 1.5, opacidade: 0.7, nucleo: true },
-    { d: arco(R * 1.22, 0, 180), largura: 8, opacidade: 0.14, nucleo: false },
-    { d: arco(R * 1.22, 0, 180), largura: 2, opacidade: 0.65, nucleo: true },
+  const camadasDoAnel: Array<{ largura: number; opacidade: number; miolo: boolean }> = [
+    { largura: 40, opacidade: 0.14, miolo: false },
+    { largura: 22, opacidade: 0.4, miolo: false },
+    { largura: 9, opacidade: 0.95, miolo: true },
   ];
-  for (const t of tracos) {
-    const p = elemento("path", {
-      d: t.d,
-      fill: "none",
-      stroke: "currentColor",
-      "stroke-width": t.largura,
-      "stroke-opacity": t.opacidade,
-      "stroke-linecap": "butt",
-    });
-    if (t.nucleo) p.style.stroke = NUCLEO;
-    arcos.appendChild(p);
+  for (const c of camadasDoAnel) {
+    arcos.appendChild(
+      elemento("circle", {
+        r: R * 1.4,
+        fill: "none",
+        stroke: c.miolo ? "url(#bn-anel-miolo)" : "url(#bn-anel)",
+        "stroke-width": c.largura,
+        opacity: c.opacidade,
+      }),
+    );
   }
   svg.appendChild(arcos);
 
@@ -165,44 +176,54 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
   fotons.dataset.fotons = "";
   svg.append(sombra, fotons);
 
-  // Faixa do disco: uma lente fina que cruza o meio, por cima da sombra.
+  // Disco inclinado, por cima da sombra: a parte de baixo da sombra fica atrás
+  // dele, o que dá a profundidade. O grupo externo só inclina (fixo); os de
+  // dentro se animam em coordenadas do disco.
+  const inclinado = elemento("g", {
+    transform: `translate(0 ${DESLOCAMENTO_Y}) rotate(${INCLINACAO})`,
+  });
   const faixa = elemento("g", {});
   faixa.dataset.faixa = "";
-  faixa.append(
-    elemento("path", {
-      d: "M -900 0 Q -100 -28 700 0 Q -100 28 -900 0 Z",
+  // Camadas do disco, da borda fria ao miolo quente: cada uma é a mesma lente
+  // mais fina e mais clara.
+  const camadasDoDisco: Array<{ escala: number; opacidade: number; nucleo: boolean }> = [
+    { escala: 1.2, opacidade: 0.22, nucleo: false },
+    { escala: 1, opacidade: 0.45, nucleo: false },
+    { escala: 0.7, opacidade: 0.7, nucleo: true },
+    { escala: 0.36, opacidade: 0.85, nucleo: true },
+  ];
+  for (const c of camadasDoDisco) {
+    const lente = elemento("path", {
+      d: LENTE,
       fill: "url(#bn-faixa)",
-      opacity: 0.55,
-    }),
-    elemento("path", {
-      d: "M -900 0 Q -100 -11 700 0 Q -100 11 -900 0 Z",
-      fill: "url(#bn-faixa)",
-    }),
-  );
-  const nucleoDaFaixa = elemento("path", {
-    d: "M -460 0 Q -60 -4 380 0 Q -60 4 -460 0 Z",
-    "fill-opacity": 0.95,
-  });
-  nucleoDaFaixa.style.fill = NUCLEO;
-  faixa.appendChild(nucleoDaFaixa);
-  svg.appendChild(faixa);
-
-  // Filetes de luz que deslizam ao longo da faixa.
-  const filetes = FILETES[versao].map((f) => {
-    const linha = elemento("line", {
-      x1: f.x1,
-      x2: f.x2,
-      y1: f.y,
-      y2: f.y,
-      "stroke-width": f.largura,
-      "stroke-opacity": f.opacidade,
-      "stroke-linecap": "round",
+      opacity: c.opacidade,
+      transform: `scale(1 ${c.escala})`,
     });
-    linha.style.stroke = NUCLEO;
-    linha.dataset.filete = "";
-    svg.appendChild(linha);
-    return linha;
+    if (c.nucleo) lente.setAttribute("fill", "url(#bn-miolo)");
+    faixa.appendChild(lente);
+  }
+  inclinado.appendChild(faixa);
+
+  // Filetes de luz que deslizam ao longo do disco.
+  const filetes = FILETES[versao].map((f) => {
+    // A escala fica no traço (atributo); o anime.js move o grupo (CSS), sem
+    // sobrescrever a escala.
+    const grupo = elemento("g", {});
+    grupo.dataset.filete = "";
+    grupo.appendChild(
+      elemento("path", {
+        d: LENTE,
+        fill: "none",
+        stroke: "url(#bn-miolo)",
+        "stroke-width": f.largura,
+        "stroke-opacity": f.opacidade,
+        transform: `scale(1 ${f.escala})`,
+      }),
+    );
+    inclinado.appendChild(grupo);
+    return grupo;
   });
+  svg.appendChild(inclinado);
 
   // Começa apagado, no mesmo instante em que entra no DOM (sem lampejo).
   const luzes = [halo, arcos, fotons, faixa, ...filetes];
@@ -227,7 +248,7 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
   if (versao === "completa") {
     animacoes.push(
       animate(filetes, {
-        translateX: [-36, 36],
+        translateX: [-30, 30],
         duration: 7000,
         delay: stagger(900, { start: 2600 }),
         ease: "inOutSine",
