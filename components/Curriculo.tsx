@@ -23,7 +23,11 @@ export function ExperienciaProfissional({ lang, numero }: Props) {
       </h2>
       <ol className="flex flex-col gap-6">
         {cargos.map((cargo) => (
-          <li key={`${cargo.empresa}-${cargo.periodo}`} data-testid="cargo">
+          <li
+            key={`${cargo.empresa}-${cargo.periodo}`}
+            data-testid="cargo"
+            className="animacao-ao-rolar"
+          >
             <h3 className="font-medium">{cargo.cargo}</h3>
             <p className="text-muted">
               {cargo.empresa} · {cargo.periodo}
@@ -56,7 +60,11 @@ export function Competencias({ lang, numero }: Props) {
       </h2>
       <div className="flex flex-col gap-4">
         {grupos.map((grupo) => (
-          <div key={grupo.nome} data-testid="grupo-de-competencias">
+          <div
+            key={grupo.nome}
+            data-testid="grupo-de-competencias"
+            className="animacao-ao-rolar"
+          >
             <h3 className="font-medium">{grupo.nome}</h3>
             <ul className="mt-2 flex flex-wrap gap-2">
               {grupo.itens.map((item) => (

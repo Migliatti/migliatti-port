@@ -14,6 +14,7 @@
 // e sem alta densidade de pixels.
 
 import { versaoParaEsteAparelho, type Versao } from "../animacao/aparelho";
+import { corAleatoria } from "../animacao/cor-aleatoria";
 import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk deste módulo. */
@@ -26,6 +27,8 @@ type Estrela = {
   /** Raio em px CSS. */
   r: number;
   alfa: number;
+  /** Cor própria, sorteada na montagem. */
+  cor: string;
 };
 
 type DefinicaoDaCamada = {
@@ -66,6 +69,7 @@ function gerarEstrelas(def: DefinicaoDaCamada, semente: number): Estrela[] {
     y: sortear(),
     r: entre(def.raio),
     alfa: entre(def.alfa),
+    cor: corAleatoria(),
   }));
 }
 
@@ -109,7 +113,6 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
     const largura = moldura.clientWidth;
     const altura = moldura.clientHeight;
     const densidade = Math.min(window.devicePixelRatio || 1, densidadeMaxima);
-    const cor = getComputedStyle(moldura).color;
     for (const { canvas, estrelas } of camadas) {
       canvas.width = Math.max(1, Math.round(largura * densidade));
       canvas.height = Math.max(1, Math.round(altura * densidade));
@@ -117,9 +120,9 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
       if (!ctx) continue;
       ctx.setTransform(densidade, 0, 0, densidade, 0, 0);
       ctx.clearRect(0, 0, largura, altura);
-      ctx.fillStyle = cor;
       for (const e of estrelas) {
         ctx.globalAlpha = e.alfa;
+        ctx.fillStyle = e.cor;
         ctx.beginPath();
         ctx.arc(e.x * largura, e.y * altura, e.r, 0, Math.PI * 2);
         ctx.fill();

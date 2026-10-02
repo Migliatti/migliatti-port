@@ -38,3 +38,11 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 
 - A linha no topo de cada `.secao` passou de `border-top` para um `::before` decorativo (sem conteúdo, fora do fluxo, sem nó no DOM). Em CSS puro, ligada à rolagem por `animation-timeline: view()`, ela se desenha (`scaleX` de 0,12 a 1) ao entrar na tela. Sem anime.js e sem custo de bundle.
 - Parada e completa com `prefers-reduced-motion: reduce`, sem JavaScript e em navegadores sem `animation-timeline`. Cobertura em `tests/e2e/separadores.spec.ts`.
+
+## Emenda (issue #56): cor aleatória decorativa
+
+- Cada ponto das animações decorativas recebe o próprio matiz (0 a 359), com saturação 80% e luminosidade 68% fixas (faixa luminosa sobre o preto), o que dá um efeito de arco-íris. "Ponto" é cada estrela do céu da Hero, cada estrela da constelação (os traços usam a cor da primeira ponta) e cada corpo orbital da Vitrine. A primeira versão sorteava um matiz só por visita; ficava monocromática e foi trocada por este sorteio por ponto.
+- O sorteio roda quando o módulo animado monta (`components/animacao/cor-aleatoria.ts`, usado por `ceu.ts`, `constelacao.ts` e `orbitas.ts`), sempre depois da hidratação. O HTML do servidor não leva cor sorteada: vem em dourado (`--cor-decorativa`, que vale `--accent`).
+- Sem JavaScript e com `prefers-reduced-motion: reduce` os módulos animados não rodam, então tudo fica dourado; ao pedir movimento reduzido com a peça rodando, os corpos voltam ao dourado.
+- Texto, links, botões, bordas e o desenho das ilustrações dos estudos de caso nunca usam cor sorteada; `lib/design/higiene-de-cor.test.ts` trava onde ela pode aparecer. As specs #51 (buraco negro, preenchimento) e #52 (pulso das ilustrações) reutilizam `corAleatoria()`.
+- Os testes e2e fixam o sorteio trocando `Math.random` por uma sequência e verificam as duas situações, dourado e sorteado (`tests/e2e/cor-aleatoria.spec.ts`).
