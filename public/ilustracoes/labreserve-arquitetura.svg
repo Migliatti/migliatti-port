@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" width="560" height="560" role="img" aria-labelledby="t d" data-cor-do-pulso="#d6a85f">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" width="560" height="560" role="img" aria-labelledby="t d" data-cor-do-pulso="#d6a85f" style="max-width:34rem">
   <title id="t">LabReserve: modular monolith (illustration)</title>
   <desc id="d">Modules web, server, application, domain and persistence. Dependencies point inward: web and server depend on application; application depends on domain and on repository contracts; persistence implements the contracts with SQLite. The domain imports nothing from HTTP, React or SQLite.</desc>
   <defs>

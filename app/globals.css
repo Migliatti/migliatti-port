@@ -429,6 +429,8 @@ main:focus {
 .ilustracao > svg {
   display: block;
   width: 100%;
+  /* O arquivo pode declarar um teto próprio (style no <svg>); centraliza. */
+  margin-inline: auto;
   max-width: 100%;
   height: auto;
 }
