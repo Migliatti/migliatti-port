@@ -33,3 +33,8 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 - A barra fixa passa a ter só o seletor de idioma e 5 âncoras (home: Projetos, Vitrine, Experiência, Competências, Contato; Estudo de caso: Problema, Decisões, Stack, Resultado, Uso de IA, mais a seta de volta). Em tela estreita as âncoras descem para uma segunda linha; nunca há rolagem horizontal nem item cortado.
 - O HUD sai da barra e existe só na moldura da **Vitrine**, sem o campo "tema". Isso revê a menção a um HUD resumido na barra (spec #42, item 5); o único cursor piscante do site passou para o prompt da faixa do visitante.
 - "Outros projetos", "Formação" (home) e "Aprendizado", "Evidências" (Estudo de caso) continuam na página, só fora da barra: marcam a âncora vizinha enquanto estão na tela. A numeração das seções segue a página inteira.
+
+## Emenda (issue #59): separadores de seção que se desenham
+
+- A linha no topo de cada `.secao` passou de `border-top` para um `::before` decorativo (sem conteúdo, fora do fluxo, sem nó no DOM). Em CSS puro, ligada à rolagem por `animation-timeline: view()`, ela se desenha (`scaleX` de 0,12 a 1) ao entrar na tela. Sem anime.js e sem custo de bundle.
+- Parada e completa com `prefers-reduced-motion: reduce`, sem JavaScript e em navegadores sem `animation-timeline`. Cobertura em `tests/e2e/separadores.spec.ts`.
