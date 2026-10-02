@@ -445,8 +445,8 @@ main:focus {
  * receber ponteiro, cobrindo o <main> abaixo da Hero (que tem o céu próprio).
  * Os pontos são só CSS, então já aparecem parados sem JavaScript, com
  * movimento reduzido e em celular fraco; o parallax (grade.ts) só mexe no
- * `transform` da camada interna, que sobra 64px para cada lado da moldura
- * (a amplitude do parallax por ponteiro).
+ * `transform` da camada interna, que é 35% mais alta que a moldura
+ * (o curso do parallax de rolagem).
  */
 .fundo-secoes {
   position: absolute;
@@ -477,7 +477,8 @@ main:focus {
 
 .fundo-secoes-pontos {
   position: absolute;
-  inset: -64px;
+  inset: 0;
+  height: 135%;
   background-image: radial-gradient(
     circle at center,
     color-mix(in srgb, currentColor 14%, transparent) 1px,

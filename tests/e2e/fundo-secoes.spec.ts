@@ -58,7 +58,7 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       expect(acerto.every(Boolean)).toBe(true);
     });
 
-    test("parallax segue o ponteiro, no sentido contrário, só com transform", async ({
+    test("parallax acompanha a rolagem, mais devagar, só com transform", async ({
       page,
     }) => {
       await aparelhoForte(page);
@@ -73,25 +73,17 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
 
       const pontos = fundo.locator(".fundo-secoes-pontos");
       const deslocamento = () =>
-        pontos.evaluate((el) => {
-          const m = new DOMMatrix(getComputedStyle(el).transform);
-          return { x: m.m41, y: m.m42 };
-        });
-      expect(await deslocamento()).toEqual({ x: 0, y: 0 });
+        pontos.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m42);
 
-      // Ponteiro no canto inferior direito: o fundo vai para cima e à esquerda.
-      await page.mouse.move(1270, 790);
-      await expect.poll(async () => (await deslocamento()).x).toBeLessThan(-40);
-      expect((await deslocamento()).y).toBeLessThan(-40);
+      const rolagem = 1500;
+      await page.evaluate((y) => window.scrollTo(0, y), rolagem);
+      // Sobe de forma visível (mais de 100px), mas bem menos do que a página rolou.
+      await expect.poll(deslocamento).toBeLessThan(-100);
+      expect(await deslocamento()).toBeGreaterThan(-rolagem);
 
-      // Ponteiro no canto superior esquerdo: o sentido inverte.
-      await page.mouse.move(10, 10);
-      await expect.poll(async () => (await deslocamento()).x).toBeGreaterThan(40);
-      expect((await deslocamento()).y).toBeGreaterThan(40);
-      // Nunca passa da amplitude (64px) reservada pela camada.
-      const { x, y } = await deslocamento();
-      expect(Math.abs(x)).toBeLessThanOrEqual(64);
-      expect(Math.abs(y)).toBeLessThanOrEqual(64);
+      // Volta ao topo: a camada volta ao lugar.
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await expect.poll(deslocamento).toBeGreaterThan(-1);
     });
 
     test("com movimento reduzido fica estático e o chunk nunca é baixado", async ({
@@ -104,7 +96,7 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       const fundo = page.getByTestId("fundo-secoes");
       await expect(fundo).toHaveAttribute("data-estado", "reduzida");
       await expect(fundo.locator(".fundo-secoes-pontos")).toHaveCSS("background-image", /radial-gradient/);
-      await page.mouse.move(600, 400);
+      await page.mouse.wheel(0, 1500);
       expect(
         await fundo
           .locator(".fundo-secoes-pontos")
@@ -131,7 +123,7 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       await page.goto(path);
       const fundo = page.getByTestId("fundo-secoes");
       await expect(fundo).toHaveAttribute("data-versao", "leve");
-      await page.mouse.move(600, 400);
+      await page.mouse.wheel(0, 1500);
       expect(
         await fundo
           .locator(".fundo-secoes-pontos")
