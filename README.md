@@ -14,6 +14,12 @@ npm run test:e2e     # smoke test da home em /pt e /en
 npx vitest run       # testes do módulo de conteúdo (requer vitest instalado)
 ```
 
+## Endereço do site
+
+O site público é <https://migliatti.vercel.app>. Esse é o valor padrão da URL
+(canonical, sitemap, `robots` e Open Graph), definido em `lib/seo`; `SITE_URL`
+ou `VERCEL_PROJECT_PRODUCTION_URL` têm precedência quando definidas.
+
 ## Conteúdo
 
 Textos e projetos ficam em `content/`, um arquivo JSON por idioma:
