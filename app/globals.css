@@ -13,6 +13,11 @@
   --accent: #d6a85f;
   --on-accent: #05070a;
   --accent-text: #d6a85f;
+  /* Cor padrão das animações decorativas (issue #56): dourada no servidor, sem
+     JS e com movimento reduzido. Os módulos animados trocam por um matiz
+     sorteado por ponto (components/animacao/cor-aleatoria.ts). Nunca em texto,
+     link, botão ou borda. */
+  --cor-decorativa: var(--accent);
   color-scheme: dark;
   /* Altura da barra fixa; âncoras e foco descontam este valor. Em tela estreita
      a barra tem duas linhas (idioma e âncoras), e as âncoras podem quebrar. */
@@ -78,6 +83,39 @@ body {
     opacity: 1;
     transform: none;
   }
+}
+
+/*
+ * Entrada ao rolar (issue #58): cartões de projeto, cargos e grupos de
+ * competências usam os mesmos keyframes, ligados à posição na tela por uma
+ * linha do tempo de visão (CSS puro, sem JavaScript). O trecho animado é curto
+ * (os primeiros 24rem de entrada, subindo 48px). Sem suporte a animation-timeline
+ * o cartão aparece parado, e com movimento reduzido nada anima.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .animacao-ao-rolar {
+      animation: animacao-ao-rolar 500ms ease-out both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 24rem;
+    }
+  }
+}
+
+@keyframes animacao-ao-rolar {
+  from {
+    opacity: 0.7;
+    transform: translateY(48px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Animações decorativas que pintam com currentColor (corpos e constelação). */
+.cor-decorativa {
+  color: var(--cor-decorativa);
 }
 
 /* Foco visível para navegação por teclado. */
@@ -356,7 +394,7 @@ main:focus {
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  color: var(--foreground);
+  color: var(--cor-decorativa);
 }
 
 @media (min-width: 40rem) {
@@ -449,15 +487,77 @@ main:focus {
   will-change: transform;
 }
 
-/* Seção numerada: linha fina no topo, número em coluna estreita à esquerda. */
+/*
+ * Seção numerada: linha fina no topo (o separador), número em coluna estreita
+ * à esquerda. O separador é um ::before decorativo, fora do fluxo e sem
+ * conteúdo, então não altera o que se lê. Parado e completo por padrão; só se
+ * desenha ao entrar na tela com movimento permitido (ver mais abaixo).
+ */
 .secao {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   row-gap: 1.25rem;
   margin-top: 4rem;
-  border-top: 1px solid color-mix(in srgb, var(--foreground) 25%, transparent);
   padding-top: 1.25rem;
   scroll-margin-top: calc(var(--altura-barra) + 1rem);
+}
+
+.secao::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--foreground) 25%, transparent);
+  transform-origin: left center;
+}
+
+/*
+ * Separador que se desenha ao entrar na tela (Animação decorativa, ADR 0003):
+ * CSS puro, ligada à rolagem (view timeline), sem JavaScript. A linha base
+ * (::before) fica sempre completa; um traço dourado com brilho (::after) a
+ * percorre da esquerda para a direita enquanto a seção sobe pela tela. O
+ * intervalo é `cover`, porque o separador tem 1px de altura e o `entry` dele
+ * duraria 1px de rolagem, e em pixels fixos: ao fim da página a última linha
+ * só sobe ~236px a partir da base da tela, então um intervalo proporcional à
+ * altura da tela nunca completaria em telas altas. Sem suporte a `animation-timeline` ou com
+ * prefers-reduced-motion: reduce, o traço fica completo e parado.
+ */
+.secao::after {
+  content: "";
+  position: absolute;
+  inset: -0.5px 0 auto 0;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 35%, transparent),
+    var(--accent)
+  );
+  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--accent) 55%, transparent);
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .secao::after {
+      animation: separador-desenha linear both;
+      animation-timeline: view();
+      animation-range: cover 0px cover 200px;
+    }
+  }
+}
+
+@keyframes separador-desenha {
+  from {
+    transform: scaleX(0);
+    opacity: 0.4;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
 }
 
 .secao > * {

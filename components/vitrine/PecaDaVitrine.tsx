@@ -250,7 +250,7 @@ function SistemaOrbital({ pilares }: Pick<Props, "pilares">) {
               role="img"
               aria-label={nome}
               aria-describedby={`vitrine-pilar-${id}`}
-              className="vitrine-corpo text-accent-text"
+              className="vitrine-corpo cor-decorativa"
             >
               {/* Área de toque maior que o corpo visível. */}
               <circle r={24} fill="transparent" />

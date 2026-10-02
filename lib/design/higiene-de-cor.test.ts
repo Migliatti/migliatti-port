@@ -48,3 +48,31 @@ describe("cores no código", () => {
     expect(ocorrencias(/(?<![-\w])color:\s*var\(--accent\)/)).toEqual([]);
   });
 });
+
+describe("cor decorativa aleatória (issue #56)", () => {
+  it("só as animações decorativas usam a cor padrão ou a cor aleatória", () => {
+    // Texto, links, botões e bordas nunca usam cor aleatória nem --cor-decorativa.
+    const usos = codigo
+      .flatMap(({ caminho, texto }) =>
+        texto
+          .split("\n")
+          .filter((linha) => /var\(--cor-decorativa\)/.test(linha))
+          .map((linha) => `${caminho}: ${linha.trim()}`),
+      )
+      .sort();
+    expect(usos).toEqual([
+      // .hero-ceu e .cor-decorativa
+      "app/globals.css: color: var(--cor-decorativa);",
+      "app/globals.css: color: var(--cor-decorativa);",
+    ]);
+  });
+
+  it("só o céu, a constelação e a Vitrine sorteiam cores", () => {
+    expect(ocorrencias(/corAleatoria\(/).sort()).toEqual([
+      "components/animacao/cor-aleatoria.ts",
+      "components/hero/ceu.ts",
+      "components/vitrine/constelacao.ts",
+      "components/vitrine/orbitas.ts",
+    ]);
+  });
+});

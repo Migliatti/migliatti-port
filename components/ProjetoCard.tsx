@@ -20,7 +20,7 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
   return (
     <article
       data-testid={`projeto-card-${projeto.id}`}
-      className="projeto-cartao"
+      className="projeto-cartao animacao-ao-rolar"
     >
       <span aria-hidden="true" className="projeto-cartao-numero">
         {String(posicao).padStart(2, "0")}

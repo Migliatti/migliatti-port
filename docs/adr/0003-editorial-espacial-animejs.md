@@ -34,6 +34,19 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 - O HUD sai da barra e existe só na moldura da **Vitrine**, sem o campo "tema". Isso revê a menção a um HUD resumido na barra (spec #42, item 5); o único cursor piscante do site passou para o prompt da faixa do visitante.
 - "Outros projetos", "Formação" (home) e "Aprendizado", "Evidências" (Estudo de caso) continuam na página, só fora da barra: marcam a âncora vizinha enquanto estão na tela. A numeração das seções segue a página inteira.
 
+## Emenda (issue #59): separadores de seção que se desenham
+
+- A linha no topo de cada `.secao` passou de `border-top` para dois pseudo-elementos decorativos (sem conteúdo, fora do fluxo, sem nó no DOM): `::before` é a linha base e `::after` é um traço dourado com brilho que a percorre (`scaleX` de 0 a 1) enquanto a seção sobe pela tela. Em CSS puro, ligado à rolagem por `animation-timeline: view()` com `animation-range: cover 0px cover 200px` (o `entry` não serve: o separador tem 1px de altura e ele durava 1px de rolagem; e o intervalo é em pixels porque a última linha só sobe ~236px a partir da base da tela ao fim da página, então um intervalo em % da tela não completava em monitores altos). Sem anime.js e sem custo de bundle.
+- Parado e completo com `prefers-reduced-motion: reduce`, sem JavaScript e em navegadores sem `animation-timeline`. Cobertura em `tests/e2e/separadores.spec.ts`, que mede o progresso do traço ao rolar.
+
+## Emenda (issue #56): cor aleatória decorativa
+
+- Cada ponto das animações decorativas recebe o próprio matiz (0 a 359), com saturação 80% e luminosidade 68% fixas (faixa luminosa sobre o preto), o que dá um efeito de arco-íris. "Ponto" é cada estrela do céu da Hero, cada estrela da constelação (os traços usam a cor da primeira ponta) e cada corpo orbital da Vitrine. A primeira versão sorteava um matiz só por visita; ficava monocromática e foi trocada por este sorteio por ponto.
+- O sorteio roda quando o módulo animado monta (`components/animacao/cor-aleatoria.ts`, usado por `ceu.ts`, `constelacao.ts` e `orbitas.ts`), sempre depois da hidratação. O HTML do servidor não leva cor sorteada: vem em dourado (`--cor-decorativa`, que vale `--accent`).
+- Sem JavaScript e com `prefers-reduced-motion: reduce` os módulos animados não rodam, então tudo fica dourado; ao pedir movimento reduzido com a peça rodando, os corpos voltam ao dourado.
+- Texto, links, botões, bordas e o desenho das ilustrações dos estudos de caso nunca usam cor sorteada; `lib/design/higiene-de-cor.test.ts` trava onde ela pode aparecer. As specs #51 (buraco negro, preenchimento) e #52 (pulso das ilustrações) reutilizam `corAleatoria()`.
+- Os testes e2e fixam o sorteio trocando `Math.random` por uma sequência e verificam as duas situações, dourado e sorteado (`tests/e2e/cor-aleatoria.spec.ts`).
+
 ## Emenda (issue #60): fundo sutil nas seções
 
 - As seções ganham ao fundo uma camada de pontos tênues (`FundoDasSecoes`, `components/fundo`): `aria-hidden`, atrás do conteúdo (`z-index: -1`), sem receber ponteiro. Na home começa abaixo da Hero (que tem o céu próprio); no estudo de caso cobre o `<main>`.
