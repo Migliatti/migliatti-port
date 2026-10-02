@@ -426,11 +426,16 @@ main:focus {
   overflow: hidden;
 }
 
+/* Desenho quase quadrado (`data-compacta` no <svg>): o recorte acompanha o
+ * desenho em vez de ficar na largura toda, e no celular ocupa tudo. */
+.ilustracao:has(> svg[data-compacta]) {
+  width: min(100%, 34rem);
+  margin-inline: auto;
+}
+
 .ilustracao > svg {
   display: block;
   width: 100%;
-  /* O arquivo pode declarar um teto próprio (style no <svg>); centraliza. */
-  margin-inline: auto;
   max-width: 100%;
   height: auto;
 }
