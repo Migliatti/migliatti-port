@@ -102,6 +102,18 @@ describe("prepararIlustracao", () => {
     expect(contar(catalogo, 'data-no=""')).toBe(17);
   });
 
+  it("as ilustrações do labreserve seguem a linguagem visual dourada (#62, #63)", () => {
+    for (const arquivo of ["labreserve-arquitetura.svg", "labreserve-fluxo-de-reserva.svg"]) {
+      const bruto = ler(arquivo);
+      expect(bruto).toContain('data-cor-do-pulso="#d6a85f"');
+      expect(bruto).toContain("#05070a");
+      expect(bruto).toContain("#19150f");
+      expect(bruto).toContain("ILUSTRAÇÃO · ILLUSTRATION");
+      expect(bruto).toContain('fill="url(#grade)"');
+      expect(bruto).toContain("feGaussianBlur");
+    }
+  });
+
   it("duas ilustrações na mesma página não dividem ids nem classes", () => {
     const a = prepararIlustracao(ler("labreserve-arquitetura.svg"), { prefixo: "ilustracao-0", alt: "a" });
     const b = prepararIlustracao(ler("labreserve-fluxo-de-reserva.svg"), { prefixo: "ilustracao-1", alt: "b" });
