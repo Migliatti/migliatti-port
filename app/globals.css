@@ -13,6 +13,11 @@
   --accent: #d6a85f;
   --on-accent: #05070a;
   --accent-text: #d6a85f;
+  /* Cor padrão das animações decorativas (issue #56): dourada no servidor, sem
+     JS e com movimento reduzido. Os módulos animados trocam por um matiz
+     sorteado por ponto (components/animacao/cor-aleatoria.ts). Nunca em texto,
+     link, botão ou borda. */
+  --cor-decorativa: var(--accent);
   color-scheme: dark;
   /* Altura da barra fixa; âncoras e foco descontam este valor. Em tela estreita
      a barra tem duas linhas (idioma e âncoras), e as âncoras podem quebrar. */
@@ -78,6 +83,11 @@ body {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Animações decorativas que pintam com currentColor (corpos e constelação). */
+.cor-decorativa {
+  color: var(--cor-decorativa);
 }
 
 /* Foco visível para navegação por teclado. */
@@ -356,7 +366,7 @@ main:focus {
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  color: var(--foreground);
+  color: var(--cor-decorativa);
 }
 
 @media (min-width: 40rem) {
