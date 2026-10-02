@@ -94,7 +94,7 @@ describe("prepararIlustracao", () => {
     });
     expect(contar(empacotamento, 'data-conector="solido"')).toBe(4);
     // A ponta da seta (dentro do <marker>) não é conector.
-    expect(empacotamento).toMatch(/<path d="M0,0 L8,4 L0,8 z" fill="#334155"\/>/);
+    expect(empacotamento).toMatch(/<path d="M0,0 L10,5 L0,10 z" fill="#d6a85f"\/>/);
 
     const catalogo = prepararIlustracao(ler("grimoire-catalogo.svg"), { prefixo: "c", alt: "x" });
     expect(contar(catalogo, "data-conector")).toBe(0);

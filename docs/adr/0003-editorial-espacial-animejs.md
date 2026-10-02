@@ -69,3 +69,7 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 ## Emenda (issue #64): catálogo do grimoire na mesma linguagem
 
 - `public/ilustracoes/grimoire-catalogo.svg` segue a linguagem da emenda #62: fundo `#05070A`→`#19150F`, grade tênue, brilho nos grupos, estrelas, rótulo "ILUSTRAÇÃO · ILLUSTRATION" e rótulos nos dois idiomas. Os nomes (manifesto `chains/business-direction.md`, as 8 skills da chain com `business-direction` como entrypoint, as 7 avulsas) são os mesmos que já estavam no desenho; nada novo foi afirmado. É escrito à mão (sem Graphviz, porque não há setas), com `data-compacta` e `data-cor-do-pulso`; as 17 caixas continuam marcadas para o halo do pulso. Sem custo de bundle.
+
+## Emenda (issue #65): empacotamento do grimoire na mesma linguagem
+
+- A ilustração de empacotamento do `grimoire` (#65) segue a mesma linguagem, em desenho quase quadrado (`data-compacta`): `skills/` ao centro, setas contínuas para as quatro plataformas. É SVG escrito à mão (sem Graphviz), com os mesmos dados que o repositório já provava; legenda e fonte nos dois idiomas.

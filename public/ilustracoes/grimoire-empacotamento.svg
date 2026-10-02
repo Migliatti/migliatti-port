@@ -1,27 +1,85 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img">
-<rect width="760" height="420" fill="#f8fafc"/>
-<defs><marker id="s" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker></defs>
-<rect x="20" y="150" width="200" height="120" rx="6" fill="#fef9c3" stroke="#334155" stroke-width="1.5"/><text x="120.0" y="214.0" text-anchor="middle" font-size="13" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a" font-weight="700">skills/&lt;nome&gt;/SKILL.md</text>
-<text x="120" y="290" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">implementação canônica</text>
-<line x1="220" y1="210" x2="330" y2="65" stroke="#334155" stroke-width="1.5" marker-end="url(#s)"/>
-<rect x="335" y="30" width="405" height="70" rx="6" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
-<text x="350" y="52" font-size="14" font-weight="700" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">Claude Code</text>
-<text x="350" y="72" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">.claude-plugin/plugin.json</text>
-<text x="350" y="90" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">marketplace.json: grimoire@migliatti</text>
-<line x1="220" y1="210" x2="330" y2="157" stroke="#334155" stroke-width="1.5" marker-end="url(#s)"/>
-<rect x="335" y="122" width="405" height="70" rx="6" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
-<text x="350" y="144" font-size="14" font-weight="700" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">Codex</text>
-<text x="350" y="164" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">.codex-plugin/plugin.json</text>
-<text x="350" y="182" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">skills: ./skills/</text>
-<line x1="220" y1="210" x2="330" y2="249" stroke="#334155" stroke-width="1.5" marker-end="url(#s)"/>
-<rect x="335" y="214" width="405" height="70" rx="6" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
-<text x="350" y="236" font-size="14" font-weight="700" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">Pi</text>
-<text x="350" y="256" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">.pi/settings.json</text>
-<text x="350" y="274" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">skills: ../skills + extensions/</text>
-<line x1="220" y1="210" x2="330" y2="341" stroke="#334155" stroke-width="1.5" marker-end="url(#s)"/>
-<rect x="335" y="306" width="405" height="70" rx="6" fill="#ffffff" stroke="#334155" stroke-width="1.5"/>
-<text x="350" y="328" font-size="14" font-weight="700" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">Hermes Agent</text>
-<text x="350" y="348" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">docs/installation/hermes-agent.md</text>
-<text x="350" y="366" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">external_dirs ou tap do GitHub</text>
-<text x="380" y="408" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">Fonte: README.md, docs/installation/ e manifestos do repositório</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 532 540" width="532" height="540" role="img" aria-labelledby="t d" data-cor-do-pulso="#d6a85f" data-compacta="">
+  <title id="t">Grimoire: per-platform packaging (illustration)</title>
+  <desc id="d">The skills/&lt;name&gt;/SKILL.md folder, the canonical implementation, is exposed to four platforms: Claude Code (.claude-plugin/plugin.json and marketplace.json), Codex (.codex-plugin/plugin.json pointing to ./skills/), Pi (.pi/settings.json pointing to ../skills and extensions/) and Hermes Agent (installation guide with external_dirs or a GitHub tap).</desc>
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#d6a85f"/>
+    </marker>
+    <radialGradient id="fundo" cx="50%" cy="46%" r="75%">
+      <stop offset="0" stop-color="#19150f"/>
+      <stop offset="1" stop-color="#05070a"/>
+    </radialGradient>
+    <pattern id="grade" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28,0 L0,0 L0,28" fill="none" stroke="#d6a85f" stroke-opacity="0.13" stroke-width="1"/>
+    </pattern>
+    <filter id="brilho" x="-20%" y="-30%" width="140%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .caixa { fill: #19150f; stroke: #c79a52; stroke-width: 1.5; }
+      .centro { fill: #19150f; stroke: #f0c97a; stroke-width: 2.5; }
+      .nome { font: 600 18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #ece8df; }
+      .det { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #b3ab9c; }
+      .rotulo { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: #d6a85f; letter-spacing: 0.08em; }
+      .linha { stroke: #d6a85f; stroke-width: 1.75; fill: none; marker-end: url(#seta); }
+    </style>
+  </defs>
+  <rect width="532" height="540" fill="url(#fundo)"/>
+  <rect width="532" height="540" fill="url(#grade)"/>
+
+  <!-- estrelas -->
+  <g fill="#ece8df" aria-hidden="true">
+    <circle cx="30" cy="70" r="1.2" opacity="0.7"/>
+    <circle cx="100" cy="62" r="1" opacity="0.5"/>
+    <circle cx="150" cy="130" r="1.2" opacity="0.6"/>
+    <circle cx="40" cy="150" r="1.5" opacity="0.8"/>
+    <circle cx="28" cy="380" r="1.2" opacity="0.6"/>
+    <circle cx="120" cy="400" r="1" opacity="0.5"/>
+    <circle cx="90" cy="445" r="1.5" opacity="0.7"/>
+    <circle cx="160" cy="350" r="1" opacity="0.5"/>
+    <circle cx="510" cy="36" r="1.5" opacity="0.8"/>
+    <circle cx="520" cy="470" r="1.2" opacity="0.6"/>
+    <circle cx="60" cy="515" r="1" opacity="0.5"/>
+    <circle cx="470" cy="440" r="1" opacity="0.4"/>
+  </g>
+
+  <text x="16" y="28" class="rotulo">ILUSTRAÇÃO · ILLUSTRATION</text>
+  <text x="516" y="28" class="rotulo" text-anchor="end">README.md</text>
+
+  <!-- skills/ -->
+  <rect x="14" y="194" width="150" height="110" rx="8" class="centro" filter="url(#brilho)"/>
+  <text x="28" y="236" class="nome">skills/</text>
+  <text x="28" y="262" class="det">&lt;name&gt;/SKILL.md</text>
+
+  <!-- Claude Code -->
+  <rect x="204" y="54" width="314" height="84" rx="8" class="caixa" filter="url(#brilho)"/>
+  <text x="220" y="86" class="nome">Claude Code</text>
+  <text x="220" y="108" class="det">.claude-plugin/plugin.json</text>
+  <text x="220" y="128" class="det">marketplace.json: grimoire@migliatti</text>
+  <!-- Codex -->
+  <rect x="204" y="156" width="314" height="84" rx="8" class="caixa" filter="url(#brilho)"/>
+  <text x="220" y="188" class="nome">Codex</text>
+  <text x="220" y="210" class="det">.codex-plugin/plugin.json</text>
+  <text x="220" y="230" class="det">skills: ./skills/</text>
+  <!-- Pi -->
+  <rect x="204" y="258" width="314" height="84" rx="8" class="caixa" filter="url(#brilho)"/>
+  <text x="220" y="290" class="nome">Pi</text>
+  <text x="220" y="312" class="det">.pi/settings.json</text>
+  <text x="220" y="332" class="det">skills: ../skills + extensions/</text>
+  <!-- Hermes Agent -->
+  <rect x="204" y="360" width="314" height="84" rx="8" class="caixa" filter="url(#brilho)"/>
+  <text x="220" y="392" class="nome">Hermes Agent</text>
+  <text x="220" y="414" class="det">docs/installation/hermes-agent.md</text>
+  <text x="220" y="434" class="det">external_dirs · GitHub tap</text>
+
+  <!-- skills/ -> plataformas -->
+  <line x1="164" y1="249" x2="204" y2="96" class="linha"/>
+  <line x1="164" y1="249" x2="204" y2="198" class="linha"/>
+  <line x1="164" y1="249" x2="204" y2="300" class="linha"/>
+  <line x1="164" y1="249" x2="204" y2="402" class="linha"/>
+
+  <text x="266" y="488" class="det" text-anchor="middle">──▶ exposta a · exposed to</text>
+  <text x="266" y="508" class="det" text-anchor="middle">skills/ = implementação canônica · canonical implementation</text>
+  <text x="266" y="528" class="det" text-anchor="middle">Fonte · Source: README.md, docs/installation/</text>
 </svg>
