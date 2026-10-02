@@ -19,7 +19,7 @@ for (const path of ["/pt", "/en"]) {
           const c = getComputedStyle(n);
           return { nome: c.animationName, linha: c.getPropertyValue("animation-timeline") };
         });
-        expect(css.nome).toBe("animacao-entrada");
+        expect(css.nome).toBe("animacao-ao-rolar");
         expect(css.linha).not.toBe("auto");
 
         // Animação ligada à rolagem não aceita currentTime absoluto: lê o
