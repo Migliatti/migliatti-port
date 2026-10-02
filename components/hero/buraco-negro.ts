@@ -34,8 +34,13 @@ const R = 64;
 
 const NUCLEO = "var(--cor-buraco-negro-nucleo)";
 
-/** Disco inclinado: ângulo (graus, negativo sobe à direita) e deslocamento vertical. */
-const INCLINACAO = -16;
+/**
+ * Plano do disco: a rotação inclina-o na horizontal; o cisalhamento simula a
+ * câmera alguns graus acima dele. SVG não tem rotação em X, portanto esta é a
+ * projeção 2D estável que produz o mesmo encurtamento vertical.
+ */
+const INCLINACAO_HORIZONTAL = -14;
+const INCLINACAO_VERTICAL = -7;
 const DESLOCAMENTO_Y = 10;
 
 /** Contorno do disco: uma elipse achatada, de pontas arredondadas. */
@@ -134,6 +139,14 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
         id === "bn-miolo" ? NUCLEO : "currentColor",
       ),
     ),
+    elemento("clipPath", { id: "bn-metade-traseira" }),
+    elemento("clipPath", { id: "bn-metade-frontal" }),
+  );
+  defs.querySelector("#bn-metade-traseira")!.appendChild(
+    elemento("rect", { x: -320, y: -90, width: 640, height: 90 }),
+  );
+  defs.querySelector("#bn-metade-frontal")!.appendChild(
+    elemento("rect", { x: -320, y: 0, width: 640, height: 90 }),
   );
   svg.appendChild(defs);
 
@@ -163,8 +176,59 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
   }
   svg.appendChild(arcos);
 
-  // Sombra e anel de fótons.
+  // A faixa tem dois planos: a metade distante fica atrás da sombra e a
+  // próxima passa à frente. Essa oclusão, mais a projeção vertical, evita a
+  // aparência de uma elipse 2D apenas rotacionada.
+  const planoDoDisco = elemento("g", {
+    transform: `translate(0 ${DESLOCAMENTO_Y}) rotate(${INCLINACAO_HORIZONTAL}) skewY(${INCLINACAO_VERTICAL})`,
+  });
+  planoDoDisco.dataset.planoDoDisco = "";
+
+  const criarMetadeDoDisco = (
+    lado: "traseira" | "frontal",
+    opacidade: number,
+  ) => {
+    const metade = elemento("g", {
+      "clip-path": `url(#bn-metade-${lado})`,
+      opacity: opacidade,
+      // Afastar os dois semidiscos no eixo vertical dá ao plano traseiro um
+      // arco acima do horizonte e deixa o plano próximo cruzar abaixo dele.
+      transform:
+        lado === "traseira"
+          ? "translate(0 -24) scale(1 0.76)"
+          : "translate(0 18) scale(1 1.12)",
+    });
+    if (lado === "traseira") metade.dataset.discoTraseiro = "";
+    else metade.dataset.discoFrontal = "";
+    return metade;
+  };
+
+  const adicionarCamadasDoDisco = (metade: SVGGElement) => {
+    const camadasDoDisco: Array<{ escala: number; opacidade: number; nucleo: boolean }> = [
+      { escala: 1.2, opacidade: 0.22, nucleo: false },
+      { escala: 1, opacidade: 0.45, nucleo: false },
+      { escala: 0.7, opacidade: 0.7, nucleo: true },
+      { escala: 0.36, opacidade: 0.85, nucleo: true },
+    ];
+    for (const c of camadasDoDisco) {
+      const lente = elemento("path", {
+        d: LENTE,
+        fill: "url(#bn-faixa)",
+        opacity: c.opacidade,
+        transform: `scale(1 ${c.escala})`,
+      });
+      if (c.nucleo) lente.setAttribute("fill", "url(#bn-miolo)");
+      metade.appendChild(lente);
+    }
+  };
+
+  const traseiro = criarMetadeDoDisco("traseira", 0.58);
+  adicionarCamadasDoDisco(traseiro);
+  planoDoDisco.appendChild(traseiro);
+
+  // Sombra e anel de fótons no meio dos dois planos do disco.
   const sombra = elemento("circle", { r: R });
+  sombra.dataset.sombra = "";
   sombra.style.fill = "var(--background)";
   const fotons = elemento("circle", {
     r: R + 2,
@@ -174,35 +238,11 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
   });
   fotons.style.stroke = NUCLEO;
   fotons.dataset.fotons = "";
-  svg.append(sombra, fotons);
+  planoDoDisco.append(sombra, fotons);
 
-  // Disco inclinado, por cima da sombra: a parte de baixo da sombra fica atrás
-  // dele, o que dá a profundidade. O grupo externo só inclina (fixo); os de
-  // dentro se animam em coordenadas do disco.
-  const inclinado = elemento("g", {
-    transform: `translate(0 ${DESLOCAMENTO_Y}) rotate(${INCLINACAO})`,
-  });
-  const faixa = elemento("g", {});
-  faixa.dataset.faixa = "";
-  // Camadas do disco, da borda fria ao miolo quente: cada uma é a mesma lente
-  // mais fina e mais clara.
-  const camadasDoDisco: Array<{ escala: number; opacidade: number; nucleo: boolean }> = [
-    { escala: 1.2, opacidade: 0.22, nucleo: false },
-    { escala: 1, opacidade: 0.45, nucleo: false },
-    { escala: 0.7, opacidade: 0.7, nucleo: true },
-    { escala: 0.36, opacidade: 0.85, nucleo: true },
-  ];
-  for (const c of camadasDoDisco) {
-    const lente = elemento("path", {
-      d: LENTE,
-      fill: "url(#bn-faixa)",
-      opacity: c.opacidade,
-      transform: `scale(1 ${c.escala})`,
-    });
-    if (c.nucleo) lente.setAttribute("fill", "url(#bn-miolo)");
-    faixa.appendChild(lente);
-  }
-  inclinado.appendChild(faixa);
+  const frontal = criarMetadeDoDisco("frontal", 1);
+  frontal.dataset.faixa = "";
+  adicionarCamadasDoDisco(frontal);
 
   // Filetes de luz que deslizam ao longo do disco.
   const filetes = FILETES[versao].map((f) => {
@@ -220,13 +260,14 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
         transform: `scale(1 ${f.escala})`,
       }),
     );
-    inclinado.appendChild(grupo);
+    frontal.appendChild(grupo);
     return grupo;
   });
-  svg.appendChild(inclinado);
+  planoDoDisco.appendChild(frontal);
+  svg.appendChild(planoDoDisco);
 
   // Começa apagado, no mesmo instante em que entra no DOM (sem lampejo).
-  const luzes = [halo, arcos, fotons, faixa, ...filetes];
+  const luzes = [halo, arcos, traseiro, fotons, frontal, ...filetes];
   for (const el of luzes) {
     el.style.opacity = "0";
     el.style.transformBox = "fill-box";
@@ -240,7 +281,8 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
   entrada
     .add(halo, { opacity: [0, 1], duration: 1200 })
     .add(arcos, { opacity: [0, 1], scale: [0.85, 1], duration: 1000 }, "-=800")
-    .add(faixa, { opacity: [0, 1], scaleX: [0.15, 1], duration: 1100 }, "-=700")
+    .add(traseiro, { opacity: [0, 0.58], scaleX: [0.15, 1], duration: 900 }, "-=700")
+    .add(frontal, { opacity: [0, 1], scaleX: [0.15, 1], duration: 1100 }, "-=780")
     .add(fotons, { opacity: [0, 1], duration: 700 }, "-=600")
     .add(filetes, { opacity: [0, 1], duration: 800, delay: stagger(140) }, "-=500");
   animacoes.push(entrada);

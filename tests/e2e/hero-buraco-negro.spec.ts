@@ -54,6 +54,30 @@ for (const path of ["/pt", "/en"]) {
       await expect(camada.locator("svg [data-filete]")).toHaveCount(4);
       await expect(page.getByTestId("hero-ceu")).toHaveAttribute("data-estado", "carregada");
 
+      // A faixa não é um plano único: a metade distante passa atrás da sombra
+      // e a próxima cruza à frente dela. Junto da inclinação vertical falsa,
+      // essa oclusão é o que cria a leitura de volume.
+      const profundidade = await camada.evaluate((el) => {
+        const traseiro = el.querySelector("[data-disco-traseiro]")!;
+        const sombra = el.querySelector("[data-sombra]")!;
+        const frontal = el.querySelector("[data-disco-frontal]")!;
+        const plano = el.querySelector("[data-plano-do-disco]")!;
+        return {
+          ordem: [traseiro, sombra, frontal].map((no) =>
+            [...no.parentElement!.children].indexOf(no),
+          ),
+          perspectiva: plano.getAttribute("transform"),
+          afastamento: [traseiro, frontal].map((no) => no.getAttribute("transform")),
+        };
+      });
+      expect(profundidade.ordem[0]).toBeLessThan(profundidade.ordem[1]);
+      expect(profundidade.ordem[1]).toBeLessThan(profundidade.ordem[2]);
+      expect(profundidade.perspectiva).toContain("skewY(");
+      expect(profundidade.afastamento).toEqual([
+        expect.stringContaining("translate(0 -"),
+        expect.stringContaining("translate(0 1"),
+      ]);
+
       // Por cima do céu (vem depois no DOM) e atrás do texto.
       const ordem = await page.evaluate(() => {
         const ceu = document.querySelector('[data-testid="hero-ceu"]')!;
