@@ -142,7 +142,7 @@ export function iniciarCamadas(moldura: HTMLElement): Camadas | null {
   // Constelação: traços primeiro, estrelas por cima.
   const constelacao = criar("g", {
     "data-camada": "constelacao",
-    class: "text-foreground",
+    class: "cor-decorativa",
   });
   const tracos = criar("g", {
     stroke: "currentColor",

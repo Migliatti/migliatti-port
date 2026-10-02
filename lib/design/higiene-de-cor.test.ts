@@ -48,3 +48,30 @@ describe("cores no código", () => {
     expect(ocorrencias(/(?<![-\w])color:\s*var\(--accent\)/)).toEqual([]);
   });
 });
+
+describe("cor decorativa sorteada (issue #56)", () => {
+  it("só as animações decorativas leem --cor-decorativa", () => {
+    // Texto, links, botões e bordas nunca usam a cor sorteada.
+    const usos = codigo
+      .filter(({ caminho }) => !caminho.endsWith("cor-da-visita.ts"))
+      .flatMap(({ caminho, texto }) =>
+        texto
+          .split("\n")
+          .filter((linha) => /var\(--cor-decorativa\)/.test(linha))
+          .map((linha) => `${caminho}: ${linha.trim()}`),
+      );
+    expect(usos.sort()).toEqual([
+      // .hero-ceu e .cor-decorativa
+      "app/globals.css: color: var(--cor-decorativa);",
+      "app/globals.css: color: var(--cor-decorativa);",
+    ]);
+  });
+
+  it("não usa a classe da cor decorativa em texto, link ou botão", () => {
+    expect(ocorrencias(/(?<![-\w])cor-decorativa(?![-\w])/).sort()).toEqual([
+      "app/globals.css",
+      "components/vitrine/PecaDaVitrine.tsx",
+      "components/vitrine/constelacao.ts",
+    ]);
+  });
+});

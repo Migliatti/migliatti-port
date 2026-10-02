@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
+import { CorDaVisita } from "@/components/animacao/CorDaVisita";
 import { obterTextosHome, validarConteudo } from "@/lib/content";
 import { getDictionary, isLocale, locales } from "@/lib/dictionary";
 import { metadadosDaPagina, urlDoSite } from "@/lib/seo";
@@ -64,6 +65,7 @@ export default async function RootLayout({
         <a href="#conteudo" className="pular-para-conteudo">
           {dict.pularParaConteudo}
         </a>
+        <CorDaVisita />
         {children}
       </body>
     </html>

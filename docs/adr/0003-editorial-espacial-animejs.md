@@ -33,3 +33,10 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 - A barra fixa passa a ter só o seletor de idioma e 5 âncoras (home: Projetos, Vitrine, Experiência, Competências, Contato; Estudo de caso: Problema, Decisões, Stack, Resultado, Uso de IA, mais a seta de volta). Em tela estreita as âncoras descem para uma segunda linha; nunca há rolagem horizontal nem item cortado.
 - O HUD sai da barra e existe só na moldura da **Vitrine**, sem o campo "tema". Isso revê a menção a um HUD resumido na barra (spec #42, item 5); o único cursor piscante do site passou para o prompt da faixa do visitante.
 - "Outros projetos", "Formação" (home) e "Aprendizado", "Evidências" (Estudo de caso) continuam na página, só fora da barra: marcam a âncora vizinha enquanto estão na tela. A numeração das seções segue a página inteira.
+
+## Emenda (issue #56): cor aleatória decorativa
+
+- Um matiz (0 a 359) é sorteado uma vez por visita, com saturação 80% e luminosidade 68% fixas (faixa luminosa sobre o preto). O sorteio roda depois da hidratação (`components/animacao/CorDaVisita.tsx`, lógica em `cor-da-visita.ts`) e grava `--cor-decorativa` na raiz, com `data-matiz-da-visita` para os testes.
+- O HTML do servidor não leva a cor: `--cor-decorativa` vale `--accent` (dourado). Sem JavaScript e com `prefers-reduced-motion: reduce` nada é sorteado e a decoração fica dourada; se o leitor passar a pedir movimento reduzido na página, a variável é removida.
+- Só leem a variável as animações decorativas que já existem: o céu da Hero (`.hero-ceu`), a constelação e os corpos orbitais da Vitrine (classe `.cor-decorativa`). Texto, links, botões, bordas e o desenho das ilustrações dos estudos de caso nunca usam a cor sorteada; `lib/design/higiene-de-cor.test.ts` trava onde ela pode aparecer. As specs #51 (buraco negro, preenchimento) e #52 (pulso das ilustrações) reutilizam a mesma variável.
+- Os testes e2e fixam o sorteio trocando `Math.random` (0.5 vira o matiz 180) e verificam as duas situações, dourado e sorteado (`tests/e2e/cor-da-visita.spec.ts`).
