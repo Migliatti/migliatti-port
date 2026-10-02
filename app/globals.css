@@ -89,7 +89,7 @@ body {
  * Entrada ao rolar (issue #58): cartões de projeto, cargos e grupos de
  * competências usam os mesmos keyframes, ligados à posição na tela por uma
  * linha do tempo de visão (CSS puro, sem JavaScript). O trecho animado é curto
- * (os primeiros 20rem de entrada, subindo 32px). Sem suporte a animation-timeline
+ * (os primeiros 24rem de entrada, subindo 48px). Sem suporte a animation-timeline
  * o cartão aparece parado, e com movimento reduzido nada anima.
  */
 @media (prefers-reduced-motion: no-preference) {
@@ -97,7 +97,7 @@ body {
     .animacao-ao-rolar {
       animation: animacao-ao-rolar 500ms ease-out both;
       animation-timeline: view();
-      animation-range: entry 0% entry 20rem;
+      animation-range: entry 0% entry 24rem;
     }
   }
 }
@@ -105,7 +105,7 @@ body {
 @keyframes animacao-ao-rolar {
   from {
     opacity: 0.7;
-    transform: translateY(32px);
+    transform: translateY(48px);
   }
   to {
     opacity: 1;
