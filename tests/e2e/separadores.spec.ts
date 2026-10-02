@@ -61,6 +61,29 @@ for (const path of ["/pt", "/en"]) {
       expect(amostras).toEqual([...amostras].sort((x, y) => x - y));
     });
 
+    for (const [largura, altura] of [
+      [1280, 800],
+      [1920, 1080],
+      [2560, 1440],
+      [390, 844],
+    ]) {
+      test(`ao fim da página todos os traços estão completos (${largura}x${altura})`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width: largura, height: altura });
+        await page.goto(path);
+        await page.evaluate(() =>
+          window.scrollTo(0, document.documentElement.scrollHeight),
+        );
+        await page.waitForTimeout(150);
+        const escalas = await page.locator("main .secao").evaluateAll((nos) =>
+          nos.map((n) => new DOMMatrix(getComputedStyle(n, "::after").transform).a),
+        );
+        expect(escalas).toHaveLength(7);
+        for (const e of escalas) expect(e).toBeGreaterThan(0.99);
+      });
+    }
+
     test("com movimento reduzido o separador fica completo e parado", async ({
       page,
     }) => {

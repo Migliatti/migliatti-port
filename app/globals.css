@@ -472,7 +472,9 @@ main:focus {
  * (::before) fica sempre completa; um traço dourado com brilho (::after) a
  * percorre da esquerda para a direita enquanto a seção sobe pela tela. O
  * intervalo é `cover`, porque o separador tem 1px de altura e o `entry` dele
- * duraria 1px de rolagem. Sem suporte a `animation-timeline` ou com
+ * duraria 1px de rolagem, e em pixels fixos: ao fim da página a última linha
+ * só sobe ~236px a partir da base da tela, então um intervalo proporcional à
+ * altura da tela nunca completaria em telas altas. Sem suporte a `animation-timeline` ou com
  * prefers-reduced-motion: reduce, o traço fica completo e parado.
  */
 .secao::after {
@@ -495,7 +497,7 @@ main:focus {
     .secao::after {
       animation: separador-desenha linear both;
       animation-timeline: view();
-      animation-range: cover 0% cover 40%;
+      animation-range: cover 0px cover 200px;
     }
   }
 }

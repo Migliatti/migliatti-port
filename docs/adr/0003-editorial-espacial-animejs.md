@@ -36,7 +36,7 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 
 ## Emenda (issue #59): separadores de seção que se desenham
 
-- A linha no topo de cada `.secao` passou de `border-top` para dois pseudo-elementos decorativos (sem conteúdo, fora do fluxo, sem nó no DOM): `::before` é a linha base e `::after` é um traço dourado com brilho que a percorre (`scaleX` de 0 a 1) enquanto a seção sobe pela tela. Em CSS puro, ligado à rolagem por `animation-timeline: view()` com `animation-range: cover 0% cover 40%` (o `entry` não serve: o separador tem 1px de altura e ele durava 1px de rolagem). Sem anime.js e sem custo de bundle.
+- A linha no topo de cada `.secao` passou de `border-top` para dois pseudo-elementos decorativos (sem conteúdo, fora do fluxo, sem nó no DOM): `::before` é a linha base e `::after` é um traço dourado com brilho que a percorre (`scaleX` de 0 a 1) enquanto a seção sobe pela tela. Em CSS puro, ligado à rolagem por `animation-timeline: view()` com `animation-range: cover 0px cover 200px` (o `entry` não serve: o separador tem 1px de altura e ele durava 1px de rolagem; e o intervalo é em pixels porque a última linha só sobe ~236px a partir da base da tela ao fim da página, então um intervalo em % da tela não completava em monitores altos). Sem anime.js e sem custo de bundle.
 - Parado e completo com `prefers-reduced-motion: reduce`, sem JavaScript e em navegadores sem `animation-timeline`. Cobertura em `tests/e2e/separadores.spec.ts`, que mede o progresso do traço ao rolar.
 
 ## Emenda (issue #56): cor aleatória decorativa
