@@ -9,7 +9,7 @@
 // (marcas gravadas por lib/ilustracoes.ts):
 //
 // - halo que pisca em volta das caixas (`data-no`), cada um no próprio tempo
-//   (assíncrono) e com cor nova a cada ciclo;
+//   (assíncrono) e com a própria cor, sorteada uma vez;
 // - luz que percorre cada seta contínua, no sentido da seta
 //   (`data-conector="solido"`), num traço à parte: a seta continua contínua;
 // - fluxo dos traços nas setas tracejadas (`data-conector="tracejado"`): o
@@ -103,7 +103,7 @@ export function iniciarPulso(moldura: HTMLElement): PecaAnimada {
   const animacoes: JSAnimation[] = [];
 
   if (desenho) {
-    // Halos nas caixas: cada um pisca no próprio tempo e troca de cor a cada ciclo.
+    // Halos nas caixas: cada um pisca no próprio tempo, com cor fixa.
     const halos = Array.from(desenho.querySelectorAll<SVGRectElement>("rect[data-no]")).map(
       criarHalo,
     );
@@ -117,7 +117,6 @@ export function iniciarPulso(moldura: HTMLElement): PecaAnimada {
           loopDelay: entre(900, 2600),
           ease: "inOutSine",
           loop: true,
-          onLoop: () => halo.setAttribute("stroke", corAleatoria()),
         }),
       );
     }
@@ -154,7 +153,6 @@ export function iniciarPulso(moldura: HTMLElement): PecaAnimada {
             loopDelay: entre(900, 2600),
             ease: "inOutSine",
             loop: true,
-            onLoop: () => cometa.setAttribute("stroke", corAleatoria()),
           }),
         );
       }

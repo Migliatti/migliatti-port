@@ -102,7 +102,7 @@ for (const path of ["/pt", "/en"]) {
       for (const cor of cores) expect(desenho).not.toContain(cor);
     });
 
-    test("os halos piscam em tempos assíncronos e trocam de cor", async ({ page }) => {
+    test("os halos piscam em tempos assíncronos e mantêm a própria cor", async ({ page }) => {
       await aparelhoForte(page);
       await fixarSorteio(page);
       await page.goto(`${path}/projetos/grimoire`);
@@ -125,11 +125,10 @@ for (const path of ["/pt", "/en"]) {
           timeout: 10_000,
         })
         .toBeGreaterThan(1);
-      // A cor de algum halo muda depois de um ciclo.
+      // A cor de cada halo é fixa: não muda a cada ciclo.
       const inicial = (await retrato()).map((h) => h.cor);
-      await expect
-        .poll(async () => (await retrato()).map((h) => h.cor).join("|"), { timeout: 15_000 })
-        .not.toBe(inicial.join("|"));
+      await page.waitForTimeout(4500);
+      expect((await retrato()).map((h) => h.cor)).toEqual(inicial);
     });
 
     test("nenhum texto, link, botão ou borda usa cor sorteada", async ({ page }) => {
