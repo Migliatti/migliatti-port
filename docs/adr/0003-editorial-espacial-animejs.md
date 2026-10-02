@@ -53,3 +53,8 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 - Os pontos são CSS puro (`radial-gradient`, ~14% do tom do texto), então já aparecem parados sem JavaScript, com movimento reduzido e em celular fraco; não reduzem o contraste do texto abaixo de AA.
 - O parallax (`components/fundo/grade.ts`) só existe na versão completa e acompanha a **rolagem**: a camada (135% da altura da moldura) sobe até 35% da altura da moldura ao longo da página, cerca de 1/3 da velocidade do conteúdo. Só `transform`, num `requestAnimationFrame` por evento de rolagem, via `usePecaPreguicosa` (pausa fora da tela e com a aba oculta). Com movimento reduzido o chunk nunca é baixado; na versão leve (`data-versao="leve"`) ele não ouve a rolagem.
 - Orçamento: chunk próprio, sem anime.js, ~0,7 kB gzip, só pedido na versão completa. Cobertura em `tests/e2e/fundo-secoes.spec.ts`.
+
+## Emenda (issue #62): linguagem visual das ilustrações
+
+- A ilustração de arquitetura do `labreserve` é a primeira redesenhada e fixa a linguagem das outras três (issues seguintes da spec #52): fundo `#05070A`→`#19150F`, grade tênue dourada, brilho (`feGaussianBlur`) nas caixas, estrelas esparsas e rótulos em mono (nomes e detalhes) e sans (rótulo "ILUSTRAÇÃO · ILLUSTRATION"), com a legenda das setas nos dois idiomas. Só rótulos que o repositório prova; as classes `caixa`/`centro`/`linha`/`tracejada` e as marcas `data-no`/`data-conector` continuam as mesmas.
+- O pulso lê a cor da decoração de `data-cor-do-pulso` no `<svg>` raiz; sem o atributo segue o índigo `#4f46e5` das ilustrações ainda em tema claro. Nenhum custo novo de chunk além de poucos bytes.
