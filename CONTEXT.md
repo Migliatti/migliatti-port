@@ -41,7 +41,7 @@ Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o
 _Avoid_: Demo (já significa projeto publicado), Galeria
 
 **Animação decorativa**:
-Animação cuja remoção não muda o significado do conteúdo. É tudo o que fica fora da **Vitrine**. Nunca esconde texto; segue as regras do ADR 0003.
+Animação cuja remoção não muda o significado do conteúdo. É tudo o que fica fora da **Vitrine**. Nunca esconde texto; segue as regras do ADR 0003. Inclui o fundo de pontos tênues das seções, com parallax leve só na versão completa.
 _Avoid_: Efeito
 
 **HUD**:

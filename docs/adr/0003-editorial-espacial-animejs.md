@@ -33,3 +33,10 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 - A barra fixa passa a ter só o seletor de idioma e 5 âncoras (home: Projetos, Vitrine, Experiência, Competências, Contato; Estudo de caso: Problema, Decisões, Stack, Resultado, Uso de IA, mais a seta de volta). Em tela estreita as âncoras descem para uma segunda linha; nunca há rolagem horizontal nem item cortado.
 - O HUD sai da barra e existe só na moldura da **Vitrine**, sem o campo "tema". Isso revê a menção a um HUD resumido na barra (spec #42, item 5); o único cursor piscante do site passou para o prompt da faixa do visitante.
 - "Outros projetos", "Formação" (home) e "Aprendizado", "Evidências" (Estudo de caso) continuam na página, só fora da barra: marcam a âncora vizinha enquanto estão na tela. A numeração das seções segue a página inteira.
+
+## Emenda (issue #60): fundo sutil nas seções
+
+- As seções ganham ao fundo uma camada de pontos tênues (`FundoDasSecoes`, `components/fundo`): `aria-hidden`, atrás do conteúdo (`z-index: -1`), sem receber ponteiro. Na home começa abaixo da Hero (que tem o céu próprio); no estudo de caso cobre o `<main>`.
+- Os pontos são CSS puro (`radial-gradient`, ~14% do tom do texto), então já aparecem parados sem JavaScript, com movimento reduzido e em celular fraco; não reduzem o contraste do texto abaixo de AA.
+- O parallax (`components/fundo/grade.ts`) só existe na versão completa: sobe a camada até 240px ao longo da página, só com `transform`, via `usePecaPreguicosa` (pausa fora da tela e com a aba oculta). Com movimento reduzido o chunk nunca é baixado; na versão leve (`data-versao="leve"`) ele não ouve a rolagem.
+- Orçamento: chunk próprio, sem anime.js, ~0,7 kB gzip, só pedido na versão completa. Cobertura em `tests/e2e/fundo-secoes.spec.ts`.

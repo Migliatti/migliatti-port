@@ -1,0 +1,73 @@
+// Parallax do fundo de pontos das seções: a camada de pontos é mais alta que a
+// moldura e sobe devagar enquanto a página rola, bem menos do que o conteúdo.
+//
+// Só é importado (via `import()`) por FundoDasSecoes depois da montagem, só na
+// versão completa e nunca com movimento reduzido; chunk próprio, sem anime.js.
+// Regras em docs/adr/0003-editorial-espacial-animejs.md.
+//
+// Custo: só `transform`, num único `requestAnimationFrame` por evento de
+// rolagem; o listener sai quando a moldura deixa a tela ou a aba fica oculta.
+
+import { versaoParaEsteAparelho } from "../animacao/aparelho";
+import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
+
+/** Marca gravada na moldura; o e2e usa para achar o chunk deste módulo. */
+export const MARCA_DA_GRADE = "grade-de-fundo";
+
+/** Quanto a camada pode subir ao longo da página, em px (igual ao CSS). */
+const CURSO_MAXIMO = 240;
+
+export function iniciarGrade(moldura: HTMLElement): PecaAnimada {
+  const versao = versaoParaEsteAparelho();
+  if (versao === "leve") {
+    // Celular fraco: fica a grade estática, sem ouvir a rolagem.
+    moldura.dataset.versao = "leve";
+    return { pausar() {}, retomar() {}, destruir() { delete moldura.dataset.versao; } };
+  }
+
+  moldura.dataset.grade = MARCA_DA_GRADE;
+  moldura.dataset.versao = versao;
+  const camada = moldura.firstElementChild as HTMLElement | null;
+
+  let quadro = 0;
+  function aplicar() {
+    quadro = 0;
+    if (!camada) return;
+    const caixa = moldura.getBoundingClientRect();
+    const percurso = caixa.height - window.innerHeight;
+    const progresso = percurso > 0 ? Math.min(1, Math.max(0, -caixa.top / percurso)) : 0;
+    camada.style.transform = `translate3d(0, ${(-progresso * CURSO_MAXIMO).toFixed(1)}px, 0)`;
+  }
+  const aoRolar = () => {
+    if (!quadro) quadro = requestAnimationFrame(aplicar);
+  };
+
+  let rodando = false;
+  function retomar() {
+    if (rodando) return;
+    rodando = true;
+    window.addEventListener("scroll", aoRolar, { passive: true });
+    window.addEventListener("resize", aoRolar, { passive: true });
+    aplicar();
+  }
+  function pausar() {
+    rodando = false;
+    window.removeEventListener("scroll", aoRolar);
+    window.removeEventListener("resize", aoRolar);
+    cancelAnimationFrame(quadro);
+    quadro = 0;
+  }
+
+  retomar();
+
+  return {
+    pausar,
+    retomar,
+    destruir() {
+      pausar();
+      if (camada) camada.style.transform = "";
+      delete moldura.dataset.grade;
+      delete moldura.dataset.versao;
+    },
+  };
+}

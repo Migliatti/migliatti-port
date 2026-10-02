@@ -402,6 +402,53 @@ main:focus {
   }
 }
 
+/*
+ * Fundo de pontos das seções (components/fundo): atrás do conteúdo, sem
+ * receber ponteiro, cobrindo o <main> abaixo da Hero (que tem o céu próprio).
+ * Os pontos são só CSS, então já aparecem parados sem JavaScript, com
+ * movimento reduzido e em celular fraco; o parallax (grade.ts) só mexe no
+ * `transform` da camada interna, que é mais alta que a moldura.
+ */
+.fundo-secoes {
+  position: absolute;
+  inset-inline: -1rem;
+  inset-block: 100svh 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--foreground);
+}
+
+/* O estudo de caso não tem Hero: o fundo começa no topo. */
+.estudo > .fundo-secoes {
+  inset-block-start: 0;
+}
+
+@media (min-width: 40rem) {
+  .fundo-secoes {
+    inset-inline: -1.5rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  .fundo-secoes {
+    inset-inline: -2.5rem;
+  }
+}
+
+.fundo-secoes-pontos {
+  position: absolute;
+  inset: 0;
+  height: calc(100% + 240px);
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, currentColor 14%, transparent) 1px,
+    transparent 1.5px
+  );
+  background-size: 28px 28px;
+  will-change: transform;
+}
+
 /* Seção numerada: linha fina no topo, número em coluna estreita à esquerda. */
 .secao {
   display: grid;
