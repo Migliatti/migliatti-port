@@ -18,6 +18,10 @@
      sorteado por ponto (components/animacao/cor-aleatoria.ts). Nunca em texto,
      link, botão ou borda. */
   --cor-decorativa: var(--accent);
+  /* Buraco negro da Hero (issue #57): cor fixa, complementar ao dourado (matiz
+     ~215° contra ~37°), mais um núcleo quase branco. Só decoração. */
+  --cor-buraco-negro: hsl(214 88% 68%);
+  --cor-buraco-negro-nucleo: hsl(208 100% 93%);
   color-scheme: dark;
   /* Altura da barra fixa; âncoras e foco descontam este valor. Em tela estreita
      a barra tem duas linhas (idioma e âncoras), e as âncoras podem quebrar. */
@@ -38,6 +42,9 @@
 }
 
 body {
+  /* As camadas decorativas da Hero vão de ponta a ponta da tela (100vw, que
+     inclui a barra de rolagem); o excesso é cortado, sem rolagem horizontal. */
+  overflow-x: clip;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
@@ -390,23 +397,15 @@ main:focus {
  */
 .hero-ceu {
   position: absolute;
-  inset: 0 -1rem;
+  top: 0;
+  bottom: 0;
+  left: 50%;
   z-index: -1;
+  width: 100vw;
+  margin-left: -50vw;
   overflow: hidden;
   pointer-events: none;
   color: var(--cor-decorativa);
-}
-
-@media (min-width: 40rem) {
-  .hero-ceu {
-    inset: 0 -1.5rem;
-  }
-}
-
-@media (min-width: 48rem) {
-  .hero-ceu {
-    inset: 0 -2.5rem;
-  }
 }
 
 .hero-ceu-camada {
@@ -415,6 +414,70 @@ main:focus {
   width: 100%;
   height: 100%;
   will-change: transform, opacity;
+}
+
+/*
+ * Buraco negro da Hero (components/hero/buraco-negro.ts): por cima do céu e
+ * atrás do texto (vem depois dele no DOM, ambos com z-index -1), sem receber
+ * ponteiro, ancorado à direita para não ficar sob o nome. Vazio sem
+ * JavaScript e com movimento reduzido.
+ */
+.hero-buraco-negro {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: -1;
+  width: 100vw;
+  margin-left: -50vw;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--cor-buraco-negro);
+}
+
+/*
+ * Cena do buraco negro: uma caixa 2:1 em que o centro do buraco negro fica a
+ * 65% da largura e 50% da altura (o viewBox das camadas vai de -520 a 280 em x),
+ * ancorado a 76% da tela, um pouco acima do meio; em tela estreita a cena tem
+ * 56rem e o excesso é cortado pela moldura. A luz nunca é cortada pela coluna
+ * do conteúdo. Cada camada ocupa a cena inteira; a pose 3D do disco é animada
+ * pelo anime.js (rotateX no plano, rotateZ na rolagem).
+ */
+.hero-buraco-negro-cena {
+  position: absolute;
+  top: 42%;
+  left: calc(76% - 0.65 * max(100%, 56rem));
+  width: max(100%, 56rem);
+  aspect-ratio: 2 / 1;
+  transform: translateY(-50%);
+}
+
+.bn-camada,
+.bn-perspectiva,
+.bn-plano {
+  position: absolute;
+  inset: 0;
+  transform-origin: 65% 50%;
+}
+
+.bn-camada {
+  will-change: transform, opacity;
+}
+
+.bn-perspectiva {
+  perspective: 1400px;
+  perspective-origin: 65% 50%;
+}
+
+.bn-plano {
+  will-change: transform, opacity;
+}
+
+.bn-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 /*

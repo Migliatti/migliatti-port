@@ -89,7 +89,7 @@ for (const path of ["/pt", "/en"]) {
         };
         const achados: string[] = [];
         for (const el of document.body.querySelectorAll("*")) {
-          if (el.closest(".hero-ceu, .vitrine-peca")) continue;
+          if (el.closest(".hero-ceu, .hero-buraco-negro, .vitrine-peca")) continue;
           const e = getComputedStyle(el);
           const cores = [
             e.color,
