@@ -58,7 +58,9 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       expect(acerto.every(Boolean)).toBe(true);
     });
 
-    test("parallax leve só com transform na versão completa", async ({ page }) => {
+    test("parallax segue o ponteiro, no sentido contrário, só com transform", async ({
+      page,
+    }) => {
       await aparelhoForte(page);
       await page.setViewportSize({ width: 1280, height: 800 });
       const chunks = registrarChunks(page);
@@ -71,11 +73,25 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
 
       const pontos = fundo.locator(".fundo-secoes-pontos");
       const deslocamento = () =>
-        pontos.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m42);
-      await page.mouse.wheel(0, 1500);
-      await expect.poll(deslocamento).toBeLessThan(0);
-      // Sobe bem menos do que a página rolou.
-      expect(await deslocamento()).toBeGreaterThan(-300);
+        pontos.evaluate((el) => {
+          const m = new DOMMatrix(getComputedStyle(el).transform);
+          return { x: m.m41, y: m.m42 };
+        });
+      expect(await deslocamento()).toEqual({ x: 0, y: 0 });
+
+      // Ponteiro no canto inferior direito: o fundo vai para cima e à esquerda.
+      await page.mouse.move(1270, 790);
+      await expect.poll(async () => (await deslocamento()).x).toBeLessThan(-40);
+      expect((await deslocamento()).y).toBeLessThan(-40);
+
+      // Ponteiro no canto superior esquerdo: o sentido inverte.
+      await page.mouse.move(10, 10);
+      await expect.poll(async () => (await deslocamento()).x).toBeGreaterThan(40);
+      expect((await deslocamento()).y).toBeGreaterThan(40);
+      // Nunca passa da amplitude (64px) reservada pela camada.
+      const { x, y } = await deslocamento();
+      expect(Math.abs(x)).toBeLessThanOrEqual(64);
+      expect(Math.abs(y)).toBeLessThanOrEqual(64);
     });
 
     test("com movimento reduzido fica estático e o chunk nunca é baixado", async ({
@@ -88,7 +104,7 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       const fundo = page.getByTestId("fundo-secoes");
       await expect(fundo).toHaveAttribute("data-estado", "reduzida");
       await expect(fundo.locator(".fundo-secoes-pontos")).toHaveCSS("background-image", /radial-gradient/);
-      await page.mouse.wheel(0, 1500);
+      await page.mouse.move(600, 400);
       expect(
         await fundo
           .locator(".fundo-secoes-pontos")
@@ -112,17 +128,15 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
     test.use({ hasTouch: true, isMobile: true });
 
     test("versão leve: grade estática, sem parallax", async ({ page }) => {
-      const chunks = registrarChunks(page);
       await page.goto(path);
       const fundo = page.getByTestId("fundo-secoes");
       await expect(fundo).toHaveAttribute("data-versao", "leve");
-      await page.mouse.wheel(0, 1500);
+      await page.mouse.move(600, 400);
       expect(
         await fundo
           .locator(".fundo-secoes-pontos")
           .evaluate((el) => getComputedStyle(el).transform),
       ).toBe("none");
-      void chunks;
     });
   });
 }
