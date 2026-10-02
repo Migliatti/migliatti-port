@@ -50,33 +50,22 @@ for (const path of ["/pt", "/en"]) {
       await expect(camada).toHaveAttribute("data-estado", "carregada");
       await expect(camada).toHaveAttribute("data-buraco-negro", MARCA);
       await expect(camada).toHaveAttribute("data-versao", "completa");
-      await expect(camada.locator("svg [data-faixa]")).toHaveCount(1);
+      await expect(camada.locator("[data-faixa]")).toHaveCount(1);
       await expect(camada.locator("svg [data-filete]")).toHaveCount(4);
       await expect(page.getByTestId("hero-ceu")).toHaveAttribute("data-estado", "carregada");
 
-      // A faixa não é um plano único: a metade distante passa atrás da sombra
-      // e a próxima cruza à frente dela. Junto da inclinação vertical falsa,
-      // essa oclusão é o que cria a leitura de volume.
-      const profundidade = await camada.evaluate((el) => {
-        const traseiro = el.querySelector("[data-disco-traseiro]")!;
-        const sombra = el.querySelector("[data-sombra]")!;
-        const frontal = el.querySelector("[data-disco-frontal]")!;
-        const plano = el.querySelector("[data-plano-do-disco]")!;
-        return {
-          ordem: [traseiro, sombra, frontal].map((no) =>
-            [...no.parentElement!.children].indexOf(no),
-          ),
-          perspectiva: plano.getAttribute("transform"),
-          afastamento: [traseiro, frontal].map((no) => no.getAttribute("transform")),
-        };
+      // O disco não é um plano único: a metade distante passa atrás da sombra
+      // e a próxima cruza à frente dela. Junto da pose 3D, essa oclusão é o
+      // que cria a leitura de volume.
+      const camadas = await camada.evaluate((el) => {
+        const cena = el.querySelector(".hero-buraco-negro-cena")!;
+        const posicao = (seletor: string) =>
+          [...cena.children].indexOf(el.querySelector(seletor)!.closest(".hero-buraco-negro-cena > *")!);
+        return [posicao("[data-disco-traseiro]"), posicao("[data-sombra]"), posicao("[data-disco-frontal]")];
       });
-      expect(profundidade.ordem[0]).toBeLessThan(profundidade.ordem[1]);
-      expect(profundidade.ordem[1]).toBeLessThan(profundidade.ordem[2]);
-      expect(profundidade.perspectiva).toContain("skewY(");
-      expect(profundidade.afastamento).toEqual([
-        expect.stringContaining("translate(0 -"),
-        expect.stringContaining("translate(0 1"),
-      ]);
+      expect(camadas[0]).toBeGreaterThanOrEqual(0);
+      expect(camadas[0]).toBeLessThan(camadas[1]);
+      expect(camadas[1]).toBeLessThan(camadas[2]);
 
       // Por cima do céu (vem depois no DOM) e atrás do texto.
       const ordem = await page.evaluate(() => {
@@ -114,12 +103,11 @@ for (const path of ["/pt", "/en"]) {
       // Não é sorteada nem dourada: é a cor fixa do buraco negro.
       await expect(camada).toHaveCSS("color", AZUL);
 
-      // Os filetes deslizam ao longo da faixa (translateX).
+      // Os filetes orbitam no plano do disco (rotate).
       const filete = camada.locator("[data-filete]").first();
-      const deslocamento = () =>
-        filete.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
-      const antes = await deslocamento();
-      await expect.poll(deslocamento, { timeout: 8000 }).not.toBe(antes);
+      const giro = () => filete.evaluate((el) => getComputedStyle(el).transform);
+      const antes = await giro();
+      await expect.poll(giro, { timeout: 8000 }).not.toBe(antes);
 
       const props = await camada.evaluate((el) => {
         const usadas = new Set<string>();
@@ -135,6 +123,41 @@ for (const path of ["/pt", "/en"]) {
           "offset", "easing", "composite", "computedOffset",
           "opacity", "transform", "rotate", "scale", "translate",
         ]).toContain(p);
+    });
+
+    test("o disco está em pose 3D: deitado visto de cima e inclinado na tela", async ({ page }) => {
+      await aparelhoForte(page);
+      await page.goto(path);
+      const camada = page.getByTestId("hero-buraco-negro");
+      await expect(camada).toHaveAttribute("data-estado", "carregada");
+
+      // Depois da entrada o plano fica a ~65° (a câmera ~25° acima do disco) e
+      // a rolagem inclina ~12° com o lado direito subindo. A deriva move alguns
+      // graus, daí as faixas.
+      const pose = () =>
+        camada.evaluate((el) => {
+          const plano = el.querySelector("[data-faixa]")!;
+          const rolagem = plano.closest("[data-disco-frontal]")!;
+          const m = new DOMMatrix(getComputedStyle(plano).transform);
+          const r = new DOMMatrix(getComputedStyle(rolagem).transform);
+          return {
+            // m22 = cos(rotateX); m12 = sin(rotateZ)
+            rotateX: (Math.acos(m.m22) * 180) / Math.PI,
+            rotateZ: (Math.asin(r.m12) * 180) / Math.PI,
+          };
+        });
+      // Espera a entrada terminar (antes dela o plano ainda está de pé, a 90°).
+      await expect
+        .poll(async () => {
+          const { rotateX } = await pose();
+          return rotateX > 64 && rotateX < 69;
+        }, { timeout: 8000 })
+        .toBe(true);
+      const final = await pose();
+      expect(final.rotateX).toBeGreaterThan(64);
+      expect(final.rotateX).toBeLessThan(69);
+      expect(final.rotateZ).toBeLessThan(-11);
+      expect(final.rotateZ).toBeGreaterThan(-15);
     });
 
     test("a luz vai de ponta a ponta da tela, não só da coluna do conteúdo", async ({ page }) => {
@@ -209,7 +232,7 @@ for (const path of ["/pt", "/en"]) {
   test.describe(`buraco negro da Hero ${path} em celular (pointer: coarse)`, () => {
     test.use({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
 
-    test("mostra a versão leve: menos filetes, sem deslizar", async ({ page }) => {
+    test("mostra a versão leve: menos filetes, sem órbita", async ({ page }) => {
       await aparelhoForte(page);
       await page.goto(path);
       const camada = page.getByTestId("hero-buraco-negro");
@@ -217,11 +240,11 @@ for (const path of ["/pt", "/en"]) {
       await expect(camada).toHaveAttribute("data-versao", "leve");
       await expect(camada.locator("[data-filete]")).toHaveCount(2);
       await page.waitForTimeout(600);
-      const deslocamento = await camada
+      const giro = await camada
         .locator("[data-filete]")
         .first()
-        .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
-      expect(deslocamento).toBe(0);
+        .evaluate((el) => getComputedStyle(el).transform);
+      expect(giro).toBe("none");
     });
   });
 }
