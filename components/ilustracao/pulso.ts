@@ -12,20 +12,25 @@
 // - luz que percorre cada seta contínua, no sentido da seta
 //   (`data-conector="solido"`), num traço à parte: a seta continua contínua;
 // - fluxo dos traços nas setas tracejadas (`data-conector="tracejado"`): o
-//   tracejado só anda, continua tracejado.
+//   tracejado só anda, continua tracejado; o fluxo colorido é um traço à parte,
+//   com o mesmo tracejado, em sincronia por cima da seta.
+//
+// A cor do pulso é sorteada por elemento (components/animacao/cor-aleatoria.ts,
+// ADR 0003, emenda da issue #56). O desenho em si nunca recebe a cor sorteada.
+// Sem JavaScript e com movimento reduzido este módulo não roda: a ilustração
+// fica parada, como veio do servidor.
 //
 // Celular fraco: versão leve, sem a luz nas setas contínuas.
 
 import { animate, stagger, svg, type JSAnimation } from "animejs";
 import { versaoParaEsteAparelho } from "../animacao/aparelho";
+import { corAleatoria } from "../animacao/cor-aleatoria";
 import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk deste módulo. */
 export const MARCA_DO_PULSO = "ilustracao-pulso";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
-/** Cor da decoração: o índigo que as ilustrações já usam nos destaques. */
-const COR_DO_PULSO = "#4f46e5";
 /** Atraso entre uma caixa e a próxima na cascata do halo (ms). */
 const PASSO_DA_CASCATA = 180;
 
@@ -42,7 +47,7 @@ function criarHalo(no: SVGRectElement): SVGRectElement {
   halo.setAttribute("height", String(numero("height") + 2 * FOLGA_DO_HALO));
   halo.setAttribute("rx", String(numero("rx") + FOLGA_DO_HALO));
   halo.setAttribute("fill", "none");
-  halo.setAttribute("stroke", COR_DO_PULSO);
+  halo.setAttribute("stroke", corAleatoria());
   halo.setAttribute("stroke-width", "2");
   halo.setAttribute("opacity", "0");
   halo.setAttribute("pointer-events", "none");
@@ -59,13 +64,27 @@ function criarCometa(conector: SVGGeometryElement): SVGGeometryElement {
     cometa.removeAttribute(nome);
   }
   cometa.setAttribute("fill", "none");
-  cometa.setAttribute("stroke", COR_DO_PULSO);
+  cometa.setAttribute("stroke", corAleatoria());
   cometa.setAttribute("stroke-width", "3");
   cometa.setAttribute("stroke-linecap", "round");
   cometa.setAttribute("pointer-events", "none");
   cometa.setAttribute("data-pulso-cometa", "");
   conector.after(cometa);
   return cometa;
+}
+
+/** Traço à parte sobre a seta tracejada, com o mesmo tracejado, colorido. */
+function criarFluxo(conector: SVGGeometryElement): SVGGeometryElement {
+  const fluxo = conector.cloneNode(false) as SVGGeometryElement;
+  for (const nome of ["class", "marker-end", "marker-start", "data-conector", "style"]) {
+    fluxo.removeAttribute(nome);
+  }
+  fluxo.setAttribute("fill", "none");
+  fluxo.setAttribute("stroke", corAleatoria());
+  fluxo.setAttribute("pointer-events", "none");
+  fluxo.setAttribute("data-pulso-fluxo", "");
+  conector.after(fluxo);
+  return fluxo;
 }
 
 export function iniciarPulso(moldura: HTMLElement): PecaAnimada {
@@ -102,8 +121,10 @@ export function iniciarPulso(moldura: HTMLElement): PecaAnimada {
       desenho.querySelectorAll<SVGGeometryElement>('[data-conector="tracejado"]'),
     );
     if (tracejados.length > 0) {
+      const fluxos = tracejados.map(criarFluxo);
+      criados.push(...fluxos);
       animacoes.push(
-        animate(tracejados, {
+        animate([...tracejados, ...fluxos], {
           strokeDashoffset: [0, -20],
           duration: 1400,
           ease: "linear",

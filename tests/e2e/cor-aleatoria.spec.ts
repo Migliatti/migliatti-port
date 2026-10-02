@@ -70,6 +70,38 @@ for (const path of ["/pt", "/en"]) {
       expect(cores).toBeGreaterThan(4);
     });
 
+    test("o pulso das ilustrações usa cor sorteada e o desenho continua dourado/claro", async ({
+      page,
+    }) => {
+      await aparelhoForte(page);
+      await fixarSorteio(page);
+      await page.goto(`${path}/projetos/grimoire`);
+      const figura = page.getByTestId("evidencia-ilustracao").first();
+      await figura.scrollIntoViewIfNeeded();
+      const moldura = figura.getByTestId("ilustracao");
+      await expect(moldura).toHaveAttribute("data-estado", "carregada");
+      const imagem = moldura.locator("svg");
+      await expect(imagem.locator("[data-pulso-halo]").first()).toBeAttached();
+
+      const cores = await imagem
+        .locator("[data-pulso-halo], [data-pulso-cometa], [data-pulso-fluxo]")
+        .evaluateAll((els) => els.map((el) => getComputedStyle(el).stroke));
+      expect(cores.length).toBeGreaterThan(3);
+      expect(new Set(cores).size).toBeGreaterThan(3);
+      expect(cores).not.toContain(DOURADO);
+
+      // O desenho original não recebe a cor sorteada.
+      const desenho = await imagem
+        .locator("[data-no], [data-conector], text")
+        .evaluateAll((els) =>
+          els.flatMap((el) => {
+            const e = getComputedStyle(el);
+            return [e.stroke, e.fill];
+          }),
+        );
+      for (const cor of cores) expect(desenho).not.toContain(cor);
+    });
+
     test("nenhum texto, link, botão ou borda usa cor sorteada", async ({ page }) => {
       await aparelhoForte(page);
       await fixarSorteio(page);
@@ -120,6 +152,21 @@ for (const path of ["/pt", "/en"]) {
       const corpo = page.locator('[data-corpo="site"]');
       await corpo.scrollIntoViewIfNeeded();
       await expect(corpo).toHaveCSS("color", DOURADO);
+    });
+  });
+
+  test.describe(`cor aleatória ${path} ilustração parada`, () => {
+    test.use({ reducedMotion: "reduce" });
+
+    test("com movimento reduzido a ilustração não ganha pulso", async ({ page }) => {
+      await fixarSorteio(page);
+      await page.goto(`${path}/projetos/grimoire`);
+      const moldura = page.getByTestId("ilustracao").first();
+      await moldura.scrollIntoViewIfNeeded();
+      await expect(moldura.locator("[data-no]").first()).toBeAttached();
+      await expect(
+        moldura.locator("[data-pulso-halo], [data-pulso-cometa], [data-pulso-fluxo]"),
+      ).toHaveCount(0);
     });
   });
 

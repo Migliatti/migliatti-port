@@ -67,10 +67,11 @@ describe("cor decorativa aleatória (issue #56)", () => {
     ]);
   });
 
-  it("só o céu, a constelação e a Vitrine sorteiam cores", () => {
+  it("só o céu, a constelação, a Vitrine e o pulso das ilustrações sorteiam cores", () => {
     expect(ocorrencias(/corAleatoria\(/).sort()).toEqual([
       "components/animacao/cor-aleatoria.ts",
       "components/hero/ceu.ts",
+      "components/ilustracao/pulso.ts",
       "components/vitrine/constelacao.ts",
       "components/vitrine/orbitas.ts",
     ]);
