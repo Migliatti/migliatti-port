@@ -468,27 +468,46 @@ main:focus {
 
 /*
  * Separador que se desenha ao entrar na tela (Animação decorativa, ADR 0003):
- * CSS puro, ligada à rolagem (view timeline), sem JavaScript. Sem suporte a
- * `animation-timeline` ou com prefers-reduced-motion: reduce, a linha fica
- * completa e parada. O início do traço já tem 12% do comprimento, então nunca
- * some; não há texto envolvido.
+ * CSS puro, ligada à rolagem (view timeline), sem JavaScript. A linha base
+ * (::before) fica sempre completa; um traço dourado com brilho (::after) a
+ * percorre da esquerda para a direita enquanto a seção sobe pela tela. O
+ * intervalo é `cover`, porque o separador tem 1px de altura e o `entry` dele
+ * duraria 1px de rolagem. Sem suporte a `animation-timeline` ou com
+ * prefers-reduced-motion: reduce, o traço fica completo e parado.
  */
+.secao::after {
+  content: "";
+  position: absolute;
+  inset: -0.5px 0 auto 0;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 35%, transparent),
+    var(--accent)
+  );
+  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--accent) 55%, transparent);
+  transform-origin: left center;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    .secao::before {
+    .secao::after {
       animation: separador-desenha linear both;
       animation-timeline: view();
-      animation-range: entry 0% entry 70%;
+      animation-range: cover 0% cover 40%;
     }
   }
 }
 
 @keyframes separador-desenha {
   from {
-    transform: scaleX(0.12);
+    transform: scaleX(0);
+    opacity: 0.4;
   }
   to {
     transform: scaleX(1);
+    opacity: 1;
   }
 }
 

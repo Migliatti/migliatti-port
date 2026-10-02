@@ -30,29 +30,35 @@ for (const path of ["/pt", "/en"]) {
       ).toBeVisible();
     });
 
-    test("ao entrar na tela o separador se desenha (escala de 0.12 a 1)", async ({
+    test("o traço se desenha aos poucos enquanto a seção sobe pela tela", async ({
       page,
     }) => {
       await page.setViewportSize({ width: 1280, height: 800 });
       await page.goto(path);
       const secao = page.getByTestId("experiencia");
-      await secao.scrollIntoViewIfNeeded();
-      await page.evaluate(() => window.scrollBy(0, 400));
 
-      const nome = await secao.evaluate(
-        (n) => getComputedStyle(n, "::before").animationName,
+      const escalaX = () =>
+        secao.evaluate((n) => {
+          const m = new DOMMatrix(getComputedStyle(n, "::after").transform);
+          return m.a;
+        });
+
+      // Alinha o topo da seção com a base da tela e depois sobe em passos.
+      const topo = await secao.evaluate(
+        (n) => n.getBoundingClientRect().top + window.scrollY,
       );
-      expect(nome).toBe("separador-desenha");
+      const amostras: number[] = [];
+      for (const faltam of [0, 120, 240, 400]) {
+        await page.evaluate((y) => window.scrollTo(0, y), topo - 800 + faltam);
+        await page.waitForTimeout(60);
+        amostras.push(await escalaX());
+      }
 
-      const escala = await secao.evaluate((n) => {
-        const anim = n
-          .getAnimations({ subtree: true })
-          .find((a) => (a as CSSAnimation).animationName === "separador-desenha");
-        const efeito = anim?.effect as KeyframeEffect | undefined;
-        const kf = efeito?.getKeyframes() ?? [];
-        return kf.map((k) => String(k.transform));
-      });
-      expect(escala).toEqual(["scaleX(0.12)", "scaleX(1)"]);
+      expect(amostras[0]).toBeLessThan(0.1);
+      expect(amostras[3]).toBeCloseTo(1, 1);
+      // Cresce de forma gradual, com pelo menos um estágio intermediário.
+      expect(amostras.some((v) => v > 0.2 && v < 0.9)).toBe(true);
+      expect(amostras).toEqual([...amostras].sort((x, y) => x - y));
     });
 
     test("com movimento reduzido o separador fica completo e parado", async ({
@@ -62,11 +68,11 @@ for (const path of ["/pt", "/en"]) {
       await page.goto(path);
       const secao = page.getByTestId("experiencia");
       const r = await secao.evaluate((n) => {
-        const antes = getComputedStyle(n, "::before");
+        const antes = getComputedStyle(n, "::after");
         return {
           animacao: antes.animationName,
           transform: antes.transform,
-          fundo: antes.backgroundColor,
+          fundo: antes.backgroundImage,
           anims: n.getAnimations({ subtree: true }).filter(
             (a) => (a as CSSAnimation).animationName === "separador-desenha",
           ).length,
@@ -74,7 +80,7 @@ for (const path of ["/pt", "/en"]) {
       });
       expect(r.animacao).toBe("none");
       expect(r.transform).toBe("none");
-      expect(r.fundo).not.toBe("rgba(0, 0, 0, 0)");
+      expect(r.fundo).toContain("linear-gradient");
       expect(r.anims).toBe(0);
     });
 
@@ -88,11 +94,11 @@ for (const path of ["/pt", "/en"]) {
       const secao = page.getByTestId("experiencia");
       await expect(secao).toBeVisible();
       const r = await secao.evaluate((n) => {
-        const antes = getComputedStyle(n, "::before");
-        return { transform: antes.transform, altura: antes.height };
+        const traco = getComputedStyle(n, "::after");
+        return { transform: traco.transform, altura: traco.height };
       });
       expect(r.transform).toBe("none");
-      expect(r.altura).toBe("1px");
+      expect(r.altura).toBe("2px");
       await ctx.close();
     });
   });
