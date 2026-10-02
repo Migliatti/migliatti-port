@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
 
+// Sem SITE_URL nem a variável de produção do Vercel, vale o padrão.
+const SITE = process.env.SITE_URL ?? "https://migliatti.vercel.app";
+
 const paginas = [
   { lang: "pt", htmlLang: "pt-BR", caminho: "" },
   { lang: "en", htmlLang: "en", caminho: "" },
@@ -31,6 +34,7 @@ for (const { lang, caminho } of paginas) {
         "href",
         new RegExp(`${path}$`),
       );
+      expect(await meta('meta[property="og:url"]')).toBe(`${SITE}${path}`);
       await expect(
         page.locator('link[rel="alternate"][hreflang="pt-BR"]'),
       ).toHaveAttribute("href", new RegExp(`/pt${caminho}$`));
@@ -72,6 +76,14 @@ test("sitemap lista todas as páginas nos dois idiomas com alternates", async ({
   }
   expect(xml).toContain('hreflang="pt-BR"');
   expect(xml).toContain('hreflang="en"');
+});
+
+test("sitemap e robots usam a URL do site", async ({ request }) => {
+  const xml = await (await request.get("/sitemap.xml")).text();
+  expect(xml).toContain(`<loc>${SITE}/pt</loc>`);
+  expect(xml).toContain(`<loc>${SITE}/en</loc>`);
+  const robots = await (await request.get("/robots.txt")).text();
+  expect(robots).toContain(`Sitemap: ${SITE}/sitemap.xml`);
 });
 
 test.describe("acessibilidade", () => {
