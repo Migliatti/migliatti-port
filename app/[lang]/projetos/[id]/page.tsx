@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BarraFixa } from "@/components/BarraFixa";
+import { FundoDasSecoes } from "@/components/fundo/FundoDasSecoes";
 import type { ItemDeSecao } from "@/components/hud/useSecaoAtual";
 import { NumeroDaSecao } from "@/components/NumeroDaSecao";
 import { IlustracaoAnimada } from "@/components/ilustracao/IlustracaoAnimada";
@@ -74,7 +75,8 @@ export default async function EstudoDeCasoPage({
         caminho={`/projetos/${projeto.id}`}
         comVoltar
       />
-      <main id="conteudo" tabIndex={-1} className="estudo flex flex-col pb-24">
+      <main id="conteudo" tabIndex={-1} className="estudo relative flex flex-col pb-24">
+        <FundoDasSecoes />
         <div className="estudo-cabecalho">
           <h1 className="estudo-titulo animacao-titulo font-extrabold">
             {projeto.titulo}

@@ -46,3 +46,10 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 - Sem JavaScript e com `prefers-reduced-motion: reduce` os módulos animados não rodam, então tudo fica dourado; ao pedir movimento reduzido com a peça rodando, os corpos voltam ao dourado.
 - Texto, links, botões, bordas e o desenho das ilustrações dos estudos de caso nunca usam cor sorteada; `lib/design/higiene-de-cor.test.ts` trava onde ela pode aparecer. As specs #51 (buraco negro, preenchimento) e #52 (pulso das ilustrações) reutilizam `corAleatoria()`.
 - Os testes e2e fixam o sorteio trocando `Math.random` por uma sequência e verificam as duas situações, dourado e sorteado (`tests/e2e/cor-aleatoria.spec.ts`).
+
+## Emenda (issue #60): fundo sutil nas seções
+
+- As seções ganham ao fundo uma camada de pontos tênues (`FundoDasSecoes`, `components/fundo`): `aria-hidden`, atrás do conteúdo (`z-index: -1`), sem receber ponteiro. Na home começa abaixo da Hero (que tem o céu próprio); no estudo de caso cobre o `<main>`.
+- Os pontos são CSS puro (`radial-gradient`, ~14% do tom do texto), então já aparecem parados sem JavaScript, com movimento reduzido e em celular fraco; não reduzem o contraste do texto abaixo de AA.
+- O parallax (`components/fundo/grade.ts`) só existe na versão completa e acompanha a **rolagem**: a camada (135% da altura da moldura) sobe até 35% da altura da moldura ao longo da página, cerca de 1/3 da velocidade do conteúdo. Só `transform`, num `requestAnimationFrame` por evento de rolagem, via `usePecaPreguicosa` (pausa fora da tela e com a aba oculta). Com movimento reduzido o chunk nunca é baixado; na versão leve (`data-versao="leve"`) ele não ouve a rolagem.
+- Orçamento: chunk próprio, sem anime.js, ~0,7 kB gzip, só pedido na versão completa. Cobertura em `tests/e2e/fundo-secoes.spec.ts`.

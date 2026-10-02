@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { BarraFixa } from "@/components/BarraFixa";
+import { FundoDasSecoes } from "@/components/fundo/FundoDasSecoes";
 import { Contato } from "@/components/Contato";
 import {
   Competencias,
@@ -45,7 +46,8 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
   return (
     <div className="mx-auto min-h-screen max-w-[75rem] px-4 sm:px-6 md:px-10">
       <BarraFixa lang={lang} secoes={secoes} />
-      <main id="conteudo" tabIndex={-1} className="flex flex-col pb-24">
+      <main id="conteudo" tabIndex={-1} className="relative flex flex-col pb-24">
+        <FundoDasSecoes />
         <Hero
           lang={lang}
           nome={textos.nome}
