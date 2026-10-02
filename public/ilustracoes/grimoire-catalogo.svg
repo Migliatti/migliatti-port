@@ -1,23 +1,86 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" role="img">
-<rect width="760" height="470" fill="#f8fafc"/>
-<text x="380" y="28" text-anchor="middle" font-size="15" font-weight="700" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">skills/&lt;nome&gt;/SKILL.md (15)</text>
-<rect x="20" y="50" width="340" height="44" rx="6" fill="#dbeafe" stroke="#334155" stroke-width="1.5"/><text x="190.0" y="76.0" text-anchor="middle" font-size="13" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a" font-weight="700">chains/business-direction.md</text>
-<text x="190" y="112" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">manifesto: entrypoint + 8 skills</text>
-<rect x="20" y="124" width="340" height="30" rx="6" fill="#bfdbfe" stroke="#334155" stroke-width="1.5"/><text x="190.0" y="143.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a" font-weight="700">business-direction</text>
-<rect x="20" y="162" width="340" height="30" rx="6" fill="#eff6ff" stroke="#334155" stroke-width="1.5"/><text x="190.0" y="181.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">business-research</text>
-<rect x="20" y="200" width="340" height="30" rx="6" fill="#eff6ff" stroke="#334155" stroke-width="1.5"/><text x="190.0" y="219.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">product-scope</text>
-<rect x="20" y="238" width="340" height="30" rx="6" fill="#eff6ff" stroke="#334155" stroke-width="1.5"/><text x="190.0" y="257.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">market-positioning</text>
-<rect x="20" y="276" width="340" height="30" rx="6" fill="#eff6ff" stroke="#334155" stroke-width="1.5"/><text x="190.0" y="295.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">sales-pipeline</text>
-<rect x="20" y="314" width="340" height="30" rx="6" fill="#eff6ff" stroke="#334155" stroke-width="1.5"/><text x="190.0" y="333.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">financial-planning</text>
-<rect x="20" y="352" width="340" height="30" rx="6" fill="#eff6ff" stroke="#334155" stroke-width="1.5"/><text x="190.0" y="371.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">operations-planning</text>
-<rect x="20" y="390" width="340" height="30" rx="6" fill="#eff6ff" stroke="#334155" stroke-width="1.5"/><text x="190.0" y="409.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">strategy-synthesis</text>
-<rect x="400" y="50" width="340" height="44" rx="6" fill="#dcfce7" stroke="#334155" stroke-width="1.5"/><text x="570.0" y="76.0" text-anchor="middle" font-size="13" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a" font-weight="700">skills avulsas (7)</text>
-<rect x="400" y="124" width="340" height="30" rx="6" fill="#f0fdf4" stroke="#334155" stroke-width="1.5"/><text x="570.0" y="143.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">route-context</text>
-<rect x="400" y="162" width="340" height="30" rx="6" fill="#f0fdf4" stroke="#334155" stroke-width="1.5"/><text x="570.0" y="181.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">evolve-skills</text>
-<rect x="400" y="200" width="340" height="30" rx="6" fill="#f0fdf4" stroke="#334155" stroke-width="1.5"/><text x="570.0" y="219.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">model-routing-policy</text>
-<rect x="400" y="238" width="340" height="30" rx="6" fill="#f0fdf4" stroke="#334155" stroke-width="1.5"/><text x="570.0" y="257.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">project-design</text>
-<rect x="400" y="276" width="340" height="30" rx="6" fill="#f0fdf4" stroke="#334155" stroke-width="1.5"/><text x="570.0" y="295.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">web-design-psychology</text>
-<rect x="400" y="314" width="340" height="30" rx="6" fill="#f0fdf4" stroke="#334155" stroke-width="1.5"/><text x="570.0" y="333.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">github-issues</text>
-<rect x="400" y="352" width="340" height="30" rx="6" fill="#f0fdf4" stroke="#334155" stroke-width="1.5"/><text x="570.0" y="371.0" text-anchor="middle" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#0f172a">gamification-psychology</text>
-<text x="380" y="458" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#475569">Fonte: README.md, chains/business-direction.md e skills/ do repositório</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 650" width="560" height="650" role="img" aria-labelledby="t d" data-cor-do-pulso="#d6a85f" data-compacta="">
+  <title id="t">Grimoire: catálogo de 15 skills (ilustração) · Grimoire: catalog of 15 skills (illustration)</title>
+  <desc id="d">O manifesto chains/business-direction.md reúne 8 skills, com business-direction como entrypoint; 7 skills são avulsas. · The chains/business-direction.md manifest groups 8 skills, with business-direction as the entrypoint; 7 skills are standalone.</desc>
+  <defs>
+    <radialGradient id="fundo" cx="50%" cy="46%" r="75%">
+      <stop offset="0" stop-color="#19150f"/>
+      <stop offset="1" stop-color="#05070a"/>
+    </radialGradient>
+    <pattern id="grade" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28,0 L0,0 L0,28" fill="none" stroke="#d6a85f" stroke-opacity="0.13" stroke-width="1"/>
+    </pattern>
+    <filter id="brilho" x="-10%" y="-30%" width="120%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .caixa { fill: #19150f; stroke: #c79a52; stroke-width: 1.5; }
+      .grupo { stroke: #d6a85f; stroke-width: 2; }
+      .centro { fill: #19150f; stroke: #f0c97a; stroke-width: 2.5; }
+      .nome { font: 600 18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #ece8df; }
+      .item { font: 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #ece8df; }
+      .det { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #b3ab9c; }
+      .rotulo { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: #d6a85f; letter-spacing: 0.08em; }
+    </style>
+  </defs>
+  <rect width="560" height="650" fill="url(#fundo)"/>
+  <rect width="560" height="650" fill="url(#grade)"/>
+
+  <!-- estrelas -->
+  <g fill="#ece8df" aria-hidden="true">
+    <circle cx="28" cy="150" r="1.2" opacity="0.7"/>
+    <circle cx="534" cy="168" r="1.5" opacity="0.8"/>
+    <circle cx="40" cy="330" r="1" opacity="0.5"/>
+    <circle cx="520" cy="352" r="1.2" opacity="0.6"/>
+    <circle cx="24" cy="602" r="1.5" opacity="0.7"/>
+    <circle cx="540" cy="584" r="1" opacity="0.5"/>
+    <circle cx="300" cy="112" r="1" opacity="0.5"/>
+    <circle cx="262" cy="404" r="1.2" opacity="0.6"/>
+    <circle cx="420" cy="38" r="1.2" opacity="0.6"/>
+    <circle cx="150" cy="640" r="1.2" opacity="0.6"/>
+    <circle cx="505" cy="640" r="1" opacity="0.5"/>
+  </g>
+
+  <text x="16" y="28" class="rotulo">ILUSTRAÇÃO · ILLUSTRATION</text>
+  <text x="544" y="28" class="rotulo" text-anchor="end">skills/&lt;nome&gt;/SKILL.md (15)</text>
+
+  <rect x="12" y="54" width="536" height="60" rx="8" class="caixa grupo" filter="url(#brilho)"/>
+  <text x="28" y="80" class="nome">chains/business-direction.md</text>
+  <text x="28" y="101" class="det">manifesto · manifest: entrypoint + 8 skills</text>
+  <rect x="12" y="126" width="536" height="38" rx="8" class="centro" filter="url(#brilho)"/>
+  <text x="28" y="150" class="nome">business-direction</text>
+  <text x="536" y="150" class="det" text-anchor="end">entrypoint</text>
+  <rect x="12" y="176" width="262" height="34" rx="8" class="caixa"/>
+  <text x="26" y="198" class="item">business-research</text>
+  <rect x="286" y="176" width="262" height="34" rx="8" class="caixa"/>
+  <text x="300" y="198" class="item">product-scope</text>
+  <rect x="12" y="220" width="262" height="34" rx="8" class="caixa"/>
+  <text x="26" y="242" class="item">market-positioning</text>
+  <rect x="286" y="220" width="262" height="34" rx="8" class="caixa"/>
+  <text x="300" y="242" class="item">sales-pipeline</text>
+  <rect x="12" y="264" width="262" height="34" rx="8" class="caixa"/>
+  <text x="26" y="286" class="item">financial-planning</text>
+  <rect x="286" y="264" width="262" height="34" rx="8" class="caixa"/>
+  <text x="300" y="286" class="item">operations-planning</text>
+  <rect x="12" y="308" width="262" height="34" rx="8" class="caixa"/>
+  <text x="26" y="330" class="item">strategy-synthesis</text>
+  <rect x="12" y="364" width="536" height="60" rx="8" class="caixa grupo" filter="url(#brilho)"/>
+  <text x="28" y="390" class="nome">skills avulsas · standalone skills (7)</text>
+  <text x="28" y="411" class="det">fora da chain · outside the chain</text>
+  <rect x="12" y="436" width="262" height="34" rx="8" class="caixa"/>
+  <text x="26" y="458" class="item">route-context</text>
+  <rect x="286" y="436" width="262" height="34" rx="8" class="caixa"/>
+  <text x="300" y="458" class="item">evolve-skills</text>
+  <rect x="12" y="480" width="262" height="34" rx="8" class="caixa"/>
+  <text x="26" y="502" class="item">model-routing-policy</text>
+  <rect x="286" y="480" width="262" height="34" rx="8" class="caixa"/>
+  <text x="300" y="502" class="item">project-design</text>
+  <rect x="12" y="524" width="262" height="34" rx="8" class="caixa"/>
+  <text x="26" y="546" class="item">web-design-psychology</text>
+  <rect x="286" y="524" width="262" height="34" rx="8" class="caixa"/>
+  <text x="300" y="546" class="item">github-issues</text>
+  <rect x="12" y="568" width="262" height="34" rx="8" class="caixa"/>
+  <text x="26" y="590" class="item">gamification-psychology</text>
+
+  <text x="280" y="632" class="det" text-anchor="middle">Fonte · Source: README.md, chains/business-direction.md, skills/</text>
 </svg>

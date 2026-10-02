@@ -94,12 +94,24 @@ describe("prepararIlustracao", () => {
     });
     expect(contar(empacotamento, 'data-conector="solido"')).toBe(4);
     // A ponta da seta (dentro do <marker>) não é conector.
-    expect(empacotamento).toMatch(/<path d="M0,0 L8,4 L0,8 z" fill="#334155"\/>/);
+    expect(empacotamento).toMatch(/<path d="M0,0 L10,5 L0,10 z" fill="#d6a85f"\/>/);
 
     const catalogo = prepararIlustracao(ler("grimoire-catalogo.svg"), { prefixo: "c", alt: "x" });
     expect(contar(catalogo, "data-conector")).toBe(0);
     // 17 caixas; o fundo (sem traço) fica de fora.
     expect(contar(catalogo, 'data-no=""')).toBe(17);
+  });
+
+  it("as ilustrações do labreserve seguem a linguagem visual dourada (#62, #63)", () => {
+    for (const arquivo of ["labreserve-arquitetura.svg", "labreserve-fluxo-de-reserva.svg"]) {
+      const bruto = ler(arquivo);
+      expect(bruto).toContain('data-cor-do-pulso="#d6a85f"');
+      expect(bruto).toContain("#05070a");
+      expect(bruto).toContain("#19150f");
+      expect(bruto).toContain("ILUSTRAÇÃO · ILLUSTRATION");
+      expect(bruto).toContain('fill="url(#grade)"');
+      expect(bruto).toContain("feGaussianBlur");
+    }
   });
 
   it("duas ilustrações na mesma página não dividem ids nem classes", () => {

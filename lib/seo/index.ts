@@ -6,11 +6,16 @@ import type { Metadata } from "next";
 import { getDictionary, locales, type Locale } from "../dictionary";
 import { listarDestaques } from "../content";
 
-/** Endereço público do site; configurável por `SITE_URL` em produção. */
+/** Endereço público padrão do site (build local, CI e e2e). */
+export const URL_PADRAO_DO_SITE = "https://migliatti.vercel.app";
+
+/**
+ * Endereço público do site: `SITE_URL`, depois a URL de produção do Vercel,
+ * depois `URL_PADRAO_DO_SITE`.
+ */
 export function urlDoSite(env: Record<string, string | undefined> = process.env): URL {
   const vercel = env.VERCEL_PROJECT_PRODUCTION_URL;
-  const bruto =
-    env.SITE_URL ?? (vercel ? `https://${vercel}` : "http://localhost:3000");
+  const bruto = env.SITE_URL ?? (vercel ? `https://${vercel}` : URL_PADRAO_DO_SITE);
   return new URL(bruto);
 }
 

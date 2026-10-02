@@ -63,3 +63,23 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 - Movimento reduzido: a camada fica vazia e o chunk nunca é baixado. Celular fraco (`aparelho.ts`): versão leve, com 2 filetes em vez de 4, só a entrada e a pose fixa (sem órbita, deriva ou respiração). Pausa com a aba oculta e fora da tela, via `usePecaPreguicosa`.
 - Orçamento: o módulo do buraco negro fica num chunk próprio (~9,3 kB sem compressão, ~3,7 kB gzip) e reutiliza o chunk compartilhado do anime.js (~14,7 kB gzip, só pedido por `import()`), somando ~18,4 kB gzip, dentro dos ~25 kB da regra 11. Como o céu, a camada só é pedida na Hero, depois da montagem; a Vitrine e o pulso das ilustrações não são afetados.
 - Cobertura em `tests/e2e/hero-buraco-negro.spec.ts` (inclui a pose 3D final, a largura de ponta a ponta e a cor fixa); `lib/design/higiene-de-cor.test.ts` volta a listar só o céu, a constelação e a Vitrine entre os módulos que sorteiam cor.
+
+## Emenda (issue #62): linguagem visual das ilustrações
+
+- A ilustração de arquitetura do `labreserve` é a primeira redesenhada e fixa a linguagem das outras três (issues seguintes da spec #52): fundo `#05070A`→`#19150F`, grade tênue dourada, brilho (`feGaussianBlur`) nas caixas, estrelas esparsas e rótulos em mono (nomes e detalhes) e sans (rótulo "ILUSTRAÇÃO · ILLUSTRATION"), com a legenda das setas nos dois idiomas. Só rótulos que o repositório prova; as classes `caixa`/`centro`/`linha`/`tracejada` e as marcas `data-no`/`data-conector` continuam as mesmas.
+- O pulso lê a cor da decoração de `data-cor-do-pulso` no `<svg>` raiz; sem o atributo segue o índigo `#4f46e5` das ilustrações ainda em tema claro. Nenhum custo novo de chunk além de poucos bytes.
+- A ilustração do `labreserve` é gerada por `npm run ilustracoes` (`scripts/gerar-ilustracao-labreserve.mjs`): o Graphviz (`@viz-js/viz`, WASM, só devDependency) calcula o layout e o script monta o SVG no tema, mantendo as classes e marcas acima. O SVG gerado é versionado e estático, então segue valendo "completa sem JS e parada com movimento reduzido" e não há custo de bundle. Uma lib que renderiza no navegador (Mermaid, React Flow) foi descartada: exigiria JS para o desenho aparecer, estouraria o orçamento do item 11 e obrigaria a reescrever o pulso.
+- `data-compacta` no `<svg>` (desenho quase quadrado) faz o recorte da ilustração ter no máximo 34rem e acompanhar o desenho, em vez de ficar na largura toda.
+
+## Emenda (issue #63): fluxo de reserva do `labreserve`
+
+- A ilustração do fluxo de criação de reserva segue a linguagem do #62 (fundo `#05070A`→`#19150F`, grade, brilho, estrelas, rótulo "ILUSTRAÇÃO · ILLUSTRATION") e é gerada pelo mesmo `npm run ilustracoes`. É uma coluna simples com posições fixas, então não passa pelo Graphviz. Erros ganham borda rosada (`#d98a7a`) para se distinguirem sem depender só de posição; a legenda diz isso nos dois idiomas.
+- Mantém as classes `caixa`/`decisao`/`ok`/`erro`/`linha` (8 setas contínuas) e a moldura `transacao`, que não é caixa nem seta. Textos e dados vêm de `src/application/lab-reserve-service.ts` do repositório; nada foi acrescentado. Sem custo de chunk.
+
+## Emenda (issue #64): catálogo do grimoire na mesma linguagem
+
+- `public/ilustracoes/grimoire-catalogo.svg` segue a linguagem da emenda #62: fundo `#05070A`→`#19150F`, grade tênue, brilho nos grupos, estrelas, rótulo "ILUSTRAÇÃO · ILLUSTRATION" e rótulos nos dois idiomas. Os nomes (manifesto `chains/business-direction.md`, as 8 skills da chain com `business-direction` como entrypoint, as 7 avulsas) são os mesmos que já estavam no desenho; nada novo foi afirmado. É escrito à mão (sem Graphviz, porque não há setas), com `data-compacta` e `data-cor-do-pulso`; as 17 caixas continuam marcadas para o halo do pulso. Sem custo de bundle.
+
+## Emenda (issue #65): empacotamento do grimoire na mesma linguagem
+
+- A ilustração de empacotamento do `grimoire` (#65) segue a mesma linguagem, em desenho quase quadrado (`data-compacta`): `skills/` ao centro, setas contínuas para as quatro plataformas. É SVG escrito à mão (sem Graphviz), com os mesmos dados que o repositório já provava; legenda e fonte nos dois idiomas.

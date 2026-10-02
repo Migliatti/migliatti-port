@@ -24,8 +24,12 @@ import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
 export const MARCA_DO_PULSO = "ilustracao-pulso";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
-/** Cor da decoração: o índigo que as ilustrações já usam nos destaques. */
-const COR_DO_PULSO = "#4f46e5";
+/**
+ * Cor da decoração: o índigo das ilustrações em tema claro, a menos que o
+ * desenho declare a sua em `data-cor-do-pulso` no <svg> (as redesenhadas em
+ * dourado sobre o escuro).
+ */
+const COR_PADRAO_DO_PULSO = "#4f46e5";
 /** Atraso entre uma caixa e a próxima na cascata do halo (ms). */
 const PASSO_DA_CASCATA = 180;
 
@@ -33,7 +37,7 @@ const PASSO_DA_CASCATA = 180;
 const FOLGA_DO_HALO = 4;
 
 /** Halo com a geometria da caixa, um pouco por fora dela. */
-function criarHalo(no: SVGRectElement): SVGRectElement {
+function criarHalo(no: SVGRectElement, cor: string): SVGRectElement {
   const halo = document.createElementNS(SVG_NS, "rect");
   const numero = (nome: string) => Number(no.getAttribute(nome) ?? 0);
   halo.setAttribute("x", String(numero("x") - FOLGA_DO_HALO));
@@ -42,7 +46,7 @@ function criarHalo(no: SVGRectElement): SVGRectElement {
   halo.setAttribute("height", String(numero("height") + 2 * FOLGA_DO_HALO));
   halo.setAttribute("rx", String(numero("rx") + FOLGA_DO_HALO));
   halo.setAttribute("fill", "none");
-  halo.setAttribute("stroke", COR_DO_PULSO);
+  halo.setAttribute("stroke", cor);
   halo.setAttribute("stroke-width", "2");
   halo.setAttribute("opacity", "0");
   halo.setAttribute("pointer-events", "none");
@@ -53,13 +57,13 @@ function criarHalo(no: SVGRectElement): SVGRectElement {
 }
 
 /** Traço à parte, com a geometria da seta, para a luz que a percorre. */
-function criarCometa(conector: SVGGeometryElement): SVGGeometryElement {
+function criarCometa(conector: SVGGeometryElement, cor: string): SVGGeometryElement {
   const cometa = conector.cloneNode(false) as SVGGeometryElement;
   for (const nome of ["class", "marker-end", "marker-start", "data-conector", "style", "stroke-dasharray"]) {
     cometa.removeAttribute(nome);
   }
   cometa.setAttribute("fill", "none");
-  cometa.setAttribute("stroke", COR_DO_PULSO);
+  cometa.setAttribute("stroke", cor);
   cometa.setAttribute("stroke-width", "3");
   cometa.setAttribute("stroke-linecap", "round");
   cometa.setAttribute("pointer-events", "none");
@@ -78,9 +82,10 @@ export function iniciarPulso(moldura: HTMLElement): PecaAnimada {
   const animacoes: JSAnimation[] = [];
 
   if (desenho) {
+    const cor = desenho.dataset.corDoPulso || COR_PADRAO_DO_PULSO;
     // Halo em cascata nas caixas, na ordem do desenho.
     const halos = Array.from(desenho.querySelectorAll<SVGRectElement>("rect[data-no]")).map(
-      criarHalo,
+      (no) => criarHalo(no, cor),
     );
     criados.push(...halos);
     if (halos.length > 0) {
@@ -116,7 +121,7 @@ export function iniciarPulso(moldura: HTMLElement): PecaAnimada {
     if (versao === "completa") {
       const cometas = Array.from(
         desenho.querySelectorAll<SVGGeometryElement>('[data-conector="solido"]'),
-      ).map(criarCometa);
+      ).map((c) => criarCometa(c, cor));
       criados.push(...cometas);
       if (cometas.length > 0) {
         animacoes.push(

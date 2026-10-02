@@ -86,9 +86,14 @@ function marcarFormas(svg: string): string {
 /** Prefixa ids (e as referências a eles) e classes (e as regras do <style>). */
 function prefixarNomes(svg: string, prefixo: string): string {
   const ids = new Set([...svg.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
-  const classes = new Set(
-    [...svg.matchAll(/\sclass="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/).filter(Boolean)),
-  );
+  // Também as classes que só existem no CSS (regras do tema que este desenho
+  // não usa): sem o prefixo, valeriam para a página inteira.
+  const classes = new Set([
+    ...[...svg.matchAll(/\sclass="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/).filter(Boolean)),
+    ...[...svg.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/g)].flatMap((m) =>
+      [...m[1].matchAll(/\.([a-z][\w-]*)(?=[\s{,.:>+~[])/gi)].map((c) => c[1]),
+    ),
+  ]);
 
   let saida = svg;
   for (const id of ids) {
