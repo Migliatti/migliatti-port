@@ -66,3 +66,6 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 - A ilustração do fluxo de criação de reserva segue a linguagem do #62 (fundo `#05070A`→`#19150F`, grade, brilho, estrelas, rótulo "ILUSTRAÇÃO · ILLUSTRATION") e é gerada pelo mesmo `npm run ilustracoes`. É uma coluna simples com posições fixas, então não passa pelo Graphviz. Erros ganham borda rosada (`#d98a7a`) para se distinguirem sem depender só de posição; a legenda diz isso nos dois idiomas.
 - Mantém as classes `caixa`/`decisao`/`ok`/`erro`/`linha` (8 setas contínuas) e a moldura `transacao`, que não é caixa nem seta. Textos e dados vêm de `src/application/lab-reserve-service.ts` do repositório; nada foi acrescentado. Sem custo de chunk.
 
+## Emenda (issue #64): catálogo do grimoire na mesma linguagem
+
+- `public/ilustracoes/grimoire-catalogo.svg` segue a linguagem da emenda #62: fundo `#05070A`→`#19150F`, grade tênue, brilho nos grupos, estrelas, rótulo "ILUSTRAÇÃO · ILLUSTRATION" e rótulos nos dois idiomas. Os nomes (manifesto `chains/business-direction.md`, as 8 skills da chain com `business-direction` como entrypoint, as 7 avulsas) são os mesmos que já estavam no desenho; nada novo foi afirmado. É escrito à mão (sem Graphviz, porque não há setas), com `data-compacta` e `data-cor-do-pulso`; as 17 caixas continuam marcadas para o halo do pulso. Sem custo de bundle.
