@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { getDictionary, type Locale } from "@/lib/dictionary";
 import { BuracoNegroDaHero } from "./hero/BuracoNegroDaHero";
 import { CeuDaHero } from "./hero/CeuDaHero";
@@ -10,7 +9,7 @@ type Props = {
 };
 
 /**
- * Hero em tela cheia (100svh): nome gigante com a marca do acento,
+ * Hero em tela cheia (100svh): nome gigante,
  * Posicionamento e dois botões. Só tipografia, sem foto. O texto já nasce
  * legível e sem JavaScript; ver ADR 0001 e ADR 0003. O fundo estrelado
  * (CeuDaHero) e o buraco negro (BuracoNegroDaHero) são só decoração, atrás do
@@ -24,12 +23,7 @@ export function Hero({ lang, nome, posicionamento }: Props) {
       <CeuDaHero />
       <BuracoNegroDaHero />
       <h1 className="animacao-titulo hero-nome font-extrabold leading-[1.02] tracking-tight">
-        {nome.split(" ").map((palavra, i) => (
-          <Fragment key={`${palavra}-${i}`}>
-            {i > 0 && " "}
-            <span className="marca-acento">{palavra}</span>
-          </Fragment>
-        ))}
+        {nome}
       </h1>
       <div className="hero-apoio">
         <p

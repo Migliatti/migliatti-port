@@ -31,14 +31,11 @@ for (const path of paths) {
           esquema: getComputedStyle(document.documentElement).colorScheme,
           primario: getComputedStyle(document.querySelector("a.botao-primario")!)
             .backgroundColor,
-          marca: getComputedStyle(document.querySelector(".marca-acento")!, "::after")
-            .backgroundColor,
         }));
         expect(cores, tema).toEqual({
           fundo: "rgb(5, 7, 10)",
           esquema: "dark",
           primario: "rgb(214, 168, 95)",
-          marca: "rgb(214, 168, 95)",
         });
       }
     });
@@ -99,13 +96,6 @@ for (const path of paths) {
       const parado = page.locator("h1").first();
       expect(
         await parado.evaluate((n) => getComputedStyle(n).animationName),
-      ).toBe("none");
-      expect(
-        await parado.evaluate(
-          (n) =>
-            getComputedStyle(n.querySelector(".marca-acento")!, "::after")
-              .animationName,
-        ),
       ).toBe("none");
     });
 
@@ -253,65 +243,28 @@ test.describe("correções da revisão final", () => {
     await page.goto("/pt");
     const duracoes = await page.evaluate(() => {
       const h1 = document.querySelector("h1")!;
-      const marca = h1.querySelector(".marca-acento")!;
-      return [
-        getComputedStyle(h1).animationDuration,
-        getComputedStyle(marca, "::after").animationDuration,
-      ].map((d) => parseFloat(d));
+      return [getComputedStyle(h1).animationDuration].map((d) => parseFloat(d));
     });
     for (const d of duracoes) expect(d).toBeLessThanOrEqual(0.5);
   });
 
-  test("o botão primário tem contorno dourado e texto escuro, e a barra do nome é dourada", async ({
+  test("o botão primário tem contorno dourado e texto escuro", async ({
     page,
   }) => {
     await page.goto("/pt");
     const r = await page.evaluate(() => {
       const botao = getComputedStyle(document.querySelector("a.botao-primario")!);
-      const barra = getComputedStyle(
-        document.querySelector(".marca-acento")!,
-        "::after",
-      );
       return {
         borda: botao.borderTopColor,
         larguraBorda: botao.borderTopWidth,
         texto: botao.color,
-        barra: barra.backgroundColor,
       };
     });
     expect(r.larguraBorda).toBe("1px");
     expect(r.borda).toBe("rgb(214, 168, 95)");
     expect(r.texto).toBe("rgb(5, 7, 10)");
-    expect(r.barra).toBe("rgb(214, 168, 95)");
   });
 });
-
-for (const path of paths) {
-  test(`em 375px cada palavra do nome tem a própria barra, numa linha só ${path}`, async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 375, height: 800 });
-    await page.goto(path);
-    await page.evaluate(() => document.fonts.ready);
-    const trechos = await page.locator("h1 .marca-acento").evaluateAll((els) =>
-      els.map((el) => {
-        const css = getComputedStyle(el);
-        return {
-          altura: el.getBoundingClientRect().height,
-          largura: el.getBoundingClientRect().width,
-          linha: parseFloat(css.lineHeight),
-          fonte: parseFloat(css.fontSize),
-          barra: parseFloat(getComputedStyle(el, "::after").width),
-        };
-      }),
-    );
-    expect(trechos.length).toBeGreaterThan(1);
-    for (const t of trechos) {
-      expect(t.altura).toBeLessThanOrEqual(t.linha * 1.1);
-      expect(t.barra).toBeLessThanOrEqual(t.largura + 1);
-    }
-  });
-}
 
 test.describe("movimento dos botões", () => {
   const transformar = (n: Element) => getComputedStyle(n).transform;
@@ -376,16 +329,6 @@ test.describe("movimento dos botões", () => {
     expect(condicoes.length).toBeGreaterThan(0);
     for (const c of condicoes) expect(c).toContain("hover: hover");
   });
-
-  test("a barra do nome anima com movimento normal", async ({ page }) => {
-    await page.goto("/pt");
-    const nome = await page.evaluate(
-      () =>
-        getComputedStyle(document.querySelector("h1 .marca-acento")!, "::after")
-          .animationName,
-    );
-    expect(nome).toBe("marca-acento");
-  });
 });
 
 test("a moldura da Vitrine usa o raio de 12px dos blocos", async ({ page }) => {
@@ -409,26 +352,5 @@ for (const path of paths) {
     expect(
       await h1.evaluate((n) => getComputedStyle(n).fontFamily),
     ).toContain("ui-sans-serif");
-  });
-}
-
-for (const path of paths) {
-  test(`em desktop a barra da primeira palavra cobre o espaço e a da última não passa do texto ${path}`, async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto(path);
-    await page.evaluate(() => document.fonts.ready);
-    const trechos = await page.locator("h1 .marca-acento").evaluateAll((els) =>
-      els.map((el) => ({
-        largura: el.getBoundingClientRect().width,
-        fonte: parseFloat(getComputedStyle(el).fontSize),
-        barra: parseFloat(getComputedStyle(el, "::after").width),
-      })),
-    );
-    const primeira = trechos[0];
-    const ultima = trechos[trechos.length - 1];
-    expect(primeira.barra).toBeGreaterThan(primeira.largura + primeira.fonte * 0.2);
-    expect(ultima.barra).toBeLessThanOrEqual(ultima.largura + 1);
   });
 }

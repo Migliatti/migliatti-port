@@ -23,7 +23,7 @@ Sem dependências novas [substituído em parte pelo ADR 0003 (issue #35): entra 
 Novos movimentos, todos sob as regras acima (sem atraso, `opacity` inicial >= 0.7, só `transform` e `opacity` [regras de atraso e propriedades substituídas em parte pelo ADR 0003], dentro de `no-preference`):
 
 - `animacao-titulo`: título do hero sobe 24px em 500ms.
-- `marca-acento`: barra do acento sob o nome cresce de `scaleX(0.15)` a 1 em 500ms, na cor `--accent-text` (decorativa, não cobre texto).
+- (removido) a barra `marca-acento` sob o nome saiu do hero.
 - `.botao`: sobe 3px no hover e afunda (`scale(0.97)`) no clique, com `transition` de 250ms.
 
 O escalonamento por `animation-delay` (palavras entrando em sequência) foi descartado por violar a regra 1 (substituído em parte pelo ADR 0003, issue #35: escalonar é permitido com texto legível).

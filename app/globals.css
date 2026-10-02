@@ -184,35 +184,6 @@ main:focus {
   font-size: 0.75rem;
 }
 
-/* Marca do acento sob o nome: barra decorativa, nunca fundo de texto. */
-.marca-acento {
-  position: relative;
-  display: inline-block;
-}
-
-.marca-acento::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -0.06em;
-  height: 0.1em;
-  border-radius: 9999px;
-  background: var(--accent-text);
-  transform-origin: left;
-}
-
-/*
- * Onde o nome cabe numa linha (sm em diante), a barra de uma palavra que não é
- * a última cobre também o espaço depois dela. Em tela estreita o nome quebra e
- * cada barra fica do tamanho da própria palavra.
- */
-@media (min-width: 40rem) {
-  .marca-acento:not(:last-child)::after {
-    right: -0.25em;
-  }
-}
-
 /* Hover só onde existe ponteiro que passa o mouse: no toque o botão não fica levantado. */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) {
   .botao:hover {
@@ -236,10 +207,6 @@ main:focus {
   .animacao-titulo {
     animation: animacao-titulo 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-
-  .marca-acento::after {
-    animation: marca-acento 500ms ease-out both;
-  }
 }
 
 @keyframes animacao-titulo {
@@ -250,15 +217,6 @@ main:focus {
   to {
     opacity: 1;
     transform: none;
-  }
-}
-
-@keyframes marca-acento {
-  from {
-    transform: scaleX(0.15);
-  }
-  to {
-    transform: scaleX(1);
   }
 }
 
