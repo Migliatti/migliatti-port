@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { getDictionary, type Locale } from "@/lib/dictionary";
+import { BuracoNegroDaHero } from "./hero/BuracoNegroDaHero";
 import { CeuDaHero } from "./hero/CeuDaHero";
 
 type Props = {
@@ -12,7 +13,8 @@ type Props = {
  * Hero em tela cheia (100svh): nome gigante com a marca do acento,
  * Posicionamento e dois botões. Só tipografia, sem foto. O texto já nasce
  * legível e sem JavaScript; ver ADR 0001 e ADR 0003. O fundo estrelado
- * (CeuDaHero) é só decoração, atrás do texto, e chega depois num chunk próprio.
+ * (CeuDaHero) e o buraco negro (BuracoNegroDaHero) são só decoração, atrás do
+ * texto, e chegam depois, cada um num chunk próprio.
  */
 export function Hero({ lang, nome, posicionamento }: Props) {
   const dict = getDictionary(lang);
@@ -20,6 +22,7 @@ export function Hero({ lang, nome, posicionamento }: Props) {
   return (
     <section id="inicio" aria-label={nome} className="hero">
       <CeuDaHero />
+      <BuracoNegroDaHero />
       <h1 className="animacao-titulo hero-nome font-extrabold leading-[1.02] tracking-tight">
         {nome.split(" ").map((palavra, i) => (
           <Fragment key={`${palavra}-${i}`}>

@@ -418,6 +418,46 @@ main:focus {
 }
 
 /*
+ * Buraco negro da Hero (components/hero/buraco-negro.ts): por cima do céu e
+ * atrás do texto (vem depois dele no DOM, ambos com z-index -1), sem receber
+ * ponteiro, ancorado à direita para não ficar sob o nome. Vazio sem
+ * JavaScript e com movimento reduzido.
+ */
+.hero-buraco-negro {
+  position: absolute;
+  inset: 0 -1rem;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--cor-decorativa);
+}
+
+@media (min-width: 40rem) {
+  .hero-buraco-negro {
+    inset: 0 -1.5rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  .hero-buraco-negro {
+    inset: 0 -2.5rem;
+  }
+}
+
+/* O disco é maior que a Hero e fica ancorado à direita; a moldura corta o excesso. */
+.hero-buraco-negro-svg {
+  position: absolute;
+  top: 50%;
+  right: -12vmin;
+  display: block;
+  width: min(120vmin, 60rem);
+  height: auto;
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  overflow: visible;
+}
+
+/*
  * Ilustração dos estudos de caso: SVG inline (lib/ilustracoes.ts), que já
  * aparece parado sem JavaScript; o pulso (components/ilustracao/pulso.ts) só
  * acrescenta decoração por cima das setas e caixas que já existem.
