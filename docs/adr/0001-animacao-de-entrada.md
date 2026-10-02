@@ -27,3 +27,7 @@ Novos movimentos, todos sob as regras acima (sem atraso, `opacity` inicial >= 0.
 - `.botao`: sobe 3px no hover e afunda (`scale(0.97)`) no clique, com `transition` de 250ms.
 
 O escalonamento por `animation-delay` (palavras entrando em sequência) foi descartado por violar a regra 1 (substituído em parte pelo ADR 0003, issue #35: escalonar é permitido com texto legível).
+
+## Extensão: entrada ao rolar (issue #58)
+
+Cartões de projeto, cargos da experiência e grupos de competências levam a classe `animacao-ao-rolar`: os mesmos keyframes de `animacao-entrada` (`opacity` inicial 0.7, `translateY(8px)`), ligados à posição na tela por `animation-timeline: view()` com `animation-range: entry 0% entry 10rem`. É CSS puro, sem JavaScript, dentro de `no-preference` e de `@supports (animation-timeline: view())`. Sem suporte o cartão aparece parado; sem JavaScript, idem (nada depende dele). Como a animação acompanha a rolagem, não corre em tempo: o trecho animado é curto (10rem de entrada), e os 500ms só valem como duração de reserva. Testes em `tests/e2e/animacao-ao-rolar.spec.ts`; como o `currentTime` absoluto não vale para animação de rolagem, o primeiro quadro é lido dos keyframes.
