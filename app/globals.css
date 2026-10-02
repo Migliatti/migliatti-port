@@ -13,9 +13,10 @@
   --accent: #d6a85f;
   --on-accent: #05070a;
   --accent-text: #d6a85f;
-  /* Cor só das animações decorativas (issue #56): dourada no servidor, sem JS
-     e com movimento reduzido; components/animacao/cor-da-visita.ts a troca por
-     um matiz sorteado depois da hidratação. Nunca em texto, link, botão ou borda. */
+  /* Cor padrão das animações decorativas (issue #56): dourada no servidor, sem
+     JS e com movimento reduzido. Os módulos animados trocam por um matiz
+     sorteado por ponto (components/animacao/cor-aleatoria.ts). Nunca em texto,
+     link, botão ou borda. */
   --cor-decorativa: var(--accent);
   color-scheme: dark;
   /* Altura da barra fixa; âncoras e foco descontam este valor. Em tela estreita

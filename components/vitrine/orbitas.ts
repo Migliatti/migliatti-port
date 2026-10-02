@@ -16,6 +16,7 @@
 
 import { animate, createTimeline, stagger, svg, type JSAnimation, type Timeline } from "animejs";
 import type { Camadas } from "./constelacao";
+import { corAleatoria } from "../animacao/cor-aleatoria";
 import { versaoParaEsteAparelho } from "../animacao/aparelho";
 import { pontoNaOrbita } from "./geometria";
 
@@ -62,6 +63,9 @@ export function iniciarPeca(moldura: HTMLElement): Peca {
   const posicoesIniciais = new Map<Element, string | null>(
     [...corpos, ...satelites].map((el) => [el, el.getAttribute("transform")]),
   );
+
+  // Cada corpo ganha o próprio matiz; sem a peça animada fica dourado.
+  for (const corpo of corpos) corpo.style.color = corAleatoria();
 
   if (versao === "completa") {
     for (const astro of astros) astro.setAttribute("filter", "url(#vitrine-brilho)");
@@ -181,6 +185,7 @@ export function iniciarPeca(moldura: HTMLElement): Peca {
         else el.setAttribute("transform", transform);
       }
       for (const astro of astros) astro.removeAttribute("filter");
+      for (const corpo of corpos) corpo.style.removeProperty("color");
       delete moldura.dataset.peca;
       delete moldura.dataset.versao;
     },

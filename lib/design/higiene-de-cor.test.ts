@@ -49,29 +49,30 @@ describe("cores no código", () => {
   });
 });
 
-describe("cor decorativa sorteada (issue #56)", () => {
-  it("só as animações decorativas leem --cor-decorativa", () => {
-    // Texto, links, botões e bordas nunca usam a cor sorteada.
+describe("cor decorativa aleatória (issue #56)", () => {
+  it("só as animações decorativas usam a cor padrão ou a cor aleatória", () => {
+    // Texto, links, botões e bordas nunca usam cor aleatória nem --cor-decorativa.
     const usos = codigo
-      .filter(({ caminho }) => !caminho.endsWith("cor-da-visita.ts"))
       .flatMap(({ caminho, texto }) =>
         texto
           .split("\n")
           .filter((linha) => /var\(--cor-decorativa\)/.test(linha))
           .map((linha) => `${caminho}: ${linha.trim()}`),
-      );
-    expect(usos.sort()).toEqual([
+      )
+      .sort();
+    expect(usos).toEqual([
       // .hero-ceu e .cor-decorativa
       "app/globals.css: color: var(--cor-decorativa);",
       "app/globals.css: color: var(--cor-decorativa);",
     ]);
   });
 
-  it("não usa a classe da cor decorativa em texto, link ou botão", () => {
-    expect(ocorrencias(/(?<![-\w])cor-decorativa(?![-\w])/).sort()).toEqual([
-      "app/globals.css",
-      "components/vitrine/PecaDaVitrine.tsx",
+  it("só o céu, a constelação e a Vitrine sorteiam cores", () => {
+    expect(ocorrencias(/corAleatoria\(/).sort()).toEqual([
+      "components/animacao/cor-aleatoria.ts",
+      "components/hero/ceu.ts",
       "components/vitrine/constelacao.ts",
+      "components/vitrine/orbitas.ts",
     ]);
   });
 });

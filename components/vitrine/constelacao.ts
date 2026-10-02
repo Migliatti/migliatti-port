@@ -12,6 +12,8 @@
 // remove. Usa um laço de `requestAnimationFrame` próprio (sem anime.js) para
 // ficar pequeno e parar de vez quando pausado.
 
+import { corAleatoria } from "../animacao/cor-aleatoria";
+
 /** Marca gravada no grupo das camadas; o e2e usa para achar este chunk. */
 export const MARCA_DA_CONSTELACAO = "vitrine-constelacao";
 
@@ -97,6 +99,8 @@ const duasCasas = (n: number) => Math.round(n * 100) / 100;
 
 type Estrela = {
   el: SVGCircleElement;
+  /** Cor própria, sorteada na montagem; os traços usam a da primeira ponta. */
+  cor: string;
   ox: number;
   oy: number;
   x: number;
@@ -154,9 +158,10 @@ export function iniciarCamadas(moldura: HTMLElement): Camadas | null {
   raiz.append(constelacao);
 
   const estrelas: Estrela[] = ESTRELAS.map(([ox, oy]) => {
-    const el = criar("circle", { "data-estrela": "", cx: ox, cy: oy, r: 2 });
+    const cor = corAleatoria();
+    const el = criar("circle", { "data-estrela": "", cx: ox, cy: oy, r: 2, fill: cor });
     pontos.append(el);
-    return { el, ox, oy, x: ox, y: oy, vx: 0, vy: 0 };
+    return { el, cor, ox, oy, x: ox, y: oy, vx: 0, vy: 0 };
   });
   const linhas = LIGACOES.map(([a, b]) => {
     const el = criar("line", {
@@ -164,6 +169,7 @@ export function iniciarCamadas(moldura: HTMLElement): Camadas | null {
       y1: ESTRELAS[a][1],
       x2: ESTRELAS[b][0],
       y2: ESTRELAS[b][1],
+      stroke: estrelas[a].cor,
     });
     tracos.append(el);
     return { el, a: estrelas[a], b: estrelas[b] };
