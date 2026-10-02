@@ -102,6 +102,36 @@ for (const path of ["/pt", "/en"]) {
       for (const cor of cores) expect(desenho).not.toContain(cor);
     });
 
+    test("os halos piscam em tempos assíncronos e trocam de cor", async ({ page }) => {
+      await aparelhoForte(page);
+      await fixarSorteio(page);
+      await page.goto(`${path}/projetos/grimoire`);
+      const moldura = page.getByTestId("ilustracao").first();
+      await moldura.scrollIntoViewIfNeeded();
+      await expect(moldura).toHaveAttribute("data-estado", "carregada");
+      const halos = moldura.locator("[data-pulso-halo]");
+      await expect(halos.first()).toBeAttached();
+
+      const retrato = () =>
+        halos.evaluateAll((els) =>
+          els.map((el) => ({
+            opacidade: getComputedStyle(el).opacity,
+            cor: getComputedStyle(el).stroke,
+          })),
+        );
+      // Em fases diferentes: num mesmo instante nem todos têm a mesma opacidade.
+      await expect
+        .poll(async () => new Set((await retrato()).map((h) => h.opacidade)).size, {
+          timeout: 10_000,
+        })
+        .toBeGreaterThan(1);
+      // A cor de algum halo muda depois de um ciclo.
+      const inicial = (await retrato()).map((h) => h.cor);
+      await expect
+        .poll(async () => (await retrato()).map((h) => h.cor).join("|"), { timeout: 15_000 })
+        .not.toBe(inicial.join("|"));
+    });
+
     test("nenhum texto, link, botão ou borda usa cor sorteada", async ({ page }) => {
       await aparelhoForte(page);
       await fixarSorteio(page);

@@ -8,7 +8,8 @@
 // muda de forma, cor ou traço. Só acrescenta decoração sobre o que já existe
 // (marcas gravadas por lib/ilustracoes.ts):
 //
-// - halo que pulsa em cascata em volta das caixas (`data-no`);
+// - halo que pisca em volta das caixas (`data-no`), cada um no próprio tempo
+//   (assíncrono) e com cor nova a cada ciclo;
 // - luz que percorre cada seta contínua, no sentido da seta
 //   (`data-conector="solido"`), num traço à parte: a seta continua contínua;
 // - fluxo dos traços nas setas tracejadas (`data-conector="tracejado"`): o
@@ -22,7 +23,7 @@
 //
 // Celular fraco: versão leve, sem a luz nas setas contínuas.
 
-import { animate, stagger, svg, type JSAnimation } from "animejs";
+import { animate, svg, type JSAnimation } from "animejs";
 import { versaoParaEsteAparelho } from "../animacao/aparelho";
 import { corAleatoria } from "../animacao/cor-aleatoria";
 import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
@@ -31,8 +32,13 @@ import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
 export const MARCA_DO_PULSO = "ilustracao-pulso";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
-/** Atraso entre uma caixa e a próxima na cascata do halo (ms). */
-const PASSO_DA_CASCATA = 180;
+/** Atraso inicial máximo de cada halo ou luz, sorteado por elemento (ms). */
+const ATRASO_MAXIMO = 2400;
+
+/** Número sorteado entre `minimo` e `maximo`: cada pulso tem o próprio tempo. */
+function entre(minimo: number, maximo: number): number {
+  return Math.round(minimo + Math.random() * (maximo - minimo));
+}
 
 /** Folga entre a borda da caixa e o halo: o halo nunca pinta sobre a borda. */
 const FOLGA_DO_HALO = 4;
@@ -97,21 +103,21 @@ export function iniciarPulso(moldura: HTMLElement): PecaAnimada {
   const animacoes: JSAnimation[] = [];
 
   if (desenho) {
-    // Halo em cascata nas caixas, na ordem do desenho.
+    // Halos nas caixas: cada um pisca no próprio tempo e troca de cor a cada ciclo.
     const halos = Array.from(desenho.querySelectorAll<SVGRectElement>("rect[data-no]")).map(
       criarHalo,
     );
     criados.push(...halos);
-    if (halos.length > 0) {
+    for (const halo of halos) {
       animacoes.push(
-        animate(halos, {
+        animate(halo, {
           opacity: [0, 0.55, 0],
-          duration: 1400,
-          delay: stagger(PASSO_DA_CASCATA),
-          // A cascata inteira termina antes de recomeçar.
-          loopDelay: Math.max(1600, halos.length * PASSO_DA_CASCATA),
+          duration: entre(1100, 1700),
+          delay: entre(0, ATRASO_MAXIMO),
+          loopDelay: entre(900, 2600),
           ease: "inOutSine",
           loop: true,
+          onLoop: () => halo.setAttribute("stroke", corAleatoria()),
         }),
       );
     }
@@ -139,15 +145,16 @@ export function iniciarPulso(moldura: HTMLElement): PecaAnimada {
         desenho.querySelectorAll<SVGGeometryElement>('[data-conector="solido"]'),
       ).map(criarCometa);
       criados.push(...cometas);
-      if (cometas.length > 0) {
+      for (const cometa of cometas) {
         animacoes.push(
-          animate(svg.createDrawable(cometas), {
+          animate(svg.createDrawable(cometa), {
             draw: ["0 0", "0 0.35", "0.65 1", "1 1"],
-            duration: 1600,
-            delay: stagger(300),
-            loopDelay: 1800,
+            duration: entre(1300, 2000),
+            delay: entre(0, ATRASO_MAXIMO),
+            loopDelay: entre(900, 2600),
             ease: "inOutSine",
             loop: true,
+            onLoop: () => cometa.setAttribute("stroke", corAleatoria()),
           }),
         );
       }
