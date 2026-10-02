@@ -27,3 +27,9 @@ A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas
 - Os testes que exigiam `animation-delay: 0s` e transform/opacity são relaxados; seguem exigindo texto visível e `opacity >= 0.7` no primeiro quadro.
 - Os testes da Vitrine (Canvas, DPR, teto de traços) foram trocados na issue #38 pelos do sistema orbital: carga preguiçosa pela marca `vitrine-orbitas`, versão leve com `pointer: coarse`, foco por teclado em cada corpo e destaque do pilar.
 - Issue #41: `tests/e2e/animacao-leve.spec.ts` cobre o céu da Hero (marca `ceu-estrelado`) e o pulso das ilustrações (marca `ilustracao-pulso`): chunk só quando permitido, nunca com movimento reduzido, versão leve com `pointer: coarse`, pausa com a aba oculta e ilustrações com rótulo e texto alternativo também sem JavaScript. Os testes que liam `<img>` das ilustrações passaram a ler o SVG inline (`role="img"` com `aria-label`).
+
+## Emenda (issue #55): barra fixa enxuta e HUD só na Vitrine
+
+- A barra fixa passa a ter só o seletor de idioma e 5 âncoras (home: Projetos, Vitrine, Experiência, Competências, Contato; Estudo de caso: Problema, Decisões, Stack, Resultado, Uso de IA, mais a seta de volta). Em tela estreita as âncoras descem para uma segunda linha; nunca há rolagem horizontal nem item cortado.
+- O HUD sai da barra e existe só na moldura da **Vitrine**, sem o campo "tema". Isso revê a menção a um HUD resumido na barra (spec #42, item 5); o único cursor piscante do site passou para o prompt da faixa do visitante.
+- "Outros projetos", "Formação" (home) e "Aprendizado", "Evidências" (Estudo de caso) continuam na página, só fora da barra: marcam a âncora vizinha enquanto estão na tela. A numeração das seções segue a página inteira.

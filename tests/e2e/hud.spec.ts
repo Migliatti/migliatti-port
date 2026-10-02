@@ -1,7 +1,7 @@
 import { readdirSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 
-// HUD de dados: só dados verificáveis (docs/superpowers/specs/2026-10-01-editorial-espacial-design.md, item 5).
+// HUD de dados: só dados verificáveis, só na Vitrine (issue #55; fora da barra fixa).
 
 const PROJETOS = readdirSync("content/projetos", { withFileTypes: true }).filter(
   (d) => d.isDirectory(),
@@ -57,9 +57,8 @@ for (const home of homes) {
 
       await expect(dado(page, "visitante", "hora")).toHaveText(/^\[\d{2}:\d{2}\]$/);
       await expect(dado(page, "visitante", "viewport")).toHaveText("[1360x800]");
-      await expect(dado(page, "visitante", "tema")).toHaveText(
-        /^\[(escuro|dark)\]$/,
-      );
+      // Sem o campo "tema": só dados verificáveis.
+      await expect(page.locator('[data-hud="tema"]')).toHaveCount(0);
       await expect(dado(page, "visitante", "rolagem")).toHaveText(/^\[\d+%\]$/);
       await expect(dado(page, "visitante", "ponteiro")).toHaveText(
         /^\[(mouse|toque|touch)\]$/,
@@ -86,26 +85,44 @@ for (const home of homes) {
       await expect(dado(page, "visitante", "rolagem")).toHaveText("[100%]");
     });
 
-    test("o build bate com o conteúdo e o resumo aparece na barra", async ({
+    test("o HUD existe só na Vitrine, denso e sem o campo tema", async ({
       page,
     }) => {
-      await page.setViewportSize({ width: 1440, height: 800 });
-      await page.goto(home.path);
-      const barra = page.getByTestId("hud-barra");
-      await expect(barra).toBeVisible();
-      await expect(
-        barra.locator('[data-hud="projetos"] .hud-valor'),
-      ).toHaveText(`[${PROJETOS}]`);
-      await expect(barra.locator(".hud-rotulo").first()).toHaveText(home.hora);
-      // Sem foco, sem leitura de tela, sem aria-live.
-      await expect(barra).toHaveAttribute("aria-hidden", "true");
-      expect(await barra.locator("a, button, [tabindex]").count()).toBe(0);
+      for (const largura of [320, 768, 1440, 1920]) {
+        await page.setViewportSize({ width: largura, height: 800 });
+        await page.goto(home.path);
+        // Nenhum HUD na barra fixa, em nenhuma largura.
+        await expect(page.getByTestId("hud-barra")).toHaveCount(0);
+        await expect(page.locator("header.barra-fixa .hud, header.barra-fixa [data-hud]")).toHaveCount(0);
+      }
+      await expect(page.locator(".hud")).toHaveCount(1);
+      const moldura = page.getByTestId("vitrine-hud");
+      await expect(moldura).toHaveCount(1);
+      await moldura.scrollIntoViewIfNeeded();
       expect(
-        await page
-          .locator('[data-testid="hud-barra"], [data-testid="vitrine-hud"]')
-          .locator("[aria-live]")
-          .count(),
-      ).toBe(0);
+        await moldura.locator("[data-hud]").evaluateAll((ns) =>
+          ns.map((n) => n.getAttribute("data-hud")),
+        ),
+      ).toEqual([
+        "hora",
+        "viewport",
+        "rolagem",
+        "ponteiro",
+        "idioma",
+        "secao",
+        "projetos",
+        "stack",
+        "destaques",
+        "data",
+        "sha",
+      ]);
+      await expect(moldura.locator(".hud-rotulo").first()).toHaveText(home.hora);
+      // Sem foco, sem leitura de tela, sem aria-live.
+      for (const faixa of await moldura.locator("[data-hud-faixa]").all()) {
+        await expect(faixa).toHaveAttribute("aria-hidden", "true");
+        expect(await faixa.locator("a, button, [tabindex]").count()).toBe(0);
+      }
+      expect(await moldura.locator("[aria-live]").count()).toBe(0);
       // Um só cursor piscante.
       await expect(page.locator(".hud-cursor")).toHaveCount(1);
     });
@@ -141,7 +158,6 @@ for (const home of homes) {
         expect(cores.prompt).toBe(rgb(cores.accentText));
         expect(cores.prompt).toBe("rgb(214, 168, 95)");
         expect(cores.moldura).toBe("rgb(25, 21, 15)");
-        await expect(dado(page, "visitante", "tema")).toHaveText(/^\[(escuro|dark)\]$/);
       });
     }
 
@@ -161,8 +177,6 @@ for (const home of homes) {
           document.querySelector('[data-testid="vitrine-hud"]')!.clientWidth,
       }));
       expect(medidas).toEqual({ estoura: false, moldura: false });
-      // Em tela estreita a barra não mostra o HUD.
-      await expect(page.getByTestId("hud-barra")).toBeHidden();
     });
 
     test("a Vitrine mantém a peça dentro da moldura e não faz pedidos externos", async ({

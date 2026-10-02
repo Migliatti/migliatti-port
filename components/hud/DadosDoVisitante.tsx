@@ -6,10 +6,8 @@ import { useSecaoAtual, type ItemDeSecao } from "./useSecaoAtual";
 
 type Props = {
   rotulos: Dictionary["hud"];
-  /** Seções da home, para a seção atual (só na variante completa). */
+  /** Seções da home, para a seção atual. */
   secoes: ItemDeSecao[];
-  /** `resumo` na barra fixa; `completo` na moldura da Vitrine. */
-  variante: "resumo" | "completo";
 };
 
 /** Marca de valor ainda desconhecido: no servidor e antes da hidratação. */
@@ -21,29 +19,23 @@ const VAZIO = "--";
  * os valores mudam o tempo todo e o HUD é decorativo (fica em um contêiner
  * `aria-hidden`).
  */
-export function DadosDoVisitante({ rotulos, secoes, variante }: Props) {
+export function DadosDoVisitante({ rotulos, secoes }: Props) {
   const dados = useDadosDoVisitante();
-  const idSecao = useSecaoAtual(variante === "completo" ? secoes : []);
+  const idSecao = useSecaoAtual(secoes);
   const secao = secoes.find((s) => s.id === idSecao)?.rotulo;
 
+  const rolagem = dados ? `${dados.rolagem}%` : undefined;
+  const ponteiro =
+    dados?.ponteiro === "toque" ? rotulos.ponteiroToque : rotulos.ponteiroFino;
+  // Só dados verificáveis: sem o campo "tema" (o site tem um tema só).
   const itens: [chave: string, rotulo: string, valor: string | undefined][] = [
     ["hora", rotulos.hora, dados?.hora],
+    ["viewport", rotulos.viewport, dados?.viewport],
+    ["rolagem", rotulos.rolagem, rolagem],
+    ["ponteiro", rotulos.ponteiro, dados ? ponteiro : undefined],
+    ["idioma", rotulos.idioma, dados?.idioma],
+    ["secao", rotulos.secao, dados ? (secao ?? "inicio") : undefined],
   ];
-  const rolagem = dados ? `${dados.rolagem}%` : undefined;
-  if (variante === "resumo") {
-    itens.push(["rolagem", rotulos.rolagem, rolagem]);
-  } else {
-    const ponteiro =
-      dados?.ponteiro === "toque" ? rotulos.ponteiroToque : rotulos.ponteiroFino;
-    itens.push(
-      ["viewport", rotulos.viewport, dados?.viewport],
-      ["tema", rotulos.tema, dados ? rotulos.escuro : undefined],
-      ["rolagem", rotulos.rolagem, rolagem],
-      ["ponteiro", rotulos.ponteiro, dados ? ponteiro : undefined],
-      ["idioma", rotulos.idioma, dados?.idioma],
-      ["secao", rotulos.secao, dados ? (secao ?? "inicio") : undefined],
-    );
-  }
 
   return (
     <>

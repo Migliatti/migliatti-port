@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { expectBarraSemTransbordo, LARGURAS } from "./barra-util";
 
 const homes = [
-  { path: "/pt", barra: "Seções", idioma: "Idioma", secao: "Projetos em destaque" },
-  { path: "/en", barra: "Sections", idioma: "Language", secao: "Featured projects" },
+  { path: "/pt", barra: "Seções", idioma: "Idioma", secao: "Projetos", ancoras: ["Projetos", "Vitrine", "Experiência", "Competências", "Contato"] },
+  { path: "/en", barra: "Sections", idioma: "Language", secao: "Projects", ancoras: ["Projects", "Showcase", "Experience", "Skills", "Contact"] },
 ] as const;
 
 for (const home of homes) {
@@ -57,10 +58,11 @@ for (const home of homes) {
         barra.getByRole("navigation", { name: home.idioma }),
       ).toBeVisible();
       const nav = barra.getByRole("navigation", { name: home.barra });
-      await expect(nav.getByRole("link")).toHaveCount(7);
+      await expect(nav.getByRole("link")).toHaveCount(5);
+      await expect(nav.getByRole("link")).toHaveText(home.ancoras);
       await expect(nav.locator("[aria-current]")).toHaveCount(0);
 
-      await nav.getByRole("link", { name: home.secao }).click();
+      await nav.getByRole("link", { name: home.secao, exact: true }).click();
       await expect(nav.locator('[aria-current="location"]')).toHaveText(
         home.secao,
       );
@@ -85,25 +87,36 @@ for (const home of homes) {
       );
     });
 
-    test("em tela estreita sobram só idioma e a seção atual", async ({ page }) => {
-      await page.setViewportSize({ width: 375, height: 800 });
+    test("outras seções marcam a âncora vizinha e a barra não tem HUD", async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1280, height: 800 });
       await page.goto(home.path);
-
       const barra = page.locator("header.barra-fixa");
-      await expect(
-        barra.getByRole("navigation", { name: home.idioma }),
-      ).toBeVisible();
-      await expect(barra.locator("nav ul").last()).toBeHidden();
-
-      const atual = page.getByTestId("secao-atual");
-      await expect(atual).toHaveText("");
-      await page.locator("#destaques").scrollIntoViewIfNeeded();
+      const nav = barra.getByRole("navigation", { name: home.barra });
+      await expect(barra.locator(".hud, [data-hud]")).toHaveCount(0);
+      // "Outros projetos" e "Formação" seguem na página, fora da barra.
+      await expect(page.locator("#outros-projetos")).toBeAttached();
+      await expect(page.locator("#formacao")).toBeAttached();
       await page.evaluate(() =>
-        document.getElementById("contato")!.scrollIntoView(),
+        document.getElementById("outros-projetos")!.scrollIntoView(),
       );
-      await expect(atual).toHaveText(/Contato|Contact/);
-      await expect(atual).toBeVisible();
+      await expect(nav.locator('[aria-current="location"]')).toHaveText(
+        home.ancoras[0],
+      );
     });
+
+    for (const largura of LARGURAS) {
+      test(`barra sem transbordo nem item cortado em ${largura}px`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width: largura, height: 800 });
+        await page.goto(home.path);
+        await page.evaluate(() => document.fonts.ready);
+        await expectBarraSemTransbordo(page, 5);
+        await expect(page.getByTestId("hud-barra")).toHaveCount(0);
+      });
+    }
 
     test("em 320px não há rolagem horizontal, com a fonte pronta", async ({
       page,
@@ -122,7 +135,7 @@ for (const home of homes) {
       await page.goto(home.path);
       const controles = page.locator("header.barra-fixa a");
       const total = await controles.count();
-      expect(total).toBeGreaterThanOrEqual(9);
+      expect(total).toBe(7);
       for (let i = 0; i < total; i++) {
         const el = controles.nth(i);
         await el.focus();
@@ -156,7 +169,7 @@ for (const home of homes) {
           .locator("header.barra-fixa")
           .getByRole("navigation", { name: home.barra })
           .getByRole("link"),
-      ).toHaveCount(7);
+      ).toHaveCount(5);
     });
   });
 }

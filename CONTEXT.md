@@ -45,7 +45,7 @@ Animação cuja remoção não muda o significado do conteúdo. É tudo o que fi
 _Avoid_: Efeito
 
 **HUD**:
-Painel de dados só verificáveis. Cliente: hora local de São Paulo, viewport, tema, idioma, progresso de rolagem, ponteiro e seção atual. Build: número de projetos, destaque, stack distinta, data do build e SHA. Sem API externa em runtime. Sem JavaScript mostra os dados de build como texto estático. Barra fixa resumida; na Vitrine, versão densa.
+Painel de dados só verificáveis, que existe só na **Vitrine** (não na barra fixa, em nenhuma largura). Cliente: hora local de São Paulo, viewport, rolagem, ponteiro, idioma e seção atual (sem tema: o site tem um só). Build: número de projetos, stack distinta, destaques, data do build e SHA. Sem API externa em runtime. Sem JavaScript mostra os dados de build como texto estático.
 _Avoid_: Dashboard, métricas
 
 **Animação de entrada**:

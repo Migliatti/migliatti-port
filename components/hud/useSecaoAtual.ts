@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-export type ItemDeSecao = { id: string; rotulo: string };
+export type ItemDeSecao = {
+  id: string;
+  rotulo: string;
+  /** Rótulo curto na barra fixa; sem ele a seção não tem âncora na barra. */
+  rotuloDaBarra?: string;
+  /** Âncora da barra que fica marcada enquanto esta seção (sem âncora) está na tela. */
+  ancora?: string;
+};
 
 /**
  * Id da seção atual da home (a que cruza a faixa de leitura perto do topo), ou
