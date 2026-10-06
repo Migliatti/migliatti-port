@@ -43,6 +43,6 @@ for (const { lang, outraLang, rascunho, problema, outro } of idiomas) {
 }
 
 test("Outro projeto não tem página de Estudo de caso (404)", async ({ page }) => {
-  const resposta = await page.goto("/pt/projetos/sciencily");
+  const resposta = await page.goto("/pt/projetos/rubicon-archive");
   expect(resposta?.status()).toBe(404);
 });

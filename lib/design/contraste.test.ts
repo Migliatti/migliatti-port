@@ -31,26 +31,50 @@ describe("razaoDeContraste", () => {
   });
 });
 
-describe("tema único escuro e dourado", () => {
+describe("tema único escuro grafite (ADR 0004)", () => {
   it("define todos os tokens", () => {
     for (const k of [
       "background",
       "surface",
+      "surface-alta",
+      "borda",
       "foreground",
       "muted",
       "accent",
       "on-accent",
       "accent-text",
+      "estado-ok",
+      "estado-aviso",
+      "estado-erro",
+      "cor-decorativa",
     ]) {
       expect(t[k], k).toMatch(/^#[0-9a-fA-F]{6}$/);
     }
   });
 
-  it("usa a paleta da issue #54", () => {
-    expect(t.background.toLowerCase()).toBe("#05070a");
-    expect(t.surface.toLowerCase()).toBe("#19150f");
-    expect(t.accent.toLowerCase()).toBe("#d6a85f");
-    expect(t["accent-text"].toLowerCase()).toBe("#d6a85f");
+  it("usa a paleta do Graphite Islands", () => {
+    const esperado: Record<string, string> = {
+      background: "#171717",
+      surface: "#242424",
+      "surface-alta": "#2c2c2c",
+      borda: "#3a3a3a",
+      foreground: "#f0f0f0",
+      muted: "#a6a6a6",
+      accent: "#e6e6e6",
+      "on-accent": "#171717",
+      "estado-ok": "#9ccc9c",
+      "estado-aviso": "#e0c07a",
+      "estado-erro": "#e08080",
+    };
+    for (const [k, v] of Object.entries(esperado)) expect(t[k].toLowerCase(), k).toBe(v);
+  });
+
+  it("o acento é neutro e o dourado é só o token decorativo", () => {
+    expect(t["accent-text"].toLowerCase()).toBe(t.foreground.toLowerCase());
+    expect(t["cor-decorativa"].toLowerCase()).toBe("#d6a85f");
+    for (const k of ["accent", "accent-text", "on-accent"]) {
+      expect(t[k].toLowerCase(), k).not.toBe("#d6a85f");
+    }
   });
 
   it("não acompanha a preferência de tema do sistema", () => {
@@ -61,23 +85,38 @@ describe("tema único escuro e dourado", () => {
   for (const [nome, fundo] of [
     ["fundo", () => t.background],
     ["superfície", () => t.surface],
+    ["superfície alta", () => t["surface-alta"]],
   ] as const) {
     describe(`sobre a ${nome}`, () => {
-      it("texto principal e de apoio passam AA", () => {
+      it("texto principal, de apoio e de acento passam AA", () => {
         expect(razaoDeContraste(t.foreground, fundo())).toBeGreaterThanOrEqual(7);
         expect(razaoDeContraste(t.muted, fundo())).toBeGreaterThanOrEqual(4.5);
-      });
-      it("acento como texto passa AA", () => {
         expect(razaoDeContraste(t["accent-text"], fundo())).toBeGreaterThanOrEqual(4.5);
       });
-      it("o acento se destaca como elemento gráfico (>= 3)", () => {
+      it("as cores de estado passam AA como texto", () => {
+        for (const k of ["estado-ok", "estado-aviso", "estado-erro"]) {
+          expect(razaoDeContraste(t[k], fundo()), k).toBeGreaterThanOrEqual(4.5);
+        }
+      });
+      it("a pílula ativa e o foco se destacam como componente (>= 3)", () => {
         expect(razaoDeContraste(t.accent, fundo())).toBeGreaterThanOrEqual(3);
+        expect(razaoDeContraste(t.foreground, fundo())).toBeGreaterThanOrEqual(3);
+      });
+      it("a cor decorativa se destaca como elemento gráfico (>= 3)", () => {
+        expect(razaoDeContraste(t["cor-decorativa"], fundo())).toBeGreaterThanOrEqual(3);
       });
     });
   }
 
-  it("texto sobre o acento passa AA", () => {
+  it("texto sobre a pílula do acento passa AA", () => {
     expect(razaoDeContraste(t["on-accent"], t.accent)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("a borda de luz fica acima da superfície, em ordem de elevação", () => {
+    const l = (hex: string) => razaoDeContraste(hex, "#000001");
+    expect(l(t.background)).toBeLessThan(l(t.surface));
+    expect(l(t.surface)).toBeLessThan(l(t["surface-alta"]));
+    expect(l(t["surface-alta"])).toBeLessThan(l(t.borda));
   });
 
   it("o HUD passa AA, também sob as scanlines", () => {

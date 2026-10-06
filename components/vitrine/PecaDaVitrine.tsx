@@ -224,7 +224,7 @@ function SistemaOrbital({ pilares }: Pick<Props, "pilares">) {
               data-rastro={id}
               d={caminhoDaElipse(ORBITAS_DOS_PILARES[id])}
               fill="none"
-              className="vitrine-rastro text-accent-text"
+              className="vitrine-rastro cor-decorativa"
               stroke="currentColor"
               strokeWidth={2}
               strokeLinecap="round"

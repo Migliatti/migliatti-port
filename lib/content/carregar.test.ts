@@ -75,11 +75,11 @@ describe("rejeita conteúdo incompleto", () => {
   });
 
   it("link de repositório vazio", () => {
-    editarJson("projetos/sciencily/projeto.json", (d) => {
+    editarJson("projetos/relogio-do-lead/projeto.json", (d) => {
       d.repositorio = "";
     });
     expect(errosAoCarregar()).toContainEqual(
-      expect.stringContaining('projetos/sciencily/projeto.json: campo obrigatório "repositorio"'),
+      expect.stringContaining('projetos/relogio-do-lead/projeto.json: campo obrigatório "repositorio"'),
     );
   });
 
@@ -294,7 +294,7 @@ describe("rejeita conteúdo incompleto", () => {
   });
 
   it("tipo ou estado desconhecido", () => {
-    editarJson("projetos/sciencily/projeto.json", (d) => {
+    editarJson("projetos/relogio-do-lead/projeto.json", (d) => {
       d.tipo = "principal";
       d.estado = "pronto";
     });

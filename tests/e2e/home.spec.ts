@@ -45,7 +45,7 @@ for (const home of homes) {
       await page.goto(home.path);
 
       const itens = page.getByTestId("outro-projeto");
-      await expect(itens).toHaveCount(4);
+      await expect(itens).toHaveCount(3);
 
       const rubicon = page.locator('[data-projeto="rubicon-archive"]');
       await expect(rubicon.getByRole("link", { name: "Demo" })).toHaveAttribute(
@@ -56,13 +56,10 @@ for (const home of homes) {
         rubicon.getByRole("link", { name: home.repositorio }),
       ).toHaveAttribute("href", "https://github.com/Migliatti/rubicon-archive");
 
-      await expect(
-        page.locator('[data-projeto="sciencily"]').getByTestId("em-desenvolvimento"),
-      ).toHaveText(home.emDesenvolvimento);
-      await expect(page.getByTestId("em-desenvolvimento")).toHaveCount(1);
+      await expect(page.locator('[data-projeto="sciencily"]')).toHaveCount(0);
+      await expect(page.getByTestId("em-desenvolvimento")).toHaveCount(0);
 
       for (const id of [
-        "sciencily",
         "relogio-do-lead",
         "ong-maos-que-transformam",
       ]) {

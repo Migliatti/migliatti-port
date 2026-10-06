@@ -20,7 +20,7 @@ for (const path of paths) {
       expect(corpo).toContain("system-ui");
     });
 
-    test("tema único escuro e dourado, igual com preferência clara ou escura", async ({
+    test("tema único escuro grafite, igual com preferência clara ou escura", async ({
       page,
     }) => {
       for (const tema of ["dark", "light"] as const) {
@@ -33,9 +33,9 @@ for (const path of paths) {
             .backgroundColor,
         }));
         expect(cores, tema).toEqual({
-          fundo: "rgb(5, 7, 10)",
+          fundo: "rgb(23, 23, 23)",
           esquema: "dark",
-          primario: "rgb(214, 168, 95)",
+          primario: "rgb(230, 230, 230)",
         });
       }
     });
@@ -184,13 +184,13 @@ for (const path of paths) {
       const atual = page.locator('nav a[aria-current="page"]').first();
       expect(
         await atual.evaluate((n) => getComputedStyle(n).backgroundColor),
-      ).toBe("rgb(214, 168, 95)");
+      ).toBe("rgb(230, 230, 230)");
     });
   });
 }
 
 for (const path of ["/pt/projetos/kepler-lab", "/en/projetos/kepler-lab"]) {
-  test(`estudo de caso usa o tema escuro e dourado ${path}`, async ({ page }) => {
+  test(`estudo de caso usa o tema escuro grafite ${path}`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" });
     await page.goto(path);
     const cores = await page.evaluate(() => ({
@@ -199,9 +199,9 @@ for (const path of ["/pt/projetos/kepler-lab", "/en/projetos/kepler-lab"]) {
       numero: getComputedStyle(document.querySelector(".secao-numero")!).color,
     }));
     expect(cores).toEqual({
-      fundo: "rgb(5, 7, 10)",
-      chip: "rgb(25, 21, 15)",
-      numero: "rgb(214, 168, 95)",
+      fundo: "rgb(23, 23, 23)",
+      chip: "rgb(36, 36, 36)",
+      numero: "rgb(240, 240, 240)",
     });
   });
 }
@@ -248,7 +248,7 @@ test.describe("correções da revisão final", () => {
     for (const d of duracoes) expect(d).toBeLessThanOrEqual(0.5);
   });
 
-  test("o botão primário tem contorno dourado e texto escuro", async ({
+  test("o botão primário tem pílula clara e texto escuro", async ({
     page,
   }) => {
     await page.goto("/pt");
@@ -261,8 +261,8 @@ test.describe("correções da revisão final", () => {
       };
     });
     expect(r.larguraBorda).toBe("1px");
-    expect(r.borda).toBe("rgb(214, 168, 95)");
-    expect(r.texto).toBe("rgb(5, 7, 10)");
+    expect(r.borda).toBe("rgb(230, 230, 230)");
+    expect(r.texto).toBe("rgb(23, 23, 23)");
   });
 });
 
