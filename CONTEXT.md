@@ -17,7 +17,7 @@ Projeto com página própria de estudo de caso. São três: `kepler-lab`, `labre
 _Avoid_: Projeto principal, featured
 
 **Outro projeto**:
-Projeto listado com uma linha e link, sem estudo de caso: `rubicon-archive`, `sciencily`, `relogio-do-lead` (automação em n8n, pouco desenvolvida) e o site da ONG "Mãos que Transformam".
+Projeto listado com uma linha e link, sem estudo de caso: `rubicon-archive`, `relogio-do-lead` (automação em n8n, pouco desenvolvida) e o site da ONG "Mãos que Transformam".
 _Avoid_: Projeto secundário
 
 **Estudo de caso**:
