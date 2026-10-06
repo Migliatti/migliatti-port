@@ -20,7 +20,6 @@ import {
 const DESTAQUES = ["kepler-lab", "labreserve", "grimoire"];
 const OUTROS = [
   "rubicon-archive",
-  "sciencily",
   "relogio-do-lead",
   "ong-maos-que-transformam",
 ];
@@ -120,9 +119,9 @@ describe.each(locales)("conteúdo em %s", (lang) => {
     }
   });
 
-  it("lista 4 Outros projetos, com links de repositório e Demo onde há", () => {
+  it("lista 3 Outros projetos, com links de repositório e Demo onde há", () => {
     const outros = listarOutrosProjetos(lang);
-    expect(outros).toHaveLength(4);
+    expect(outros).toHaveLength(3);
     const rubicon = outros.find((p) => p.id === "rubicon-archive")!;
     expect(rubicon.demo).toBe("https://rubicon-archive.vercel.app");
     expect(rubicon.repositorio).toBe(
@@ -136,8 +135,8 @@ describe.each(locales)("conteúdo em %s", (lang) => {
     expect(relogio.stack).toContain("n8n");
   });
 
-  it("sciencily está marcado como em desenvolvimento", () => {
-    expect(obterProjeto("sciencily", lang)?.estado).toBe("em-desenvolvimento");
+  it("o projeto removido não existe mais", () => {
+    expect(obterProjeto("sciencily", lang)).toBeUndefined();
   });
 
   it("obtém projeto por identificador e devolve undefined para desconhecido", () => {
