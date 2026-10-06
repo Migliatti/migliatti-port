@@ -156,8 +156,8 @@ for (const home of homes) {
         expect(cores.rotulo).toBe(rgb(cores.muted));
         expect(cores.valor).toBe(rgb(cores.foreground));
         expect(cores.prompt).toBe(rgb(cores.accentText));
-        expect(cores.prompt).toBe("rgb(214, 168, 95)");
-        expect(cores.moldura).toBe("rgb(25, 21, 15)");
+        expect(cores.prompt).toBe("rgb(240, 240, 240)");
+        expect(cores.moldura).toBe("rgb(36, 36, 36)");
       });
     }
 

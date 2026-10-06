@@ -1,23 +1,37 @@
 @import "tailwindcss";
 
 /*
- * Tema único, escuro e dourado (issue #54): o site não acompanha a
- * preferência de tema do sistema. Fundo quase preto, superfícies em marrom
- * escuro e um acento dourado; contraste em lib/design/contraste.test.ts.
+ * Tema único, escuro e grafite (ADR 0004, spec #81), baseado no
+ * yasb-graphite-islands: o site não acompanha a preferência de tema do
+ * sistema. Base grafite neutra, superfícies elevadas, destaque por pílula
+ * invertida e cor reservada para sinal; contraste em
+ * lib/design/contraste.test.ts.
  */
 :root {
-  --background: #05070a;
-  --surface: #19150f;
-  --foreground: #ece8df;
-  --muted: #b3ab9c;
-  --accent: #d6a85f;
-  --on-accent: #05070a;
-  --accent-text: #d6a85f;
+  --background: #171717;
+  --surface: #242424;
+  --surface-alta: #2c2c2c;
+  --borda: #3a3a3a;
+  --detalhe: #333333;
+  --sombra-borda: #111111;
+  --hover: #363636;
+  --foreground: #f0f0f0;
+  --muted: #a6a6a6;
+  /* Acento neutro: pílula ativa clara com texto escuro; texto e sublinhado de
+     links seguem o texto neutro. */
+  --accent: #e6e6e6;
+  --on-accent: #171717;
+  --accent-text: #f0f0f0;
+  /* Cor de estado, só em sinais pontuais (nunca decoração). */
+  --estado-ok: #9ccc9c;
+  --estado-aviso: #e0c07a;
+  --estado-erro: #e08080;
   /* Cor padrão das animações decorativas (issue #56): dourada no servidor, sem
      JS e com movimento reduzido. Os módulos animados trocam por um matiz
      sorteado por ponto (components/animacao/cor-aleatoria.ts). Nunca em texto,
-     link, botão ou borda. */
-  --cor-decorativa: var(--accent);
+     link, botão ou borda; é o único lugar do código com o dourado. A troca por
+     cinza claro está adiada (ADR 0004). */
+  --cor-decorativa: #d6a85f;
   /* Buraco negro da Hero (issue #57): cor fixa, complementar ao dourado (matiz
      ~215° contra ~37°), mais um núcleo quase branco. Só decoração. */
   --cor-buraco-negro: hsl(214 88% 68%);
@@ -31,11 +45,16 @@
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-alta: var(--surface-alta);
+  --color-borda: var(--borda);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-on-accent: var(--on-accent);
   --color-accent-text: var(--accent-text);
+  --color-estado-ok: var(--estado-ok);
+  --color-estado-aviso: var(--estado-aviso);
+  --color-estado-erro: var(--estado-erro);
   --font-sans: var(--fonte-corpo), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--fonte-titulo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--fonte-mono), ui-monospace, monospace;
@@ -64,9 +83,9 @@ body {
     scroll-padding-top: calc(var(--altura-barra) + 1rem);
   }
 
-  /* Links sublinhados em dourado; o texto segue a cor do contexto. */
+  /* Links sublinhados em cinza neutro; o texto segue a cor do contexto. */
   a {
-    text-decoration-color: var(--accent-text);
+    text-decoration-color: var(--muted);
   }
 }
 
@@ -163,7 +182,7 @@ main:focus {
 }
 
 .botao-primario {
-  border: 1px solid var(--accent-text);
+  border: 1px solid var(--accent);
   background: var(--accent);
   color: var(--on-accent);
 }
@@ -175,7 +194,7 @@ main:focus {
 
 .chip {
   display: inline-block;
-  border: 1px solid color-mix(in srgb, var(--accent-text) 35%, transparent);
+  border: 1px solid var(--borda);
   border-radius: 9999px;
   background: var(--surface);
   padding: 0.2rem 0.65rem;
@@ -561,10 +580,10 @@ main:focus {
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--accent) 35%, transparent),
-    var(--accent)
+    color-mix(in srgb, var(--cor-decorativa) 35%, transparent),
+    var(--cor-decorativa)
   );
-  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--cor-decorativa) 55%, transparent);
   transform-origin: left center;
 }
 
