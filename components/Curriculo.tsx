@@ -26,7 +26,7 @@ export function ExperienciaProfissional({ lang, numero }: Props) {
           <li
             key={`${cargo.empresa}-${cargo.periodo}`}
             data-testid="cargo"
-            className="animacao-ao-rolar"
+            className="ilha animacao-ao-rolar"
           >
             <h3 className="font-medium">{cargo.cargo}</h3>
             <p className="text-muted">

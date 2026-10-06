@@ -37,9 +37,6 @@
   --cor-buraco-negro: hsl(214 88% 68%);
   --cor-buraco-negro-nucleo: hsl(208 100% 93%);
   color-scheme: dark;
-  /* Altura da barra fixa; âncoras e foco descontam este valor. Em tela estreita
-     a barra tem duas linhas (idioma e âncoras), e as âncoras podem quebrar. */
-  --altura-barra: 6rem;
 }
 
 @theme inline {
@@ -306,20 +303,41 @@ main:focus {
 
 /* Layout editorial (docs/superpowers/specs/2026-10-01-editorial-espacial-design.md, item 3). */
 
+/*
+ * Barra fixa como ilha flutuante (ADR 0004, issue #84): solta do topo e das
+ * bordas, centralizada (margens laterais automáticas com largura máxima),
+ * superfície elevada, borda de luz e sombra de borda. `--altura-barra` é o
+ * fundo da ilha mais uma folga, e âncoras e foco descontam esse valor.
+ */
 .barra-fixa {
   position: fixed;
-  inset: 0 0 auto 0;
+  top: 0.5rem;
+  right: 0.5rem;
+  left: 0.5rem;
   z-index: 20;
-  min-height: var(--altura-barra);
-  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
-  background: color-mix(in srgb, var(--background) 90%, transparent);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  max-width: 75rem;
+  margin-inline: auto;
+  border: 1px solid var(--borda);
+  border-radius: 1.25rem;
+  background: var(--surface);
+  box-shadow: 0 4px 14px var(--sombra-borda);
+}
+
+/* Em tela estreita a ilha tem duas linhas: idioma e âncoras (que podem quebrar). */
+:root {
+  --altura-barra: 8.5rem;
 }
 
 @media (min-width: 48rem) {
   :root {
-    --altura-barra: 3rem;
+    --altura-barra: 4.5rem;
+  }
+
+  .barra-fixa {
+    top: 0.75rem;
+    right: 1.5rem;
+    left: 1.5rem;
+    border-radius: 999px;
   }
 }
 
@@ -333,8 +351,26 @@ main:focus {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 0 0.75rem;
+  gap: 0.25rem 0.25rem;
   line-height: 1.5rem;
+}
+
+/* Pílula de cada âncora; a atual é a pílula invertida (accent / on-accent). */
+.barra-ancora {
+  display: block;
+  border-radius: 999px;
+  padding: 0.25rem 0.625rem;
+  color: var(--muted);
+}
+
+.barra-ancora:hover {
+  background: var(--hover);
+  color: var(--foreground);
+}
+
+.barra-ancora[aria-current="location"] {
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 @media (min-width: 48rem) {
@@ -344,7 +380,11 @@ main:focus {
 
   .barra-ancoras {
     flex-wrap: nowrap;
-    gap: 0 1.25rem;
+    gap: 0 0.25rem;
+  }
+
+  .barra-ancora {
+    padding-inline: 0.875rem;
   }
 }
 
@@ -636,18 +676,28 @@ main:focus {
   }
 }
 
-/* Cartão tipográfico de Projeto em destaque: sem caixa, só linhas finas. */
+/*
+ * Ilha elevada (ADR 0004, issue #85): superfície com gradiente sutil (da
+ * superfície à superfície de topo), borda de luz, detalhe interno (inset) e
+ * sombra de borda. Só os cartões de projeto e de cargo; as seções ficam no
+ * fundo plano e nada dentro de uma ilha ganha outra.
+ */
+.ilha {
+  border: 1px solid var(--borda);
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, var(--surface-alta), var(--surface));
+  box-shadow:
+    inset 0 1px 0 var(--detalhe),
+    0 4px 14px var(--sombra-borda);
+  padding: 1.25rem;
+}
+
+/* Cartão de Projeto em destaque: uma ilha com o número em coluna estreita. */
 .projeto-cartao {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.5rem;
-  border-top: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
-  padding: 1.75rem 0;
-}
-
-li:first-child > .projeto-cartao {
-  border-top: 0;
-  padding-top: 0.5rem;
+  padding: 1.5rem;
 }
 
 .projeto-cartao-numero {

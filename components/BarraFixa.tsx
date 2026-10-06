@@ -19,7 +19,7 @@ type Props = {
 };
 
 /**
- * Barra fixa da home e do Estudo de caso: seletor de idioma e 5 âncoras (as
+ * Barra fixa da home e do Estudo de caso, uma ilha flutuante e centralizada: seletor de idioma e 5 âncoras (as
  * seções com `rotuloDaBarra`), mais a seta de volta no Estudo de caso. Em tela
  * estreita as âncoras descem para uma segunda linha. Sem HUD: ele vive só na
  * Vitrine (ADR 0003).
@@ -29,7 +29,7 @@ export function BarraFixa({ lang, secoes, caminho = "", comVoltar = false }: Pro
 
   return (
     <header className="barra-fixa">
-      <div className="mx-auto flex min-h-[var(--altura-barra)] max-w-[75rem] flex-wrap content-center items-center justify-between gap-x-4 px-4 md:flex-nowrap sm:px-6 md:px-10">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-3 py-2 md:flex-nowrap md:px-4">
         <div className="flex shrink-0 items-center gap-3">
           {comVoltar && (
             <Link

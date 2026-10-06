@@ -1,5 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { expectBarraSemTransbordo, LARGURAS } from "./barra-util";
+import {
+  expectBarraIlha,
+  expectBarraSemTransbordo,
+  expectPilulaInvertida,
+  LARGURAS,
+} from "./barra-util";
 
 const homes = [
   { path: "/pt", barra: "Seções", idioma: "Idioma", secao: "Projetos", ancoras: ["Projetos", "Vitrine", "Experiência", "Competências", "Contato"] },
@@ -35,12 +40,12 @@ for (const home of homes) {
           .evaluate((n) => getComputedStyle(n).fontFamily);
         expect(fonte).toContain("Geist Mono");
 
-        // Cartão tipográfico: sem caixa (sem borda lateral), com número e espaço de Evidência.
+        // Cartão é ilha elevada (borda de luz; detalhes em ilhas-cartoes.spec.ts), com número e espaço de Evidência.
         const cartao = page.getByTestId("projeto-card-kepler-lab");
         await expect(cartao).toBeVisible();
         expect(
           await cartao.evaluate((n) => getComputedStyle(n).borderLeftWidth),
-        ).toBe("0px");
+        ).toBe("1px");
         await expect(cartao.locator(".projeto-cartao-numero")).toHaveText(/^\d\d$/);
         await expect(cartao.locator('[data-slot="evidencia"]')).toHaveCount(1);
       });
@@ -73,19 +78,57 @@ for (const home of homes) {
           page.locator("#destaques").evaluate((n) => n.getBoundingClientRect().top),
         )
         .toBeGreaterThanOrEqual(
-          await barra.evaluate((n) => n.getBoundingClientRect().height),
+          await barra.evaluate((n) => n.getBoundingClientRect().bottom),
         );
 
-      // A barra continua no topo depois da rolagem.
-      expect(
-        await barra.evaluate((n) => n.getBoundingClientRect().top),
-      ).toBe(0);
+      // A barra continua flutuando no topo depois da rolagem.
+      await expectBarraIlha(page);
+      await expectPilulaInvertida(page, home.secao);
 
       await nav.getByRole("link", { name: /Contato|Contact/ }).click();
       await expect(nav.locator('[aria-current="location"]')).toHaveText(
         /Contato|Contact/,
       );
     });
+
+    for (const largura of [320, 390, 1280]) {
+      test(`barra é ilha flutuante e centralizada em ${largura}px`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width: largura, height: 800 });
+        await page.goto(home.path);
+        await expectBarraIlha(page);
+      });
+
+      test(`título da seção não fica sob a barra após âncora em ${largura}px`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width: largura, height: 800 });
+        await page.goto(home.path);
+        await page.evaluate(() => document.fonts.ready);
+        const barra = page.locator("header.barra-fixa");
+        const links = barra.getByRole("navigation", { name: home.barra }).getByRole("link");
+        for (let i = 0; i < 5; i++) {
+          const link = links.nth(i);
+          const id = (await link.getAttribute("href"))!.slice(1);
+          await link.click();
+          await expect
+            .poll(async () =>
+              // O id pode estar no próprio título ou na seção que o contém.
+              page.evaluate((alvo) => {
+                const el = document.getElementById(alvo)!;
+                const titulo = el.matches("h1, h2, h3")
+                  ? el
+                  : el.querySelector("h1, h2, h3")!;
+                return titulo.getBoundingClientRect().top;
+              }, id),
+            )
+            .toBeGreaterThanOrEqual(
+              await barra.evaluate((n) => n.getBoundingClientRect().bottom),
+            );
+        }
+      });
+    }
 
     test("outras seções marcam a âncora vizinha e a barra não tem HUD", async ({
       page,
@@ -144,10 +187,15 @@ for (const home of homes) {
           return {
             estilo: css.outlineStyle,
             largura: parseFloat(css.outlineWidth),
+            cor: css.outlineColor,
+            deslocamento: parseFloat(css.outlineOffset),
           };
         });
         expect(foco.estilo).not.toBe("none");
         expect(foco.largura).toBeGreaterThanOrEqual(2);
+        // Visível sobre o grafite: contorno claro, afastado do controle.
+        expect(foco.cor).toBe("rgb(240, 240, 240)");
+        expect(foco.deslocamento).toBeGreaterThanOrEqual(2);
       }
     });
   });
