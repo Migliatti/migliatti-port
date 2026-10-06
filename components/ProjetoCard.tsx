@@ -10,8 +10,7 @@ type Props = {
 };
 
 /**
- * Cartão tipográfico: número, título, resumo e stack, separado por uma linha
- * fina (sem caixa). O espaço de Evidência fica pronto e vazio
+ * Cartão em forma de ilha elevada: número, título, resumo e stack. O espaço de Evidência fica pronto e vazio
  * (`data-slot="evidencia"`): enquanto não houver captura, não ocupa lugar.
  */
 export function ProjetoCard({ projeto, lang, posicao }: Props) {
@@ -20,7 +19,7 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
   return (
     <article
       data-testid={`projeto-card-${projeto.id}`}
-      className="projeto-cartao animacao-ao-rolar"
+      className="ilha projeto-cartao animacao-ao-rolar"
     >
       <span aria-hidden="true" className="projeto-cartao-numero">
         {String(posicao).padStart(2, "0")}

@@ -15,7 +15,7 @@ type Props = {
 /**
  * Navegação por seção da barra fixa: só as seções com `rotuloDaBarra`. Renderiza
  * no servidor com links de âncora que funcionam sem JavaScript; depois da
- * hidratação marca a seção atual (`aria-current="location"`) com
+ * hidratação marca a seção atual (`aria-current="location"`, pílula invertida no CSS) com
  * IntersectionObserver. Seção sem âncora própria marca a âncora do `ancora`.
  */
 export function NavegacaoDasSecoes({ rotulo, itens }: Props) {
@@ -35,11 +35,7 @@ export function NavegacaoDasSecoes({ rotulo, itens }: Props) {
                 <a
                   href={`#${item.id}`}
                   aria-current={ehAtual ? "location" : undefined}
-                  className={
-                    ehAtual
-                      ? "text-accent-text underline underline-offset-8"
-                      : "text-muted hover:text-foreground"
-                  }
+                  className="barra-ancora"
                 >
                   {item.rotuloDaBarra}
                 </a>

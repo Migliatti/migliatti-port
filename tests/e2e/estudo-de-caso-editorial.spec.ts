@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { expectBarraSemTransbordo, LARGURAS } from "./barra-util";
+import { expectBarraIlha, expectBarraSemTransbordo, LARGURAS } from "./barra-util";
 
 // Estudo de caso no layout editorial (issue #37): mesma barra fixa da home,
 // seções numeradas no grid, sem rolagem horizontal em 320px.
@@ -69,17 +69,16 @@ for (const idioma of idiomas) {
             .locator("h1")
             .evaluate((n) => n.getBoundingClientRect().top);
           const alturaDaBarra = await barra.evaluate(
-            (n) => n.getBoundingClientRect().height,
+            (n) => n.getBoundingClientRect().bottom,
           );
           expect(topoDoTitulo).toBeGreaterThanOrEqual(alturaDaBarra);
+          await expectBarraIlha(page);
 
-          // A barra continua no topo depois de rolar até o fim.
+          // A barra continua flutuando no topo depois de rolar até o fim.
           await page.evaluate(() =>
             window.scrollTo(0, document.documentElement.scrollHeight),
           );
-          expect(
-            await barra.evaluate((n) => n.getBoundingClientRect().top),
-          ).toBe(0);
+          await expectBarraIlha(page);
         });
       }
 
@@ -91,6 +90,7 @@ for (const idioma of idiomas) {
           await page.goto(caminho);
           await page.evaluate(() => document.fonts.ready);
           await expectBarraSemTransbordo(page, 5);
+          await expectBarraIlha(page);
           const voltar = page.getByTestId("link-voltar");
           await expect(voltar).toBeVisible();
           await expect(page.getByTestId("hud-barra")).toHaveCount(0);
