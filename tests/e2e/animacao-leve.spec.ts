@@ -134,7 +134,16 @@ for (const path of ["/pt", "/en"]) {
       const ceu = page.getByTestId("hero-ceu");
       await expect(ceu).toHaveAttribute("data-estado", "reduzida");
       await expect(ceu.locator("canvas")).toHaveCount(0);
-      expect(await ceu.evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+      // A saída da Hero ao rolar (ADR 0005) é uma animação de rolagem do próprio
+      // CSS, fora do que este teste mede: só conta as animações de tempo.
+      expect(
+        await ceu.evaluate(
+          (el) =>
+            el
+              .getAnimations({ subtree: true })
+              .filter((a) => a.timeline instanceof DocumentTimeline).length,
+        ),
+      ).toBe(0);
       expect(await chunks.baixado(MARCA_DO_CEU)).toBe(false);
     });
   });
