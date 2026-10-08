@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { expectBarraIlha, expectBarraSemTransbordo, LARGURAS } from "./barra-util";
+import { abrirMenu, expectBarraIlha, expectBarraSemTransbordo, LARGURAS } from "./barra-util";
 
 // Estudo de caso no layout editorial (issue #37): mesma barra fixa da home,
 // seções numeradas no grid, sem rolagem horizontal em 320px.
@@ -107,6 +107,7 @@ for (const idioma of idiomas) {
           () => document.documentElement.scrollWidth > window.innerWidth,
         );
         expect(estoura).toBe(false);
+        await abrirMenu(page);
         await expect(
           page
             .locator("header.barra-fixa")

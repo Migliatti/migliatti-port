@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import {
   expectBarraIlha,
+  abrirMenu,
+  esperarMenuFechado,
   expectBarraSemTransbordo,
   expectPilulaAtiva,
   LARGURAS,
@@ -111,9 +113,12 @@ for (const home of homes) {
         const barra = page.locator("header.barra-fixa");
         const links = barra.getByRole("navigation", { name: home.barra }).getByRole("link");
         for (let i = 0; i < 5; i++) {
+          // No celular as âncoras estão no menu, que fecha ao tocar numa delas.
+          await abrirMenu(page);
           const link = links.nth(i);
           const id = (await link.getAttribute("href"))!.slice(1);
           await link.click();
+          await esperarMenuFechado(page);
           await expect
             .poll(async () =>
               // O id pode estar no próprio título ou na seção que o contém.
