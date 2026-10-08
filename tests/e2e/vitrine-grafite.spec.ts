@@ -87,7 +87,6 @@ for (const path of ["/pt", "/en"]) {
         return achados;
       });
       expect(ocorrencias).toEqual([]);
-      expect(ehAzul(AZUL)).toBe(true);
     });
 
     test("o buraco negro e o céu (cor de reserva) são o azul decorativo", async ({ page }) => {

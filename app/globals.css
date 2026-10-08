@@ -37,7 +37,7 @@
   --cor-decorativa: var(--azul);
   /* Buraco negro da Hero (issue #57): cor fixa, o mesmo azul do acento, mais
      um núcleo quase branco. Só decoração. */
-  --cor-buraco-negro: hsl(214 88% 68%);
+  --cor-buraco-negro: var(--azul);
   --cor-buraco-negro-nucleo: hsl(208 100% 93%);
   color-scheme: dark;
 }
