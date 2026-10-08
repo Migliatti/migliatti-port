@@ -50,7 +50,6 @@
   --ease-orbita: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-ambiente: cubic-bezier(0.37, 0, 0.63, 1);
   --ease-rolagem: linear;
-  --ease-mola: cubic-bezier(0.34, 1.56, 0.64, 1);
   color-scheme: dark;
 }
 
@@ -267,28 +266,25 @@ main:focus {
 }
 
 /*
- * Botões (ADR 0005): magnéticos e vivos. `--mx` e `--my` são o deslocamento
- * que o ponteiro puxa (components/animacao/Magnetico.tsx, só com mouse); sem
- * eles o botão fica parado. O hover levanta, o clique afunda e a volta tem
- * leve mola. Só transform.
+ * Botões (ADR 0005): vivos. O hover levanta e cresce, o clique afunda, só com
+ * mouse (hover: hover). Só transform.
  */
 .botao {
-  transform: translate(var(--mx, 0px), var(--my, 0px));
-  transition: transform var(--mov-rapido) var(--ease-mola);
+  transition: transform var(--mov-rapido) var(--ease-orbita);
 }
 
 .botao:active {
-  transform: translate(var(--mx, 0px), var(--my, 0px)) scale(0.95);
+  transform: scale(0.95);
 }
 
 /* Hover só onde existe ponteiro que passa o mouse: no toque o botão não fica levantado. */
 @media (hover: hover) {
   .botao:hover {
-    transform: translate(var(--mx, 0px), calc(var(--my, 0px) - 3px)) scale(1.03);
+    transform: translateY(-3px) scale(1.03);
   }
 
   .botao:hover:active {
-    transform: translate(var(--mx, 0px), var(--my, 0px)) scale(0.95);
+    transform: scale(0.95);
   }
 }
 

@@ -63,15 +63,4 @@ export const EASE_CSS = {
   orbita: "cubic-bezier(0.16, 1, 0.3, 1)",
   ambiente: "cubic-bezier(0.37, 0, 0.63, 1)",
   rolagem: "linear",
-  mola: "cubic-bezier(0.34, 1.56, 0.64, 1)",
-} as const;
-
-/** Botão magnético (components/animacao/Magnetico.tsx), em px e fração. */
-export const MAGNETICO = {
-  /** Fração da distância ponteiro-centro que o botão acompanha. */
-  forca: 0.28,
-  /** Deslocamento máximo do botão em cada eixo. */
-  limite: 14,
-  /** Folga ao redor do botão em que o ponteiro já o puxa. */
-  alcance: 72,
 } as const;

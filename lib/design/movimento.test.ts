@@ -22,7 +22,6 @@ describe("tokens de movimento (ADR 0005)", () => {
     expect(propriedade("ease-orbita")).toBe(EASE_CSS.orbita);
     expect(propriedade("ease-ambiente")).toBe(EASE_CSS.ambiente);
     expect(propriedade("ease-rolagem")).toBe(EASE_CSS.rolagem);
-    expect(propriedade("ease-mola")).toBe(EASE_CSS.mola);
     expect(propriedade("mov-piscar")).toBe(`${AMBIENTE.piscar}ms`);
     expect(propriedade("mov-escalonar")).toBe(`${ESCALONAR_CSS}ms`);
   });
