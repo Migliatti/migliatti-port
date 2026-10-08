@@ -43,7 +43,7 @@ export function OutrosProjetos({
                 {t.repositorio}
               </a>
               {projeto.demo && (
-                <a href={projeto.demo} className="underline">
+                <a href={projeto.demo} className="link-demo underline">
                   {t.demo}
                 </a>
               )}

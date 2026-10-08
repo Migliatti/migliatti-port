@@ -54,7 +54,7 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
               href={projeto.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline underline-offset-4"
+              className="link-demo underline underline-offset-4"
             >
               {dict.verDemo}
             </a>

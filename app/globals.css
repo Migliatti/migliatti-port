@@ -85,9 +85,18 @@ body {
     scroll-padding-top: calc(var(--altura-barra) + 1rem);
   }
 
-  /* Links sublinhados em cinza neutro; o texto segue a cor do contexto. */
+  /* Links sublinhados em cinza neutro; o texto segue a cor do contexto. No
+     hover o sublinhado vira azul (ADR 0005). */
   a {
     text-decoration-color: var(--muted);
+  }
+
+  a:not(.botao) {
+    transition: text-decoration-color 200ms ease-out;
+  }
+
+  a:hover {
+    text-decoration-color: var(--azul);
   }
 }
 
@@ -146,9 +155,9 @@ body {
   color: var(--cor-decorativa);
 }
 
-/* Foco visível para navegação por teclado. */
+/* Foco visível para navegação por teclado, em azul (ADR 0005). */
 :focus-visible {
-  outline: 2px solid var(--foreground);
+  outline: 2px solid var(--azul);
   outline-offset: 3px;
 }
 
@@ -192,6 +201,12 @@ main:focus {
 .botao-secundario {
   border: 1px solid var(--foreground);
   color: var(--foreground);
+}
+
+/* Link para o demo publicado: o único link de corpo em azul (ADR 0005). */
+.link-demo {
+  color: var(--azul);
+  text-decoration-color: var(--azul);
 }
 
 .chip {
@@ -360,7 +375,7 @@ main:focus {
   line-height: 1.5rem;
 }
 
-/* Pílula de cada âncora; a atual é a pílula invertida (accent / on-accent). */
+/* Pílula de cada âncora; a atual é a pílula azul (azul / on-azul). */
 .barra-ancora {
   display: block;
   border-radius: 999px;
@@ -374,8 +389,8 @@ main:focus {
 }
 
 .barra-ancora[aria-current="location"] {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--azul);
+  color: var(--on-azul);
 }
 
 @media (min-width: 48rem) {
