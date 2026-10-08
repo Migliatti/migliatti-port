@@ -32,8 +32,7 @@ export function BarraFixa({ lang, secoes, caminho = "", comVoltar = false }: Pro
   return (
     <header className="barra-fixa">
       <BarraComMenu
-        rotuloAbrir={dict.menu.abrir}
-        rotuloFechar={dict.menu.fechar}
+        rotulo={dict.menu}
         topo={
           comVoltar ? (
             <Link
@@ -54,7 +53,7 @@ export function BarraFixa({ lang, secoes, caminho = "", comVoltar = false }: Pro
       <noscript
         dangerouslySetInnerHTML={{
           __html:
-            "<style>.barra-hamburguer{display:none!important}.barra-painel{grid-template-rows:1fr!important;opacity:1!important;visibility:visible!important}</style>",
+            "<style>:root{--altura-barra:8.5rem}.barra-hamburguer{display:none!important}.barra-painel{grid-template-rows:1fr!important;opacity:1!important;visibility:visible!important}.barra-ancoras{flex-direction:row!important;flex-wrap:wrap}.barra-ancora{min-height:0!important;padding:.25rem .5rem!important;font-size:.75rem!important}.barra-painel-miolo>nav:first-child{order:0!important;border-top:0!important;padding-top:0!important}.barra-secoes{padding-top:0!important}</style>",
         }}
       />
     </header>

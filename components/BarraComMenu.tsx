@@ -7,8 +7,8 @@ type Props = {
   topo?: ReactNode;
   /** Idioma e âncoras: no desktop ficam na linha da barra, no celular no painel. */
   children: ReactNode;
-  rotuloAbrir: string;
-  rotuloFechar: string;
+  /** Rótulo fixo do botão; o estado vai em `aria-expanded`. */
+  rotulo: string;
 };
 
 /**
@@ -19,7 +19,7 @@ type Props = {
  * da barra ou quando a tela cresce; Esc e a âncora devolvem o foco ao botão.
  * Sem JavaScript o CSS (noscript, em BarraFixa) mantém o painel aberto.
  */
-export function BarraComMenu({ topo, children, rotuloAbrir, rotuloFechar }: Props) {
+export function BarraComMenu({ topo, children, rotulo }: Props) {
   const [aberto, setAberto] = useState(false);
   const raiz = useRef<HTMLDivElement>(null);
   const botao = useRef<HTMLButtonElement>(null);
@@ -77,7 +77,7 @@ export function BarraComMenu({ topo, children, rotuloAbrir, rotuloFechar }: Prop
         className="barra-hamburguer"
         aria-expanded={aberto}
         aria-controls="barra-painel"
-        aria-label={aberto ? rotuloFechar : rotuloAbrir}
+        aria-label={rotulo}
         onClick={() => setAberto((v) => !v)}
       >
         <span aria-hidden="true" className="barra-hamburguer-icone" />

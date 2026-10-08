@@ -17,7 +17,7 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       await expect(botao).toBeVisible();
       await expect(botao).toHaveAttribute("aria-expanded", "false");
       await expect(botao).toHaveAttribute("aria-controls", "barra-painel");
-      await expect(botao).toHaveAttribute("aria-label", /Abrir menu|Open menu/);
+      await expect(botao).toHaveAttribute("aria-label", "Menu");
       await expect(page.locator("#barra-painel")).toBeHidden();
       await expect(page.locator("header.barra-fixa nav").last().getByRole("link")).toHaveCount(0);
     });
@@ -26,7 +26,6 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       const botao = page.getByTestId("barra-hamburguer");
       await botao.click();
       await expect(botao).toHaveAttribute("aria-expanded", "true");
-      await expect(botao).toHaveAttribute("aria-label", /Fechar menu|Close menu/);
       await expect(botao).toHaveCSS("background-color", AZUL);
       const painel = page.locator("#barra-painel");
       await expect(painel).toBeVisible();
@@ -112,5 +111,16 @@ test.describe("sem JavaScript", () => {
     await expect(page.getByTestId("barra-hamburguer")).toBeHidden();
     await expect(page.locator("#barra-painel")).toBeVisible();
     await expect(page.locator("#barra-painel .barra-ancora").first()).toBeVisible();
+  });
+
+  test("os títulos das âncoras não ficam sob a barra", async ({ page }) => {
+    await page.goto("/pt");
+    const barra = page.locator("header.barra-fixa");
+    await page.locator('a[href="#contato"]').first().click();
+    await expect
+      .poll(async () =>
+        page.evaluate(() => document.querySelector("#contato-titulo")!.getBoundingClientRect().top),
+      )
+      .toBeGreaterThanOrEqual(await barra.evaluate((n) => n.getBoundingClientRect().bottom));
   });
 });
