@@ -387,16 +387,12 @@ main:focus {
   box-shadow: 0 4px 14px var(--sombra-borda);
 }
 
-/* Em tela estreita a ilha tem duas linhas: idioma e âncoras (que podem quebrar). */
+/* A ilha tem a altura de uma linha; o painel do menu abre por cima do conteúdo. */
 :root {
-  --altura-barra: 8.5rem;
+  --altura-barra: 4.5rem;
 }
 
 @media (min-width: 48rem) {
-  :root {
-    --altura-barra: 4.5rem;
-  }
-
   .barra-fixa {
     top: 0.75rem;
     right: 1.5rem;
@@ -405,26 +401,186 @@ main:focus {
   }
 }
 
-/* Âncoras da barra: segunda linha em tela estreita (podem quebrar), uma linha só no md. */
-.barra-secoes {
+/*
+ * Conteúdo da barra (components/BarraComMenu.tsx). Celular: uma linha com o
+ * link de volta (se houver) e o botão hambúrguer; o painel com âncoras e
+ * idioma abre abaixo, animado pela altura (grid 0fr a 1fr) e pela opacidade.
+ * Desktop (>= 48rem): o painel some do fluxo e idioma e âncoras ficam na linha.
+ */
+.barra-grade {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.barra-hamburguer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left: auto;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  transition:
+    background-color var(--mov-rapido) var(--ease-orbita),
+    border-color var(--mov-rapido) var(--ease-orbita),
+    color var(--mov-rapido) var(--ease-orbita);
+}
+
+.barra-hamburguer:hover {
+  background: var(--hover);
+}
+
+.barra-hamburguer[aria-expanded="true"] {
+  border-color: var(--azul);
+  background: var(--azul);
+  color: var(--on-azul);
+}
+
+/* Três linhas que viram um X: a do meio some, as outras duas giram. */
+.barra-hamburguer-icone,
+.barra-hamburguer-icone::before,
+.barra-hamburguer-icone::after {
+  display: block;
+  width: 1.125rem;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition:
+    transform var(--mov-medio) var(--ease-orbita),
+    background-color var(--mov-rapido) var(--ease-orbita);
+}
+
+.barra-hamburguer-icone {
+  position: relative;
+}
+
+.barra-hamburguer-icone::before,
+.barra-hamburguer-icone::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.barra-hamburguer-icone::before {
+  transform: translateY(-6px);
+}
+
+.barra-hamburguer-icone::after {
+  transform: translateY(6px);
+}
+
+.barra-hamburguer[aria-expanded="true"] .barra-hamburguer-icone {
+  background: transparent;
+}
+
+.barra-hamburguer[aria-expanded="true"] .barra-hamburguer-icone::before {
+  transform: rotate(45deg);
+}
+
+.barra-hamburguer[aria-expanded="true"] .barra-hamburguer-icone::after {
+  transform: rotate(-45deg);
+}
+
+.barra-painel {
+  display: grid;
   flex: 1 0 100%;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--mov-medio) var(--ease-orbita),
+    opacity var(--mov-rapido) var(--ease-orbita),
+    visibility 0s linear var(--mov-medio);
+}
+
+.barra-grade[data-menu="aberto"] .barra-painel {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.barra-painel-miolo {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow: hidden;
+}
+
+/* Respiro dentro do painel (fora do miolo, que fecha a 0px). */
+.barra-secoes {
+  padding-top: 0.5rem;
+}
+
+/* Idioma por último, separado das âncoras. */
+.barra-painel-miolo > nav:first-child {
+  order: 2;
+  border-top: 1px solid var(--borda);
+  padding-top: 0.75rem;
+}
+
+@media (min-width: 48rem) {
+  .barra-grade {
+    flex-wrap: nowrap;
+    gap: 0 0.75rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .barra-hamburguer {
+    display: none;
+  }
+
+  .barra-painel,
+  .barra-painel-miolo {
+    display: contents;
+  }
+
+  .barra-painel {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .barra-painel-miolo > nav:first-child {
+    order: 0;
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .barra-secoes {
+    margin-left: auto;
+    padding-top: 0;
+  }
+}
+
+/* Âncoras da barra: lista vertical no painel do celular, uma linha só no md. */
+.barra-secoes {
   min-width: 0;
 }
 
 .barra-ancoras {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.25rem 0.25rem;
+  flex-direction: column;
+  gap: 0.25rem;
   line-height: 1.5rem;
 }
 
 /* Pílula de cada âncora; a atual é a pílula azul (azul / on-azul). */
 .barra-ancora {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
   border-radius: 999px;
-  padding: 0.25rem 0.625rem;
+  padding: 0.25rem 1rem;
   color: var(--muted);
+  font-size: 0.875rem;
 }
 
 .barra-ancora:hover {
@@ -437,18 +593,38 @@ main:focus {
   color: var(--on-azul);
 }
 
-@media (min-width: 48rem) {
-  .barra-secoes {
-    flex: 0 1 auto;
-  }
+/* As âncoras entram em sequência cada vez que o painel abre (celular). */
+.barra-grade[data-menu="aberto"] .barra-ancoras > li {
+  animation: barra-item var(--mov-medio) var(--ease-orbita) both;
+  animation-delay: calc(var(--i, 0) * var(--mov-escalonar));
+}
 
+@keyframes barra-item {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (min-width: 48rem) {
   .barra-ancoras {
-    flex-wrap: nowrap;
+    flex-direction: row;
     gap: 0 0.25rem;
   }
 
   .barra-ancora {
-    padding-inline: 0.875rem;
+    display: block;
+    min-height: 0;
+    padding: 0.25rem 0.875rem;
+    font-size: 0.75rem;
+  }
+
+  .barra-grade[data-menu="aberto"] .barra-ancoras > li {
+    animation: none;
   }
 }
 

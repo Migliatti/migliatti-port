@@ -25,7 +25,7 @@ export function NavegacaoDasSecoes({ rotulo, itens }: Props) {
 
   return (
     <nav aria-label={rotulo} className="barra-secoes">
-      <ul className="barra-ancoras font-mono text-xs">
+      <ul className="barra-ancoras escalonar font-mono text-xs">
         {itens
           .filter((item) => item.rotuloDaBarra)
           .map((item) => {
