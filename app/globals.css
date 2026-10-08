@@ -497,14 +497,17 @@ main:focus {
   transition:
     grid-template-rows var(--mov-medio) var(--ease-orbita),
     opacity var(--mov-rapido) var(--ease-orbita),
-    visibility 0s linear var(--mov-medio);
+    visibility var(--mov-medio) step-end;
 }
 
 .barra-grade[data-menu="aberto"] .barra-painel {
   grid-template-rows: 1fr;
   opacity: 1;
   visibility: visible;
-  transition-delay: 0s;
+  transition:
+    grid-template-rows var(--mov-medio) var(--ease-orbita),
+    opacity var(--mov-rapido) var(--ease-orbita),
+    visibility var(--mov-medio) step-start;
 }
 
 .barra-painel-miolo {
