@@ -121,6 +121,6 @@ for (const path of ["/pt", "/en"]) {
     const [a, b] = await page
       .locator('[data-testid^="projeto-card-"]')
       .evaluateAll((els) => els.slice(0, 2).map((el) => el.getBoundingClientRect()));
-    expect(b.top - a.bottom).toBeGreaterThanOrEqual(8);
+    expect(b.top - a.bottom).toBeGreaterThanOrEqual(15); // gap-4 (16px)
   });
 }
