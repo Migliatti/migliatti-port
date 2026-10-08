@@ -59,11 +59,18 @@ export function Magnetico() {
       for (const botao of document.querySelectorAll<HTMLElement>(".botao")) soltar(botao);
     };
 
+    // Rolar com o mouse parado muda quem está perto: recalcula no mesmo ponto.
+    const aoRolar = () => {
+      if (!quadro) quadro = requestAnimationFrame(atualizar);
+    };
+
     document.addEventListener("pointermove", aoMover, { passive: true });
+    window.addEventListener("scroll", aoRolar, { passive: true });
     document.documentElement.addEventListener("pointerleave", aoSair);
     return () => {
       cancelAnimationFrame(quadro);
       document.removeEventListener("pointermove", aoMover);
+      window.removeEventListener("scroll", aoRolar);
       document.documentElement.removeEventListener("pointerleave", aoSair);
       aoSair();
     };

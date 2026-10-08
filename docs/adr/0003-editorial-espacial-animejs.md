@@ -2,6 +2,8 @@
 
 Status: aceito (issue #35); revisto em parte pelo ADR 0005 (dourado sai, cor de reserva azul, sem `prefers-reduced-motion`)
 
+> Nota (ADR 0005): as regras sobre `prefers-reduced-motion` neste documento foram revogadas pelo ADR 0005; o site anima sempre. O resto segue como está.
+
 ## Contexto
 
 A direção "editorial espacial" (spec #42) pede uma Vitrine mais rica (órbitas, traços, filtros), uma entrada orquestrada na Hero e um HUD de dados verificáveis. As regras dos ADRs 0001 e 0002 (só `transform`/`opacity`, sem biblioteca de animação, sem `animation-delay`, DPR 1.5 e teto de 700 traços) limitam isso. Este ADR substitui essas regras e mantém as que protegem quem lê: texto legível, movimento reduzido e celular leve. Continua valendo que só a **Vitrine** tem animação como conteúdo.

@@ -2,6 +2,8 @@
 
 Status: aceito (issue #19); substituído em parte pelo ADR 0003 (issue #35) e pelo ADR 0005 (sem `prefers-reduced-motion`). Desde a issue #38 a peça é o sistema orbital em SVG com anime.js (`components/vitrine/orbitas.ts`); o campo de fluxo em Canvas foi removido.
 
+> Nota (ADR 0005): as regras sobre `prefers-reduced-motion` neste documento foram revogadas pelo ADR 0005; o site anima sempre. O resto segue como está.
+
 ## Contexto
 
 A **Vitrine** é o único lugar onde a animação é o conteúdo (ver ADR 0001). A peça é mais pesada que uma Animação de entrada, mas não pode atrasar a home, esconder texto, ignorar `prefers-reduced-motion` nem travar o celular.

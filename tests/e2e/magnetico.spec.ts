@@ -25,8 +25,9 @@ for (const path of ["/pt", "/en"]) {
       await expect
         .poll(() => botao.evaluate((el) => parseFloat(el.style.getPropertyValue("--mx") || "0")))
         .toBeGreaterThan(1);
-      const deslocado = await botao.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).e);
-      expect(deslocado).toBeGreaterThan(0);
+      await expect
+        .poll(() => botao.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).e))
+        .toBeGreaterThan(0);
 
       // Limite de 14px por eixo.
       const mx = await botao.evaluate((el) => parseFloat(el.style.getPropertyValue("--mx")));
