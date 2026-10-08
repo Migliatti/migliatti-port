@@ -37,11 +37,11 @@ PDF baixável pelo site, sem telefone e com cidade só como "São Paulo, SP". De
 _Avoid_: Currículo completo, CV atual
 
 **Vitrine**:
-Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. Só a Vitrine tem animação como conteúdo. O resto do site tem apenas **Animação decorativa**, e nenhuma esconde texto: o conteúdo já está legível antes de animar. Toda animação respeita `prefers-reduced-motion` e tem versão leve para celular fraco. A peça é um sistema orbital em SVG com três corpos, um por pilar do **Posicionamento** (site, automação, diagnóstico); passar o mouse ou focar um corpo destaca o pilar no texto. Na versão completa, ganha ao fundo uma constelação que o ponteiro puxa (e que volta em mola) e estrelas em parallax por camadas; a versão leve e o movimento reduzido não têm essas camadas. Usa anime.js e só carrega quando a seção entra na tela; regras em `docs/adr/0003-editorial-espacial-animejs.md` (que substitui em parte `docs/adr/0002-vitrine.md`).
+Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. Só a Vitrine tem animação como conteúdo. O resto do site tem apenas **Animação decorativa**, e nenhuma esconde texto: o conteúdo já está legível antes de animar. A animação não depende de `prefers-reduced-motion` (decisão do dono, `docs/adr/0005-azul-como-segundo-acento-e-motion-dinamico.md`) e tem versão leve para celular fraco. A peça é um sistema orbital em SVG com três corpos, um por pilar do **Posicionamento** (site, automação, diagnóstico); passar o mouse ou focar um corpo destaca o pilar no texto. Na versão completa, ganha ao fundo uma constelação que o ponteiro puxa (e que volta em mola) e estrelas em parallax por camadas; a versão leve não tem essas camadas. Usa anime.js e só carrega quando a seção entra na tela; regras em `docs/adr/0003-editorial-espacial-animejs.md` (que substitui em parte `docs/adr/0002-vitrine.md`).
 _Avoid_: Demo (já significa projeto publicado), Galeria
 
 **Animação decorativa**:
-Animação cuja remoção não muda o significado do conteúdo. É tudo o que fica fora da **Vitrine**. Nunca esconde texto; segue as regras do ADR 0003. Inclui o fundo de pontos tênues das seções, com parallax leve só na versão completa.
+Animação cuja remoção não muda o significado do conteúdo. É tudo o que fica fora da **Vitrine**. Nunca esconde texto; segue as regras dos ADRs 0003 e 0005. Cor de reserva azul; pontos do céu, da constelação e da Vitrine sorteiam o próprio matiz. Inclui o fundo de pontos tênues das seções, com parallax leve só na versão completa.
 _Avoid_: Efeito
 
 **HUD**:
@@ -49,7 +49,7 @@ Painel de dados só verificáveis, que existe só na **Vitrine** (não na barra 
 _Avoid_: Dashboard, métricas
 
 **Animação de entrada**:
-Animação curta (até ~500ms, em CSS) aplicada com a classe `animacao-entrada`. Texto legível desde o primeiro quadro, desligada com `prefers-reduced-motion`. Regra em `docs/adr/0001-animacao-de-entrada.md`, revista em parte por `docs/adr/0003-editorial-espacial-animejs.md`.
+Animação curta (até ~500ms, em CSS) aplicada com a classe `animacao-entrada`. Texto legível desde o primeiro quadro. Regra em `docs/adr/0001-animacao-de-entrada.md`, revista em parte por `docs/adr/0003-editorial-espacial-animejs.md`.
 _Avoid_: Efeito, transição de página
 
 **Experiência profissional**:
