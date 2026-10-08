@@ -14,13 +14,13 @@ export function OutrosProjetos({
 
   return (
     <Secao numero={numero} idDoTitulo="outros-projetos" titulo={t.titulo}>
-      <ul className="flex flex-col gap-3">
+      <ul className="escalonar flex flex-col gap-3">
         {projetos.map((projeto) => (
           <li
             key={projeto.id}
             data-testid="outro-projeto"
             data-projeto={projeto.id}
-            className="ilha"
+            className="ilha animacao-ao-rolar"
           >
             <p>
               <span className="font-medium">{projeto.titulo}</span>

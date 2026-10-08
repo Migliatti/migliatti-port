@@ -19,7 +19,7 @@ export function ExperienciaProfissional({ lang, numero }: Props) {
       titulo={t.secoes.experiencia}
       animar
     >
-      <ol className="flex flex-col gap-6">
+      <ol className="escalonar flex flex-col gap-6">
         {cargos.map((cargo) => (
           <li
             key={`${cargo.empresa}-${cargo.periodo}`}
@@ -53,7 +53,7 @@ export function Competencias({ lang, numero }: Props) {
       numero={numero}
       titulo={t.secoes.competencias}
     >
-      <div className="flex flex-col gap-4">
+      <div className="escalonar flex flex-col gap-4">
         {grupos.map((grupo) => (
           <div
             key={grupo.nome}

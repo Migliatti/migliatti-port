@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
+import { Magnetico } from "@/components/animacao/Magnetico";
 import { obterTextosHome, validarConteudo } from "@/lib/content";
 import { getDictionary, isLocale, locales } from "@/lib/dictionary";
 import { metadadosDaPagina, urlDoSite } from "@/lib/seo";
@@ -65,6 +66,7 @@ export default async function RootLayout({
           {dict.pularParaConteudo}
         </a>
         {children}
+        <Magnetico />
       </body>
     </html>
   );

@@ -60,7 +60,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           testId="projetos-em-destaque"
           animar
         >
-          <ul className="flex flex-col gap-4">
+          <ul className="escalonar flex flex-col gap-4">
             {destaques.map((projeto, i) => (
               <li key={projeto.id}>
                 <ProjetoCard projeto={projeto} lang={lang} posicao={i + 1} />

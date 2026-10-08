@@ -1,6 +1,6 @@
 # Vitrine: peça própria, carregada só ao chegar na seção
 
-Status: aceito (issue #19); substituído em parte pelo ADR 0003 (issue #35). Desde a issue #38 a peça é o sistema orbital em SVG com anime.js (`components/vitrine/orbitas.ts`); o campo de fluxo em Canvas foi removido.
+Status: aceito (issue #19); substituído em parte pelo ADR 0003 (issue #35) e pelo ADR 0005 (sem `prefers-reduced-motion`). Desde a issue #38 a peça é o sistema orbital em SVG com anime.js (`components/vitrine/orbitas.ts`); o campo de fluxo em Canvas foi removido.
 
 ## Contexto
 

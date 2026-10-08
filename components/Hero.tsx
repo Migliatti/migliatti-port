@@ -33,7 +33,7 @@ export function Hero({ lang, nome, posicionamento }: Props) {
           >
             {posicionamento}
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="animacao-entrada mt-8 flex flex-wrap gap-3">
             <a href="#contato" className="botao botao-primario">
               {dict.falarComigo}
             </a>

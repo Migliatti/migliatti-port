@@ -37,7 +37,7 @@ PDF baixável pelo site, sem telefone e com cidade só como "São Paulo, SP". De
 _Avoid_: Currículo completo, CV atual
 
 **Vitrine**:
-Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. Só a Vitrine tem animação como conteúdo. O resto do site tem apenas **Animação decorativa**, e nenhuma esconde texto: o conteúdo já está legível antes de animar. A animação deixará de depender de `prefers-reduced-motion` (decisão do dono, `docs/adr/0005-azul-como-segundo-acento-e-motion-dinamico.md`; o código muda no passo de motion, P5) e tem versão leve para celular fraco. A peça é um sistema orbital em SVG com três corpos, um por pilar do **Posicionamento** (site, automação, diagnóstico); passar o mouse ou focar um corpo destaca o pilar no texto. Na versão completa, ganha ao fundo uma constelação que o ponteiro puxa (e que volta em mola) e estrelas em parallax por camadas; a versão leve não tem essas camadas (hoje o movimento reduzido também não; muda no P5). Usa anime.js e só carrega quando a seção entra na tela; regras em `docs/adr/0003-editorial-espacial-animejs.md` (que substitui em parte `docs/adr/0002-vitrine.md`).
+Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o que Gabriel entrega em site; não é projeto nem estudo de caso. Só a Vitrine tem animação como conteúdo. O resto do site tem apenas **Animação decorativa**, e nenhuma esconde texto: o conteúdo já está legível antes de animar. A animação não depende de `prefers-reduced-motion` (decisão do dono, `docs/adr/0005-azul-como-segundo-acento-e-motion-dinamico.md`) e tem versão leve para celular fraco. A peça é um sistema orbital em SVG com três corpos, um por pilar do **Posicionamento** (site, automação, diagnóstico); passar o mouse ou focar um corpo destaca o pilar no texto. Na versão completa, ganha ao fundo uma constelação que o ponteiro puxa (e que volta em mola) e estrelas em parallax por camadas; a versão leve não tem essas camadas. Usa anime.js e só carrega quando a seção entra na tela; regras em `docs/adr/0003-editorial-espacial-animejs.md` (que substitui em parte `docs/adr/0002-vitrine.md`).
 _Avoid_: Demo (já significa projeto publicado), Galeria
 
 **Animação decorativa**:
@@ -49,7 +49,7 @@ Painel de dados só verificáveis, que existe só na **Vitrine** (não na barra 
 _Avoid_: Dashboard, métricas
 
 **Animação de entrada**:
-Animação curta (até ~500ms, em CSS) aplicada com a classe `animacao-entrada`. Texto legível desde o primeiro quadro. Regra em `docs/adr/0001-animacao-de-entrada.md`, revista em parte por `docs/adr/0003-editorial-espacial-animejs.md`.
+Animação curta (até ~800ms, em CSS) aplicada com a classe `animacao-entrada`. Texto legível desde o primeiro quadro. Regra em `docs/adr/0001-animacao-de-entrada.md`, revista em parte por `docs/adr/0003-editorial-espacial-animejs.md`.
 _Avoid_: Efeito, transição de página
 
 **Experiência profissional**:

@@ -1,6 +1,6 @@
 # Animação de entrada: regra e classe reutilizável
 
-Status: aceito (issue #17); substituído em parte pelo ADR 0003 (issue #35)
+Status: aceito (issue #17); substituído em parte pelo ADR 0003 (issue #35); revisto pelo ADR 0005 (duração até 800ms, sem `prefers-reduced-motion`)
 
 ## Contexto
 
