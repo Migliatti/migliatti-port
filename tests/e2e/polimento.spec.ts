@@ -3,9 +3,9 @@ import { expect, test } from "@playwright/test";
 // P6 (spec #89): sinais e detalhes finais.
 for (const path of ["/pt", "/en"]) {
   test.describe(`polimento ${path}`, () => {
-    test("o status de rascunho é um chip âmbar legível", async ({ page }) => {
-      await page.goto(path);
-      const chip = page.getByTestId("rascunho").first();
+    test("o aviso de rascunho do estudo de caso é um chip âmbar legível", async ({ page }) => {
+      await page.goto(`${path}/projetos/kepler-lab`);
+      const chip = page.getByTestId("rascunho");
       await expect(chip).toHaveClass(/chip-aviso/);
       await expect(chip).toHaveCSS("color", "rgb(224, 192, 122)");
       await expect(chip).toHaveCSS("border-top-color", "rgb(224, 192, 122)");

@@ -29,7 +29,7 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
           <h3 className="text-2xl font-semibold sm:text-4xl">
             {projeto.titulo}
           </h3>
-          <span data-testid="rascunho" className="chip chip-aviso">
+          <span data-testid="rascunho" className="chip">
             {dict.rascunho}
           </span>
         </div>
