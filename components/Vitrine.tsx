@@ -30,7 +30,7 @@ export function Vitrine({ lang, numero, secoes }: Props) {
       numero={numero}
       titulo={vitrine.titulo}
     >
-      <p data-testid="vitrine-descricao" className="text-muted">
+      <p data-testid="vitrine-descricao" className="max-w-3xl text-muted">
         {vitrine.descricao}
       </p>
       <HudDaVitrine lang={lang} secoes={secoes}>

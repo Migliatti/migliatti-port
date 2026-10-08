@@ -22,42 +22,44 @@ export function Contato({ lang, numero }: Props) {
       titulo={contato.titulo}
       animar
     >
-      <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
-        <li>
-          <a href={`mailto:${contato.email}`} className={estiloDoLink}>
-            {contato.email}
-          </a>
-        </li>
-        <li>
+      <div className="ilha flex flex-col gap-4">
+        <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          <li>
+            <a href={`mailto:${contato.email}`} className={estiloDoLink}>
+              {contato.email}
+            </a>
+          </li>
+          <li>
+            <a
+              href={contato.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={estiloDoLink}
+            >
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a
+              href={contato.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={estiloDoLink}
+            >
+              GitHub
+            </a>
+          </li>
+        </ul>
+        <div>
           <a
-            href={contato.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={estiloDoLink}
+            href={contato.cvPublico}
+            download
+            type="application/pdf"
+            className="botao botao-primario"
           >
-            LinkedIn
+            {contato.rotuloCvPublico}
           </a>
-        </li>
-        <li>
-          <a
-            href={contato.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={estiloDoLink}
-          >
-            GitHub
-          </a>
-        </li>
-      </ul>
-      <div>
-        <a
-          href={contato.cvPublico}
-          download
-          type="application/pdf"
-          className="botao botao-primario"
-        >
-          {contato.rotuloCvPublico}
-        </a>
+        </div>
       </div>
     </Secao>
   );

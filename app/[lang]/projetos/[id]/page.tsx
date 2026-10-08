@@ -115,7 +115,9 @@ export default async function EstudoDeCasoPage({
           titulo={dict.problema}
           animar
         >
-          <p className="estudo-texto">{estudo.problema}</p>
+          <div className="ilha">
+            <p className="estudo-texto">{estudo.problema}</p>
+          </div>
         </Secao>
         <Secao
           numero={numero("decisoes")}
@@ -123,11 +125,13 @@ export default async function EstudoDeCasoPage({
           titulo={dict.decisoes}
           animar
         >
-          <ul className="estudo-texto list-disc pl-5">
-            {estudo.decisoes.map((decisao) => (
-              <li key={decisao}>{decisao}</li>
-            ))}
-          </ul>
+          <div className="ilha">
+            <ul className="estudo-texto list-disc pl-5">
+              {estudo.decisoes.map((decisao) => (
+                <li key={decisao}>{decisao}</li>
+              ))}
+            </ul>
+          </div>
         </Secao>
         <Secao
           numero={numero("stack")}
@@ -135,13 +139,15 @@ export default async function EstudoDeCasoPage({
           titulo={dict.stack}
           animar
         >
-          <ul className="flex flex-wrap gap-2">
-            {projeto.stack.map((item) => (
-              <li key={item} className="chip">
-                {item}
-              </li>
-            ))}
-          </ul>
+          <div className="ilha">
+            <ul className="flex flex-wrap gap-2">
+              {projeto.stack.map((item) => (
+                <li key={item} className="chip">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
         </Secao>
         <Secao
           numero={numero("resultado")}
@@ -149,7 +155,9 @@ export default async function EstudoDeCasoPage({
           titulo={dict.resultado}
           animar
         >
-          <p className="estudo-texto">{estudo.resultado}</p>
+          <div className="ilha">
+            <p className="estudo-texto">{estudo.resultado}</p>
+          </div>
         </Secao>
         <Secao
           numero={numero("aprendizado")}
@@ -157,7 +165,9 @@ export default async function EstudoDeCasoPage({
           titulo={dict.aprendizado}
           animar
         >
-          <p className="estudo-texto">{estudo.aprendizado}</p>
+          <div className="ilha">
+            <p className="estudo-texto">{estudo.aprendizado}</p>
+          </div>
         </Secao>
         <Secao
           numero={numero("uso-de-ia")}
@@ -166,21 +176,23 @@ export default async function EstudoDeCasoPage({
           testId="uso-de-ia"
           animar
         >
-          <p className="estudo-texto">{estudo.usoDeIA.texto}</p>
-          <ul className="flex flex-col gap-1">
-            {estudo.usoDeIA.links.map((link) => (
-              <li key={link.url}>
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline underline-offset-4"
-                >
-                  {link.rotulo}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="ilha flex flex-col gap-4">
+            <p className="estudo-texto">{estudo.usoDeIA.texto}</p>
+            <ul className="flex flex-col gap-1">
+              {estudo.usoDeIA.links.map((link) => (
+                <li key={link.url}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-4"
+                  >
+                    {link.rotulo}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </Secao>
         {projeto.evidencias.length > 0 && (
           <Secao

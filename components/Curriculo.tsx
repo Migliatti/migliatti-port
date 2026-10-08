@@ -58,7 +58,7 @@ export function Competencias({ lang, numero }: Props) {
           <div
             key={grupo.nome}
             data-testid="grupo-de-competencias"
-            className="animacao-ao-rolar"
+            className="ilha animacao-ao-rolar"
           >
             <h3 className="font-medium">{grupo.nome}</h3>
             <ul className="mt-2 flex flex-wrap gap-2">
@@ -89,7 +89,7 @@ export function Formacao({ lang, numero }: Props) {
       numero={numero}
       titulo={t.secoes.formacao}
     >
-      <div>
+      <div className="ilha">
         <h3 className="font-medium">{formacao.curso}</h3>
         <p className="text-muted">
           {formacao.instituicao} · {t.previsaoDeConclusao}: {formacao.previsao}

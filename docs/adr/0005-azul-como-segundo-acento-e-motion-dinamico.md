@@ -14,6 +14,9 @@ O ADR 0004 deixou o dourado `#d6a85f` como cor decorativa (`--cor-decorativa`) e
 4. **Motion dinâmico e fluido**: botões magnéticos, saída da Hero ao rolar, entradas ao rolar mais marcadas e com escalonamento, tokens de duração e curva compartilhados entre CSS e anime.js. As regras de texto legível antes de animar (ADR 0001) continuam: nada esconde conteúdo.
 5. **Sem suporte a `prefers-reduced-motion`.** Decisão do dono: o site anima sempre. Saem os blocos `prefers-reduced-motion` do CSS, o desvio do `usePecaPreguicosa.ts` e da Vitrine, e os testes que dependem disso. A versão leve para celular fraco (`aparelho.ts`) continua, porque trata desempenho e não preferência.
 
+6. **Ilhas em todas as seções.** O conteúdo de Outros projetos, Competências, Formação, Contato e das seções do estudo de caso passa a ficar em ilhas (`.ilha`), com espaço entre elas; a seção continua no fundo plano, nada aninha ilha e a Vitrine mantém a própria moldura. Isso amplia o ADR 0004, que limitava as ilhas aos cartões de projeto e de cargo. Todas as seções usam o componente `Secao` e a coluna do número fica estreita (4.5rem).
+7. **Hero** (decisão da fatia P3): o nome diminui, o buraco negro vai de 76% para 80% da largura e a altura da Hero cai para `min(100svh - 7rem, 44rem)`, deixando a seção 01 na dobra. O conteúdo da Hero sai ao rolar (CSS com `animation-timeline: scroll()`), com o fundo em paralaxe.
+
 ## Aplicação em fatias
 
 - P0 (este ADR e o `CONTEXT.md`) e P1 (tokens, higiene de cor, contraste, ilustrações) tiram o dourado e criam o azul.

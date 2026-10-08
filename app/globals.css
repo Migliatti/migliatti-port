@@ -744,7 +744,8 @@ main:focus {
 
 @media (min-width: 48rem) {
   .secao {
-    grid-template-columns: 25% minmax(0, 1fr);
+    /* Coluna do número estreita (era 25%): o conteúdo ocupa o resto. */
+    grid-template-columns: 4.5rem minmax(0, 1fr);
     column-gap: 1.5rem;
   }
 
