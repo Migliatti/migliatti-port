@@ -1,33 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 650" width="560" height="650" role="img" aria-labelledby="t d" data-cor-do-pulso="#d6a85f" data-compacta="">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 650" width="560" height="650" role="img" aria-labelledby="t d" data-cor-do-pulso="#66a4f5" data-compacta="">
   <title id="t">Grimoire: catálogo de 15 skills (ilustração) · Grimoire: catalog of 15 skills (illustration)</title>
   <desc id="d">O manifesto chains/business-direction.md reúne 8 skills, com business-direction como entrypoint; 7 skills são avulsas. · The chains/business-direction.md manifest groups 8 skills, with business-direction as the entrypoint; 7 skills are standalone.</desc>
   <defs>
     <radialGradient id="fundo" cx="50%" cy="46%" r="75%">
-      <stop offset="0" stop-color="#19150f"/>
-      <stop offset="1" stop-color="#05070a"/>
+      <stop offset="0" stop-color="#242424"/>
+      <stop offset="1" stop-color="#171717"/>
     </radialGradient>
     <pattern id="grade" width="28" height="28" patternUnits="userSpaceOnUse">
-      <path d="M28,0 L0,0 L0,28" fill="none" stroke="#d6a85f" stroke-opacity="0.13" stroke-width="1"/>
+      <path d="M28,0 L0,0 L0,28" fill="none" stroke="#66a4f5" stroke-opacity="0.13" stroke-width="1"/>
     </pattern>
     <filter id="brilho" x="-10%" y="-30%" width="120%" height="160%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <style>
-      .caixa { fill: #19150f; stroke: #c79a52; stroke-width: 1.5; }
-      .grupo { stroke: #d6a85f; stroke-width: 2; }
-      .centro { fill: #19150f; stroke: #f0c97a; stroke-width: 2.5; }
-      .nome { font: 600 18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #ece8df; }
-      .item { font: 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #ece8df; }
-      .det { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #b3ab9c; }
-      .rotulo { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: #d6a85f; letter-spacing: 0.08em; }
+      .caixa { fill: #242424; stroke: #4a82d4; stroke-width: 1.5; }
+      .grupo { stroke: #66a4f5; stroke-width: 2; }
+      .centro { fill: #242424; stroke: #a9cdfa; stroke-width: 2.5; }
+      .nome { font: 600 18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #f0f0f0; }
+      .item { font: 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #f0f0f0; }
+      .det { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #a6a6a6; }
+      .rotulo { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: #66a4f5; letter-spacing: 0.08em; }
     </style>
   </defs>
   <rect width="560" height="650" fill="url(#fundo)"/>
   <rect width="560" height="650" fill="url(#grade)"/>
 
   <!-- estrelas -->
-  <g fill="#ece8df" aria-hidden="true">
+  <g fill="#f0f0f0" aria-hidden="true">
     <circle cx="28" cy="150" r="1.2" opacity="0.7"/>
     <circle cx="534" cy="168" r="1.5" opacity="0.8"/>
     <circle cx="40" cy="330" r="1" opacity="0.5"/>
