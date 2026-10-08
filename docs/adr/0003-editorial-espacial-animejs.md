@@ -1,6 +1,8 @@
 # Editorial espacial: anime.js v4 e regras de animação revistas
 
-Status: aceito (issue #35)
+Status: aceito (issue #35); revisto em parte pelo ADR 0005 (dourado sai, cor de reserva azul, sem `prefers-reduced-motion`)
+
+> Nota (ADR 0005): as regras sobre `prefers-reduced-motion` neste documento foram revogadas pelo ADR 0005; o site anima sempre. O resto segue como está.
 
 ## Contexto
 

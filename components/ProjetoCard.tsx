@@ -29,7 +29,7 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
           <h3 className="text-2xl font-semibold sm:text-4xl">
             {projeto.titulo}
           </h3>
-          <span data-testid="rascunho" className="text-xs uppercase text-muted">
+          <span data-testid="rascunho" className="chip">
             {dict.rascunho}
           </span>
         </div>
@@ -54,7 +54,7 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
               href={projeto.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline underline-offset-4"
+              className="link-demo underline underline-offset-4"
             >
               {dict.verDemo}
             </a>

@@ -3,23 +3,8 @@ import { expect, test, type Page } from "@playwright/test";
 // Buraco negro da Hero (issue #57). Regras em
 // docs/adr/0003-editorial-espacial-animejs.md (emenda da issue #57).
 const MARCA = "buraco-negro-animado"; // components/hero/buraco-negro.ts
-// Cor fixa, complementar ao dourado (--cor-buraco-negro).
+// Cor fixa, o azul do acento (--cor-buraco-negro).
 const AZUL = "rgb(102, 164, 245)";
-
-function registrarChunks(page: Page) {
-  const corpos: Promise<string>[] = [];
-  page.on("response", (resposta) => {
-    const url = resposta.url();
-    if (url.includes("/_next/static/chunks/") && /\.js(\?|$)/.test(url)) {
-      corpos.push(resposta.text().catch(() => ""));
-    }
-  });
-  return {
-    async baixado(marca: string) {
-      return (await Promise.all(corpos)).some((t) => t.includes(marca));
-    },
-  };
-}
 
 async function aparelhoForte(page: Page) {
   await page.addInitScript(() => {
@@ -100,7 +85,7 @@ for (const path of ["/pt", "/en"]) {
       await page.goto(path);
       const camada = page.getByTestId("hero-buraco-negro");
       await expect(camada).toHaveAttribute("data-estado", "carregada");
-      // Não é sorteada nem dourada: é a cor fixa do buraco negro.
+      // Não é sorteada: é a cor fixa do buraco negro.
       await expect(camada).toHaveCSS("color", AZUL);
 
       // Os filetes orbitam no plano do disco (rotate).
@@ -214,19 +199,6 @@ for (const path of ["/pt", "/en"]) {
       await expect.poll(giro, { timeout: 8000 }).not.toBe(parado);
     });
 
-    test("com movimento reduzido fica vazio e o chunk nunca é baixado", async ({ page }) => {
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      const chunks = registrarChunks(page);
-      await page.goto(path);
-      await page.waitForLoadState("networkidle");
-
-      await expect(page.locator("h1")).toBeVisible();
-      const camada = page.getByTestId("hero-buraco-negro");
-      await expect(camada).toHaveAttribute("data-estado", "reduzida");
-      await expect(camada).toBeEmpty();
-      await expect(camada).toHaveCSS("color", AZUL);
-      expect(await chunks.baixado(MARCA)).toBe(false);
-    });
   });
 
   test.describe(`buraco negro da Hero ${path} em celular (pointer: coarse)`, () => {

@@ -1,5 +1,5 @@
 import { listarOutrosProjetos } from "@/lib/content";
-import { NumeroDaSecao } from "@/components/NumeroDaSecao";
+import { Secao } from "@/components/Secao";
 import { getDictionary, type Locale } from "@/lib/dictionary";
 
 export function OutrosProjetos({
@@ -13,18 +13,14 @@ export function OutrosProjetos({
   const projetos = listarOutrosProjetos(lang);
 
   return (
-    <section aria-labelledby="outros-projetos" className="secao">
-      <NumeroDaSecao numero={numero} />
-      <h2 id="outros-projetos" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-        {t.titulo}
-      </h2>
-      <ul className="flex flex-col divide-y divide-foreground/15">
+    <Secao numero={numero} idDoTitulo="outros-projetos" titulo={t.titulo}>
+      <ul className="escalonar flex flex-col gap-3">
         {projetos.map((projeto) => (
           <li
             key={projeto.id}
             data-testid="outro-projeto"
             data-projeto={projeto.id}
-            className="py-4 first:pt-0"
+            className="ilha animacao-ao-rolar"
           >
             <p>
               <span className="font-medium">{projeto.titulo}</span>
@@ -43,7 +39,7 @@ export function OutrosProjetos({
                 {t.repositorio}
               </a>
               {projeto.demo && (
-                <a href={projeto.demo} className="underline">
+                <a href={projeto.demo} className="link-demo underline">
                   {t.demo}
                 </a>
               )}
@@ -51,6 +47,6 @@ export function OutrosProjetos({
           </li>
         ))}
       </ul>
-    </section>
+    </Secao>
   );
 }

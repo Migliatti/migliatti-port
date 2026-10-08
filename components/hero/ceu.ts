@@ -1,8 +1,7 @@
 // Fundo estrelado da Hero: duas camadas de estrelas em <canvas>, ligadas à
 // rolagem em parallax e com um cintilar lento.
 //
-// Só é importado (via `import()`) por CeuDaHero depois da montagem, e nunca
-// com movimento reduzido; vive num chunk próprio, pequeno e sem anime.js.
+// Só é importado (via `import()`) por CeuDaHero depois da montagem; vive num chunk próprio, pequeno e sem anime.js.
 // Regras em docs/adr/0003-editorial-espacial-animejs.md.
 //
 // Custo: as estrelas são desenhadas uma vez (e de novo só quando a Hero muda

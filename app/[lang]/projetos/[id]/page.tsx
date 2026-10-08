@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { BarraFixa } from "@/components/BarraFixa";
 import { FundoDasSecoes } from "@/components/fundo/FundoDasSecoes";
 import type { ItemDeSecao } from "@/components/hud/useSecaoAtual";
-import { NumeroDaSecao } from "@/components/NumeroDaSecao";
+import { Secao } from "@/components/Secao";
 import { IlustracaoAnimada } from "@/components/ilustracao/IlustracaoAnimada";
 import { listarDestaques, obterProjeto } from "@/lib/content";
 import { getDictionary, isLocale, locales, type Locale } from "@/lib/dictionary";
@@ -64,9 +64,6 @@ export default async function EstudoDeCasoPage({
   const numero = (id: string) =>
     String(secoes.findIndex((s) => s.id === id) + 1).padStart(2, "0");
 
-  const secao = "secao animacao-entrada";
-  const tituloSecao = "text-2xl font-semibold sm:text-3xl";
-
   return (
     <div className="mx-auto min-h-screen max-w-[75rem] px-4 sm:px-6 md:px-10">
       <BarraFixa
@@ -85,7 +82,7 @@ export default async function EstudoDeCasoPage({
             <p className="max-w-2xl text-lg text-muted sm:text-xl">
               {projeto.resumo}
             </p>
-            <p data-testid="rascunho" className="font-mono text-xs text-muted">
+            <p data-testid="rascunho" className="chip chip-aviso self-start">
               {dict.avisoRascunho}
             </p>
             <div className="flex flex-wrap gap-3">
@@ -112,82 +109,98 @@ export default async function EstudoDeCasoPage({
             </div>
           </div>
         </div>
-        <section aria-labelledby="problema" className={secao}>
-          <NumeroDaSecao numero={numero("problema")} />
-          <h2 id="problema" className={tituloSecao}>
-            {dict.problema}
-          </h2>
-          <p className="estudo-texto">{estudo.problema}</p>
-        </section>
-        <section aria-labelledby="decisoes" className={secao}>
-          <NumeroDaSecao numero={numero("decisoes")} />
-          <h2 id="decisoes" className={tituloSecao}>
-            {dict.decisoes}
-          </h2>
-          <ul className="estudo-texto list-disc pl-5">
-            {estudo.decisoes.map((decisao) => (
-              <li key={decisao}>{decisao}</li>
-            ))}
-          </ul>
-        </section>
-        <section aria-labelledby="stack" className={secao}>
-          <NumeroDaSecao numero={numero("stack")} />
-          <h2 id="stack" className={tituloSecao}>
-            {dict.stack}
-          </h2>
-          <ul className="flex flex-wrap gap-2">
-            {projeto.stack.map((item) => (
-              <li key={item} className="chip">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-        <section aria-labelledby="resultado" className={secao}>
-          <NumeroDaSecao numero={numero("resultado")} />
-          <h2 id="resultado" className={tituloSecao}>
-            {dict.resultado}
-          </h2>
-          <p className="estudo-texto">{estudo.resultado}</p>
-        </section>
-        <section aria-labelledby="aprendizado" className={secao}>
-          <NumeroDaSecao numero={numero("aprendizado")} />
-          <h2 id="aprendizado" className={tituloSecao}>
-            {dict.aprendizado}
-          </h2>
-          <p className="estudo-texto">{estudo.aprendizado}</p>
-        </section>
-        <section
-          aria-labelledby="uso-de-ia"
-          className={secao}
-          data-testid="uso-de-ia"
+        <Secao
+          numero={numero("problema")}
+          idDoTitulo="problema"
+          titulo={dict.problema}
+          animar
         >
-          <NumeroDaSecao numero={numero("uso-de-ia")} />
-          <h2 id="uso-de-ia" className={tituloSecao}>
-            {dict.usoDeIA}
-          </h2>
-          <p className="estudo-texto">{estudo.usoDeIA.texto}</p>
-          <ul className="flex flex-col gap-1">
-            {estudo.usoDeIA.links.map((link) => (
-              <li key={link.url}>
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline underline-offset-4"
-                >
-                  {link.rotulo}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
+          <div className="ilha">
+            <p className="estudo-texto">{estudo.problema}</p>
+          </div>
+        </Secao>
+        <Secao
+          numero={numero("decisoes")}
+          idDoTitulo="decisoes"
+          titulo={dict.decisoes}
+          animar
+        >
+          <div className="ilha">
+            <ul className="estudo-texto list-disc pl-5">
+              {estudo.decisoes.map((decisao) => (
+                <li key={decisao}>{decisao}</li>
+              ))}
+            </ul>
+          </div>
+        </Secao>
+        <Secao
+          numero={numero("stack")}
+          idDoTitulo="stack"
+          titulo={dict.stack}
+          animar
+        >
+          <div className="ilha">
+            <ul className="flex flex-wrap gap-2">
+              {projeto.stack.map((item) => (
+                <li key={item} className="chip">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Secao>
+        <Secao
+          numero={numero("resultado")}
+          idDoTitulo="resultado"
+          titulo={dict.resultado}
+          animar
+        >
+          <div className="ilha">
+            <p className="estudo-texto">{estudo.resultado}</p>
+          </div>
+        </Secao>
+        <Secao
+          numero={numero("aprendizado")}
+          idDoTitulo="aprendizado"
+          titulo={dict.aprendizado}
+          animar
+        >
+          <div className="ilha">
+            <p className="estudo-texto">{estudo.aprendizado}</p>
+          </div>
+        </Secao>
+        <Secao
+          numero={numero("uso-de-ia")}
+          idDoTitulo="uso-de-ia"
+          titulo={dict.usoDeIA}
+          testId="uso-de-ia"
+          animar
+        >
+          <div className="ilha flex flex-col gap-4">
+            <p className="estudo-texto">{estudo.usoDeIA.texto}</p>
+            <ul className="flex flex-col gap-1">
+              {estudo.usoDeIA.links.map((link) => (
+                <li key={link.url}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-4"
+                  >
+                    {link.rotulo}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Secao>
         {projeto.evidencias.length > 0 && (
-          <section aria-labelledby="evidencias" className={secao}>
-            <NumeroDaSecao numero={numero("evidencias")} />
-            <h2 id="evidencias" className={tituloSecao}>
-              {dict.evidencias}
-            </h2>
+          <Secao
+            numero={numero("evidencias")}
+            idDoTitulo="evidencias"
+            titulo={dict.evidencias}
+            animar
+          >
             <ul className="flex flex-col gap-10">
               {projeto.evidencias.map((evidencia, i) => (
                 <li
@@ -269,7 +282,7 @@ export default async function EstudoDeCasoPage({
                 </li>
               ))}
             </ul>
-          </section>
+          </Secao>
         )}
       </main>
     </div>

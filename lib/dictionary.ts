@@ -22,6 +22,8 @@ export type Dictionary = {
   languageSelectorLabel: string;
   /** Rótulo da navegação por seção na barra fixa da home. */
   navegacaoDasSecoes: string;
+  /** Botão hambúrguer da barra no celular. */
+  menu: string;
   /** Link de atalho para pular direto ao conteúdo (teclado). */
   pularParaConteudo: string;
   /** Rótulos da home e do Estudo de caso. */
@@ -97,6 +99,7 @@ const dictionaries: Record<Locale, Dictionary> = {
     languageName: "Português",
     languageSelectorLabel: "Idioma",
     navegacaoDasSecoes: "Seções",
+    menu: "Menu",
     pularParaConteudo: "Pular para o conteúdo",
     projetosEmDestaque: "Projetos em destaque",
     verEstudoDeCaso: "Ver estudo de caso",
@@ -159,6 +162,7 @@ const dictionaries: Record<Locale, Dictionary> = {
     languageName: "English",
     languageSelectorLabel: "Language",
     navegacaoDasSecoes: "Sections",
+    menu: "Menu",
     pularParaConteudo: "Skip to content",
     projetosEmDestaque: "Featured projects",
     verEstudoDeCaso: "View case study",

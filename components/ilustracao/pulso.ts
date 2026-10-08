@@ -1,7 +1,7 @@
 // Pulso das ilustrações dos estudos de caso, com anime.js v4.
 //
 // Só é importado (via `import()`) por IlustracaoAnimada quando a ilustração
-// entra na tela e o leitor não pediu movimento reduzido; vive num chunk
+// entra na tela; vive num chunk
 // próprio. Regras em docs/adr/0003-editorial-espacial-animejs.md.
 //
 // Não altera o que a ilustração afirma: nenhum texto, caixa ou seta original
@@ -27,7 +27,7 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 /**
  * Cor da decoração: o índigo das ilustrações em tema claro, a menos que o
  * desenho declare a sua em `data-cor-do-pulso` no <svg> (as redesenhadas em
- * dourado sobre o escuro).
+ * azul sobre o escuro).
  */
 const COR_PADRAO_DO_PULSO = "#4f46e5";
 /** Atraso entre uma caixa e a próxima na cascata do halo (ms). */

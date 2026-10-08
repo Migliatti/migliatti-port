@@ -1,6 +1,6 @@
 # Identidade grafite com ilhas
 
-Status: aceito (spec #81, issue #82)
+Status: aceito (spec #81, issue #82); revisto em parte pelo ADR 0005 (o dourado decorativo sai; o azul é o segundo acento)
 
 ## Contexto
 

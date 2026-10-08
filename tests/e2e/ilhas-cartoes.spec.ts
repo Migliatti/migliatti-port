@@ -82,7 +82,7 @@ for (const path of ["/pt", "/en"]) {
   });
 }
 
-test("estudo de caso: seções no fundo plano, sem ilhas", async ({ page }) => {
+test("estudo de caso: seções no fundo plano e conteúdo em ilhas", async ({ page }) => {
   for (const path of ["/pt/projetos/kepler-lab", "/en/projetos/kepler-lab"]) {
     await page.goto(path);
     const secoes = page.locator("main section.secao");
@@ -93,5 +93,34 @@ test("estudo de caso: seções no fundo plano, sem ilhas", async ({ page }) => {
       expect(e.larguraBorda).toBe("0px");
       expect(e.sombra).toBe("none");
     }
+    // Problema, decisões, stack, resultado, aprendizado e uso de IA: uma ilha cada.
+    const ilhas = page.locator("main section.secao > .ilha");
+    expect(await ilhas.count()).toBeGreaterThanOrEqual(6);
+    await expectIlha(ilhas.first());
+    // Nada aninhado: nenhuma ilha dentro de outra.
+    expect(await page.locator(".ilha .ilha").count()).toBe(0);
   }
 });
+
+for (const path of ["/pt", "/en"]) {
+  test(`home ${path}: o conteúdo de todas as seções (exceto a Vitrine) está em ilhas`, async ({
+    page,
+  }) => {
+    await page.goto(path);
+    for (const id of ["outros-projetos", "competencias", "formacao", "contato-titulo"]) {
+      const secao = page.locator(`main section[aria-labelledby="${id}"]`);
+      const ilhas = secao.locator(".ilha");
+      expect(await ilhas.count(), id).toBeGreaterThan(0);
+      await expectIlha(ilhas.first());
+    }
+    expect(await page.locator(".ilha .ilha").count()).toBe(0);
+  });
+
+  test(`home ${path}: os cartões de destaque têm espaço entre si`, async ({ page }) => {
+    await page.goto(path);
+    const [a, b] = await page
+      .locator('[data-testid^="projeto-card-"]')
+      .evaluateAll((els) => els.slice(0, 2).map((el) => el.getBoundingClientRect()));
+    expect(b.top - a.bottom).toBeGreaterThanOrEqual(15); // gap-4 (16px)
+  });
+}

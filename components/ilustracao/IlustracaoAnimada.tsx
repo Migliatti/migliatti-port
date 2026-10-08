@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { usePecaPreguicosa } from "@/components/animacao/usePecaPreguicosa";
 
 // Chunk separado (com o anime.js): só é pedido quando a ilustração chega
-// perto da tela, e nunca com movimento reduzido.
+// perto da tela.
 async function iniciar(el: HTMLElement) {
   const { iniciarPulso } = await import("./pulso");
   return iniciarPulso(el);
@@ -19,8 +19,8 @@ type Props = {
 
 /**
  * Ilustração de um estudo de caso como SVG inline. O desenho vem pronto do
- * servidor e aparece parado sem JavaScript e com movimento reduzido; com
- * movimento liberado, o pulso só acrescenta decoração sobre setas e caixas.
+ * servidor e aparece parado sem JavaScript; com
+ * JavaScript, o pulso só acrescenta decoração sobre setas e caixas.
  */
 export function IlustracaoAnimada({ svg, origem }: Props) {
   const ref = useRef<HTMLDivElement>(null);

@@ -1,35 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 532 540" width="532" height="540" role="img" aria-labelledby="t d" data-cor-do-pulso="#d6a85f" data-compacta="">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 532 540" width="532" height="540" role="img" aria-labelledby="t d" data-cor-do-pulso="#66a4f5" data-compacta="">
   <title id="t">Grimoire: per-platform packaging (illustration)</title>
   <desc id="d">The skills/&lt;name&gt;/SKILL.md folder, the canonical implementation, is exposed to four platforms: Claude Code (.claude-plugin/plugin.json and marketplace.json), Codex (.codex-plugin/plugin.json pointing to ./skills/), Pi (.pi/settings.json pointing to ../skills and extensions/) and Hermes Agent (installation guide with external_dirs or a GitHub tap).</desc>
   <defs>
     <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#d6a85f"/>
+      <path d="M0,0 L10,5 L0,10 z" fill="#66a4f5"/>
     </marker>
     <radialGradient id="fundo" cx="50%" cy="46%" r="75%">
-      <stop offset="0" stop-color="#19150f"/>
-      <stop offset="1" stop-color="#05070a"/>
+      <stop offset="0" stop-color="#242424"/>
+      <stop offset="1" stop-color="#171717"/>
     </radialGradient>
     <pattern id="grade" width="28" height="28" patternUnits="userSpaceOnUse">
-      <path d="M28,0 L0,0 L0,28" fill="none" stroke="#d6a85f" stroke-opacity="0.13" stroke-width="1"/>
+      <path d="M28,0 L0,0 L0,28" fill="none" stroke="#66a4f5" stroke-opacity="0.13" stroke-width="1"/>
     </pattern>
     <filter id="brilho" x="-20%" y="-30%" width="140%" height="160%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <style>
-      .caixa { fill: #19150f; stroke: #c79a52; stroke-width: 1.5; }
-      .centro { fill: #19150f; stroke: #f0c97a; stroke-width: 2.5; }
-      .nome { font: 600 18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #ece8df; }
-      .det { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #b3ab9c; }
-      .rotulo { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: #d6a85f; letter-spacing: 0.08em; }
-      .linha { stroke: #d6a85f; stroke-width: 1.75; fill: none; marker-end: url(#seta); }
+      .caixa { fill: #242424; stroke: #4a82d4; stroke-width: 1.5; }
+      .centro { fill: #242424; stroke: #a9cdfa; stroke-width: 2.5; }
+      .nome { font: 600 18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #f0f0f0; }
+      .det { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #a6a6a6; }
+      .rotulo { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: #66a4f5; letter-spacing: 0.08em; }
+      .linha { stroke: #66a4f5; stroke-width: 1.75; fill: none; marker-end: url(#seta); }
     </style>
   </defs>
   <rect width="532" height="540" fill="url(#fundo)"/>
   <rect width="532" height="540" fill="url(#grade)"/>
 
   <!-- estrelas -->
-  <g fill="#ece8df" aria-hidden="true">
+  <g fill="#f0f0f0" aria-hidden="true">
     <circle cx="30" cy="70" r="1.2" opacity="0.7"/>
     <circle cx="100" cy="62" r="1" opacity="0.5"/>
     <circle cx="150" cy="130" r="1.2" opacity="0.6"/>

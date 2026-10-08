@@ -84,44 +84,21 @@ for (const path of ["/pt", "/en"]) {
       });
     }
 
-    test("com movimento reduzido o separador fica completo e parado", async ({
-      page,
-    }) => {
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      await page.goto(path);
-      const secao = page.getByTestId("experiencia");
-      const r = await secao.evaluate((n) => {
-        const antes = getComputedStyle(n, "::after");
-        return {
-          animacao: antes.animationName,
-          transform: antes.transform,
-          fundo: antes.backgroundImage,
-          anims: n.getAnimations({ subtree: true }).filter(
-            (a) => (a as CSSAnimation).animationName === "separador-desenha",
-          ).length,
-        };
-      });
-      expect(r.animacao).toBe("none");
-      expect(r.transform).toBe("none");
-      expect(r.fundo).toContain("linear-gradient");
-      expect(r.anims).toBe(0);
-    });
-
     test("sem JavaScript o separador aparece completo", async ({ browser }) => {
-      const ctx = await browser.newContext({
-        javaScriptEnabled: false,
-        reducedMotion: "reduce",
-      });
+      const ctx = await browser.newContext({ javaScriptEnabled: false });
       const page = await ctx.newPage();
       await page.goto(path);
       const secao = page.getByTestId("experiencia");
-      await expect(secao).toBeVisible();
-      const r = await secao.evaluate((n) => {
-        const traco = getComputedStyle(n, "::after");
-        return { transform: traco.transform, altura: traco.height };
-      });
-      expect(r.transform).toBe("none");
-      expect(r.altura).toBe("2px");
+      await secao.evaluate((n) => n.scrollIntoView({ block: "start" }));
+      const traco = () =>
+        secao.evaluate((n) => {
+          const t = getComputedStyle(n, "::after");
+          const escala = t.transform === "none" ? 1 : new DOMMatrix(t.transform).a;
+          return { escala, altura: t.height };
+        });
+      // O traço se desenha com a rolagem (CSS puro, sem JavaScript).
+      await expect.poll(async () => (await traco()).escala).toBeGreaterThan(0.99);
+      expect((await traco()).altura).toBe("2px");
       await ctx.close();
     });
   });

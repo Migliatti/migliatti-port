@@ -2,7 +2,7 @@
 //
 // Uma <img> não deixa animar o desenho por fora; por isso o SVG de
 // `public/ilustracoes/` é lido no build (as páginas são estáticas) e entra
-// direto no HTML. Sem JavaScript e com movimento reduzido ele aparece parado,
+// direto no HTML. Sem JavaScript ele aparece parado,
 // igual ao arquivo. O pulso (components/ilustracao/pulso.ts) só acrescenta
 // decoração sobre as marcas que este módulo grava:
 //

@@ -1,8 +1,10 @@
 import { expect, test } from "@playwright/test";
 import {
   expectBarraIlha,
+  abrirMenu,
+  esperarMenuFechado,
   expectBarraSemTransbordo,
-  expectPilulaInvertida,
+  expectPilulaAtiva,
   LARGURAS,
 } from "./barra-util";
 
@@ -14,7 +16,7 @@ const homes = [
 for (const home of homes) {
   test.describe(`layout editorial ${home.path}`, () => {
     for (const tema of ["light", "dark"] as const) {
-      test(`Hero ocupa a tela e as seções vêm numeradas no tema ${tema}`, async ({
+      test(`Hero ocupa quase a tela e as seções vêm numeradas no tema ${tema}`, async ({
         page,
       }) => {
         await page.emulateMedia({ colorScheme: tema });
@@ -23,7 +25,9 @@ for (const home of homes) {
 
         const hero = page.locator("section.hero");
         const caixa = await hero.boundingBox();
-        expect(caixa!.height).toBeGreaterThanOrEqual(800 - 1);
+        // A Hero deixa uma faixa da próxima seção na tela: min(100svh - 7rem, 44rem).
+        expect(caixa!.height).toBeGreaterThanOrEqual(Math.min(800 - 112, 704) - 1);
+        expect(caixa!.height).toBeLessThan(800);
         await expect(page.locator("h1")).toBeVisible();
         await expect(page.getByTestId("posicionamento")).toBeVisible();
         await expect(hero.locator("a.botao")).toHaveCount(2);
@@ -83,7 +87,7 @@ for (const home of homes) {
 
       // A barra continua flutuando no topo depois da rolagem.
       await expectBarraIlha(page);
-      await expectPilulaInvertida(page, home.secao);
+      await expectPilulaAtiva(page, home.secao);
 
       await nav.getByRole("link", { name: /Contato|Contact/ }).click();
       await expect(nav.locator('[aria-current="location"]')).toHaveText(
@@ -109,9 +113,12 @@ for (const home of homes) {
         const barra = page.locator("header.barra-fixa");
         const links = barra.getByRole("navigation", { name: home.barra }).getByRole("link");
         for (let i = 0; i < 5; i++) {
+          // No celular as âncoras estão no menu, que fecha ao tocar numa delas.
+          await abrirMenu(page);
           const link = links.nth(i);
           const id = (await link.getAttribute("href"))!.slice(1);
           await link.click();
+          await esperarMenuFechado(page);
           await expect
             .poll(async () =>
               // O id pode estar no próprio título ou na seção que o contém.
@@ -193,8 +200,8 @@ for (const home of homes) {
         });
         expect(foco.estilo).not.toBe("none");
         expect(foco.largura).toBeGreaterThanOrEqual(2);
-        // Visível sobre o grafite: contorno claro, afastado do controle.
-        expect(foco.cor).toBe("rgb(240, 240, 240)");
+        // Visível sobre o grafite: contorno azul, afastado do controle.
+        expect(foco.cor).toBe("rgb(102, 164, 245)");
         expect(foco.deslocamento).toBeGreaterThanOrEqual(2);
       }
     });

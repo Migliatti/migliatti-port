@@ -6,13 +6,12 @@
 // câmera à deriva.
 // Animado por cima do céu estrelado e atrás do texto.
 //
-// Só é importado (via `import()`) por BuracoNegroDaHero depois da montagem, e
-// nunca com movimento reduzido; vive num chunk próprio, com os módulos do
+// Só é importado (via `import()`) por BuracoNegroDaHero depois da montagem; vive num chunk próprio, com os módulos do
 // anime.js que usa. Regras em docs/adr/0003-editorial-espacial-animejs.md
 // (emenda da issue #57).
 //
 // A moldura chega vazia do servidor: a cena nasce aqui. A cor é fixa
-// (`--cor-buraco-negro`, complementar ao dourado), aplicada em `color` da
+// (`--cor-buraco-negro`, o azul do acento), aplicada em `color` da
 // moldura pelo CSS; o SVG usa `currentColor` e `--cor-buraco-negro-nucleo`.
 // Só `transform` e `opacity` se movem.
 //

@@ -1,8 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 
 // Issue #86: Vitrine, HUD e animações decorativas sobre o grafite (ADR 0004).
-const DOURADO = [214, 168, 95];
-const AZUL = "rgb(102, 164, 245)"; // --cor-buraco-negro
+const AZUL = "rgb(102, 164, 245)"; // --azul e --cor-buraco-negro
+const AZUL_RGB = [102, 164, 245];
 
 async function aparelhoForte(page: Page) {
   await page.addInitScript(() => {
@@ -29,9 +29,9 @@ function razao(a: string, b: string) {
   return (x + 0.05) / (y + 0.05);
 }
 
-const ehDourado = (css: string) => {
+const ehAzul = (css: string) => {
   const c = canais(css);
-  return c.length === 3 && c.every((v, i) => v === DOURADO[i]);
+  return c.length === 3 && c.every((v, i) => v === AZUL_RGB[i]);
 };
 
 for (const path of ["/pt", "/en"]) {
@@ -63,44 +63,42 @@ for (const path of ["/pt", "/en"]) {
       }
     });
 
-    test("o dourado não aparece em texto, borda ou fundo da UI da Vitrine e do HUD", async ({
+    test("o azul decorativo não aparece em texto, borda ou fundo da UI da Vitrine e do HUD", async ({
       page,
     }) => {
       await page.goto(path);
       await page.getByTestId("vitrine").scrollIntoViewIfNeeded();
       const ocorrencias = await page.evaluate(() => {
-        const dourado = (css: string) => {
+        const azul = (css: string) => {
           const c = (css.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number);
-          return c.length === 3 && c[0] === 214 && c[1] === 168 && c[2] === 95;
+          return c.length === 3 && c[0] === 102 && c[1] === 164 && c[2] === 245;
         };
         const achados: string[] = [];
         const nos = document.querySelectorAll(
-          '[data-testid="vitrine"] :is(h2, p, li, strong, span, a, button), [data-testid="vitrine-hud"], [data-testid="vitrine-hud"] *, a, button',
+          '[data-testid="vitrine"] :is(h2, p, li, strong, span, a, button), [data-testid="vitrine-hud"], [data-testid="vitrine-hud"] *',
         );
         for (const el of nos) {
           if (el.closest("svg")) continue; // ilustração decorativa
           const s = getComputedStyle(el);
           for (const p of ["color", "backgroundColor", "borderTopColor", "borderLeftColor"] as const) {
-            if (dourado(s[p])) achados.push(`${el.tagName}.${p}`);
+            if (azul(s[p])) achados.push(`${el.tagName}.${p}`);
           }
         }
         return achados;
       });
       expect(ocorrencias).toEqual([]);
-      expect(ehDourado("rgb(214, 168, 95)")).toBe(true);
     });
 
-    test("o buraco negro segue azul e o dourado só decora o céu", async ({ page }) => {
+    test("o buraco negro e o céu (cor de reserva) são o azul decorativo", async ({ page }) => {
       await aparelhoForte(page);
       await page.goto(path);
       const camada = page.getByTestId("hero-buraco-negro");
       await expect(camada).toHaveAttribute("data-estado", "carregada");
       await expect(camada).toHaveCSS("color", AZUL);
-      await expect(page.getByTestId("hero-ceu")).toHaveCSS("color", "rgb(214, 168, 95)");
+      await expect(page.getByTestId("hero-ceu")).toHaveCSS("color", AZUL);
       // O texto da Hero não herda nenhuma das cores decorativas.
       const cor = await page.locator("h1").evaluate((el) => getComputedStyle(el).color);
-      expect(ehDourado(cor)).toBe(false);
-      expect(cor).not.toBe(AZUL);
+      expect(ehAzul(cor)).toBe(false);
     });
 
     test("texto da Hero segue legível sobre o buraco negro (contraste >= 4.5 com o fundo)", async ({

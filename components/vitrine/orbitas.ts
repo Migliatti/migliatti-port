@@ -1,8 +1,7 @@
 // Peça da Vitrine: o sistema orbital em SVG, animado com anime.js v4.
 //
 // Este módulo é a parte pesada da Vitrine. Só é importado (via `import()`)
-// por PecaDaVitrine quando a seção entra na tela e o leitor não pediu
-// movimento reduzido; por isso vive num chunk separado, junto com os módulos
+// por PecaDaVitrine quando a seção entra na tela; por isso vive num chunk separado, junto com os módulos
 // do anime.js que usa. Regras em docs/adr/0002-vitrine.md e
 // docs/adr/0003-editorial-espacial-animejs.md.
 //
@@ -64,7 +63,7 @@ export function iniciarPeca(moldura: HTMLElement): Peca {
     [...corpos, ...satelites].map((el) => [el, el.getAttribute("transform")]),
   );
 
-  // Cada corpo ganha o próprio matiz; sem a peça animada fica dourado.
+  // Cada corpo ganha o próprio matiz; sem a peça animada fica azul.
   for (const corpo of corpos) corpo.style.color = corAleatoria();
 
   if (versao === "completa") {
