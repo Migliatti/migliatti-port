@@ -26,14 +26,17 @@
   --estado-ok: #9ccc9c;
   --estado-aviso: #e0c07a;
   --estado-erro: #e08080;
-  /* Cor padrão das animações decorativas (issue #56): dourada no servidor, sem
-     JS e com movimento reduzido. Os módulos animados trocam por um matiz
-     sorteado por ponto (components/animacao/cor-aleatoria.ts). Nunca em texto,
-     link, botão ou borda; é o único lugar do código com o dourado. A troca por
-     cinza claro está adiada (ADR 0004). */
-  --cor-decorativa: #d6a85f;
-  /* Buraco negro da Hero (issue #57): cor fixa, complementar ao dourado (matiz
-     ~215° contra ~37°), mais um núcleo quase branco. Só decoração. */
+  /* Segundo acento (ADR 0005): azul hsl(214 88% 68%), com texto escuro sobre
+     ele. Pode aparecer em UI (foco, hover, item ativo), não em texto corrido. */
+  --azul: #66a4f5;
+  --on-azul: #171717;
+  /* Cor de reserva das animações decorativas (issue #56): azul no servidor e
+     sem JS. Os módulos animados trocam por um matiz sorteado por ponto
+     (components/animacao/cor-aleatoria.ts). Nunca em texto, link, botão ou
+     borda. */
+  --cor-decorativa: var(--azul);
+  /* Buraco negro da Hero (issue #57): cor fixa, o mesmo azul do acento, mais
+     um núcleo quase branco. Só decoração. */
   --cor-buraco-negro: hsl(214 88% 68%);
   --cor-buraco-negro-nucleo: hsl(208 100% 93%);
   color-scheme: dark;
@@ -49,6 +52,8 @@
   --color-accent: var(--accent);
   --color-on-accent: var(--on-accent);
   --color-accent-text: var(--accent-text);
+  --color-azul: var(--azul);
+  --color-on-azul: var(--on-azul);
   --color-estado-ok: var(--estado-ok);
   --color-estado-aviso: var(--estado-aviso);
   --color-estado-erro: var(--estado-erro);
@@ -604,7 +609,7 @@ main:focus {
 /*
  * Separador que se desenha ao entrar na tela (Animação decorativa, ADR 0003):
  * CSS puro, ligada à rolagem (view timeline), sem JavaScript. A linha base
- * (::before) fica sempre completa; um traço dourado com brilho (::after) a
+ * (::before) fica sempre completa; um traço azul com brilho (::after) a
  * percorre da esquerda para a direita enquanto a seção sobe pela tela. O
  * intervalo é `cover`, porque o separador tem 1px de altura e o `entry` dele
  * duraria 1px de rolagem, e em pixels fixos: ao fim da página a última linha

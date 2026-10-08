@@ -27,7 +27,7 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 /**
  * Cor da decoração: o índigo das ilustrações em tema claro, a menos que o
  * desenho declare a sua em `data-cor-do-pulso` no <svg> (as redesenhadas em
- * dourado sobre o escuro).
+ * azul sobre o escuro).
  */
 const COR_PADRAO_DO_PULSO = "#4f46e5";
 /** Atraso entre uma caixa e a próxima na cascata do halo (ms). */

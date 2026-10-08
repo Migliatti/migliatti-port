@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 // Cor aleatória por ponto (issue #56). O sorteio é fixado trocando
 // `Math.random` por uma sequência que anda de 0.137 em 0.137, o que dá matizes
 // diferentes a cada ponto. Regra em docs/adr/0003-editorial-espacial-animejs.md.
-const DOURADO = "rgb(214, 168, 95)";
+const RESERVA = "rgb(102, 164, 245)"; // azul de reserva (--cor-decorativa)
 
 async function aparelhoForte(page: Page) {
   await page.addInitScript(() => {
@@ -21,7 +21,7 @@ async function fixarSorteio(page: Page) {
 
 for (const path of ["/pt", "/en"]) {
   test.describe(`cor aleatória ${path}`, () => {
-    test("o HTML do servidor vem dourado, sem cores sorteadas", async ({ request }) => {
+    test("o HTML do servidor vem azul, sem cores sorteadas", async ({ request }) => {
       const html = await (await request.get(path)).text();
       expect(html).not.toMatch(/hsl\(\d+ 80%/);
     });
@@ -40,13 +40,13 @@ for (const path of ["/pt", "/en"]) {
         .locator("[data-estrela]")
         .evaluateAll((els) => els.map((el) => getComputedStyle(el).fill));
       expect(new Set(estrelas).size).toBeGreaterThan(3);
-      expect(estrelas).not.toContain(DOURADO);
+      expect(estrelas).not.toContain(RESERVA);
 
       const corpos = await peca
         .locator("[data-corpo]")
         .evaluateAll((els) => els.map((el) => getComputedStyle(el).color));
       expect(new Set(corpos).size).toBe(3);
-      expect(corpos).not.toContain(DOURADO);
+      expect(corpos).not.toContain(RESERVA);
     });
 
     test("o céu da Hero pinta estrelas de cores diferentes", async ({ page }) => {
@@ -110,26 +110,26 @@ for (const path of ["/pt", "/en"]) {
     });
   });
 
-  test.describe(`cor aleatória ${path} em dourado`, () => {
+  test.describe(`cor aleatória ${path} no azul de reserva`, () => {
     test.use({ reducedMotion: "reduce" });
 
-    test("com movimento reduzido a decoração fica dourada", async ({ page }) => {
+    test("com movimento reduzido a decoração fica azul", async ({ page }) => {
       await fixarSorteio(page);
       await page.goto(path);
-      await expect(page.getByTestId("hero-ceu")).toHaveCSS("color", DOURADO);
+      await expect(page.getByTestId("hero-ceu")).toHaveCSS("color", RESERVA);
       const corpo = page.locator('[data-corpo="site"]');
       await corpo.scrollIntoViewIfNeeded();
-      await expect(corpo).toHaveCSS("color", DOURADO);
+      await expect(corpo).toHaveCSS("color", RESERVA);
     });
   });
 
   test.describe(`cor aleatória ${path} sem JavaScript`, () => {
     test.use({ javaScriptEnabled: false });
 
-    test("sem JS a decoração fica dourada", async ({ page }) => {
+    test("sem JS a decoração fica azul", async ({ page }) => {
       await page.goto(path);
-      await expect(page.getByTestId("hero-ceu")).toHaveCSS("color", DOURADO);
-      await expect(page.locator('[data-corpo="site"]')).toHaveCSS("color", DOURADO);
+      await expect(page.getByTestId("hero-ceu")).toHaveCSS("color", RESERVA);
+      await expect(page.locator('[data-corpo="site"]')).toHaveCSS("color", RESERVA);
     });
   });
 }

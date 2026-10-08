@@ -12,7 +12,7 @@
 // (emenda da issue #57).
 //
 // A moldura chega vazia do servidor: a cena nasce aqui. A cor é fixa
-// (`--cor-buraco-negro`, complementar ao dourado), aplicada em `color` da
+// (`--cor-buraco-negro`, o azul do acento), aplicada em `color` da
 // moldura pelo CSS; o SVG usa `currentColor` e `--cor-buraco-negro-nucleo`.
 // Só `transform` e `opacity` se movem.
 //

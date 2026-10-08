@@ -21,17 +21,17 @@ function hslParaHex(valor: string) {
 }
 
 describe("animações decorativas sobre o grafite (issue #86)", () => {
-  it("o buraco negro segue azul, longe do dourado", () => {
+  it("o buraco negro segue azul", () => {
     const matiz = Number(token("cor-buraco-negro").match(/hsl\((\d+)/)![1]);
     expect(matiz).toBeGreaterThanOrEqual(200);
     expect(matiz).toBeLessThanOrEqual(230);
     expect(token("cor-buraco-negro-nucleo")).toMatch(/hsl\(20\d /);
   });
 
-  it("o buraco negro e a cor decorativa se destacam sobre o fundo (>= 3)", () => {
+  it("o buraco negro e o azul decorativo se destacam sobre o fundo (>= 3)", () => {
     const fundo = token("background");
     expect(razaoDeContraste(hslParaHex(token("cor-buraco-negro")), fundo)).toBeGreaterThanOrEqual(3);
-    expect(razaoDeContraste(token("cor-decorativa"), fundo)).toBeGreaterThanOrEqual(3);
+    expect(razaoDeContraste(token("azul"), fundo)).toBeGreaterThanOrEqual(3);
   });
 
   it("a Vitrine e o HUD não pintam nada com a cor decorativa", () => {

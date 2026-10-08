@@ -46,7 +46,8 @@ describe("tema único escuro grafite (ADR 0004)", () => {
       "estado-ok",
       "estado-aviso",
       "estado-erro",
-      "cor-decorativa",
+      "azul",
+      "on-azul",
     ]) {
       expect(t[k], k).toMatch(/^#[0-9a-fA-F]{6}$/);
     }
@@ -69,12 +70,17 @@ describe("tema único escuro grafite (ADR 0004)", () => {
     for (const [k, v] of Object.entries(esperado)) expect(t[k].toLowerCase(), k).toBe(v);
   });
 
-  it("o acento é neutro e o dourado é só o token decorativo", () => {
+  it("o acento principal é neutro e o azul é o segundo acento (ADR 0005)", () => {
     expect(t["accent-text"].toLowerCase()).toBe(t.foreground.toLowerCase());
-    expect(t["cor-decorativa"].toLowerCase()).toBe("#d6a85f");
+    expect(t.azul.toLowerCase()).toBe("#66a4f5");
+    expect(t["on-azul"].toLowerCase()).toBe(t.background.toLowerCase());
     for (const k of ["accent", "accent-text", "on-accent"]) {
-      expect(t[k].toLowerCase(), k).not.toBe("#d6a85f");
+      expect(t[k].toLowerCase(), k).not.toBe(t.azul.toLowerCase());
     }
+  });
+
+  it("a cor decorativa de reserva é o azul", () => {
+    expect(css).toMatch(/:root\s*{[^}]*--cor-decorativa:\s*var\(--azul\);/);
   });
 
   it("não acompanha a preferência de tema do sistema", () => {
@@ -102,14 +108,18 @@ describe("tema único escuro grafite (ADR 0004)", () => {
         expect(razaoDeContraste(t.accent, fundo())).toBeGreaterThanOrEqual(3);
         expect(razaoDeContraste(t.foreground, fundo())).toBeGreaterThanOrEqual(3);
       });
-      it("a cor decorativa se destaca como elemento gráfico (>= 3)", () => {
-        expect(razaoDeContraste(t["cor-decorativa"], fundo())).toBeGreaterThanOrEqual(3);
+      it("o azul passa AA como texto e se destaca como elemento gráfico", () => {
+        expect(razaoDeContraste(t.azul, fundo())).toBeGreaterThanOrEqual(4.5);
       });
     });
   }
 
   it("texto sobre a pílula do acento passa AA", () => {
     expect(razaoDeContraste(t["on-accent"], t.accent)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("texto sobre a pílula azul passa AA", () => {
+    expect(razaoDeContraste(t["on-azul"], t.azul)).toBeGreaterThanOrEqual(4.5);
   });
 
   it("a borda de luz fica acima da superfície, em ordem de elevação", () => {

@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 // Buraco negro da Hero (issue #57). Regras em
 // docs/adr/0003-editorial-espacial-animejs.md (emenda da issue #57).
 const MARCA = "buraco-negro-animado"; // components/hero/buraco-negro.ts
-// Cor fixa, complementar ao dourado (--cor-buraco-negro).
+// Cor fixa, o azul do acento (--cor-buraco-negro).
 const AZUL = "rgb(102, 164, 245)";
 
 function registrarChunks(page: Page) {
@@ -100,7 +100,7 @@ for (const path of ["/pt", "/en"]) {
       await page.goto(path);
       const camada = page.getByTestId("hero-buraco-negro");
       await expect(camada).toHaveAttribute("data-estado", "carregada");
-      // Não é sorteada nem dourada: é a cor fixa do buraco negro.
+      // Não é sorteada: é a cor fixa do buraco negro.
       await expect(camada).toHaveCSS("color", AZUL);
 
       // Os filetes orbitam no plano do disco (rotate).

@@ -36,14 +36,20 @@ describe("cores no código", () => {
     expect(ocorrencias(/#(05070a|19150f|ece8df|b3ab9c)\b/i)).toEqual([]);
   });
 
-  it("o dourado só aparece no token decorativo", () => {
+  it("o dourado não aparece em lugar nenhum (ADR 0005)", () => {
+    // O #d6a85f foi o dourado do tema; os tons dourados das ilustrações
+    // antigas também ficam banidos.
+    expect(ocorrencias(/#(d6a85f|c79a52|f0c97a|e3b868)\b/i)).toEqual([]);
+  });
+
+  it("o azul vive em um token só e o resto usa var(--azul)", () => {
     const linhas = codigo.flatMap(({ caminho, texto }) =>
       texto
         .split("\n")
-        .filter((linha) => /#d6a85f\b/i.test(linha))
+        .filter((linha) => /#66a4f5\b/i.test(linha))
         .map((linha) => `${caminho}: ${linha.trim()}`),
     );
-    expect(linhas).toEqual(["app/globals.css: --cor-decorativa: #d6a85f;"]);
+    expect(linhas).toEqual(["app/globals.css: --azul: #66a4f5;"]);
   });
 
   it("não usa o verde-limão nem os tons dos temas antigos", () => {
@@ -62,7 +68,7 @@ describe("cores no código", () => {
   });
 });
 
-describe("cor decorativa aleatória (issue #56)", () => {
+describe("cor decorativa aleatória (issue #56, ADR 0005)", () => {
   it("só as animações decorativas usam a cor padrão ou a cor aleatória", () => {
     // Texto, links, botões e bordas nunca usam cor aleatória nem
     // --cor-decorativa: cada uso fica num seletor decorativo conhecido.

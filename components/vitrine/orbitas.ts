@@ -64,7 +64,7 @@ export function iniciarPeca(moldura: HTMLElement): Peca {
     [...corpos, ...satelites].map((el) => [el, el.getAttribute("transform")]),
   );
 
-  // Cada corpo ganha o próprio matiz; sem a peça animada fica dourado.
+  // Cada corpo ganha o próprio matiz; sem a peça animada fica azul.
   for (const corpo of corpos) corpo.style.color = corAleatoria();
 
   if (versao === "completa") {
