@@ -583,7 +583,8 @@ main:focus {
 @keyframes hero-saida-fundo {
   to {
     opacity: 0;
-    transform: translateY(12vh) scale(1.06);
+    /* Sem scale: a moldura tem 100vw e qualquer aumento gera rolagem horizontal. */
+    transform: translateY(12vh);
   }
 }
 
@@ -718,6 +719,20 @@ main:focus {
 .secao > * {
   grid-column: 1;
   min-width: 0;
+}
+
+/* Título de seção (h2 único, em components/Secao.tsx). */
+.secao-titulo {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+
+@media (min-width: 40rem) {
+  .secao-titulo {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
 }
 
 .secao-numero {

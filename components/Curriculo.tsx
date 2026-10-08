@@ -2,7 +2,7 @@
 // técnicas e Formação. Os dados vêm do módulo de conteúdo.
 
 import { obterCompetencias, obterExperiencia, obterFormacao } from "@/lib/content";
-import { NumeroDaSecao } from "@/components/NumeroDaSecao";
+import { Secao } from "@/components/Secao";
 import { getDictionary, type Locale } from "@/lib/dictionary";
 
 type Props = { lang: Locale; numero: string };
@@ -12,15 +12,13 @@ export function ExperienciaProfissional({ lang, numero }: Props) {
   const cargos = obterExperiencia(lang);
 
   return (
-    <section
-      aria-labelledby="experiencia"
-      data-testid="experiencia"
-      className="secao animacao-entrada"
+    <Secao
+      idDoTitulo="experiencia"
+      testId="experiencia"
+      numero={numero}
+      titulo={t.secoes.experiencia}
+      animar
     >
-      <NumeroDaSecao numero={numero} />
-      <h2 id="experiencia" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-        {t.secoes.experiencia}
-      </h2>
       <ol className="flex flex-col gap-6">
         {cargos.map((cargo) => (
           <li
@@ -40,7 +38,7 @@ export function ExperienciaProfissional({ lang, numero }: Props) {
           </li>
         ))}
       </ol>
-    </section>
+    </Secao>
   );
 }
 
@@ -49,15 +47,12 @@ export function Competencias({ lang, numero }: Props) {
   const grupos = obterCompetencias(lang);
 
   return (
-    <section
-      aria-labelledby="competencias"
-      data-testid="competencias"
-      className="secao"
+    <Secao
+      idDoTitulo="competencias"
+      testId="competencias"
+      numero={numero}
+      titulo={t.secoes.competencias}
     >
-      <NumeroDaSecao numero={numero} />
-      <h2 id="competencias" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-        {t.secoes.competencias}
-      </h2>
       <div className="flex flex-col gap-4">
         {grupos.map((grupo) => (
           <div
@@ -79,7 +74,7 @@ export function Competencias({ lang, numero }: Props) {
           </div>
         ))}
       </div>
-    </section>
+    </Secao>
   );
 }
 
@@ -88,15 +83,12 @@ export function Formacao({ lang, numero }: Props) {
   const formacao = obterFormacao(lang);
 
   return (
-    <section
-      aria-labelledby="formacao"
-      data-testid="formacao"
-      className="secao"
+    <Secao
+      idDoTitulo="formacao"
+      testId="formacao"
+      numero={numero}
+      titulo={t.secoes.formacao}
     >
-      <NumeroDaSecao numero={numero} />
-      <h2 id="formacao" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-        {t.secoes.formacao}
-      </h2>
       <div>
         <h3 className="font-medium">{formacao.curso}</h3>
         <p className="text-muted">
@@ -106,6 +98,6 @@ export function Formacao({ lang, numero }: Props) {
           {formacao.ingles}
         </p>
       </div>
-    </section>
+    </Secao>
   );
 }

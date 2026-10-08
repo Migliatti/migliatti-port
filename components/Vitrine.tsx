@@ -2,7 +2,7 @@ import { obterVitrine } from "@/lib/content";
 import type { Locale } from "@/lib/dictionary";
 import { HudDaVitrine } from "@/components/hud/HudDaVitrine";
 import type { ItemDeSecao } from "@/components/hud/useSecaoAtual";
-import { NumeroDaSecao } from "@/components/NumeroDaSecao";
+import { Secao } from "@/components/Secao";
 import { PecaDaVitrine } from "@/components/vitrine/PecaDaVitrine";
 
 type Props = {
@@ -23,16 +23,13 @@ export function Vitrine({ lang, numero, secoes }: Props) {
   const vitrine = obterVitrine(lang);
 
   return (
-    <section
+    <Secao
       id="vitrine"
-      aria-labelledby="vitrine-titulo"
-      data-testid="vitrine"
-      className="secao"
+      idDoTitulo="vitrine-titulo"
+      testId="vitrine"
+      numero={numero}
+      titulo={vitrine.titulo}
     >
-      <NumeroDaSecao numero={numero} />
-      <h2 id="vitrine-titulo" className="text-2xl font-semibold sm:text-3xl">
-        {vitrine.titulo}
-      </h2>
       <p data-testid="vitrine-descricao" className="text-muted">
         {vitrine.descricao}
       </p>
@@ -55,6 +52,6 @@ export function Vitrine({ lang, numero, secoes }: Props) {
           </li>
         ))}
       </ul>
-    </section>
+    </Secao>
   );
 }

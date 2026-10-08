@@ -1,5 +1,5 @@
 import { listarOutrosProjetos } from "@/lib/content";
-import { NumeroDaSecao } from "@/components/NumeroDaSecao";
+import { Secao } from "@/components/Secao";
 import { getDictionary, type Locale } from "@/lib/dictionary";
 
 export function OutrosProjetos({
@@ -13,11 +13,7 @@ export function OutrosProjetos({
   const projetos = listarOutrosProjetos(lang);
 
   return (
-    <section aria-labelledby="outros-projetos" className="secao">
-      <NumeroDaSecao numero={numero} />
-      <h2 id="outros-projetos" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-        {t.titulo}
-      </h2>
+    <Secao numero={numero} idDoTitulo="outros-projetos" titulo={t.titulo}>
       <ul className="flex flex-col divide-y divide-foreground/15">
         {projetos.map((projeto) => (
           <li
@@ -51,6 +47,6 @@ export function OutrosProjetos({
           </li>
         ))}
       </ul>
-    </section>
+    </Secao>
   );
 }

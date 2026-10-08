@@ -9,9 +9,9 @@ import {
 } from "@/components/Curriculo";
 import type { ItemDeSecao } from "@/components/hud/useSecaoAtual";
 import { Hero } from "@/components/Hero";
-import { NumeroDaSecao } from "@/components/NumeroDaSecao";
 import { OutrosProjetos } from "@/components/OutrosProjetos";
 import { ProjetoCard } from "@/components/ProjetoCard";
+import { Secao } from "@/components/Secao";
 import { Vitrine } from "@/components/Vitrine";
 import {
   listarDestaques,
@@ -53,23 +53,21 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           nome={textos.nome}
           posicionamento={textos.posicionamento}
         />
-        <section
-          aria-labelledby="destaques"
-          data-testid="projetos-em-destaque"
-          className="secao animacao-entrada"
+        <Secao
+          numero={numero("destaques")}
+          idDoTitulo="destaques"
+          titulo={dict.projetosEmDestaque}
+          testId="projetos-em-destaque"
+          animar
         >
-          <NumeroDaSecao numero={numero("destaques")} />
-          <h2 id="destaques" className="text-2xl font-semibold sm:text-3xl">
-            {dict.projetosEmDestaque}
-          </h2>
-          <ul className="flex flex-col">
+          <ul className="flex flex-col gap-4">
             {destaques.map((projeto, i) => (
               <li key={projeto.id}>
                 <ProjetoCard projeto={projeto} lang={lang} posicao={i + 1} />
               </li>
             ))}
           </ul>
-        </section>
+        </Secao>
         <Vitrine lang={lang} numero={numero("vitrine")} secoes={secoes} />
         <OutrosProjetos lang={lang} numero={numero("outros-projetos")} />
         <ExperienciaProfissional lang={lang} numero={numero("experiencia")} />
