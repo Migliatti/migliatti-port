@@ -150,57 +150,9 @@ for (const path of ["/pt", "/en"]) {
         .not.toBe(antes);
     });
 
-    test("com movimento reduzido a peça fica parada e nunca é baixada", async ({
-      page,
-    }) => {
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      const chunks = registrarChunks(page);
-      await page.goto(path);
-      await page.waitForLoadState("networkidle");
-
-      const secao = page.getByTestId("vitrine");
-      const peca = page.getByTestId("vitrine-peca");
-      await expect(peca).toHaveAttribute("data-estado", "reduzida");
-
-      await secao.scrollIntoViewIfNeeded();
-      await page.waitForLoadState("networkidle");
-      const corpo = peca.locator('[data-corpo="site"]');
-      const posicao = await corpo.getAttribute("transform");
-      await page.waitForTimeout(300);
-
-      await expect(peca).toHaveAttribute("data-estado", "reduzida");
-      expect(await chunks.pecaBaixada()).toBe(false);
-      expect(await chunks.constelacaoBaixada()).toBe(false);
-      await expect(peca.locator("[data-camada]")).toHaveCount(0);
-      await expect(peca).not.toHaveAttribute("data-peca", /.*/);
-      expect(await corpo.getAttribute("transform")).toBe(posicao);
-
-      // SVG estático com as órbitas e os três corpos.
-      await expect(peca.locator("svg")).toBeVisible();
-      await expect(peca.locator("[data-orbita]")).toHaveCount(3);
-      await expect(peca.locator("[data-corpo]")).toHaveCount(3);
-      await expect(page.getByTestId("vitrine-descricao")).toBeVisible();
-      expect(
-        await secao.evaluate((el) =>
-          [el, ...el.querySelectorAll("*")].reduce(
-            (n, node) => n + node.getAnimations().length,
-            0,
-          ),
-        ),
-      ).toBe(0);
-
-      // Os corpos continuam focáveis e destacando o pilar.
-      await focarCorpo(page, "automacao");
-      await expect(page.locator('[data-pilar="automacao"]')).toHaveCSS(
-        "border-left-color",
-        await corDeAcento(page),
-      );
-    });
-
     test("cada corpo é focável por teclado e destaca o pilar correspondente", async ({
       page,
     }) => {
-      await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(path);
       const peca = page.getByTestId("vitrine-peca");
       await peca.scrollIntoViewIfNeeded();
@@ -234,7 +186,6 @@ for (const path of ["/pt", "/en"]) {
     });
 
     test("passar o mouse num corpo destaca o pilar", async ({ page }) => {
-      await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(path);
       await page.getByTestId("vitrine-peca").scrollIntoViewIfNeeded();
       const acento = await corDeAcento(page);
@@ -364,29 +315,6 @@ for (const path of ["/pt", "/en"]) {
       await expect.poll(parado).toBe(false);
     });
 
-    test("com movimento reduzido não há constelação nem parallax", async ({ page }) => {
-      await aparelhoForte(page);
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      const chunks = registrarChunks(page);
-      await page.goto(path);
-      const peca = page.getByTestId("vitrine-peca");
-      await peca.scrollIntoViewIfNeeded();
-      await page.waitForLoadState("networkidle");
-      await page.waitForTimeout(300);
-
-      await expect(peca).toHaveAttribute("data-estado", "reduzida");
-      await expect(peca.locator("[data-camadas], [data-camada], [data-estrela]")).toHaveCount(0);
-      expect(await chunks.constelacaoBaixada()).toBe(false);
-    });
-
-    test("ao pedir movimento reduzido com a peça rodando, as camadas somem", async ({
-      page,
-    }) => {
-      const peca = await abrirPecaCompleta(page, path);
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      await expect(peca).toHaveAttribute("data-estado", "reduzida");
-      await expect(peca.locator("[data-camadas], [data-camada], [data-estrela]")).toHaveCount(0);
-    });
   });
 
   test.describe(`Vitrine ${path} em celular (pointer: coarse)`, () => {

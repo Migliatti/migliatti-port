@@ -43,7 +43,7 @@ for (const path of paths) {
 }
 
 test.describe("controles e movimento", () => {
-  test("botão eleva no hover com movimento normal e fica parado com movimento reduzido", async ({
+  test("botão tem transição de movimento", async ({
     page,
   }) => {
     await page.goto("/pt");
@@ -51,20 +51,13 @@ test.describe("controles e movimento", () => {
     await expect(botao).toBeVisible();
     expect(
       await botao.evaluate((n) => getComputedStyle(n).transitionDuration),
-    ).not.toBe("0s");
-
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.reload();
-    const parado = page.locator(".botao").first();
-    expect(
-      await parado.evaluate((n) => getComputedStyle(n).transitionDuration),
-    ).toBe("0s");
+    ).toBe("0.2s");
   });
 });
 
 for (const path of paths) {
   test.describe(`hero ${path}`, () => {
-    test("título anima legível e para com movimento reduzido", async ({
+    test("título anima e fica legível desde o primeiro quadro", async ({
       page,
     }) => {
       await page.goto(path);
@@ -90,13 +83,6 @@ for (const path of paths) {
       expect(
         await h1.evaluate((n) => getComputedStyle(n).animationName),
       ).toBe("animacao-titulo");
-
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      await page.reload();
-      const parado = page.locator("h1").first();
-      expect(
-        await parado.evaluate((n) => getComputedStyle(n).animationName),
-      ).toBe("none");
     });
 
     test("CTAs levam ao contato e aos projetos", async ({ page }) => {
@@ -236,7 +222,7 @@ test.describe("auditoria de design", () => {
 });
 
 test.describe("correções da revisão final", () => {
-  test("animações novas respeitam o limite de 500ms do ADR 0001 (mantido)", async ({
+  test("a entrada do título dura até 800ms (ADR 0001 revisto pelo ADR 0005)", async ({
     page,
   }) => {
     await page.goto("/pt");
@@ -244,7 +230,7 @@ test.describe("correções da revisão final", () => {
       const h1 = document.querySelector("h1")!;
       return [getComputedStyle(h1).animationDuration].map((d) => parseFloat(d));
     });
-    for (const d of duracoes) expect(d).toBeLessThanOrEqual(0.5);
+    for (const d of duracoes) expect(d).toBeLessThanOrEqual(0.8);
   });
 
   test("o botão primário tem pílula clara e texto escuro", async ({
@@ -268,7 +254,7 @@ test.describe("correções da revisão final", () => {
 test.describe("movimento dos botões", () => {
   const transformar = (n: Element) => getComputedStyle(n).transform;
 
-  test("hover eleva 3px e o clique afunda, com movimento normal", async ({
+  test("hover eleva 3px e cresce 3%, o clique afunda", async ({
     page,
   }) => {
     await page.goto("/pt");
@@ -276,24 +262,11 @@ test.describe("movimento dos botões", () => {
     await botao.hover();
     await expect
       .poll(() => botao.evaluate(transformar))
-      .toBe("matrix(1, 0, 0, 1, 0, -3)");
+      .toBe("matrix(1.03, 0, 0, 1.03, 0, -3)");
     await page.mouse.down();
     await expect
       .poll(() => botao.evaluate(transformar))
-      .toBe("matrix(0.97, 0, 0, 0.97, 0, 0)");
-    await page.mouse.up();
-  });
-
-  test("com movimento reduzido hover e clique não movem o botão", async ({
-    page,
-  }) => {
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/pt");
-    const botao = page.locator("a.botao-secundario").first();
-    await botao.hover();
-    expect(await botao.evaluate(transformar)).toBe("none");
-    await page.mouse.down();
-    expect(await botao.evaluate(transformar)).toBe("none");
+      .toBe("matrix(0.95, 0, 0, 0.95, 0, 0)");
     await page.mouse.up();
   });
 

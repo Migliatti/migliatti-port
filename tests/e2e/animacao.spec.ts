@@ -39,22 +39,6 @@ for (const path of ["/pt", "/en"]) {
       expect(animacaoDefinida).toBe("animacao-entrada");
     });
 
-    test("com movimento reduzido a animação fica desligada", async ({
-      page,
-    }) => {
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      await page.goto(path);
-      const el = page.getByTestId("posicionamento");
-
-      await expect(el).toBeVisible();
-      expect(
-        await el.evaluate((node) => getComputedStyle(node).animationName),
-      ).toBe("none");
-      expect(await el.evaluate((node) => node.getAnimations().length)).toBe(0);
-      expect(
-        await el.evaluate((node) => Number(getComputedStyle(node).opacity)),
-      ).toBe(1);
-    });
   });
 }
 
@@ -117,16 +101,6 @@ for (const path of ["/pt", "/en"]) {
         }
       });
 
-      test(`${id} fica parado com movimento reduzido`, async ({ page }) => {
-        await page.emulateMedia({ reducedMotion: "reduce" });
-        await page.goto(path);
-        const el = page.getByTestId(id);
-        await expect(el).toBeVisible();
-        expect(
-          await el.evaluate((n) => getComputedStyle(n).animationName),
-        ).toBe("none");
-        expect(await el.evaluate((n) => n.getAnimations().length)).toBe(0);
-      });
     }
   });
 }

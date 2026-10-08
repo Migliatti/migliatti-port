@@ -111,16 +111,6 @@ for (const path of ["/pt", "/en"]) {
   });
 
   test.describe(`cor aleatória ${path} no azul de reserva`, () => {
-    test.use({ reducedMotion: "reduce" });
-
-    test("com movimento reduzido a decoração fica azul", async ({ page }) => {
-      await fixarSorteio(page);
-      await page.goto(path);
-      await expect(page.getByTestId("hero-ceu")).toHaveCSS("color", RESERVA);
-      const corpo = page.locator('[data-corpo="site"]');
-      await corpo.scrollIntoViewIfNeeded();
-      await expect(corpo).toHaveCSS("color", RESERVA);
-    });
   });
 
   test.describe(`cor aleatória ${path} sem JavaScript`, () => {

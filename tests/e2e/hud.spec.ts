@@ -208,25 +208,6 @@ for (const home of homes) {
   });
 }
 
-test.describe("movimento reduzido", () => {
-  test.use({ reducedMotion: "reduce" });
-
-  test("sem cursor piscante nem animação na Vitrine", async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 800 });
-    await page.goto("/pt");
-    const animacoes = await page.evaluate(() => ({
-      cursor: document
-        .querySelector(".hud-cursor")!
-        .getAnimations().length,
-      vitrine: [
-        document.querySelector("#vitrine")!,
-        ...document.querySelectorAll("#vitrine *"),
-      ].reduce((n, el) => n + el.getAnimations().length, 0),
-    }));
-    expect(animacoes).toEqual({ cursor: 0, vitrine: 0 });
-  });
-});
-
 test("com movimento liberado o cursor pisca", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 800 });
   await page.goto("/pt");

@@ -55,12 +55,16 @@ for (const path of ["/pt", "/en"]) {
       await expect
         .poll(async () => Number(await conteudo.evaluate((el) => getComputedStyle(el).opacity)))
         .toBeLessThan(0.5);
-      // No fim da saída os botões somem da ordem de Tab.
+      // Os botões seguem focáveis: ao focar um, a página rola até ele e a
+      // Hero reaparece.
       await page.evaluate(() => window.scrollTo(0, 800));
-      await expect(conteudo).toHaveCSS("visibility", "hidden");
-      await page.evaluate(() => window.scrollTo(0, 0));
-      await expect(conteudo).toHaveCSS("opacity", "1");
-      await expect(conteudo).toHaveCSS("visibility", "visible");
+      await expect
+        .poll(async () => Number(await conteudo.evaluate((el) => getComputedStyle(el).opacity)))
+        .toBe(0);
+      await page.locator("a.botao-primario").first().focus();
+      await expect
+        .poll(async () => Number(await conteudo.evaluate((el) => getComputedStyle(el).opacity)))
+        .toBeGreaterThan(0.9);
     });
   });
 }

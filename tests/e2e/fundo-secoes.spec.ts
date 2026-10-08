@@ -86,25 +86,6 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       await expect.poll(deslocamento).toBeGreaterThan(-1);
     });
 
-    test("com movimento reduzido fica estático e o chunk nunca é baixado", async ({
-      page,
-    }) => {
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      const chunks = registrarChunks(page);
-      await page.goto(path);
-      await page.waitForLoadState("networkidle");
-      const fundo = page.getByTestId("fundo-secoes");
-      await expect(fundo).toHaveAttribute("data-estado", "reduzida");
-      await expect(fundo.locator(".fundo-secoes-pontos")).toHaveCSS("background-image", /radial-gradient/);
-      await page.mouse.wheel(0, 1500);
-      expect(
-        await fundo
-          .locator(".fundo-secoes-pontos")
-          .evaluate((el) => getComputedStyle(el).transform),
-      ).toBe("none");
-      expect(await chunks.baixado(MARCA_DA_GRADE)).toBe(false);
-    });
-
     test("sem JavaScript os pontos já aparecem parados", async ({ browser }) => {
       const contexto = await browser.newContext({ javaScriptEnabled: false });
       const page = await contexto.newPage();

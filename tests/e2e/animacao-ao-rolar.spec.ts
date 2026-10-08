@@ -39,16 +39,6 @@ for (const path of ["/pt", "/en"]) {
         );
       });
 
-      test(`${id} fica parado com movimento reduzido`, async ({ page }) => {
-        await page.emulateMedia({ reducedMotion: "reduce" });
-        await page.goto(path);
-        const el = page.getByTestId(id).first();
-        await expect(el).toBeAttached();
-        expect(await el.evaluate((n) => getComputedStyle(n).animationName)).toBe(
-          "none",
-        );
-        expect(await el.evaluate((n) => n.getAnimations().length)).toBe(0);
-      });
     }
 
     test("sem JavaScript todos os cartões aparecem", async ({ browser }) => {

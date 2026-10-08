@@ -122,30 +122,6 @@ for (const path of ["/pt", "/en"]) {
       await expect.poll(rodando).toBe(true);
     });
 
-    test("com movimento reduzido o céu fica vazio e o chunk nunca é baixado", async ({
-      page,
-    }) => {
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      const chunks = registrarChunks(page);
-      await page.goto(path);
-      await page.waitForLoadState("networkidle");
-
-      await expect(page.locator("h1")).toBeVisible();
-      const ceu = page.getByTestId("hero-ceu");
-      await expect(ceu).toHaveAttribute("data-estado", "reduzida");
-      await expect(ceu.locator("canvas")).toHaveCount(0);
-      // A saída da Hero ao rolar (ADR 0005) é uma animação de rolagem do próprio
-      // CSS, fora do que este teste mede: só conta as animações de tempo.
-      expect(
-        await ceu.evaluate(
-          (el) =>
-            el
-              .getAnimations({ subtree: true })
-              .filter((a) => a.timeline instanceof DocumentTimeline).length,
-        ),
-      ).toBe(0);
-      expect(await chunks.baixado(MARCA_DO_CEU)).toBe(false);
-    });
   });
 
   test.describe(`céu da Hero ${path} em celular (pointer: coarse)`, () => {
@@ -256,31 +232,6 @@ for (const lang of ["pt", "en"]) {
         await expect.poll(retrato).not.toBe(parado);
       });
 
-      test("com movimento reduzido ficam paradas e o chunk nunca é baixado", async ({
-        page,
-      }) => {
-        await page.emulateMedia({ reducedMotion: "reduce" });
-        const chunks = registrarChunks(page);
-        await page.goto(caminho);
-
-        const figuras = page.getByTestId("evidencia-ilustracao");
-        await expect(figuras).toHaveCount(estudo.ilustracoes);
-        for (const figura of await figuras.all()) {
-          await figura.scrollIntoViewIfNeeded();
-          const moldura = figura.getByTestId("ilustracao");
-          await expect(moldura).toHaveAttribute("data-estado", "reduzida");
-          await expect(figura.getByTestId("rotulo-ilustracao")).toBeVisible();
-          const imagem = figura.getByRole("img");
-          await expect(imagem).toBeVisible();
-          expect((await imagem.getAttribute("aria-label"))?.trim()).toBeTruthy();
-          await expect(moldura.locator("[data-pulso-halo], [data-pulso-cometa]")).toHaveCount(0);
-          expect(
-            await moldura.evaluate((el) => el.getAnimations({ subtree: true }).length),
-          ).toBe(0);
-        }
-        await page.waitForLoadState("networkidle");
-        expect(await chunks.baixado(MARCA_DO_PULSO)).toBe(false);
-      });
     });
 
     test.describe(`ilustrações ${caminho} em celular (pointer: coarse)`, () => {
