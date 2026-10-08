@@ -22,23 +22,25 @@ export function Hero({ lang, nome, posicionamento }: Props) {
     <section id="inicio" aria-label={nome} className="hero">
       <CeuDaHero />
       <BuracoNegroDaHero />
-      <h1 className="animacao-titulo hero-nome font-extrabold leading-[1.02] tracking-tight">
-        {nome}
-      </h1>
-      <div className="hero-apoio">
-        <p
-          data-testid="posicionamento"
-          className="animacao-entrada max-w-2xl text-lg text-muted sm:text-2xl"
-        >
-          {posicionamento}
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <a href="#contato" className="botao botao-primario">
-            {dict.falarComigo}
-          </a>
-          <a href="#destaques" className="botao botao-secundario">
-            {dict.verProjetos}
-          </a>
+      <div className="hero-conteudo">
+        <h1 className="animacao-titulo hero-nome font-extrabold leading-[1.02] tracking-tight">
+          {nome}
+        </h1>
+        <div className="hero-apoio">
+          <p
+            data-testid="posicionamento"
+            className="animacao-entrada max-w-2xl text-lg text-muted sm:text-2xl"
+          >
+            {posicionamento}
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a href="#contato" className="botao botao-primario">
+              {dict.falarComigo}
+            </a>
+            <a href="#destaques" className="botao botao-secundario">
+              {dict.verProjetos}
+            </a>
+          </div>
         </div>
       </div>
     </section>

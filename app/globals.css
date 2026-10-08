@@ -413,17 +413,24 @@ main:focus {
   position: relative;
   isolation: isolate;
   display: flex;
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: min(100vh, 50rem);
+  min-height: min(100svh, 50rem);
   flex-direction: column;
   justify-content: center;
-  gap: 2rem;
   padding-top: calc(var(--altura-barra) + 2rem);
   padding-bottom: 3rem;
 }
 
+.hero-conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 .hero-nome {
-  font-size: clamp(3rem, 9vw, 6.5rem);
+  /* Menor que antes (6.5rem) para o nome terminar antes do anel do buraco
+     negro em telas largas. */
+  font-size: clamp(3rem, 7.5vw, 5.75rem);
   overflow-wrap: anywhere;
 }
 
@@ -467,7 +474,9 @@ main:focus {
   z-index: -1;
   width: 100vw;
   margin-left: -50vw;
-  overflow: hidden;
+  /* clip (e não hidden): a cena passa da moldura de propósito e não deve
+     contar como rolagem. */
+  overflow: clip;
   pointer-events: none;
   color: var(--cor-buraco-negro);
 }
@@ -483,7 +492,7 @@ main:focus {
 .hero-buraco-negro-cena {
   position: absolute;
   top: 42%;
-  left: calc(76% - 0.65 * max(100%, 56rem));
+  left: calc(80% - 0.65 * max(100%, 56rem));
   width: max(100%, 56rem);
   aspect-ratio: 2 / 1;
   transform: translateY(-50%);
@@ -540,10 +549,48 @@ main:focus {
   height: auto;
 }
 
+/*
+ * Saída da Hero ao rolar (ADR 0005): o conteúdo sobe, encolhe e esmaece
+ * enquanto o fundo (céu e buraco negro) afunda mais devagar, em paralaxe. Linha
+ * do tempo de rolagem da página, CSS puro; sem suporte a animation-timeline a
+ * Hero só rola normalmente. Só transform, opacity e filter.
+ */
+@supports (animation-timeline: scroll()) {
+  .hero-conteudo {
+    animation: hero-saida-conteudo linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 75vh;
+    transform-origin: 20% 60%;
+    will-change: transform, opacity;
+  }
+
+  .hero-ceu,
+  .hero-buraco-negro {
+    animation: hero-saida-fundo linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100vh;
+  }
+}
+
+@keyframes hero-saida-conteudo {
+  to {
+    opacity: 0;
+    transform: translateY(-14vh) scale(0.92);
+    filter: blur(6px);
+  }
+}
+
+@keyframes hero-saida-fundo {
+  to {
+    opacity: 0.15;
+    transform: translateY(12vh) scale(1.06);
+  }
+}
+
 /* Grid assimétrico: o apoio do Hero começa deslocado à direita em telas largas. */
 @media (min-width: 48rem) {
   .hero-apoio {
-    margin-left: 25%;
+    margin-left: 12%;
   }
 }
 
