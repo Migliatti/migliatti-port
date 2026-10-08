@@ -17,7 +17,9 @@ for (const path of ["/pt", "/en"]) {
 
     test("o sublinhado dos links vira azul no hover", async ({ page }) => {
       await page.goto(path);
-      const link = page.locator("main a.underline:not(.link-demo)").first();
+      const link = page
+        .locator('[data-projeto="rubicon-archive"]')
+        .getByRole("link", { name: /Reposit|Repository/ });
       await link.scrollIntoViewIfNeeded();
       await expect(link).not.toHaveCSS("text-decoration-color", AZUL);
       await link.hover();

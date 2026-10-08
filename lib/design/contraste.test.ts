@@ -104,9 +104,9 @@ describe("tema único escuro grafite (ADR 0004)", () => {
           expect(razaoDeContraste(t[k], fundo()), k).toBeGreaterThanOrEqual(4.5);
         }
       });
-      it("a pílula ativa e o foco se destacam como componente (>= 3)", () => {
+      it("a pílula do botão, a pílula ativa azul e o foco azul se destacam como componente (>= 3)", () => {
         expect(razaoDeContraste(t.accent, fundo())).toBeGreaterThanOrEqual(3);
-        expect(razaoDeContraste(t.foreground, fundo())).toBeGreaterThanOrEqual(3);
+        expect(razaoDeContraste(t.azul, fundo())).toBeGreaterThanOrEqual(3);
       });
       it("o azul passa AA como texto e se destaca como elemento gráfico", () => {
         expect(razaoDeContraste(t.azul, fundo())).toBeGreaterThanOrEqual(4.5);
