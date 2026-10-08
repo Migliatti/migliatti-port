@@ -256,6 +256,16 @@ main:focus {
   font-size: 0.75rem;
 }
 
+/* Sinal de estado (ADR 0004: âmbar só em sinais pontuais): "Rascunho". */
+.chip-aviso {
+  border-color: var(--estado-aviso);
+  background: transparent;
+  color: var(--estado-aviso);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
 /*
  * Botões (ADR 0005): magnéticos e vivos. `--mx` e `--my` são o deslocamento
  * que o ponteiro puxa (components/animacao/Magnetico.tsx, só com mouse); sem
@@ -999,7 +1009,7 @@ main:focus {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.25rem 1rem;
+  gap: 0.25rem 0.75rem;
   min-width: 0;
   overflow-wrap: anywhere;
 }

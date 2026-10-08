@@ -82,7 +82,7 @@ export default async function EstudoDeCasoPage({
             <p className="max-w-2xl text-lg text-muted sm:text-xl">
               {projeto.resumo}
             </p>
-            <p data-testid="rascunho" className="font-mono text-xs text-muted">
+            <p data-testid="rascunho" className="chip chip-aviso self-start">
               {dict.avisoRascunho}
             </p>
             <div className="flex flex-wrap gap-3">
