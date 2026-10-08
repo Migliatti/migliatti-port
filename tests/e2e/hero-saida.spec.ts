@@ -36,10 +36,13 @@ for (const path of ["/pt", "/en"]) {
       for (const largura of [1440, 390]) {
         await page.setViewportSize({ width: largura, height: 844 });
         await page.goto(path);
-        const sobra = await page.evaluate(
-          () => document.documentElement.scrollWidth - window.innerWidth,
-        );
-        expect(sobra).toBeLessThanOrEqual(0);
+        const sobra = () =>
+          page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+        expect(await sobra()).toBeLessThanOrEqual(0);
+        // Também depois de rolar, com a saída da Hero em andamento.
+        await page.evaluate(() => window.scrollTo(0, 400));
+        await page.waitForTimeout(200);
+        expect(await sobra()).toBeLessThanOrEqual(0);
       }
     });
 
