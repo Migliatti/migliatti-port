@@ -551,24 +551,23 @@ main:focus {
 
 /*
  * Saída da Hero ao rolar (ADR 0005): o conteúdo sobe, encolhe e esmaece
- * enquanto o fundo (céu e buraco negro) afunda mais devagar, em paralaxe. Linha
+ * enquanto o fundo (céu e buraco negro) afunda mais devagar e some, em paralaxe. Linha
  * do tempo de rolagem da página, CSS puro; sem suporte a animation-timeline a
- * Hero só rola normalmente. Só transform, opacity e filter.
+ * Hero só rola normalmente. Só transform, opacity e visibility.
  */
 @supports (animation-timeline: scroll()) {
   .hero-conteudo {
     animation: hero-saida-conteudo linear both;
     animation-timeline: scroll(root);
-    animation-range: 0 75vh;
+    animation-range: 0px 75vh;
     transform-origin: 20% 60%;
-    will-change: transform, opacity;
   }
 
   .hero-ceu,
   .hero-buraco-negro {
     animation: hero-saida-fundo linear both;
     animation-timeline: scroll(root);
-    animation-range: 0 100vh;
+    animation-range: 0px 100vh;
   }
 }
 
@@ -576,13 +575,14 @@ main:focus {
   to {
     opacity: 0;
     transform: translateY(-14vh) scale(0.92);
-    filter: blur(6px);
+    /* Valor discreto: só vira hidden no fim, e o foco não cai em botão invisível. */
+    visibility: hidden;
   }
 }
 
 @keyframes hero-saida-fundo {
   to {
-    opacity: 0.15;
+    opacity: 0;
     transform: translateY(12vh) scale(1.06);
   }
 }

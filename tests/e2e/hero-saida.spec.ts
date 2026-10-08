@@ -45,8 +45,12 @@ for (const path of ["/pt", "/en"]) {
       await expect
         .poll(async () => Number(await conteudo.evaluate((el) => getComputedStyle(el).opacity)))
         .toBeLessThan(0.5);
+      // No fim da saída os botões somem da ordem de Tab.
+      await page.evaluate(() => window.scrollTo(0, 800));
+      await expect(conteudo).toHaveCSS("visibility", "hidden");
       await page.evaluate(() => window.scrollTo(0, 0));
       await expect(conteudo).toHaveCSS("opacity", "1");
+      await expect(conteudo).toHaveCSS("visibility", "visible");
     });
   });
 }
