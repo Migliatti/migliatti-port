@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { esperarAnimacoesFinitas } from "./animacoes-util";
 
 const paths = ["/pt", "/en"];
 
@@ -180,7 +181,7 @@ for (const path of ["/pt/projetos/kepler-lab", "/en/projetos/kepler-lab"]) {
     await page.goto(path);
     const cores = await page.evaluate(() => ({
       fundo: getComputedStyle(document.body).backgroundColor,
-      chip: getComputedStyle(document.querySelector("main .chip")!).backgroundColor,
+      chip: getComputedStyle(document.querySelector("main .chip:not(.chip-aviso)")!).backgroundColor,
       numero: getComputedStyle(document.querySelector(".secao-numero")!).color,
     }));
     expect(cores).toEqual({
@@ -258,6 +259,7 @@ test.describe("movimento dos botões", () => {
     page,
   }) => {
     await page.goto("/pt");
+    await esperarAnimacoesFinitas(page);
     const botao = page.locator("a.botao-secundario").first();
     await botao.hover();
     await expect

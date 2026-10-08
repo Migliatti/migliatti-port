@@ -191,6 +191,11 @@ for (const path of ["/pt", "/en"]) {
       const acento = await corDeAcento(page);
       const item = page.locator('[data-pilar="diagnostico"]');
       await expect(item).not.toHaveCSS("border-left-color", acento);
+      // Com a aba oculta a peça pausa; o corpo para de orbitar e dá para passar o mouse.
+      await page.evaluate(() => {
+        Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
+        document.dispatchEvent(new Event("visibilitychange"));
+      });
       await page.locator('[data-corpo="diagnostico"] [data-astro]').hover();
       await expect(item).toHaveCSS("border-left-color", acento);
     });
