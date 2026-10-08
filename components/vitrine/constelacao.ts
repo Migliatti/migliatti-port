@@ -3,7 +3,7 @@
 // camadas.
 //
 // Só é importado (via `import()`) por orbitas.ts quando a peça roda na versão
-// completa; a versão leve e o movimento reduzido nunca baixam este chunk.
+// completa; a versão leve nunca baixa este chunk.
 // Regras em docs/adr/0003-editorial-espacial-animejs.md.
 //
 // Diferente de orbitas.ts, cria os próprios elementos (decorativos, sem

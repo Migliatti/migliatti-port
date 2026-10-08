@@ -17,16 +17,14 @@ type Props = {
  * - `aguardando`: a seção ainda não entrou na tela; nada pesado foi baixado.
  * - `carregando`: o chunk da peça está sendo baixado.
  * - `carregada`: a peça está rodando (ou pausada fora da tela).
- * - `reduzida`: o leitor pediu movimento reduzido; só o SVG estático.
  */
-type Estado = "aguardando" | "carregando" | "carregada" | "reduzida";
+type Estado = "aguardando" | "carregando" | "carregada";
 
 /** Margem para começar a baixar a peça um pouco antes de ela aparecer. */
 const MARGEM_DE_CARGA = "200px 0px";
 
 /**
- * Carrega a peça da Vitrine só quando a seção entra na tela e só se o leitor
- * não pediu movimento reduzido. Até lá (e sem JavaScript) o mesmo sistema
+ * Carrega a peça da Vitrine só quando a seção entra na tela. Até lá (e sem JavaScript) o mesmo sistema
  * orbital aparece parado, com os corpos já focáveis. Regras em
  * docs/adr/0002-vitrine.md e docs/adr/0003-editorial-espacial-animejs.md.
  */
@@ -37,7 +35,6 @@ export function PecaDaVitrine({ rotulo, pilares }: Props) {
     if (!moldura.current) return;
     const el: HTMLDivElement = moldura.current;
 
-    const reduzir = window.matchMedia("(prefers-reduced-motion: reduce)");
     let peca: Peca | null = null;
     let observador: IntersectionObserver | null = null;
     let visivel = false;
@@ -57,13 +54,13 @@ export function PecaDaVitrine({ rotulo, pilares }: Props) {
         // Chunk separado (com o anime.js): só é pedido aqui, nunca no
         // carregamento da página.
         const { iniciarPeca } = await import("./orbitas");
-        if (desmontado || reduzir.matches || peca) return;
+        if (desmontado || peca) return;
         peca = iniciarPeca(el);
         marcar("carregada");
         if (!deveRodar()) peca.pausar();
       } catch {
         // Sem a peça, o SVG estático continua no lugar.
-        if (!desmontado && !reduzir.matches) marcar("aguardando");
+        if (!desmontado) marcar("aguardando");
       } finally {
         carregando = false;
       }
@@ -82,16 +79,7 @@ export function PecaDaVitrine({ rotulo, pilares }: Props) {
       }
     }
 
-    function aplicarPreferencia() {
-      if (reduzir.matches) {
-        observador?.disconnect();
-        observador = null;
-        peca?.destruir();
-        peca = null;
-        marcar("reduzida");
-        return;
-      }
-      if (observador) return;
+    function observar() {
       marcar("aguardando");
       observador = new IntersectionObserver(aoCruzar, {
         rootMargin: MARGEM_DE_CARGA,
@@ -105,13 +93,11 @@ export function PecaDaVitrine({ rotulo, pilares }: Props) {
       else peca.pausar();
     }
 
-    aplicarPreferencia();
-    reduzir.addEventListener("change", aplicarPreferencia);
+    observar();
     document.addEventListener("visibilitychange", aoMudarVisibilidadeDaAba);
 
     return () => {
       desmontado = true;
-      reduzir.removeEventListener("change", aplicarPreferencia);
       document.removeEventListener("visibilitychange", aoMudarVisibilidadeDaAba);
       observador?.disconnect();
       peca?.destruir();
@@ -165,8 +151,8 @@ function translado(orbita: Orbita, graus: number): string {
 }
 
 /**
- * O quadro parado da peça. É o que aparece sem JavaScript, com movimento
- * reduzido e antes do chunk chegar; o módulo animado só move o que já está
+ * O quadro parado da peça. É o que aparece sem JavaScript e antes do chunk
+ * chegar; o módulo animado só move o que já está
  * aqui. Os atributos `data-*` são o contrato com `orbitas.ts`.
  */
 function SistemaOrbital({ pilares }: Pick<Props, "pilares">) {

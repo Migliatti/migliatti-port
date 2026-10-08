@@ -6,8 +6,7 @@
 // câmera à deriva.
 // Animado por cima do céu estrelado e atrás do texto.
 //
-// Só é importado (via `import()`) por BuracoNegroDaHero depois da montagem, e
-// nunca com movimento reduzido; vive num chunk próprio, com os módulos do
+// Só é importado (via `import()`) por BuracoNegroDaHero depois da montagem; vive num chunk próprio, com os módulos do
 // anime.js que usa. Regras em docs/adr/0003-editorial-espacial-animejs.md
 // (emenda da issue #57).
 //

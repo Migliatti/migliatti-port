@@ -1,7 +1,7 @@
 // Pulso das ilustrações dos estudos de caso, com anime.js v4.
 //
 // Só é importado (via `import()`) por IlustracaoAnimada quando a ilustração
-// entra na tela e o leitor não pediu movimento reduzido; vive num chunk
+// entra na tela; vive num chunk
 // próprio. Regras em docs/adr/0003-editorial-espacial-animejs.md.
 //
 // Não altera o que a ilustração afirma: nenhum texto, caixa ou seta original

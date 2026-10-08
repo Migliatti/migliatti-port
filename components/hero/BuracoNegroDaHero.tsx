@@ -3,8 +3,7 @@
 import { useRef } from "react";
 import { usePecaPreguicosa } from "@/components/animacao/usePecaPreguicosa";
 
-// Chunk separado, com o anime.js: só é pedido depois da montagem, e nunca com
-// movimento reduzido.
+// Chunk separado, com o anime.js: só é pedido depois da montagem.
 async function iniciar(el: HTMLElement) {
   const { iniciarBuracoNegro } = await import("./buraco-negro");
   return iniciarBuracoNegro(el);
@@ -13,8 +12,7 @@ async function iniciar(el: HTMLElement) {
 /**
  * Buraco negro ao fundo da Hero: camada decorativa por cima do céu estrelado e
  * atrás do texto, vazia no HTML do servidor. O texto da Hero nunca depende
- * dela (ADR 0003, regra 5); com movimento reduzido ela fica vazia e o módulo
- * nem é baixado.
+ * dela (ADR 0003, regra 5); até o módulo chegar ela fica vazia.
  */
 export function BuracoNegroDaHero() {
   const ref = useRef<HTMLDivElement>(null);

@@ -2,7 +2,7 @@
 // página rola, mais devagar que o conteúdo, e por isso parece ficar para trás.
 //
 // Só é importado (via `import()`) por FundoDasSecoes depois da montagem, só na
-// versão completa e nunca com movimento reduzido; chunk próprio, sem anime.js.
+// versão completa; chunk próprio, sem anime.js.
 // Regras em docs/adr/0003-editorial-espacial-animejs.md.
 //
 // Custo: só `transform`, num único `requestAnimationFrame` por evento de

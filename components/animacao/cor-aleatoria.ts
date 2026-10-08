@@ -3,8 +3,8 @@
 // corpo da Vitrine recebe o próprio matiz, sorteado quando o módulo animado
 // monta (sempre depois da hidratação; o HTML do servidor vem em azul).
 //
-// Os módulos animados nunca rodam com movimento reduzido nem sem JavaScript;
-// nesses casos tudo fica no azul do tema (`--cor-decorativa`). Os testes
+// Os módulos animados não rodam sem JavaScript; nesse caso (e até o módulo
+// chegar) tudo fica no azul do tema (`--cor-decorativa`). Os testes
 // fixam o sorteio trocando `Math.random`.
 
 /** Saturação e luminosidade fixas: uma faixa luminosa sobre o preto. */
