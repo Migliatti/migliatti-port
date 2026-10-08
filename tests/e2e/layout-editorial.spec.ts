@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import {
   expectBarraIlha,
   expectBarraSemTransbordo,
-  expectPilulaInvertida,
+  expectPilulaAtiva,
   LARGURAS,
 } from "./barra-util";
 
@@ -83,7 +83,7 @@ for (const home of homes) {
 
       // A barra continua flutuando no topo depois da rolagem.
       await expectBarraIlha(page);
-      await expectPilulaInvertida(page, home.secao);
+      await expectPilulaAtiva(page, home.secao);
 
       await nav.getByRole("link", { name: /Contato|Contact/ }).click();
       await expect(nav.locator('[aria-current="location"]')).toHaveText(
@@ -193,8 +193,8 @@ for (const home of homes) {
         });
         expect(foco.estilo).not.toBe("none");
         expect(foco.largura).toBeGreaterThanOrEqual(2);
-        // Visível sobre o grafite: contorno claro, afastado do controle.
-        expect(foco.cor).toBe("rgb(240, 240, 240)");
+        // Visível sobre o grafite: contorno azul, afastado do controle.
+        expect(foco.cor).toBe("rgb(102, 164, 245)");
         expect(foco.deslocamento).toBeGreaterThanOrEqual(2);
       }
     });

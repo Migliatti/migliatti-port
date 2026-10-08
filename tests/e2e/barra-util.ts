@@ -76,8 +76,8 @@ export async function expectBarraIlha(page: Page) {
   expect(ilha.sombra).not.toBe("none");
 }
 
-/** A âncora da seção atual é a pílula invertida (accent / on-accent). */
-export async function expectPilulaInvertida(page: Page, nome: string | RegExp) {
+/** A âncora da seção atual é a pílula azul (azul / on-azul, ADR 0005). */
+export async function expectPilulaAtiva(page: Page, nome: string | RegExp) {
   const atual = page
     .locator("header.barra-fixa")
     .locator('a[aria-current="location"]');
@@ -90,7 +90,7 @@ export async function expectPilulaInvertida(page: Page, nome: string | RegExp) {
       raio: parseFloat(c.borderTopLeftRadius),
     };
   });
-  expect(css.fundo).toBe("rgb(230, 230, 230)");
+  expect(css.fundo).toBe("rgb(102, 164, 245)");
   expect(css.texto).toBe("rgb(23, 23, 23)");
   expect(css.raio).toBeGreaterThanOrEqual(12);
 }

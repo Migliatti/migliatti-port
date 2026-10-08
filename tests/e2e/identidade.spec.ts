@@ -140,12 +140,11 @@ for (const path of paths) {
               estilo: css.outlineStyle,
               largura: parseFloat(css.outlineWidth),
               cor: css.outlineColor,
-              texto: getComputedStyle(document.body).color,
             };
           });
           expect(foco.estilo).not.toBe("none");
           expect(foco.largura).toBeGreaterThanOrEqual(2);
-          expect(foco.cor).toBe(foco.texto);
+          expect(foco.cor).toBe("rgb(102, 164, 245)"); // --azul
         });
       }
     }

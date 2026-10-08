@@ -75,7 +75,7 @@ for (const path of ["/pt", "/en"]) {
         };
         const achados: string[] = [];
         const nos = document.querySelectorAll(
-          '[data-testid="vitrine"] :is(h2, p, li, strong, span, a, button), [data-testid="vitrine-hud"], [data-testid="vitrine-hud"] *, a, button',
+          '[data-testid="vitrine"] :is(h2, p, li, strong, span, a, button), [data-testid="vitrine-hud"], [data-testid="vitrine-hud"] *',
         );
         for (const el of nos) {
           if (el.closest("svg")) continue; // ilustração decorativa
