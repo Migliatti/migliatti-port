@@ -19,10 +19,17 @@ for (const path of ["/pt", "/en"]) {
     test("a seção 01 aparece na primeira tela (sem vão de uma tela inteira)", async ({
       page,
     }) => {
-      await page.setViewportSize({ width: 1440, height: 900 });
-      await page.goto(path);
-      const topo = await page.locator("#destaques").evaluate((el) => el.getBoundingClientRect().top);
-      expect(topo).toBeLessThan(900);
+      for (const [largura, altura, limite] of [
+        [1440, 900, 840], // o título "Projetos em destaque" já cabe na dobra
+        [390, 844, 844], // no celular, ao menos o começo da seção
+      ]) {
+        await page.setViewportSize({ width: largura, height: altura });
+        await page.goto(path);
+        const topo = await page
+          .locator("#destaques")
+          .evaluate((el) => el.getBoundingClientRect().top);
+        expect(topo, `${largura}x${altura}`).toBeLessThan(limite);
+      }
     });
 
     test("a página não ganha rolagem horizontal", async ({ page }) => {

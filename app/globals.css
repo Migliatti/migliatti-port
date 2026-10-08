@@ -413,8 +413,8 @@ main:focus {
   position: relative;
   isolation: isolate;
   display: flex;
-  min-height: min(100vh, 50rem);
-  min-height: min(100svh, 50rem);
+  min-height: min(calc(100vh - 7rem), 44rem);
+  min-height: min(calc(100svh - 7rem), 44rem);
   flex-direction: column;
   justify-content: center;
   padding-top: calc(var(--altura-barra) + 2rem);
