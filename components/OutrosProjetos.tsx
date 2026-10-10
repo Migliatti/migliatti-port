@@ -47,7 +47,7 @@ export function OutrosProjetos({
             </p>
             {projeto.evidencias.filter(ehEvidenciaVisual).map((evidencia, i) => (
               <div key={evidencia.url} className="outro-projeto-evidencia mt-4 max-w-2xl">
-                <EvidenciaVisual evidencia={evidencia} lang={lang} prefixo={`outro-${projeto.id}-${i}`} compacta />
+                <EvidenciaVisual demo={projeto.demo} evidencia={evidencia} lang={lang} prefixo={`outro-${projeto.id}-${i}`} compacta />
               </div>
             ))}
           </li>

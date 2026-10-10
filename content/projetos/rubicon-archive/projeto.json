@@ -13,8 +13,8 @@
     {
       "tipo": "captura",
       "url": "/evidencias/rubicon-archive.jpg",
-      "largura": 1280,
-      "altura": 720,
+      "largura": 1440,
+      "altura": 900,
       "alt": {
         "pt": "Rubicon Archive em execução: página inicial com acesso aos dossiês, arquivo e doutrina.",
         "en": "Rubicon Archive running: home page linking to target dossiers, archive and doctrine."

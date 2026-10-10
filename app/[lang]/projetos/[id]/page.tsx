@@ -210,6 +210,7 @@ export default async function EstudoDeCasoPage({
                 >
                   {ehEvidenciaVisual(evidencia) && (
                     <EvidenciaVisual
+                      demo={projeto.demo}
                       evidencia={evidencia}
                       lang={lang}
                       prefixo={`ilustracao-${i}`}

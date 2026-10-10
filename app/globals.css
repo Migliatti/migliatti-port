@@ -1017,6 +1017,7 @@ main:focus {
 }
 
 .projeto-cartao-numero {
+  align-self: start;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   color: var(--accent-text);
@@ -1271,10 +1272,10 @@ main:focus {
 }
 
 .projeto-evidencia { min-width: 0; }
-.evidencia-imagem { display: block; width: 100%; height: auto; object-fit: contain; border-radius: 0.5rem; }
+.evidencia-imagem { display: block; width: 100%; height: auto; }
 .evidencia-ilustracao-compacta > svg { display: block; width: 100%; height: auto; max-height: 20rem; }
 .projeto-evidencia figcaption { font-size: 0.75rem; }
-.projeto-evidencia .evidencia-imagem { max-height: 24rem; }
+
 @media (min-width: 64rem) {
   .destaques-grade > li:first-child .projeto-cartao-com-evidencia {
     grid-template-columns: 2rem minmax(0, 1fr) minmax(12rem, 0.85fr);
@@ -1299,4 +1300,67 @@ main:focus {
   }
   .estudo-grade > .secao > * { grid-column: 1; }
   .estudo-grade > .secao > .secao-numero { grid-row: auto; }
+}
+
+/* Capturas inteiras, com proporção original e moldura discreta de navegador. */
+.evidencia-janela {
+  overflow: hidden;
+  border: 1px solid var(--borda);
+  border-radius: 0.875rem;
+  background: var(--background);
+  box-shadow: 0 12px 28px var(--sombra-borda);
+}
+
+.evidencia-janela-barra {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 2rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--borda);
+  background: var(--surface);
+}
+
+.evidencia-janela-controles {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.evidencia-janela-controles i {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--muted);
+  opacity: 0.65;
+}
+
+.evidencia-janela-endereco {
+  overflow: hidden;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.evidencia-diagrama {
+  display: grid;
+  align-items: center;
+  min-height: 12rem;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+  border: 1px solid var(--borda);
+  border-radius: 0.875rem;
+  background: var(--background);
+}
+
+.evidencia-visual figcaption {
+  padding-inline: 0.25rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 64rem) {
+  .destaques-grade > li:first-child .projeto-cartao-com-evidencia {
+    grid-template-columns: 2rem minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+  }
 }

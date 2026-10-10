@@ -60,7 +60,7 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
       </div>
       <div data-slot="evidencia" className="projeto-evidencia">
         {evidencia && (
-          <EvidenciaVisual evidencia={evidencia} lang={lang} prefixo={`card-${projeto.id}`} compacta />
+          <EvidenciaVisual demo={projeto.demo} evidencia={evidencia} lang={lang} prefixo={`card-${projeto.id}`} compacta />
         )}
       </div>
     </article>
