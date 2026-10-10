@@ -41,7 +41,7 @@ for (const home of homes) {
       );
     });
 
-    test("lista os 4 Outros projetos com links", async ({ page }) => {
+    test("lista os 3 Outros projetos com links", async ({ page }) => {
       await page.goto(home.path);
 
       const itens = page.getByTestId("outro-projeto");
@@ -71,6 +71,11 @@ for (const home of homes) {
       }
     });
 
+    test("a rota removida do Sciencily retorna 404", async ({ page }) => {
+      const resposta = await page.goto(`${home.path}/projetos/sciencily`);
+      expect(resposta?.status()).toBe(404);
+    });
+
     test(`seletor de idioma leva para ${home.other.path}`, async ({ page }) => {
       await page.goto(home.path);
 
@@ -92,6 +97,12 @@ for (const home of homes) {
     });
   });
 }
+
+test("o sitemap não inclui o Sciencily", async ({ request }) => {
+  const resposta = await request.get("/sitemap.xml");
+  expect(resposta.status()).toBe(200);
+  expect(await resposta.text()).not.toContain("sciencily");
+});
 
 test("raiz redireciona para /pt", async ({ page }) => {
   await page.goto("/");

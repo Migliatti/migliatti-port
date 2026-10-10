@@ -1,6 +1,6 @@
 # Identidade grafite com ilhas
 
-Status: aceito (spec #81, issue #82); revisto em parte pelo ADR 0005 (o dourado decorativo sai; o azul é o segundo acento)
+Status: aceito (spec #81, issues #82 a #86 entregues); revisto em parte pelo ADR 0005 (o dourado decorativo sai; o azul é o segundo acento)
 
 ## Contexto
 
@@ -26,6 +26,6 @@ Trocar o dourado decorativo por cinza claro, deixando o site sem nenhuma cor for
 
 ## Consequências
 
-- Fatias seguintes da spec #81: barra flutuante e cartões como ilhas; Vitrine e animações sobre o novo fundo.
-- As ilustrações SVG dos estudos de caso (`public/ilustracoes`) ainda usam a linguagem escura e dourada do ADR 0003 (emendas #62 a #65); ajustá-las fica para a fatia da Vitrine e animações.
+- As fatias da spec #81 foram entregues: tokens e ADR (#82, commit `5b7ac66`), remoção do Sciencily (#83, `a622df7`), barra flutuante (#84), cartões como ilhas (#85) e Vitrine sobre o grafite (#86, `d529b6c`). Entraram na `main` pelos PRs #87 e #88.
+- A spec #89, entregue pelo PR #90, revisou a #81 conforme o ADR 0005: azul substitui o dourado, inclusive nas ilustrações SVG dos estudos de caso; âncora ativa azul; ilhas nas demais seções; animação sempre ativa; menu hambúrguer no celular substitui a barra em duas linhas. Ao verificar a #81, essas decisões posteriores prevalecem.
 - Fontes mantidas; revisão em outra rodada.
