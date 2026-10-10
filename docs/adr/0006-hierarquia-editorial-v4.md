@@ -21,3 +21,7 @@ O item 6 do ADR 0005 deixa de exigir ilhas em Formação e Contato. As ilhas con
 ## Consequências
 
 Os testes de layout verificam a diferença de largura dos Projetos em destaque, as três colunas de Competências, o cabeçalho do Estudo de caso e a ausência de ilhas em Formação e Contato. O conteúdo e os links continuam disponíveis no HTML sem JavaScript.
+
+## Emenda: Hero em tela inteira (2026-10-10)
+
+Por decisão do dono, a Hero passa a ter `min-height: 100svh`, com `100vh` como fallback. A abertura ganha espaço para o nome e o buraco negro; Projetos em destaque começa após a primeira dobra. Em telas com pouco espaço vertical, o conteúdo pode ampliar a seção para continuar legível. Isso substitui a altura limitada a `min(100svh - 7rem, 44rem)` do item 7 do ADR 0005; a saída ao rolar permanece.

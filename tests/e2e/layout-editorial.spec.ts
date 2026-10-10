@@ -16,7 +16,7 @@ const homes = [
 for (const home of homes) {
   test.describe(`layout editorial ${home.path}`, () => {
     for (const tema of ["light", "dark"] as const) {
-      test(`Hero ocupa quase a tela e as seções vêm numeradas no tema ${tema}`, async ({
+      test(`Hero ocupa a tela inteira e as seções vêm numeradas no tema ${tema}`, async ({
         page,
       }) => {
         await page.emulateMedia({ colorScheme: tema });
@@ -25,9 +25,8 @@ for (const home of homes) {
 
         const hero = page.locator("section.hero");
         const caixa = await hero.boundingBox();
-        // A Hero deixa uma faixa da próxima seção na tela: min(100svh - 7rem, 44rem).
-        expect(caixa!.height).toBeGreaterThanOrEqual(Math.min(800 - 112, 704) - 1);
-        expect(caixa!.height).toBeLessThan(800);
+        // A abertura ocupa uma viewport; os projetos começam após a primeira dobra.
+        expect(caixa!.height).toBeCloseTo(800, 0);
         await expect(page.locator("h1")).toBeVisible();
         await expect(page.getByTestId("posicionamento")).toBeVisible();
         await expect(hero.locator("a.botao")).toHaveCount(2);

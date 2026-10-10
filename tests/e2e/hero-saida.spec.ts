@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
-// ADR 0005, P3: o nome não encosta no anel do buraco negro, a seção 01 já
-// aparece na primeira tela e o conteúdo da Hero sai ao rolar.
+// ADR 0005, P3, revisto pela emenda do ADR 0006: abertura em tela inteira,
+// nome antes do anel e saída da Hero ao rolar.
 for (const path of ["/pt", "/en"]) {
   test.describe(`Hero ${path}`, () => {
     test("o nome termina antes do anel do buraco negro (1440x900)", async ({ page }) => {
@@ -16,19 +16,19 @@ for (const path of ["/pt", "/en"]) {
       expect(direita).toBeLessThan(1440 * 0.62);
     });
 
-    test("a seção 01 aparece na primeira tela (sem vão de uma tela inteira)", async ({
+    test("a seção 01 começa após a abertura em tela inteira", async ({
       page,
     }) => {
-      for (const [largura, altura, limite] of [
-        [1440, 900, 840], // o título "Projetos em destaque" já cabe na dobra
-        [390, 844, 844], // no celular, ao menos o começo da seção
-      ]) {
+      for (const [largura, altura] of [[1440, 900], [390, 844]]) {
         await page.setViewportSize({ width: largura, height: altura });
         await page.goto(path);
         const topo = await page
           .locator("#destaques")
           .evaluate((el) => el.getBoundingClientRect().top);
-        expect(topo, `${largura}x${altura}`).toBeLessThan(limite);
+        expect(topo, `${largura}x${altura}`).toBeGreaterThanOrEqual(altura);
+        expect(await page.locator(".hero").evaluate(el => el.getBoundingClientRect().height)).toBeCloseTo(altura, 0);
+        await page.locator("#destaques").scrollIntoViewIfNeeded();
+        await expect(page.locator("#destaques")).toBeInViewport();
       }
     });
 
