@@ -41,6 +41,50 @@ it("aceita o conteúdo real", () => {
   expect(() => carregarConteudo(raiz)).not.toThrow();
 });
 
+describe.each(["captura", "gif"])("Evidência visual real: %s", (tipo) => {
+  beforeEach(() => {
+    editarJson("projetos/kepler-lab/projeto.json", (d) => {
+      d.evidencias = [{
+        tipo,
+        url: `/capturas/kepler-lab.${tipo === "gif" ? "gif" : "jpg"}`,
+        legenda: { pt: "Projeto rodando", en: "Running project" },
+        alt: { pt: "Tela do projeto", en: "Project screen" },
+        largura: 1440,
+        altura: 900,
+      }];
+    });
+  });
+
+  it("carrega URL local, textos de cada idioma e dimensões originais", () => {
+    const conteudo = carregarConteudo(raiz);
+    expect(conteudo.en.projetos.find((p) => p.id === "kepler-lab")?.evidencias[0])
+      .toMatchObject({ tipo, alt: "Project screen", largura: 1440, altura: 900 });
+  });
+
+  it("aceita imagem hospedada em URL https", () => {
+    editarJson("projetos/kepler-lab/projeto.json", (d) => {
+      (d.evidencias as Record<string, unknown>[])[0].url = "https://exemplo.com/projeto.png";
+    });
+    expect(() => carregarConteudo(raiz)).not.toThrow();
+  });
+
+  it("rejeita texto alternativo ausente em um idioma", () => {
+    editarJson("projetos/kepler-lab/projeto.json", (d) => {
+      delete ((d.evidencias as Record<string, unknown>[])[0].alt as Record<string, unknown>).en;
+    });
+    expect(errosAoCarregar()).toContainEqual(expect.stringContaining('alt: campo obrigatório "en"'));
+  });
+
+  it.each(["largura", "altura"])("rejeita %s ausente ou inadequada", (campo) => {
+    for (const valor of [undefined, 0, -10, 1.5, "1440", Number.MAX_SAFE_INTEGER + 1]) {
+      editarJson("projetos/kepler-lab/projeto.json", (d) => {
+        (d.evidencias as Record<string, unknown>[])[0][campo] = valor;
+      });
+      expect(errosAoCarregar()).toContainEqual(expect.stringContaining(`"${campo}" deve ser um inteiro positivo`));
+    }
+  });
+});
+
 describe("rejeita conteúdo incompleto", () => {
   it("projeto sem a versão em inglês", () => {
     rmSync(path.join(raiz, "projetos", "grimoire", "en.json"));

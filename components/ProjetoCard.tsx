@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getDictionary, type Locale } from "@/lib/dictionary";
 import type { ProjetoEmDestaque } from "@/lib/content";
+import { EvidenciaVisual, ehEvidenciaVisual } from "./EvidenciaVisual";
 
 type Props = {
   projeto: ProjetoEmDestaque;
@@ -10,28 +11,25 @@ type Props = {
 };
 
 /**
- * Cartão em forma de ilha elevada: número, título, resumo e stack. O espaço de Evidência fica pronto e vazio
- * (`data-slot="evidencia"`): enquanto não houver captura, não ocupa lugar.
+ * Cartão com texto e uma amostra visual da Evidência, quando disponível.
  */
 export function ProjetoCard({ projeto, lang, posicao }: Props) {
   const dict = getDictionary(lang);
+  const evidencia = projeto.evidencias.find(ehEvidenciaVisual);
 
   return (
     <article
       data-testid={`projeto-card-${projeto.id}`}
-      className="ilha projeto-cartao animacao-ao-rolar"
+      className={`ilha projeto-cartao animacao-ao-rolar${evidencia ? " projeto-cartao-com-evidencia" : ""}`}
     >
       <span aria-hidden="true" className="projeto-cartao-numero">
         {String(posicao).padStart(2, "0")}
       </span>
-      <div className="flex min-w-0 flex-col gap-3">
+      <div className="projeto-cartao-texto flex min-w-0 flex-col gap-3">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h3 className="text-2xl font-semibold sm:text-4xl">
             {projeto.titulo}
           </h3>
-          <span data-testid="rascunho" className="chip">
-            {dict.rascunho}
-          </span>
         </div>
         <p className="max-w-2xl text-muted">{projeto.resumo}</p>
         <ul className="flex flex-wrap gap-2">
@@ -41,7 +39,6 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
             </li>
           ))}
         </ul>
-        <div data-slot="evidencia" className="projeto-evidencia" />
         <div className="flex flex-wrap items-center gap-4 text-sm">
           <Link
             href={`/${lang}/projetos/${projeto.id}`}
@@ -60,6 +57,11 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
             </a>
           )}
         </div>
+      </div>
+      <div data-slot="evidencia" className="projeto-evidencia">
+        {evidencia && (
+          <EvidenciaVisual evidencia={evidencia} lang={lang} prefixo={`card-${projeto.id}`} compacta />
+        )}
       </div>
     </article>
   );

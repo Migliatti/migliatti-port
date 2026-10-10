@@ -35,6 +35,7 @@ export type Dictionary = {
   verProjetos: string;
   repositorio: string;
   voltar: string;
+  rodape: { voltarAoTopo: string };
   problema: string;
   decisoes: string;
   stack: string;
@@ -108,6 +109,7 @@ const dictionaries: Record<Locale, Dictionary> = {
     verProjetos: "Ver projetos",
     repositorio: "Repositório",
     voltar: "Voltar para a home",
+    rodape: { voltarAoTopo: "Voltar ao topo" },
     problema: "Problema",
     decisoes: "Decisões",
     stack: "Stack",
@@ -171,6 +173,7 @@ const dictionaries: Record<Locale, Dictionary> = {
     verProjetos: "See projects",
     repositorio: "Repository",
     voltar: "Back to home",
+    rodape: { voltarAoTopo: "Back to top" },
     problema: "Problem",
     decisoes: "Decisions",
     stack: "Stack",

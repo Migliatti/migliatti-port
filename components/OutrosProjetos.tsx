@@ -1,6 +1,7 @@
 import { listarOutrosProjetos } from "@/lib/content";
 import { Secao } from "@/components/Secao";
 import { getDictionary, type Locale } from "@/lib/dictionary";
+import { EvidenciaVisual, ehEvidenciaVisual } from "@/components/EvidenciaVisual";
 
 export function OutrosProjetos({
   lang,
@@ -27,7 +28,7 @@ export function OutrosProjetos({
               {projeto.estado === "em-desenvolvimento" && (
                 <span
                   data-testid="em-desenvolvimento"
-                  className="chip ml-2"
+                  className="chip chip-aviso ml-2"
                 >
                   {t.emDesenvolvimento}
                 </span>
@@ -44,6 +45,11 @@ export function OutrosProjetos({
                 </a>
               )}
             </p>
+            {projeto.evidencias.filter(ehEvidenciaVisual).map((evidencia, i) => (
+              <div key={evidencia.url} className="outro-projeto-evidencia mt-4 max-w-2xl">
+                <EvidenciaVisual evidencia={evidencia} lang={lang} prefixo={`outro-${projeto.id}-${i}`} compacta />
+              </div>
+            ))}
           </li>
         ))}
       </ul>

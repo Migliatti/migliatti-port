@@ -22,7 +22,7 @@ export function Contato({ lang, numero }: Props) {
       titulo={contato.titulo}
       animar
     >
-      <div className="ilha flex flex-col gap-4">
+      <div className="contato-conteudo flex flex-col gap-4">
         <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <li>
             <a href={`mailto:${contato.email}`} className={estiloDoLink}>

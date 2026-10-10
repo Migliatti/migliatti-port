@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
+import { Rodape } from "@/components/Rodape";
 import { notFound } from "next/navigation";
 import { BarraFixa } from "@/components/BarraFixa";
 import { FundoDasSecoes } from "@/components/fundo/FundoDasSecoes";
 import type { ItemDeSecao } from "@/components/hud/useSecaoAtual";
 import { Secao } from "@/components/Secao";
-import { IlustracaoAnimada } from "@/components/ilustracao/IlustracaoAnimada";
+import { EvidenciaVisual, ehEvidenciaVisual } from "@/components/EvidenciaVisual";
 import { listarDestaques, obterProjeto } from "@/lib/content";
 import { getDictionary, isLocale, locales, type Locale } from "@/lib/dictionary";
-import { carregarIlustracao } from "@/lib/ilustracoes";
 import { metadadosDaPagina } from "@/lib/seo";
 
 export const dynamicParams = false;
@@ -65,14 +65,14 @@ export default async function EstudoDeCasoPage({
     String(secoes.findIndex((s) => s.id === id) + 1).padStart(2, "0");
 
   return (
-    <div className="mx-auto min-h-screen max-w-[75rem] px-4 sm:px-6 md:px-10">
+    <div id="topo" className="mx-auto min-h-screen max-w-[75rem] px-4 sm:px-6 md:px-10">
       <BarraFixa
         lang={lang}
         secoes={secoes}
         caminho={`/projetos/${projeto.id}`}
         comVoltar
       />
-      <main id="conteudo" tabIndex={-1} className="estudo relative flex flex-col pb-24">
+      <main id="conteudo" tabIndex={-1} className="estudo estudo-grade relative flex flex-col pb-24">
         <FundoDasSecoes />
         <div className="estudo-cabecalho">
           <h1 className="estudo-titulo animacao-titulo font-extrabold">
@@ -85,7 +85,7 @@ export default async function EstudoDeCasoPage({
             <p data-testid="rascunho" className="chip chip-aviso self-start">
               {dict.avisoRascunho}
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="estudo-acoes flex flex-wrap gap-3">
               {projeto.demo && (
                 <a
                   data-testid="link-demo"
@@ -208,26 +208,12 @@ export default async function EstudoDeCasoPage({
                   data-testid={`evidencia-${evidencia.tipo}`}
                   className="estudo-evidencia flex flex-col gap-3"
                 >
-                  {evidencia.tipo === "ilustracao" && (
-                    <figure className="flex min-w-0 flex-col gap-3">
-                      {/* SVG inline (lido no build) para o pulso poder animá-lo. */}
-                      <IlustracaoAnimada
-                        origem={evidencia.url}
-                        svg={carregarIlustracao(evidencia.url, {
-                          prefixo: `ilustracao-${i}`,
-                          alt: evidencia.alt ?? "",
-                        })}
-                      />
-                      <figcaption className="text-sm text-muted">
-                        <span
-                          data-testid="rotulo-ilustracao"
-                          className="mr-2 rounded border border-muted/40 px-1.5 py-0.5 text-xs uppercase"
-                        >
-                          {dict.ilustracao}
-                        </span>
-                        {evidencia.legenda}
-                      </figcaption>
-                    </figure>
+                  {ehEvidenciaVisual(evidencia) && (
+                    <EvidenciaVisual
+                      evidencia={evidencia}
+                      lang={lang}
+                      prefixo={`ilustracao-${i}`}
+                    />
                   )}
                   {evidencia.tipo === "codigo" && (
                     <>
@@ -267,7 +253,7 @@ export default async function EstudoDeCasoPage({
                       </a>
                     </>
                   )}
-                  {evidencia.tipo !== "ilustracao" &&
+                  {!ehEvidenciaVisual(evidencia) &&
                     evidencia.tipo !== "codigo" &&
                     evidencia.tipo !== "testes" && (
                       <a
@@ -285,6 +271,7 @@ export default async function EstudoDeCasoPage({
           </Secao>
         )}
       </main>
+      <Rodape lang={lang} />
     </div>
   );
 }

@@ -40,7 +40,11 @@ for (const {
       await page.goto(`/${lang}`);
       const card = page.getByTestId("projeto-card-grimoire");
       await expect(card).toContainText("Grimoire");
-      await expect(card.getByTestId("rascunho")).toHaveText(rascunho);
+      await expect(card.getByTestId("rascunho")).toHaveCount(0);
+      await expect(page.getByTestId("rascunho")).toHaveCount(1);
+      await expect(page.getByTestId("rascunho")).toContainText(rascunho);
+      await expect(card.getByTestId("rotulo-ilustracao")).toHaveText(ilustracao);
+      await expect(card.getByRole("img", { name: altCatalogo })).toBeVisible();
       await expect(card.locator('a[href^="https://grimoire"]')).toHaveCount(0);
 
       await card.locator(`a[href="/${lang}/projetos/grimoire"]`).click();

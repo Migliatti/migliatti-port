@@ -53,7 +53,7 @@ export function Competencias({ lang, numero }: Props) {
       numero={numero}
       titulo={t.secoes.competencias}
     >
-      <div className="escalonar flex flex-col gap-4">
+      <div className="competencias-grade escalonar">
         {grupos.map((grupo) => (
           <div
             key={grupo.nome}
@@ -89,7 +89,7 @@ export function Formacao({ lang, numero }: Props) {
       numero={numero}
       titulo={t.secoes.formacao}
     >
-      <div className="ilha">
+      <div className="formacao-conteudo">
         <h3 className="font-medium">{formacao.curso}</h3>
         <p className="text-muted">
           {formacao.instituicao} · {t.previsaoDeConclusao}: {formacao.previsao}

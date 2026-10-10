@@ -103,15 +103,19 @@ test("estudo de caso: seções no fundo plano e conteúdo em ilhas", async ({ pa
 });
 
 for (const path of ["/pt", "/en"]) {
-  test(`home ${path}: o conteúdo de todas as seções (exceto a Vitrine) está em ilhas`, async ({
+  test(`home ${path}: ilhas destacam listas; Formação e Contato ficam no fundo plano`, async ({
     page,
   }) => {
     await page.goto(path);
-    for (const id of ["outros-projetos", "competencias", "formacao", "contato-titulo"]) {
+    for (const id of ["outros-projetos", "competencias"]) {
       const secao = page.locator(`main section[aria-labelledby="${id}"]`);
       const ilhas = secao.locator(".ilha");
       expect(await ilhas.count(), id).toBeGreaterThan(0);
       await expectIlha(ilhas.first());
+    }
+    for (const id of ["formacao", "contato-titulo"]) {
+      const secao = page.locator(`main section[aria-labelledby="${id}"]`);
+      await expect(secao.locator(".ilha")).toHaveCount(0);
     }
     expect(await page.locator(".ilha .ilha").count()).toBe(0);
   });

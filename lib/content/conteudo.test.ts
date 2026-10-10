@@ -69,8 +69,11 @@ describe.each(locales)("conteúdo em %s", (lang) => {
       if (projeto.demo !== undefined) linkValido(projeto.demo);
       for (const evidencia of projeto.evidencias) {
         naoVazio(evidencia.legenda);
-        // Ilustração é arquivo local do site; as demais apontam para http(s).
-        if (evidencia.tipo === "ilustracao") naoVazio(evidencia.url);
+        // Evidências visuais podem ser arquivos públicos locais.
+        if (evidencia.url.startsWith("/")) {
+          naoVazio(evidencia.url);
+          expect(existsSync(path.join(process.cwd(), "public", evidencia.url))).toBe(true);
+        }
         else linkValido(evidencia.url);
       }
     }

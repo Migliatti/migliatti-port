@@ -83,6 +83,14 @@ body {
 }
 
 @layer base {
+  p {
+    text-wrap: pretty;
+  }
+
+  a, button {
+    touch-action: manipulation;
+  }
+
   h1,
   h2,
   h3 {
@@ -623,7 +631,7 @@ main:focus {
     display: block;
     min-height: 0;
     padding: 0.25rem 0.875rem;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
   }
 
   .barra-grade[data-menu="aberto"] .barra-ancoras > li {
@@ -894,7 +902,7 @@ main:focus {
 /*
  * Separador que se desenha ao entrar na tela (Animação decorativa, ADR 0003):
  * CSS puro, ligada à rolagem (view timeline), sem JavaScript. A linha base
- * (::before) fica sempre completa; um traço azul com brilho (::after) a
+ * (::before) fica sempre completa; um traço azul discreto (::after) a
  * percorre da esquerda para a direita enquanto a seção sobe pela tela. O
  * intervalo é `cover`, porque o separador tem 1px de altura e o `entry` dele
  * duraria 1px de rolagem, e em pixels fixos: ao fim da página a última linha
@@ -909,10 +917,9 @@ main:focus {
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--cor-decorativa) 35%, transparent),
-    var(--cor-decorativa)
+    color-mix(in srgb, var(--cor-decorativa) 12%, transparent),
+    color-mix(in srgb, var(--cor-decorativa) 35%, transparent)
   );
-  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--cor-decorativa) 55%, transparent);
   transform-origin: left center;
 }
 
@@ -992,6 +999,13 @@ main:focus {
     inset 0 1px 0 var(--detalhe),
     0 4px 14px var(--sombra-borda);
   padding: 1.25rem;
+  transition: border-color var(--mov-rapido) var(--ease-orbita);
+}
+
+@media (hover: hover) {
+  .ilha:hover {
+    border-color: var(--muted);
+  }
 }
 
 /* Cartão de Projeto em destaque: uma ilha com o número em coluna estreita. */
@@ -1062,11 +1076,8 @@ main:focus {
   overflow-wrap: anywhere;
 }
 
-/* Apoio deslocado à direita em telas largas, como o do Hero. */
-@media (min-width: 48rem) {
-  .estudo-apoio {
-    margin-left: 25%;
-  }
+.estudo-apoio {
+  min-width: 0;
 }
 
 /* Texto corrido com medida confortável de leitura. */
@@ -1187,4 +1198,105 @@ main:focus {
   gap: 0.25rem 0.75rem;
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+/* Fechamento tipográfico, no fundo plano das páginas. */
+.rodape {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 2rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.nota-rascunho {
+  color: var(--estado-aviso);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.barra-marca {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+
+.hud, .secao-numero, .projeto-cartao-numero {
+  font-variant-numeric: tabular-nums;
+}
+
+.destaques-grade, .competencias-grade {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.destaques-grade > li, .competencias-grade > * {
+  min-width: 0;
+}
+
+.destaques-grade .projeto-cartao {
+  height: 100%;
+}
+
+.contato-conteudo {
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 48rem) {
+  .barra-marca { display: none; }
+}
+
+@media (min-width: 64rem) {
+  .destaques-grade {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .destaques-grade > li:first-child {
+    grid-column: 1 / -1;
+  }
+  .competencias-grade {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .estudo-cabecalho {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+}
+
+.projeto-evidencia { min-width: 0; }
+.evidencia-imagem { display: block; width: 100%; height: auto; object-fit: contain; border-radius: 0.5rem; }
+.evidencia-ilustracao-compacta > svg { display: block; width: 100%; height: auto; max-height: 20rem; }
+.projeto-evidencia figcaption { font-size: 0.75rem; }
+.projeto-evidencia .evidencia-imagem { max-height: 24rem; }
+@media (min-width: 64rem) {
+  .destaques-grade > li:first-child .projeto-cartao-com-evidencia {
+    grid-template-columns: 2rem minmax(0, 1fr) minmax(12rem, 0.85fr);
+    align-items: start;
+  }
+  .destaques-grade > li:not(:first-child) .projeto-evidencia {
+    grid-column: 2;
+  }
+  .estudo-grade {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+    align-items: start;
+  }
+  .estudo-grade > .estudo-cabecalho,
+  .estudo-grade > section[aria-labelledby="evidencias"] {
+    grid-column: 1 / -1;
+  }
+  .estudo-grade > .secao {
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .estudo-grade > .secao > * { grid-column: 1; }
+  .estudo-grade > .secao > .secao-numero { grid-row: auto; }
 }

@@ -55,7 +55,7 @@ export function link(
   return valor;
 }
 
-const CAMINHO_LOCAL = /^\/[a-z0-9]+(?:-[a-z0-9]+)*\/[a-z0-9]+(?:-[a-z0-9]+)*\.(?:svg|png|webp|gif)$/;
+const CAMINHO_LOCAL = /^\/[a-z0-9]+(?:-[a-z0-9]+)*\/[a-z0-9]+(?:-[a-z0-9]+)*\.(?:svg|png|jpg|jpeg|webp|gif)$/;
 
 /** Caminho de arquivo público do próprio site (ex.: `/ilustracoes/x.svg`). */
 export function caminhoLocal(

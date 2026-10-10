@@ -44,7 +44,7 @@ for (const home of homes) {
           .evaluate((n) => getComputedStyle(n).fontFamily);
         expect(fonte).toContain("Geist Mono");
 
-        // Cartão é ilha elevada (borda de luz; detalhes em ilhas-cartoes.spec.ts), com número e espaço de Evidência.
+        // Cartão é ilha elevada com número e Evidência visual.
         const cartao = page.getByTestId("projeto-card-kepler-lab");
         await expect(cartao).toBeVisible();
         expect(
@@ -52,6 +52,28 @@ for (const home of homes) {
         ).toBe("1px");
         await expect(cartao.locator(".projeto-cartao-numero")).toHaveText(/^\d\d$/);
         await expect(cartao.locator('[data-slot="evidencia"]')).toHaveCount(1);
+
+        const [primeiro, segundo, terceiro] = await page
+          .locator('[data-testid^="projeto-card-"]')
+          .evaluateAll((els) => els.map((el) => {
+            const { top, bottom, left, right, width } = el.getBoundingClientRect();
+            return { top, bottom, left, right, width };
+          }));
+        expect(primeiro.width).toBeGreaterThan(segundo.width * 1.8);
+        expect(segundo.top).toBeCloseTo(terceiro.top, 0);
+        expect(terceiro.left - segundo.right).toBeGreaterThanOrEqual(15);
+        expect(segundo.top - primeiro.bottom).toBeGreaterThanOrEqual(15);
+
+        const grupos = await page.getByTestId("grupo-de-competencias")
+          .evaluateAll((els) => els.map((el) => {
+            const { top, left, right } = el.getBoundingClientRect();
+            return { top, left, right };
+          }));
+        expect(grupos).toHaveLength(3);
+        expect(grupos[0].top).toBeCloseTo(grupos[1].top, 0);
+        expect(grupos[1].top).toBeCloseTo(grupos[2].top, 0);
+        expect(grupos[1].left - grupos[0].right).toBeGreaterThanOrEqual(15);
+        expect(grupos[2].left - grupos[1].right).toBeGreaterThanOrEqual(15);
       });
     }
 
@@ -168,16 +190,18 @@ for (const home of homes) {
       });
     }
 
-    test("em 320px não há rolagem horizontal, com a fonte pronta", async ({
+    test("em 320px e 390px não há rolagem horizontal, com a fonte pronta", async ({
       page,
     }) => {
-      await page.setViewportSize({ width: 320, height: 700 });
-      await page.goto(home.path);
-      await page.evaluate(() => document.fonts.ready);
-      const estoura = await page.evaluate(
-        () => document.documentElement.scrollWidth > window.innerWidth,
-      );
-      expect(estoura).toBe(false);
+      for (const width of [320, 390]) {
+        await page.setViewportSize({ width, height: 700 });
+        await page.goto(home.path);
+        await page.evaluate(() => document.fonts.ready);
+        const estoura = await page.evaluate(
+          () => document.documentElement.scrollWidth > window.innerWidth,
+        );
+        expect(estoura).toBe(false);
+      }
     });
 
     test("todos os controles da barra têm foco visível", async ({ page }) => {

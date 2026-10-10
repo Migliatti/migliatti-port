@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { obterTextosHome, validarConteudo } from "@/lib/content";
@@ -23,6 +23,10 @@ const fonteMono = Geist_Mono({
 });
 
 export const dynamicParams = false;
+
+export const viewport: Viewport = {
+  themeColor: "#171717",
+};
 
 export function generateStaticParams() {
   // Conteúdo incompleto lança erro aqui e faz `next build` falhar.

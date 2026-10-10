@@ -385,20 +385,31 @@ function carregarProjeto(
       }
       const tipoDaEvidencia = umDe(ev, "tipo", tiposDeEvidencia, local, errosComuns);
       const ilustracao = tipoDaEvidencia === "ilustracao";
+      const capturaOuGif = tipoDaEvidencia === "captura" || tipoDaEvidencia === "gif";
       const evidencia: Evidencia = {
         tipo: tipoDaEvidencia,
-        url: ilustracao
+        url: ilustracao || (capturaOuGif && typeof ev.url === "string" && ev.url.startsWith("/"))
           ? caminhoLocal(ev, "url", local, errosComuns)
           : link(ev, "url", local, errosComuns),
         legenda: texto(legendas, lang, `${local} legenda`, erros),
       };
-      if (ilustracao) {
+      if (ilustracao || capturaOuGif) {
         // O texto alternativo é por idioma, como a legenda.
         const alts = ehObjeto(ev.alt) ? ev.alt : {};
         if (!ehObjeto(ev.alt) && lang === locales[0]) {
           erros.push(`${local}: "alt" deve ter um texto por idioma (${locales.join(", ")})`);
         }
         evidencia.alt = texto(alts, lang, `${local} alt`, erros);
+      }
+      if (capturaOuGif) {
+        for (const campo of ["largura", "altura"] as const) {
+          const dimensao = ev[campo];
+          if (typeof dimensao !== "number" || !Number.isSafeInteger(dimensao) || dimensao <= 0) {
+            errosComuns.push(`${local}: campo obrigatório "${campo}" deve ser um inteiro positivo em pixels`);
+          } else {
+            evidencia[campo] = dimensao;
+          }
+        }
       }
       if (tipoDaEvidencia === "codigo") {
         evidencia.trecho = texto(ev, "trecho", local, errosComuns);

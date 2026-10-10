@@ -1,3 +1,4 @@
+import { Rodape } from "@/components/Rodape";
 import { notFound } from "next/navigation";
 import { BarraFixa } from "@/components/BarraFixa";
 import { FundoDasSecoes } from "@/components/fundo/FundoDasSecoes";
@@ -44,7 +45,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
     String(secoes.findIndex((s) => s.id === id) + 1).padStart(2, "0");
 
   return (
-    <div className="mx-auto min-h-screen max-w-[75rem] px-4 sm:px-6 md:px-10">
+    <div id="topo" className="mx-auto min-h-screen max-w-[75rem] px-4 sm:px-6 md:px-10">
       <BarraFixa lang={lang} secoes={secoes} />
       <main id="conteudo" tabIndex={-1} className="relative flex flex-col pb-24">
         <FundoDasSecoes />
@@ -60,7 +61,10 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           testId="projetos-em-destaque"
           animar
         >
-          <ul className="escalonar flex flex-col gap-4">
+          <p data-testid="rascunho" className="nota-rascunho">
+            {dict.avisoRascunho}
+          </p>
+          <ul className="destaques-grade escalonar">
             {destaques.map((projeto, i) => (
               <li key={projeto.id}>
                 <ProjetoCard projeto={projeto} lang={lang} posicao={i + 1} />
@@ -75,6 +79,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         <Formacao lang={lang} numero={numero("formacao")} />
         <Contato lang={lang} numero={numero("contato")} />
       </main>
+      <Rodape lang={lang} />
     </div>
   );
 }

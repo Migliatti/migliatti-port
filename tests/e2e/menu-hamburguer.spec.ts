@@ -12,12 +12,22 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       await page.goto(path);
     });
 
-    test("fechado só o botão aparece, com os atributos de acessibilidade", async ({ page }) => {
+    test("fechado mostra a identidade ou a volta, e o botão acessível", async ({ page }) => {
       const botao = page.getByTestId("barra-hamburguer");
       await expect(botao).toBeVisible();
       await expect(botao).toHaveAttribute("aria-expanded", "false");
       await expect(botao).toHaveAttribute("aria-controls", "barra-painel");
       await expect(botao).toHaveAttribute("aria-label", "Menu");
+      if (path.includes("/projetos/")) {
+        await expect(page.getByTestId("link-voltar")).toBeVisible();
+      } else {
+        const marca = page.getByTestId("barra-marca");
+        await expect(marca).toBeVisible();
+        await expect(marca).toHaveText("GM");
+        const marcaDireita = await marca.evaluate((n) => n.getBoundingClientRect().right);
+        const botaoEsquerda = await botao.evaluate((n) => n.getBoundingClientRect().left);
+        expect(marcaDireita).toBeLessThan(botaoEsquerda);
+      }
       await expect(page.locator("#barra-painel")).toBeHidden();
       await expect(page.locator("header.barra-fixa nav").last().getByRole("link")).toHaveCount(0);
     });
@@ -96,6 +106,7 @@ test("no desktop não há botão e as âncoras ficam na linha da barra", async (
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/pt");
   await expect(page.getByTestId("barra-hamburguer")).toBeHidden();
+  await expect(page.getByTestId("barra-marca")).toBeHidden();
   await expect(page.locator("header.barra-fixa .barra-ancora")).toHaveCount(5);
   const topos = await page
     .locator("header.barra-fixa .barra-ancora")

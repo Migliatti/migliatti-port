@@ -9,5 +9,20 @@
   ],
   "repositorio": "https://github.com/Migliatti/rubicon-archive",
   "demo": "https://rubicon-archive.vercel.app",
-  "evidencias": []
+  "evidencias": [
+    {
+      "tipo": "captura",
+      "url": "/evidencias/rubicon-archive.jpg",
+      "largura": 1280,
+      "altura": 720,
+      "alt": {
+        "pt": "Rubicon Archive em execução: página inicial com acesso aos dossiês, arquivo e doutrina.",
+        "en": "Rubicon Archive running: home page linking to target dossiers, archive and doctrine."
+      },
+      "legenda": {
+        "pt": "Captura da demo real em funcionamento.",
+        "en": "Capture of the live demo in operation."
+      }
+    }
+  ]
 }

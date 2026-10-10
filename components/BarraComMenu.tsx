@@ -69,7 +69,11 @@ export function BarraComMenu({ topo, children, rotulo }: Props) {
       data-menu={aberto ? "aberto" : "fechado"}
       className="barra-grade"
     >
-      {topo}
+      {topo ?? (
+        <span className="barra-marca" data-testid="barra-marca" aria-hidden="true">
+          GM
+        </span>
+      )}
       <button
         ref={botao}
         type="button"

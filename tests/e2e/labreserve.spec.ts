@@ -31,7 +31,12 @@ for (const { lang, outraLang, rascunho, problema, evidencias, ilustracao, verNoR
       await page.goto(`/${lang}`);
       const card = page.getByTestId("projeto-card-labreserve");
       await expect(card).toContainText("LabReserve");
-      await expect(card.getByTestId("rascunho")).toHaveText(rascunho);
+      await expect(card.getByTestId("rascunho")).toHaveCount(0);
+      await expect(page.getByTestId("rascunho")).toHaveCount(1);
+      await expect(page.getByTestId("rascunho")).toContainText(rascunho);
+      await expect(card.getByTestId("rotulo-ilustracao")).toHaveText(ilustracao);
+      await expect(card.getByRole("img")).toBeVisible();
+      expect((await card.getByRole("img").getAttribute("aria-label"))?.trim()).toBeTruthy();
       // Só o link do Estudo de caso: nenhum Demo.
       await expect(card.locator("a")).toHaveCount(1);
 

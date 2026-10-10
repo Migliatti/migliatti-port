@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { abrirMenu, expectBarraIlha, expectBarraSemTransbordo, LARGURAS } from "./barra-util";
 
 // Estudo de caso no layout editorial (issue #37): mesma barra fixa da home,
-// seções numeradas no grid, sem rolagem horizontal em 320px.
+// seções numeradas em duas colunas, sem rolagem horizontal em 320px e 390px.
 
 const projetos = ["kepler-lab", "labreserve", "grimoire"] as const;
 
@@ -61,6 +61,14 @@ for (const idioma of idiomas) {
             numeros.map((_, i) => String(i + 1).padStart(2, "0")),
           );
 
+          const [problema, decisoes] = await page.locator("main section.secao")
+            .evaluateAll((els) => els.slice(0, 2).map((el) => {
+              const { top, left, right } = el.getBoundingClientRect();
+              return { top, left, right };
+            }));
+          expect(problema.top).toBeCloseTo(decisoes.top, 0);
+          expect(decisoes.left - problema.right).toBeGreaterThanOrEqual(24);
+
           const nav = barra.getByRole("navigation", { name: idioma.barra });
           await expect(nav.getByRole("link")).toHaveCount(5);
 
@@ -97,16 +105,18 @@ for (const idioma of idiomas) {
         });
       }
 
-      test("em 320px não há rolagem horizontal, com a fonte pronta", async ({
+      test("em 320px e 390px não há rolagem horizontal, com a fonte pronta", async ({
         page,
       }) => {
-        await page.setViewportSize({ width: 320, height: 700 });
-        await page.goto(caminho);
-        await page.evaluate(() => document.fonts.ready);
-        const estoura = await page.evaluate(
-          () => document.documentElement.scrollWidth > window.innerWidth,
-        );
-        expect(estoura).toBe(false);
+        for (const width of [320, 390]) {
+          await page.setViewportSize({ width, height: 700 });
+          await page.goto(caminho);
+          await page.evaluate(() => document.fonts.ready);
+          const estoura = await page.evaluate(
+            () => document.documentElement.scrollWidth > window.innerWidth,
+          );
+          expect(estoura).toBe(false);
+        }
         await abrirMenu(page);
         await expect(
           page

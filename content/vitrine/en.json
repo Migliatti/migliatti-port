@@ -1,6 +1,6 @@
 {
   "titulo": "Showcase",
-  "descricao": "A signature animation piece built with AI: a small orbital system in SVG, animated with anime.js, where each body is one of the three things I deliver. Hover or Tab to a body to highlight what it stands for. The piece only loads when you get here, pauses off-screen, goes lighter on phones and stays still if your system asks for reduced motion.",
+  "descricao": "An animation piece built with AI. Explore the three bodies to see what I deliver: websites, automations and diagnostics.",
   "rotuloDaPeca": "Orbital system: three bodies circle a core on their own orbits, one for websites, one for automations and one for diagnostics.",
   "pilares": [
     {

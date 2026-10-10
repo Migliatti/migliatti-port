@@ -12,6 +12,20 @@
   "demo": "https://kepler-lab-gamma.vercel.app",
   "evidencias": [
     {
+      "tipo": "captura",
+      "url": "/evidencias/kepler-lab.jpg",
+      "largura": 670,
+      "altura": 804,
+      "alt": {
+        "pt": "Kepler Lab em execução: Terra e outros corpos celestes na cena navegável.",
+        "en": "Kepler Lab running: Earth and other celestial bodies in the navigable scene."
+      },
+      "legenda": {
+        "pt": "Captura da demo real em funcionamento.",
+        "en": "Capture of the live demo in operation."
+      }
+    },
+    {
       "tipo": "repositorio",
       "url": "https://github.com/Migliatti/kepler-lab",
       "legenda": {
