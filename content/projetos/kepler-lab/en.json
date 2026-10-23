@@ -5,7 +5,7 @@
     "problema": "Astronomy content is usually in long texts or in simulators that are hard to use. The goal was a visual way, in Portuguese, to explore the Milky Way with reliable information.",
     "decisoes": [
       "Three.js with React to render the 3D scene and keep the interface organized in components.",
-      "Vite and TypeScript for fast builds and strict typing.",
+      "Vite and JavaScript for fast builds.",
       "Scientific content curated from institutional sources.",
       "Support for reduced motion and high contrast mode from the start."
     ],

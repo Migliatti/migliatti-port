@@ -3,12 +3,9 @@ import { expect, test } from "@playwright/test";
 // P6 (spec #89): sinais e detalhes finais.
 for (const path of ["/pt", "/en"]) {
   test.describe(`polimento ${path}`, () => {
-    test("o aviso de rascunho do estudo de caso é um chip âmbar legível", async ({ page }) => {
+    test("o estudo de caso não exibe aviso de rascunho", async ({ page }) => {
       await page.goto(`${path}/projetos/kepler-lab`);
-      const chip = page.getByTestId("rascunho");
-      await expect(chip).toHaveClass(/chip-aviso/);
-      await expect(chip).toHaveCSS("color", "rgb(224, 192, 122)");
-      await expect(chip).toHaveCSS("border-top-color", "rgb(224, 192, 122)");
+      await expect(page.getByTestId("rascunho")).toHaveCount(0);
     });
 
     test("o HUD da Vitrine cabe numa linha por faixa em 1440 e 1024", async ({ page }) => {

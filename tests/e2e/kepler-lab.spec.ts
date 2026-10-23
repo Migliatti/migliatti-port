@@ -15,19 +15,18 @@ async function verificarCaptura(imagem: Locator) {
 }
 
 const idiomas = [
-  { lang: "pt", outraLang: "en", rascunho: "Rascunho", problema: "Problema", outro: "EN" },
-  { lang: "en", outraLang: "pt", rascunho: "Draft", problema: "Problem", outro: "PT" },
+  { lang: "pt", outraLang: "en", problema: "Problema", outro: "EN" },
+  { lang: "en", outraLang: "pt", problema: "Problem", outro: "PT" },
 ] as const;
 
-for (const { lang, outraLang, rascunho, problema, outro } of idiomas) {
+for (const { lang, outraLang, problema, outro } of idiomas) {
   test.describe(`kepler-lab /${lang}`, () => {
     test("card na home leva ao Estudo de caso", async ({ page }) => {
       await page.goto(`/${lang}`);
       const card = page.getByTestId("projeto-card-kepler-lab");
       await expect(card).toContainText("Kepler Lab");
       await expect(card.getByTestId("rascunho")).toHaveCount(0);
-      await expect(page.getByTestId("rascunho")).toHaveCount(1);
-      await expect(page.getByTestId("rascunho")).toContainText(rascunho);
+      await expect(page.getByTestId("rascunho")).toHaveCount(0);
       await expect(card.locator(`a[href="${DEMO}"]`)).toBeVisible();
       await verificarCaptura(card.locator("img"));
 
@@ -35,7 +34,7 @@ for (const { lang, outraLang, rascunho, problema, outro } of idiomas) {
       await expect(page).toHaveURL(`/${lang}/projetos/kepler-lab`);
     });
 
-    test("Estudo de caso tem links, rascunho e seletor de idioma", async ({
+    test("Estudo de caso tem links e seletor de idioma", async ({
       page,
     }) => {
       await page.goto(`/${lang}/projetos/kepler-lab`);
@@ -43,7 +42,7 @@ for (const { lang, outraLang, rascunho, problema, outro } of idiomas) {
         "Kepler Lab",
       );
       await expect(page.getByRole("heading", { name: problema })).toBeVisible();
-      await expect(page.getByTestId("rascunho")).toContainText(rascunho);
+      await expect(page.getByTestId("rascunho")).toHaveCount(0);
       await expect(page.getByTestId("link-demo")).toHaveAttribute("href", DEMO);
       await expect(page.getByTestId("link-repositorio")).toHaveAttribute(
         "href",

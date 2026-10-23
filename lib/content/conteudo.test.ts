@@ -241,6 +241,14 @@ describe.each(locales)("SEO da home em %s", (lang) => {
 });
 
 describe.each(locales)("kepler-lab em %s", (lang) => {
+  it("usa JavaScript no Kepler sem retirar TypeScript do LabReserve", () => {
+    const kepler = listarDestaques(lang).find((p) => p.id === "kepler-lab")!;
+    expect(kepler.stack).toContain("JavaScript");
+    expect(kepler.stack).not.toContain("TypeScript");
+    expect(kepler.estudoDeCaso.decisoes.join(" ")).not.toMatch(/TypeScript|tipagem estrita|strict typing/);
+    expect(listarDestaques(lang).find((p) => p.id === "labreserve")!.stack).toContain("TypeScript");
+  });
+
   it("é Projeto em destaque com Demo, repositório e Estudo de caso completo", () => {
     const projeto = listarDestaques(lang).find((p) => p.id === "kepler-lab");
     expect(projeto).toBeDefined();

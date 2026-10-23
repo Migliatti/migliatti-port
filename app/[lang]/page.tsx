@@ -61,9 +61,6 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           testId="projetos-em-destaque"
           animar
         >
-          <p data-testid="rascunho" className="nota-rascunho">
-            {dict.avisoRascunho}
-          </p>
           <ul className="destaques-grade escalonar">
             {destaques.map((projeto, i) => (
               <li key={projeto.id}>

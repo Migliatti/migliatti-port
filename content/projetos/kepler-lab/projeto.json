@@ -6,7 +6,7 @@
     "React",
     "Vite",
     "Three.js",
-    "TypeScript"
+    "JavaScript"
   ],
   "repositorio": "https://github.com/Migliatti/kepler-lab",
   "demo": "https://kepler-lab-gamma.vercel.app",

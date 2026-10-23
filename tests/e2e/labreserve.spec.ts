@@ -6,7 +6,6 @@ const idiomas = [
   {
     lang: "pt",
     outraLang: "en",
-    rascunho: "Rascunho",
     problema: "Problema",
     evidencias: "Evidências",
     ilustracao: "Ilustração",
@@ -16,7 +15,6 @@ const idiomas = [
   {
     lang: "en",
     outraLang: "pt",
-    rascunho: "Draft",
     problema: "Problem",
     evidencias: "Evidence",
     ilustracao: "Illustration",
@@ -25,15 +23,14 @@ const idiomas = [
   },
 ] as const;
 
-for (const { lang, outraLang, rascunho, problema, evidencias, ilustracao, verNoRepositorio, outro } of idiomas) {
+for (const { lang, outraLang, problema, evidencias, ilustracao, verNoRepositorio, outro } of idiomas) {
   test.describe(`labreserve /${lang}`, () => {
     test("card na home leva ao Estudo de caso e não tem Demo", async ({ page }) => {
       await page.goto(`/${lang}`);
       const card = page.getByTestId("projeto-card-labreserve");
       await expect(card).toContainText("LabReserve");
       await expect(card.getByTestId("rascunho")).toHaveCount(0);
-      await expect(page.getByTestId("rascunho")).toHaveCount(1);
-      await expect(page.getByTestId("rascunho")).toContainText(rascunho);
+      await expect(page.getByTestId("rascunho")).toHaveCount(0);
       await expect(card.getByTestId("rotulo-ilustracao")).toHaveText(ilustracao);
       await expect(card.getByRole("img")).toBeVisible();
       expect((await card.getByRole("img").getAttribute("aria-label"))?.trim()).toBeTruthy();
@@ -44,13 +41,13 @@ for (const { lang, outraLang, rascunho, problema, evidencias, ilustracao, verNoR
       await expect(page).toHaveURL(`/${lang}/projetos/labreserve`);
     });
 
-    test("Estudo de caso tem repositório, rascunho, seletor de idioma e nenhum Demo", async ({
+    test("Estudo de caso tem repositório, seletor de idioma e nenhum Demo", async ({
       page,
     }) => {
       await page.goto(`/${lang}/projetos/labreserve`);
       await expect(page.getByRole("heading", { level: 1 })).toHaveText("LabReserve");
       await expect(page.getByRole("heading", { name: problema })).toBeVisible();
-      await expect(page.getByTestId("rascunho")).toContainText(rascunho);
+      await expect(page.getByTestId("rascunho")).toHaveCount(0);
       await expect(page.getByTestId("link-demo")).toHaveCount(0);
       await expect(page.getByTestId("link-repositorio")).toHaveAttribute("href", REPOSITORIO);
 

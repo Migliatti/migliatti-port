@@ -6,7 +6,6 @@ const idiomas = [
   {
     lang: "pt",
     outraLang: "en",
-    rascunho: "Rascunho",
     problema: "Problema",
     ilustracao: "Ilustração",
     altCatalogo: /manifesto chains\/business-direction\.md/,
@@ -16,7 +15,6 @@ const idiomas = [
   {
     lang: "en",
     outraLang: "pt",
-    rascunho: "Draft",
     problema: "Problem",
     ilustracao: "Illustration",
     altCatalogo: /chains\/business-direction\.md manifest/,
@@ -28,7 +26,6 @@ const idiomas = [
 for (const {
   lang,
   outraLang,
-  rascunho,
   problema,
   ilustracao,
   altCatalogo,
@@ -41,8 +38,7 @@ for (const {
       const card = page.getByTestId("projeto-card-grimoire");
       await expect(card).toContainText("Grimoire");
       await expect(card.getByTestId("rascunho")).toHaveCount(0);
-      await expect(page.getByTestId("rascunho")).toHaveCount(1);
-      await expect(page.getByTestId("rascunho")).toContainText(rascunho);
+      await expect(page.getByTestId("rascunho")).toHaveCount(0);
       await expect(card.getByTestId("rotulo-ilustracao")).toHaveText(ilustracao);
       await expect(card.getByRole("img", { name: altCatalogo })).toBeVisible();
       await expect(card.locator('a[href^="https://grimoire"]')).toHaveCount(0);
@@ -57,7 +53,7 @@ for (const {
       await page.goto(`/${lang}/projetos/grimoire`);
       await expect(page.getByRole("heading", { level: 1 })).toHaveText("Grimoire");
       await expect(page.getByRole("heading", { name: problema })).toBeVisible();
-      await expect(page.getByTestId("rascunho")).toContainText(rascunho);
+      await expect(page.getByTestId("rascunho")).toHaveCount(0);
       await expect(page.getByTestId("link-demo")).toHaveCount(0);
       await expect(page.getByTestId("link-repositorio")).toHaveAttribute(
         "href",
