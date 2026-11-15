@@ -36,7 +36,8 @@ for (const home of homes) {
       const cargos = secao.getByTestId("cargo");
       await expect(cargos).toHaveCount(2);
       await expect(cargos.nth(0)).toContainText("Speedpro");
-      await expect(cargos.nth(0)).toContainText("Trio");
+      await expect(cargos.nth(0)).toContainText(/engenharia e arquitetura|engineering and architecture/);
+      await expect(cargos.nth(0)).not.toContainText("Trio");
       await expect(cargos.nth(1)).toContainText("Aloha011");
     });
 

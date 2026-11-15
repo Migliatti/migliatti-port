@@ -167,10 +167,11 @@ describe.each(locales)("conteúdo em %s", (lang) => {
     }
   });
 
-  it("a Experiência profissional traz Speedpro/Trio e Aloha011", () => {
+  it("a Experiência profissional traz Speedpro (sem nomear o cliente) e Aloha011", () => {
     const empresas = obterExperiencia(lang).map((c) => c.empresa);
     expect(empresas[0]).toContain("Speedpro");
-    expect(empresas[0]).toContain("Trio");
+    expect(empresas[0]).toMatch(/engenharia e arquitetura|engineering and architecture/);
+    expect(empresas[0]).not.toContain("Trio");
     expect(empresas[1]).toContain("Aloha011");
   });
 

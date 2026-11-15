@@ -53,7 +53,7 @@ Animação curta (até ~800ms, em CSS) aplicada com a classe `animacao-entrada`.
 _Avoid_: Efeito, transição de página
 
 **Experiência profissional**:
-Seção curta com os cargos de Speedpro/Trio Engenharia e Aloha011, focada em automação e diagnóstico.
+Seção curta com os cargos da Speedpro (alocado em empresa de engenharia e arquitetura) e da Aloha011, focada em automação e diagnóstico. Não nomear o cliente onde o Gabriel está alocado (confidencialidade do contrato).
 _Avoid_: Trabalhos, histórico
 
 **Canal de contato**:
