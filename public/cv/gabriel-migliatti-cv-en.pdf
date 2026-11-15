@@ -12,7 +12,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
 endobj
 5 0 obj
-<< /Length 3531 >>
+<< /Length 3605 >>
 stream
 BT /F2 20 Tf 45 772.0 Td (Gabriel Migliatti) Tj ET
 BT /F1 11 Tf 45 752.3 Td (Full-stack developer who uses AI to ship websites, automations and diagnostics) Tj ET
@@ -21,38 +21,39 @@ BT /F1 10 Tf 45 715.3 Td (S\343o Paulo, SP  \225  gabriel.migliatti@icloud.com) 
 BT /F1 10 Tf 45 700.8 Td (LinkedIn: https://www.linkedin.com/in/gabriel-migliatti) Tj ET
 BT /F1 10 Tf 45 686.3 Td (GitHub: https://github.com/Migliatti) Tj ET
 BT /F2 12 Tf 45 657.3 Td (Work experience) Tj ET
-BT /F2 10 Tf 45 638.8 Td (Implementation Analyst | Speedpro Consultoria, assigned to Trio Engenharia + Arquitetura) Tj ET
-BT /F1 10 Tf 45 624.3 Td (Jun 2025 \226 Present) Tj ET
-BT /F1 10 Tf 55 609.8 Td (\225  Technical support and incident diagnosis for Windows, Microsoft 365, remote access, networks and) Tj ET
-BT /F1 10 Tf 65 597.3 Td (business software.) Tj ET
-BT /F1 10 Tf 55 582.8 Td (\225  Automation and standardization of administrative routines with PowerShell, technical documentation and) Tj ET
-BT /F1 10 Tf 65 570.3 Td (reusable procedures.) Tj ET
-BT /F1 10 Tf 55 555.8 Td (\225  Analysis of logs and recurring failures: Windows events, authentication, corporate email and software) Tj ET
-BT /F1 10 Tf 65 543.3 Td (integrations.) Tj ET
-BT /F1 10 Tf 55 528.8 Td (\225  Inventory of equipment, licenses and IT assets, with an Excel control base and detection of underused) Tj ET
-BT /F1 10 Tf 65 516.3 Td (tools.) Tj ET
-BT /F2 10 Tf 45 497.8 Td (Performance Analyst | Aloha011 \226 Fashion Retail) Tj ET
-BT /F1 10 Tf 45 483.3 Td (Apr 2024 \226 Feb 2025) Tj ET
-BT /F1 10 Tf 55 468.8 Td (\225  Tracking of metrics in Google Sheets, analysis of deviations and reports to support sales decisions.) Tj ET
-BT /F1 10 Tf 55 454.3 Td (\225  Mapping of failures in the customer relationship flow and an improvement proposal adopted by the team.) Tj ET
-BT /F2 12 Tf 45 425.3 Td (Featured projects) Tj ET
-BT /F2 10 Tf 45 406.8 Td (Kepler Lab | React, Vite, Three.js, TypeScript) Tj ET
-BT /F1 10 Tf 45 392.3 Td (3D web experience to explore the Milky Way, with 22 astronomical destinations and curated scientific) Tj ET
-BT /F1 10 Tf 45 379.8 Td (content.) Tj ET
-BT /F1 10 Tf 45 365.3 Td (https://github.com/Migliatti/kepler-lab) Tj ET
-BT /F2 10 Tf 45 346.8 Td (LabReserve | TypeScript, React, SQLite) Tj ET
-BT /F1 10 Tf 45 332.3 Td (Web system to check availability and book labs and equipment, with automated tests.) Tj ET
-BT /F1 10 Tf 45 317.8 Td (https://github.com/Migliatti/labreserve) Tj ET
-BT /F2 10 Tf 45 299.3 Td (Grimoire | Python, Markdown, Claude Code, Codex) Tj ET
-BT /F1 10 Tf 45 284.8 Td (Open source catalog of reusable skills and workflows for AI agents, installable in Claude Code and Codex.) Tj ET
-BT /F1 10 Tf 45 270.3 Td (https://github.com/Migliatti/grimoire) Tj ET
-BT /F2 12 Tf 45 241.3 Td (Technical skills) Tj ET
-BT /F1 10 Tf 45 226.8 Td (Development: Python, TypeScript, JavaScript, React, Node.js, HTML5, SQL, PostgreSQL, REST APIs, JSON, HTTP) Tj ET
-BT /F1 10 Tf 45 212.3 Td (Tools: Git/GitHub, Docker, Linux, Windows, PowerShell, Vercel, Microsoft 365) Tj ET
-BT /F1 10 Tf 45 197.8 Td (Practices: Automated testing, Technical documentation, Automation, AI agents, Incident diagnosis) Tj ET
-BT /F2 12 Tf 45 168.8 Td (Education) Tj ET
-BT /F1 10 Tf 45 154.3 Td (Computer Science | Universidade Cruzeiro do Sul \(expected graduation: Jun 2030\)) Tj ET
-BT /F1 10 Tf 45 139.8 Td (Technical English: reading and basic communication) Tj ET
+BT /F2 10 Tf 45 638.8 Td (Implementation and Helpdesk Analyst | Speedpro Consultoria \(PJ contractor\), assigned to an engineering and) Tj ET
+BT /F2 10 Tf 45 626.3 Td (architecture company) Tj ET
+BT /F1 10 Tf 45 611.8 Td (Jun 2025 \226 Present) Tj ET
+BT /F1 10 Tf 55 597.3 Td (\225  Technical support and incident diagnosis for Windows, Microsoft 365, remote access, networks and) Tj ET
+BT /F1 10 Tf 65 584.8 Td (business software.) Tj ET
+BT /F1 10 Tf 55 570.3 Td (\225  Automation and standardization of administrative routines with PowerShell, technical documentation and) Tj ET
+BT /F1 10 Tf 65 557.8 Td (reusable procedures.) Tj ET
+BT /F1 10 Tf 55 543.3 Td (\225  Analysis of logs and recurring failures: Windows events, authentication, corporate email and software) Tj ET
+BT /F1 10 Tf 65 530.8 Td (integrations.) Tj ET
+BT /F1 10 Tf 55 516.3 Td (\225  Inventory of equipment, licenses and IT assets, with an Excel control base and detection of underused) Tj ET
+BT /F1 10 Tf 65 503.8 Td (tools.) Tj ET
+BT /F2 10 Tf 45 485.3 Td (Performance Analyst | Aloha011 \226 Fashion Retail) Tj ET
+BT /F1 10 Tf 45 470.8 Td (Apr 2024 \226 Feb 2025) Tj ET
+BT /F1 10 Tf 55 456.3 Td (\225  Tracking of metrics in Google Sheets, analysis of deviations and reports to support sales decisions.) Tj ET
+BT /F1 10 Tf 55 441.8 Td (\225  Mapping of failures in the customer relationship flow and an improvement proposal adopted by the team.) Tj ET
+BT /F2 12 Tf 45 412.8 Td (Featured projects) Tj ET
+BT /F2 10 Tf 45 394.3 Td (Kepler Lab | React, Vite, Three.js, JavaScript) Tj ET
+BT /F1 10 Tf 45 379.8 Td (3D web experience to explore the Milky Way, with 22 astronomical destinations and curated scientific) Tj ET
+BT /F1 10 Tf 45 367.3 Td (content.) Tj ET
+BT /F1 10 Tf 45 352.8 Td (https://github.com/Migliatti/kepler-lab) Tj ET
+BT /F2 10 Tf 45 334.3 Td (LabReserve | TypeScript, React, SQLite) Tj ET
+BT /F1 10 Tf 45 319.8 Td (Web system to check availability and book labs and equipment, with automated tests.) Tj ET
+BT /F1 10 Tf 45 305.3 Td (https://github.com/Migliatti/labreserve) Tj ET
+BT /F2 10 Tf 45 286.8 Td (Grimoire | Python, Markdown, Claude Code, Codex) Tj ET
+BT /F1 10 Tf 45 272.3 Td (Open source catalog of reusable skills and workflows for AI agents, installable in Claude Code and Codex.) Tj ET
+BT /F1 10 Tf 45 257.8 Td (https://github.com/Migliatti/grimoire) Tj ET
+BT /F2 12 Tf 45 228.8 Td (Technical skills) Tj ET
+BT /F1 10 Tf 45 214.3 Td (Development: Python, TypeScript, JavaScript, React, Node.js, HTML5, SQL, PostgreSQL, REST APIs, JSON, HTTP) Tj ET
+BT /F1 10 Tf 45 199.8 Td (Tools: Git/GitHub, Docker, Linux, Windows, PowerShell, Vercel, Microsoft 365) Tj ET
+BT /F1 10 Tf 45 185.3 Td (Practices: Automated testing, Technical documentation, Automation, AI agents, Incident diagnosis) Tj ET
+BT /F2 12 Tf 45 156.3 Td (Education) Tj ET
+BT /F1 10 Tf 45 141.8 Td (Computer Science | Universidade Cruzeiro do Sul \(expected graduation: Jun 2030\)) Tj ET
+BT /F1 10 Tf 45 127.3 Td (Technical English: reading and basic communication) Tj ET
 endstream
 endobj
 6 0 obj
@@ -69,10 +70,10 @@ xref
 0000000126 00000 n 
 0000000223 00000 n 
 0000000325 00000 n 
-0000003908 00000 n 
-0000004044 00000 n 
+0000003982 00000 n 
+0000004118 00000 n 
 trailer
 << /Size 8 /Root 1 0 R /Info 7 0 R >>
 startxref
-4125
+4199
 %%EOF
