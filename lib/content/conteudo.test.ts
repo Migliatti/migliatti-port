@@ -171,7 +171,6 @@ describe.each(locales)("conteúdo em %s", (lang) => {
     const empresas = obterExperiencia(lang).map((c) => c.empresa);
     expect(empresas[0]).toContain("Speedpro");
     expect(empresas[0]).toMatch(/engenharia e arquitetura|engineering and architecture/);
-    expect(empresas[0]).not.toContain("Trio");
     expect(empresas[1]).toContain("Aloha011");
   });
 
@@ -190,13 +189,13 @@ it("a Formação traz o curso e o nível de inglês honesto em cada idioma", () 
     curso: "Ciência da Computação",
     instituicao: "Universidade Cruzeiro do Sul",
     previsao: "Jun/2030",
-    ingles: "Inglês técnico: leitura e comunicação básica",
+    ingles: "Inglês intermediário (autodeclarado): leitura técnica e comunicação",
   });
   expect(obterFormacao("en")).toEqual({
     curso: "Computer Science",
     instituicao: "Universidade Cruzeiro do Sul",
     previsao: "Jun 2030",
-    ingles: "Technical English: reading and basic communication",
+    ingles: "Intermediate English (self-reported): technical reading and communication",
   });
 });
 
@@ -223,10 +222,10 @@ it("o bloco de IA de cada Projeto em destaque aponta para os mesmos arquivos em 
 
 it("a home em cada idioma traz o Posicionamento", () => {
   expect(obterTextosHome("pt").posicionamento).toBe(
-    "Desenvolvedor full-stack que usa IA para entregar sites, automações e diagnósticos",
+    "Analista de implementação e helpdesk, com automação e desenvolvimento como diferencial",
   );
   expect(obterTextosHome("en").posicionamento).toBe(
-    "Full-stack developer who uses AI to ship websites, automations and diagnostics",
+    "Implementation and helpdesk analyst, with automation and development as a differentiator",
   );
 });
 

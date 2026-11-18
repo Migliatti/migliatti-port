@@ -5,9 +5,9 @@ const homes = [
     path: "/pt",
     htmlLang: "pt-BR",
     title:
-      "Gabriel Migliatti | Desenvolvedor full-stack que usa IA para entregar sites, automações e diagnósticos",
+      "Gabriel Migliatti | Analista de implementação e helpdesk, com automação e desenvolvimento como diferencial",
     posicionamento:
-      "Desenvolvedor full-stack que usa IA para entregar sites, automações e diagnósticos",
+      "Analista de implementação e helpdesk, com automação e desenvolvimento como diferencial",
     selectorLabel: "Idioma",
     current: "PT",
     repositorio: "Repositório",
@@ -18,9 +18,9 @@ const homes = [
     path: "/en",
     htmlLang: "en",
     title:
-      "Gabriel Migliatti | Full-stack developer who uses AI to ship websites, automations and diagnostics",
+      "Gabriel Migliatti | Implementation and helpdesk analyst, with automation and development as a differentiator",
     posicionamento:
-      "Full-stack developer who uses AI to ship websites, automations and diagnostics",
+      "Implementation and helpdesk analyst, with automation and development as a differentiator",
     selectorLabel: "Language",
     current: "EN",
     repositorio: "Repository",

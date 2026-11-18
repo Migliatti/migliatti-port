@@ -21,7 +21,7 @@ const PUBLICO = path.join(RAIZ, "public");
 
 const TEXTOS = {
   pt: {
-    nivel: "Em busca de estágio ou vaga júnior em desenvolvimento. Também aberto a projetos freelance.",
+    nivel: "Aberto a trabalho 100% remoto, inclusive em empresas do exterior. Também aberto a projetos freelance.",
     cidade: "São Paulo, SP",
     secoes: {
       experiencia: "Experiência profissional",
@@ -32,7 +32,7 @@ const TEXTOS = {
     previsao: "previsão de conclusão",
   },
   en: {
-    nivel: "Looking for an internship or junior developer role. Also open to freelance projects.",
+    nivel: "Open to 100% remote work, including international companies. Also open to freelance projects.",
     cidade: "São Paulo, SP",
     secoes: {
       experiencia: "Work experience",

@@ -12,7 +12,7 @@ const homes = [
     grupos: ["Desenvolvimento", "Ferramentas", "Práticas"],
     curso: "Ciência da Computação",
     previsao: "Jun/2030",
-    ingles: "Inglês técnico: leitura e comunicação básica",
+    ingles: "Inglês intermediário (autodeclarado): leitura técnica e comunicação",
   },
   {
     path: "/en",
@@ -22,7 +22,7 @@ const homes = [
     grupos: ["Development", "Tools", "Practices"],
     curso: "Computer Science",
     previsao: "Jun 2030",
-    ingles: "Technical English: reading and basic communication",
+    ingles: "Intermediate English (self-reported): technical reading and communication",
   },
 ] as const;
 
@@ -37,7 +37,6 @@ for (const home of homes) {
       await expect(cargos).toHaveCount(2);
       await expect(cargos.nth(0)).toContainText("Speedpro");
       await expect(cargos.nth(0)).toContainText(/engenharia e arquitetura|engineering and architecture/);
-      await expect(cargos.nth(0)).not.toContainText("Trio");
       await expect(cargos.nth(1)).toContainText("Aloha011");
     });
 

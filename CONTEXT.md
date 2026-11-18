@@ -1,6 +1,6 @@
 # Portfólio
 
-Site pessoal de Gabriel Migliatti Parizi para conseguir vaga (estágio ou júnior) e também projetos freelance. O leitor é quem contrata, seja recrutador ou cliente: precisa entender rápido quem ele é, o que já construiu e como chamá-lo. O nível (estágio, júnior) aparece só no **CV público**, não no **Posicionamento**.
+Site pessoal de Gabriel Migliatti Parizi para conseguir vaga 100% remota (inclusive em empresa do exterior) e também projetos freelance. O leitor é quem contrata, seja recrutador ou cliente: precisa entender rápido quem ele é, o que já construiu e como chamá-lo. A disponibilidade (100% remoto, inclusive internacional) aparece só no **CV público**, não no **Posicionamento**.
 
 ## Language
 
@@ -9,7 +9,7 @@ O site inteiro, publicado em português e inglês, cujo objetivo é gerar contat
 _Avoid_: Página, landing
 
 **Posicionamento**:
-A frase que diz quem Gabriel é profissionalmente: "Desenvolvedor full-stack que usa IA para entregar sites, automações e diagnósticos". Não traz nível; o desenvolvimento é o substantivo e a IA é o diferencial.
+A frase que diz quem Gabriel é profissionalmente: "Analista de implementação e helpdesk, com automação e desenvolvimento como diferencial". Não traz nível; implementação e helpdesk são o substantivo, e automação e desenvolvimento são o diferencial. Atualizada em 18/11/2026.
 _Avoid_: Slogan, bio
 
 **Projeto em destaque**:
