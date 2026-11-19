@@ -1,0 +1,4 @@
+{
+  "titulo": "Support triage in n8n",
+  "resumo": "n8n workflow that validates IT support requests and triages them by category, priority and SLA, using keyword rules and no data storage. Built with AI assistance and tested on n8n 2.48.5."
+}

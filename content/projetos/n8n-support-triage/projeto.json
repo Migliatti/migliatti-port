@@ -1,0 +1,20 @@
+{
+  "ordem": 5,
+  "tipo": "outro",
+  "estado": "concluido",
+  "stack": [
+    "JavaScript",
+    "n8n"
+  ],
+  "repositorio": "https://github.com/Migliatti/n8n-support-triage",
+  "evidencias": [
+    {
+      "tipo": "repositorio",
+      "url": "https://github.com/Migliatti/n8n-support-triage",
+      "legenda": {
+        "pt": "Workflow, README e licença MIT no GitHub",
+        "en": "Workflow, README and MIT license on GitHub"
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "titulo": "Triagem de suporte em n8n",
+  "resumo": "Workflow n8n que valida solicitações de suporte de TI e as classifica por categoria, prioridade e SLA, com regras por palavras-chave e sem armazenamento de dados. Feito com apoio de IA e testado no n8n 2.48.5."
+}
