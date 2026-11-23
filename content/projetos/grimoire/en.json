@@ -9,7 +9,7 @@
       "Implementation, documentation, tests and platform integration kept separate."
     ],
     "resultado": "Open source catalog with 15 skills, one of them orchestrating a composed workflow (chain), packaged for Claude Code, Codex, Pi and Hermes Agent, with a suite of 41 Python tests.",
-    "aprendizado": "Defining stable contracts across different tools and testing agent behavior, not only code.",
+    "aprendizado": "I learned to define stable contracts across different tools and to test agent behavior, not only code.",
     "usoDeIA": {
       "texto": "The product is instructions for AI agents, so skill changes are evaluated with agents: each scenario has observable criteria, runs against the current skills to record the RED result, and runs again after the smallest fix to record the GREEN result, in a fresh context and an isolated sandbox. No scenario is marked as passing from reading SKILL.md alone. The repository's structural contracts are checked by Python tests.",
       "links": [

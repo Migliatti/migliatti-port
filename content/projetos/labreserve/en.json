@@ -2,7 +2,7 @@
   "titulo": "LabReserve",
   "resumo": "Web system to check availability and book labs and equipment, with automated tests.",
   "estudoDeCaso": {
-    "problema": "Booking labs and equipment without a central system leads to schedule conflicts and manual control. The project also tested how to build a working app with AI agents following good engineering practices.",
+    "problema": "Booking labs and equipment without a central system leads to schedule conflicts and manual control. The project also tested how to build a working app with AI agents following a plan, tests and review.",
     "decisoes": [
       "TypeScript end to end, with React for the interface and SQLite as a simple database with no separate server.",
       "Plan before code: scope split into small stories with acceptance criteria.",
@@ -10,7 +10,7 @@
       "Validation gate with typecheck, lint, build, tests and E2E before calling anything done."
     ],
     "resultado": "Local system with availability search, bookings with schedule conflict detection, filters, cancellation and event history.",
-    "aprendizado": "Using tests, planning and review to stay in control of code written with AI agents.",
+    "aprendizado": "I learned to use tests, planning and review to stay in control of code written with AI agents.",
     "usoDeIA": {
       "texto": "Built with AI agents. CLAUDE.md pins down the architecture, the business rules that must stay true, test-first work and the full gate (typecheck, lint, build, tests and E2E). AGENT_ISSUES.md is the persistent handoff board between sessions. The UI delivery went through a self-audit and two independent, blind reviews run in parallel, recorded under docs/verification/; it was approved in the sixth round.",
       "links": [

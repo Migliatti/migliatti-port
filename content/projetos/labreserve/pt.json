@@ -2,7 +2,7 @@
   "titulo": "LabReserve",
   "resumo": "Sistema web para consultar disponibilidade e reservar laboratórios e equipamentos, com testes automatizados.",
   "estudoDeCaso": {
-    "problema": "Reservar laboratórios e equipamentos sem um sistema central leva a conflitos de horário e controle manual. O projeto também testou como construir uma aplicação funcional com agentes de IA seguindo boas práticas de engenharia.",
+    "problema": "Reservar laboratórios e equipamentos sem um sistema central leva a conflitos de horário e controle manual. O projeto também testou como construir uma aplicação funcional com agentes de IA seguindo plano, testes e revisão.",
     "decisoes": [
       "TypeScript de ponta a ponta, com React na interface e SQLite como banco simples, sem servidor à parte.",
       "Plano antes do código: escopo quebrado em histórias pequenas com critérios de aceitação.",
@@ -10,7 +10,7 @@
       "Gate de validação com typecheck, lint, build, testes e E2E antes de declarar algo pronto."
     ],
     "resultado": "Sistema local com consulta de disponibilidade, reservas com detecção de conflito de horário, filtros, cancelamento e histórico de eventos.",
-    "aprendizado": "Usar testes, plano e revisão para manter o controle sobre código produzido com agentes de IA.",
+    "aprendizado": "Aprendi a usar testes, plano e revisão para manter o controle sobre código produzido com agentes de IA.",
     "usoDeIA": {
       "texto": "Construído com agentes de IA. O CLAUDE.md fixa a arquitetura, as regras de negócio que precisam continuar valendo, o trabalho test-first e o gate completo (typecheck, lint, build, testes e E2E). O AGENT_ISSUES.md é o quadro persistente de handoff entre sessões. A entrega da interface passou por uma autoauditoria e por duas revisões independentes e cegas, em paralelo, registradas em docs/verification/; foi aprovada na sexta rodada.",
       "links": [

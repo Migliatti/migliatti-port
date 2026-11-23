@@ -6,6 +6,10 @@
 
 **Por que a paleta serve:** grafite escuro + um azul frio de sinal é a linguagem de ferramentas técnicas; o azul agora carrega a ação.
 
+## Voz
+
+Voz: só fatos com prova técnica (copy-registers.md 1 + 2) · exato, não frio; seguro, não alto · "eu" contido, o projeto como sujeito nas linhas de projeto · frases de 8 a 20 palavras · sem humor · palavras da casa: Posicionamento literal, Evidência, estudo de caso, repositório · nunca: disponibilidade fora do CV público, nome do cliente da Speedpro, número que não venha do conteúdo, adjetivo sem fato ao lado.
+
 ## Seções da home
 
 Cada uma 1 ou 2 telas a 1440x900, `--h`.

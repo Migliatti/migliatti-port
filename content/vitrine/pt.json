@@ -1,17 +1,17 @@
 {
   "titulo": "Vitrine",
-  "descricao": "Uma peça de animação desenvolvida com IA. Explore os três corpos para conhecer o que entrego: sites, automações e diagnósticos.",
+  "descricao": "Uma peça de animação desenvolvida com IA. Cada corpo em órbita é uma frente do que entrego: sites, automações e diagnósticos. Passe o mouse ou o foco num corpo para destacar a frente no texto.",
   "rotuloDaPeca": "Sistema orbital: três corpos giram em órbitas ao redor de um núcleo, um para sites, um para automações e um para diagnósticos.",
   "pilares": [
     {
       "id": "site",
       "nome": "Sites",
-      "texto": "Sites rápidos, acessíveis e bilíngues, do layout ao deploy."
+      "texto": "Sites acessíveis e bilíngues, do layout ao deploy."
     },
     {
       "id": "automacao",
       "nome": "Automações",
-      "texto": "Fluxos que tiram trabalho repetitivo das mãos de alguém."
+      "texto": "Fluxos em n8n e scripts em PowerShell que assumem a parte repetitiva de uma rotina."
     },
     {
       "id": "diagnostico",
