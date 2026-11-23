@@ -4,12 +4,12 @@ import type { Locator } from "@playwright/test";
 const DEMO = "https://kepler-lab-gamma.vercel.app";
 const REPOSITORIO = "https://github.com/Migliatti/kepler-lab";
 
-async function verificarCaptura(imagem: Locator) {
+async function verificarCaptura(imagem: Locator, carregamento: "lazy" | "eager" = "lazy") {
   await expect(imagem).toBeVisible();
   expect((await imagem.getAttribute("alt"))?.trim()).toBeTruthy();
   expect(Number(await imagem.getAttribute("width"))).toBeGreaterThan(0);
   expect(Number(await imagem.getAttribute("height"))).toBeGreaterThan(0);
-  await expect(imagem).toHaveAttribute("loading", "lazy");
+  await expect(imagem).toHaveAttribute("loading", carregamento);
   await expect(imagem).toHaveAttribute("decoding", "async");
   await expect.poll(() => imagem.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
 }
@@ -48,7 +48,9 @@ for (const { lang, outraLang, problema, outro } of idiomas) {
         "href",
         REPOSITORIO,
       );
-      await verificarCaptura(page.getByTestId("evidencia-captura").locator("img"));
+      // No estudo de caso a captura é a evidência principal do primeiro ecrã:
+      // carrega já, sem lazy.
+      await verificarCaptura(page.getByTestId("evidencia-captura").locator("img"), "eager");
 
       await page.getByRole("link", { name: outro, exact: true }).click();
       await expect(page).toHaveURL(`/${outraLang}/projetos/kepler-lab`);

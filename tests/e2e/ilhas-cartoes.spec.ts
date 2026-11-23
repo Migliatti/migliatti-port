@@ -93,10 +93,11 @@ test("estudo de caso: seções no fundo plano e conteúdo em ilhas", async ({ pa
       expect(e.larguraBorda).toBe("0px");
       expect(e.sombra).toBe("none");
     }
-    // Problema, decisões, stack, resultado, aprendizado e uso de IA: uma ilha cada.
-    const ilhas = page.locator("main section.secao > .ilha");
-    expect(await ilhas.count()).toBeGreaterThanOrEqual(6);
-    await expectIlha(ilhas.first());
+    // Redesign (fase 4): a narrativa fica no fundo plano, em tipografia
+    // grande; os cartões dos outros estudos de caso são as ilhas da página.
+    const cartoes = page.locator('[data-testid="outros-estudos"] .estudo-proximo');
+    await expect(cartoes).toHaveCount(2);
+    await expectIlha(cartoes.first());
     // Nada aninhado: nenhuma ilha dentro de outra.
     expect(await page.locator(".ilha .ilha").count()).toBe(0);
   }
