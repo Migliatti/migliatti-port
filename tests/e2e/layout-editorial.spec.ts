@@ -173,6 +173,9 @@ for (const home of homes) {
       // "Outros projetos" e "Formação" seguem na página, fora da barra.
       await expect(page.locator("#outros-projetos")).toBeAttached();
       await expect(page.locator("#formacao")).toBeAttached();
+      // Os capítulos fixados mudam de altura ao virar "vivo" (depois da
+      // hidratação): rolar antes disso deixa a seção fora da faixa de leitura.
+      await expect(page.getByTestId("capitulos")).toHaveAttribute("data-capitulos", "vivo");
       await page.evaluate(() =>
         document.getElementById("outros-projetos")!.scrollIntoView(),
       );
