@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, type RefObject } from "react";
+import { aoMudarMovimentoReduzido } from "./movimento-reduzido";
 
 /** O que um módulo animado devolve ao ser iniciado. */
 export type PecaAnimada = {
@@ -24,8 +25,9 @@ const MARGEM_DE_CARGA = "200px 0px";
 /**
  * Liga um módulo animado a um elemento com as regras do ADR 0003: só baixa o
  * chunk (via `iniciar`, que faz o `import()`) quando o elemento chega perto da
- * tela; pausa fora da tela e com a aba oculta (ADR 0005: sem preferência de
- * movimento reduzido).
+ * tela; pausa fora da tela e com a aba oculta. Com movimento reduzido (ADR 0007)
+ * os módulos desenham só o quadro parado; ao mudar a preferência, a peça é
+ * refeita do zero.
  *
  * `iniciar` precisa ser estável (definida fora do componente).
  */
@@ -96,11 +98,20 @@ export function usePecaPreguicosa(
       else peca.pausar();
     }
 
+    // A preferência mudou: a peça atual segue a regra antiga, então é refeita.
+    const cancelarMovimento = aoMudarMovimentoReduzido(() => {
+      if (!peca) return;
+      peca.destruir();
+      peca = null;
+      if (visivel && !carregando) void carregar();
+    });
+
     observar();
     document.addEventListener("visibilitychange", aoMudarVisibilidadeDaAba);
 
     return () => {
       desmontado = true;
+      cancelarMovimento();
       document.removeEventListener("visibilitychange", aoMudarVisibilidadeDaAba);
       observador?.disconnect();
       peca?.destruir();

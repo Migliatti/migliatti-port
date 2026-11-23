@@ -28,10 +28,14 @@
 //     └ perspectiva (CSS `perspective`)
 //         └ plano (rotateX, a elevação da câmera)
 //
+// Movimento reduzido (ADR 0007): a cena nasce já na pose final (disco deitado,
+// tudo visível), sem entrada, órbita nem deriva.
+//
 // Celular fraco: versão leve, com menos filetes, sem órbita e sem deriva.
 
 import { animate, createTimeline, stagger, type JSAnimation, type Timeline } from "animejs";
 import { versaoParaEsteAparelho, type Versao } from "../animacao/aparelho";
+import { movimentoReduzido } from "../animacao/movimento-reduzido";
 import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk deste módulo. */
@@ -354,6 +358,24 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
   const rolagens = [arco, traseiro.rolagem, frontal.rolagem];
   // Mesmo filete nas duas metades: animados juntos, para nunca se desencontrarem.
   const pares = traseiro.filetes.map((t, i) => [t, frontal.filetes[i]]);
+
+  // Movimento reduzido: pose final fixa, sem anime.js em funcionamento.
+  if (movimentoReduzido()) {
+    for (const el of [halo, arco, fotons, ...planos, ...traseiro.filetes, ...frontal.filetes]) {
+      el.style.opacity = "1";
+    }
+    for (const plano of planos) plano.style.transform = `rotateX(${TOMBAMENTO}deg)`;
+    for (const rolagem of rolagens) rolagem.style.transform = `rotateZ(${INCLINACAO}deg)`;
+    return {
+      pausar() {},
+      retomar() {},
+      destruir() {
+        cena.remove();
+        delete moldura.dataset.buracoNegro;
+        delete moldura.dataset.versao;
+      },
+    };
+  }
 
   const animacoes: Array<JSAnimation | Timeline> = [];
   let destruida = false;

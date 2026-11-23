@@ -18,6 +18,7 @@
 
 import { animate, stagger, svg, type JSAnimation } from "animejs";
 import { versaoParaEsteAparelho } from "../animacao/aparelho";
+import { movimentoReduzido } from "../animacao/movimento-reduzido";
 import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk deste módulo. */
@@ -77,7 +78,8 @@ export function iniciarPulso(moldura: HTMLElement): PecaAnimada {
   moldura.dataset.pulso = MARCA_DO_PULSO;
   moldura.dataset.versao = versao;
 
-  const desenho = moldura.querySelector("svg");
+  // Movimento reduzido (ADR 0007): a ilustração fica como veio, sem decoração.
+  const desenho = movimentoReduzido() ? null : moldura.querySelector("svg");
   const criados: SVGElement[] = [];
   const animacoes: JSAnimation[] = [];
 

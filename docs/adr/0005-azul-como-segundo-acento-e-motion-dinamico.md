@@ -1,6 +1,6 @@
 # Azul como segundo acento e motion dinâmico
 
-Status: aceito (spec #89)
+Status: aceito (spec #89); o item 5 (sem `prefers-reduced-motion`) foi substituído pelo ADR 0007
 
 ## Contexto
 

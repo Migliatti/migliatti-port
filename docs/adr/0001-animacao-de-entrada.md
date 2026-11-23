@@ -2,7 +2,7 @@
 
 Status: aceito (issue #17); substituído em parte pelo ADR 0003 (issue #35); revisto pelo ADR 0005 (duração até 800ms, sem `prefers-reduced-motion`)
 
-> Nota (ADR 0005): as regras sobre `prefers-reduced-motion` neste documento foram revogadas pelo ADR 0005; o site anima sempre. O resto segue como está.
+> Nota (ADR 0005, depois ADR 0007): o ADR 0005 revogou as regras sobre `prefers-reduced-motion` deste documento ("o site anima sempre"); o ADR 0007 as restabelece de outra forma: com movimento reduzido a entrada vira um fade só de opacidade e as peças em JavaScript ficam paradas. O resto segue como está.
 
 ## Contexto
 

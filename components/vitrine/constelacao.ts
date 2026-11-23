@@ -13,6 +13,7 @@
 // ficar pequeno e parar de vez quando pausado.
 
 import { corAleatoria } from "../animacao/cor-aleatoria";
+import { movimentoReduzido } from "../animacao/movimento-reduzido";
 
 /** Marca gravada no grupo das camadas; o e2e usa para achar este chunk. */
 export const MARCA_DA_CONSTELACAO = "vitrine-constelacao";
@@ -179,6 +180,10 @@ export function iniciarCamadas(moldura: HTMLElement): Camadas | null {
   const defs = svg.querySelector("defs");
   svg.insertBefore(raiz, defs ? defs.nextSibling : svg.firstChild);
 
+  // Movimento reduzido (ADR 0007): as camadas ficam desenhadas em repouso, sem
+  // laço, sem balanço e sem seguir o ponteiro.
+  const reduzido = movimentoReduzido();
+
   // Ponteiro no espaço do viewBox; `null` quando está fora da peça.
   let ponteiro: { x: number; y: number } | null = null;
 
@@ -193,8 +198,10 @@ export function iniciarCamadas(moldura: HTMLElement): Camadas | null {
   const aoSair = () => {
     ponteiro = null;
   };
-  moldura.addEventListener("pointermove", aoMover, { passive: true });
-  moldura.addEventListener("pointerleave", aoSair);
+  if (!reduzido) {
+    moldura.addEventListener("pointermove", aoMover, { passive: true });
+    moldura.addEventListener("pointerleave", aoSair);
+  }
 
   let quadro = 0;
   let ultimo: number | null = null;
@@ -264,7 +271,7 @@ export function iniciarCamadas(moldura: HTMLElement): Camadas | null {
   }
 
   function retomar() {
-    if (rodando) return;
+    if (rodando || reduzido) return;
     rodando = true;
     ultimo = null;
     quadro = requestAnimationFrame(passo);

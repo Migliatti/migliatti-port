@@ -9,11 +9,15 @@
 // `opacity` das camadas, sem layout nem repintura contínua. Tudo pausa fora
 // da tela e com a aba oculta.
 //
+// Movimento reduzido (ADR 0007): estrelas desenhadas uma vez, sem cintilar,
+// sem fade de entrada e sem parallax.
+//
 // Celular fraco: versão leve, com uma camada só, menos estrelas, sem cintilar
 // e sem alta densidade de pixels.
 
 import { versaoParaEsteAparelho, type Versao } from "../animacao/aparelho";
 import { corAleatoria } from "../animacao/cor-aleatoria";
+import { movimentoReduzido } from "../animacao/movimento-reduzido";
 import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk deste módulo. */
@@ -84,6 +88,7 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
   moldura.dataset.ceu = MARCA_DO_CEU;
   moldura.dataset.versao = versao;
 
+  const reduzido = movimentoReduzido();
   const densidadeMaxima = versao === "leve" ? 1 : 2;
 
   const camadas: Camada[] = CAMADAS[versao].map((def, i) => {
@@ -91,7 +96,7 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
     canvas.className = "hero-ceu-camada";
     canvas.dataset.camada = String(i);
     moldura.appendChild(canvas);
-    const cintilar = def.cintilar
+    const cintilar = def.cintilar && !reduzido
       ? canvas.animate([{ opacity: 1 }, { opacity: def.cintilar.minimo }], {
           duration: def.cintilar.duracao,
           direction: "alternate",
@@ -103,10 +108,12 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
   });
 
   // Entrada suave da camada (decorativa; o texto da Hero não depende dela).
-  const entrada = moldura.animate([{ opacity: 0 }, { opacity: 1 }], {
-    duration: 900,
-    easing: "ease-out",
-  });
+  const entrada = reduzido
+    ? null
+    : moldura.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 900,
+        easing: "ease-out",
+      });
 
   function desenhar() {
     const largura = moldura.clientWidth;
@@ -157,7 +164,7 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
 
   let rodando = false;
   function retomar() {
-    if (rodando) return;
+    if (rodando || reduzido) return;
     rodando = true;
     window.addEventListener("scroll", aoRolar, { passive: true });
     aplicarRolagem();
@@ -180,7 +187,7 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
       pausar();
       cancelAnimationFrame(quadroDoDesenho);
       observadorDeTamanho.disconnect();
-      entrada.cancel();
+      entrada?.cancel();
       for (const { canvas, cintilar } of camadas) {
         cintilar?.cancel();
         canvas.remove();

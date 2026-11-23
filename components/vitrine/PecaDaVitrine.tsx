@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { usePecaPreguicosa } from "@/components/animacao/usePecaPreguicosa";
 import type { IdDoPilar, PilarDaVitrine } from "@/lib/content/tipos";
 import { CENTRO, pontoNaOrbita, type Orbita } from "./geometria";
-import type { Peca } from "./orbitas";
 
 type Props = {
   /** Descrição acessível da peça (rótulo do grupo). */
@@ -12,97 +12,23 @@ type Props = {
   pilares: Pick<PilarDaVitrine, "id" | "nome">[];
 };
 
-/**
- * Estado exposto em `data-estado` (lido pelo CSS e pelo e2e):
- * - `aguardando`: a seção ainda não entrou na tela; nada pesado foi baixado.
- * - `carregando`: o chunk da peça está sendo baixado.
- * - `carregada`: a peça está rodando (ou pausada fora da tela).
- */
-type Estado = "aguardando" | "carregando" | "carregada";
-
-/** Margem para começar a baixar a peça um pouco antes de ela aparecer. */
-const MARGEM_DE_CARGA = "200px 0px";
+// Chunk separado (com o anime.js): só é pedido quando a seção chega perto da
+// tela, nunca no carregamento da página.
+async function iniciar(el: HTMLElement) {
+  const { iniciarPeca } = await import("./orbitas");
+  return iniciarPeca(el);
+}
 
 /**
- * Carrega a peça da Vitrine só quando a seção entra na tela. Até lá (e sem JavaScript) o mesmo sistema
- * orbital aparece parado, com os corpos já focáveis. Regras em
- * docs/adr/0002-vitrine.md e docs/adr/0003-editorial-espacial-animejs.md.
+ * Carrega a peça da Vitrine só quando a seção entra na tela (hook
+ * compartilhado: pausa fora da tela e respeita movimento reduzido). Até lá (e
+ * sem JavaScript) o mesmo sistema orbital aparece parado, com os corpos já
+ * focáveis. Regras em docs/adr/0002-vitrine.md,
+ * docs/adr/0003-editorial-espacial-animejs.md e docs/adr/0007-movimento-reduzido.md.
  */
 export function PecaDaVitrine({ rotulo, pilares }: Props) {
   const moldura = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!moldura.current) return;
-    const el: HTMLDivElement = moldura.current;
-
-    let peca: Peca | null = null;
-    let observador: IntersectionObserver | null = null;
-    let visivel = false;
-    let carregando = false;
-    let desmontado = false;
-
-    const marcar = (estado: Estado) => {
-      el.dataset.estado = estado;
-    };
-
-    const deveRodar = () => visivel && !document.hidden;
-
-    async function carregar() {
-      carregando = true;
-      marcar("carregando");
-      try {
-        // Chunk separado (com o anime.js): só é pedido aqui, nunca no
-        // carregamento da página.
-        const { iniciarPeca } = await import("./orbitas");
-        if (desmontado || peca) return;
-        peca = iniciarPeca(el);
-        marcar("carregada");
-        if (!deveRodar()) peca.pausar();
-      } catch {
-        // Sem a peça, o SVG estático continua no lugar.
-        if (!desmontado) marcar("aguardando");
-      } finally {
-        carregando = false;
-      }
-    }
-
-    function aoCruzar(entradas: IntersectionObserverEntry[]) {
-      visivel = entradas.some((e) => e.isIntersecting);
-      if (!visivel) {
-        peca?.pausar();
-        return;
-      }
-      if (peca) {
-        if (deveRodar()) peca.retomar();
-      } else if (!carregando) {
-        void carregar();
-      }
-    }
-
-    function observar() {
-      marcar("aguardando");
-      observador = new IntersectionObserver(aoCruzar, {
-        rootMargin: MARGEM_DE_CARGA,
-      });
-      observador.observe(el);
-    }
-
-    function aoMudarVisibilidadeDaAba() {
-      if (!peca) return;
-      if (deveRodar()) peca.retomar();
-      else peca.pausar();
-    }
-
-    observar();
-    document.addEventListener("visibilitychange", aoMudarVisibilidadeDaAba);
-
-    return () => {
-      desmontado = true;
-      document.removeEventListener("visibilitychange", aoMudarVisibilidadeDaAba);
-      observador?.disconnect();
-      peca?.destruir();
-    };
-  }, []);
+  usePecaPreguicosa(moldura, iniciar);
 
   return (
     <div

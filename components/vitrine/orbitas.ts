@@ -17,6 +17,7 @@ import { animate, createTimeline, stagger, svg, type JSAnimation, type Timeline 
 import type { Camadas } from "./constelacao";
 import { corAleatoria } from "../animacao/cor-aleatoria";
 import { versaoParaEsteAparelho } from "../animacao/aparelho";
+import { movimentoReduzido } from "../animacao/movimento-reduzido";
 import { pontoNaOrbita } from "./geometria";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk desta peça. */
@@ -70,47 +71,53 @@ export function iniciarPeca(moldura: HTMLElement): Peca {
     for (const astro of astros) astro.setAttribute("filter", "url(#vitrine-brilho)");
   }
 
+  // Movimento reduzido (ADR 0007): os corpos ficam no quadro de repouso do
+  // servidor; nada gira, pulsa ou segue o ponteiro. A constelação entra só
+  // desenhada. O destaque de pilar por hover e foco é CSS e segue valendo.
+  const reduzido = movimentoReduzido();
   const animacoes: (JSAnimation | Timeline)[] = [];
+  if (reduzido) moldura.dataset.movimento = "reduzido";
 
   // Cada corpo (e satélite) dá voltas na própria elipse, partindo do ângulo
   // em que o quadro parado o desenhou.
-  for (const el of [...corpos, ...satelites]) {
-    const orbita = lerOrbita(el);
-    const estado = { angulo: orbita.inicio };
+  if (!reduzido) {
+    for (const el of [...corpos, ...satelites]) {
+      const orbita = lerOrbita(el);
+      const estado = { angulo: orbita.inicio };
+      animacoes.push(
+        animate(estado, {
+          angulo: orbita.inicio + 360,
+          duration: orbita.volta,
+          ease: "linear",
+          loop: true,
+          onUpdate: () => {
+            const { x, y } = pontoNaOrbita(orbita, estado.angulo);
+            el.setAttribute("transform", `translate(${x} ${y})`);
+          },
+        }),
+      );
+    }
+
+    // Rastro de luz que percorre cada órbita dos pilares, um depois do outro.
     animacoes.push(
-      animate(estado, {
-        angulo: orbita.inicio + 360,
-        duration: orbita.volta,
+      animate(svg.createDrawable(rastros), {
+        draw: ["0 0", "0 0.2", "0.8 1", "1 1"],
+        duration: (_alvo: unknown, i = 0) => {
+          const corpo = corpos[i];
+          return corpo ? lerOrbita(corpo).volta / 2 : 8000;
+        },
+        delay: stagger(900),
         ease: "linear",
         loop: true,
-        onUpdate: () => {
-          const { x, y } = pontoNaOrbita(orbita, estado.angulo);
-          el.setAttribute("transform", `translate(${x} ${y})`);
-        },
       }),
     );
+
+    // Entrada: núcleo e corpos pulsam uma vez, em sequência.
+    const entrada = createTimeline({ defaults: { ease: "outQuad" } });
+    if (nucleo) entrada.add(nucleo, { r: [11, 14, 11], duration: 700 });
+    entrada.add(astros, { r: [9, 13, 9], duration: 600, delay: stagger(160) }, "-=350");
+    animacoes.push(entrada);
   }
-
-  // Rastro de luz que percorre cada órbita dos pilares, um depois do outro.
-  const desenhaveis = svg.createDrawable(rastros);
-  animacoes.push(
-    animate(desenhaveis, {
-      draw: ["0 0", "0 0.2", "0.8 1", "1 1"],
-      duration: (_alvo: unknown, i = 0) => {
-        const corpo = corpos[i];
-        return corpo ? lerOrbita(corpo).volta / 2 : 8000;
-      },
-      delay: stagger(900),
-      ease: "linear",
-      loop: true,
-    }),
-  );
-
-  // Entrada: núcleo e corpos pulsam uma vez, em sequência.
-  const entrada = createTimeline({ defaults: { ease: "outQuad" } });
-  if (nucleo) entrada.add(nucleo, { r: [11, 14, 11], duration: 700 });
-  entrada.add(astros, { r: [9, 13, 9], duration: 600, delay: stagger(160) }, "-=350");
-  animacoes.push(entrada);
 
   // Quem passa o mouse ou foca um corpo consegue lê-lo parado.
   let pausadaPorFora = false;
@@ -186,6 +193,7 @@ export function iniciarPeca(moldura: HTMLElement): Peca {
       for (const astro of astros) astro.removeAttribute("filter");
       for (const corpo of corpos) corpo.style.removeProperty("color");
       delete moldura.dataset.peca;
+      delete moldura.dataset.movimento;
       delete moldura.dataset.versao;
     },
   };

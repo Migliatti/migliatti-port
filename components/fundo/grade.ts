@@ -9,6 +9,7 @@
 // rolagem; o listener sai quando a moldura deixa a tela ou a aba fica oculta.
 
 import { versaoParaEsteAparelho } from "../animacao/aparelho";
+import { movimentoReduzido } from "../animacao/movimento-reduzido";
 import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk deste módulo. */
@@ -24,9 +25,10 @@ const CURSO = 0.35;
 
 export function iniciarGrade(moldura: HTMLElement): PecaAnimada {
   const versao = versaoParaEsteAparelho();
-  if (versao === "leve") {
-    // Celular fraco: fica a grade estática, sem ouvir a rolagem.
-    moldura.dataset.versao = "leve";
+  if (versao === "leve" || movimentoReduzido()) {
+    // Celular fraco ou movimento reduzido (ADR 0007): fica a grade estática,
+    // sem ouvir a rolagem.
+    moldura.dataset.versao = versao;
     return {
       pausar() {},
       retomar() {},
