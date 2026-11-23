@@ -41,12 +41,15 @@
   --cor-buraco-negro-nucleo: hsl(208 100% 93%);
   /* Movimento (ADR 0005): os mesmos valores vivem em
      components/animacao/movimento.ts; lib/design/movimento.test.ts compara. */
+  --mov-toque: 140ms;
   --mov-rapido: 200ms;
   --mov-medio: 500ms;
   --mov-lento: 800ms;
   --mov-cena: 1200ms;
   --mov-piscar: 1100ms;
-  --mov-escalonar: 90ms;
+  --mov-onda-1: 100ms;
+  --mov-onda-2: 180ms;
+  --mov-onda-3: 240ms;
   --ease-orbita: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-ambiente: cubic-bezier(0.37, 0, 0.63, 1);
   --ease-rolagem: linear;
@@ -144,60 +147,6 @@ body {
   from {
     opacity: 0.7;
     transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/*
- * Escalonar: os filhos diretos entram em sequência, cada um --mov-escalonar
- * depois do anterior (até o 8º). `--i` também vale para a entrada ao rolar.
- */
-.escalonar > :nth-child(1) { --i: 0; }
-.escalonar > :nth-child(2) { --i: 1; }
-.escalonar > :nth-child(3) { --i: 2; }
-.escalonar > :nth-child(4) { --i: 3; }
-.escalonar > :nth-child(5) { --i: 4; }
-.escalonar > :nth-child(6) { --i: 5; }
-.escalonar > :nth-child(7) { --i: 6; }
-.escalonar > :nth-child(n + 8) { --i: 7; }
-
-.escalonar > .animacao-entrada,
-.escalonar > * > .animacao-entrada {
-  animation-delay: calc(var(--i, 0) * var(--mov-escalonar));
-}
-
-/* Hero: o Posicionamento e os botões entram logo depois do nome. */
-.hero-apoio > :nth-child(1) {
-  animation-delay: var(--mov-escalonar);
-}
-
-.hero-apoio > :nth-child(2) {
-  animation-delay: calc(2 * var(--mov-escalonar));
-}
-
-/*
- * Entrada ao rolar (issue #58): cartões de projeto, cargos e grupos de
- * competências usam os mesmos keyframes, ligados à posição na tela por uma
- * linha do tempo de visão (CSS puro, sem JavaScript). Sobe 48px e cresce de
- * 0.97 a 1 ao longo da entrada; com `escalonar` no pai, cada irmão começa um
- * pouco depois do anterior. Sem suporte a animation-timeline o cartão aparece
- * parado.
- */
-@supports (animation-timeline: view()) {
-  .animacao-ao-rolar {
-    animation: animacao-ao-rolar var(--mov-medio) var(--ease-rolagem) both;
-    animation-timeline: view();
-    animation-range: entry calc(var(--i, 0) * 6%) entry calc(30rem + var(--i, 0) * 6%);
-  }
-}
-
-@keyframes animacao-ao-rolar {
-  from {
-    opacity: 0.7;
-    transform: translateY(48px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -654,23 +603,6 @@ main:focus {
   color: var(--on-azul);
 }
 
-/* As âncoras entram em sequência cada vez que o painel abre (celular). */
-.barra-grade[data-menu="aberto"] .barra-ancoras > li {
-  animation: barra-item var(--mov-medio) var(--ease-orbita) both;
-  animation-delay: calc(var(--i, 0) * var(--mov-escalonar));
-}
-
-@keyframes barra-item {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 @media (min-width: 48rem) {
   .barra-ancoras {
     flex-direction: row;
@@ -682,10 +614,6 @@ main:focus {
     min-height: 0;
     padding: 0.25rem 0.625rem;
     font-size: 0.875rem;
-  }
-
-  .barra-grade[data-menu="aberto"] .barra-ancoras > li {
-    animation: none;
   }
 }
 
@@ -884,10 +812,8 @@ main:focus {
 /*
  * Fundo de pontos das seções (components/fundo): atrás do conteúdo, sem
  * receber ponteiro, cobrindo o <main> abaixo da Hero (que tem o céu próprio).
- * Os pontos são só CSS, então já aparecem parados sem JavaScript e em
- * celular fraco; o parallax (grade.ts) só mexe no
- * `transform` da camada interna, que é 35% mais alta que a moldura
- * (o curso do parallax de rolagem).
+ * Os pontos são só CSS e ficam parados: nada se move porque a página rolou
+ * (ADR 0008, item 4, que tirou o parallax).
  */
 .fundo-secoes {
   position: absolute;
@@ -919,14 +845,12 @@ main:focus {
 .fundo-secoes-pontos {
   position: absolute;
   inset: 0;
-  height: 135%;
   background-image: radial-gradient(
     circle at center,
     color-mix(in srgb, currentColor 14%, transparent) 1px,
     transparent 1.5px
   );
   background-size: 28px 28px;
-  will-change: transform;
 }
 
 /*
@@ -1462,12 +1386,14 @@ main:focus {
 /*
  * Movimento reduzido (ADR 0007, substitui o "anima sempre" do ADR 0005).
  * Com prefers-reduced-motion: reduce:
- * - entradas (animacao-entrada, animacao-titulo, animacao-ao-rolar e as
- *   âncoras do menu) viram um fade curto só de opacidade, sem deslocamento e
- *   sem escalonar; o texto segue legível desde o primeiro quadro;
+ * - a entrada única (animacao-entrada, animacao-titulo, cabeçalho do estudo
+ *   de caso) vira um fade curto só de opacidade, sem deslocamento e sem a
+ *   onda: tudo junto; o texto segue legível desde o primeiro quadro;
  * - o que acompanha a rolagem (saída da Hero, traço do separador) fica parado
  *   no estado de repouso;
  * - o cursor do HUD deixa de piscar;
+ * - botões e cartões respondem ao hover e ao clique só com cor e borda, sem
+ *   se deslocar; o sublinhado aparece sem se desenhar;
  * - as peças em JavaScript desenham só o quadro parado (components/animacao/movimento-reduzido.ts).
  * Feedback de estado (hover, foco, abrir o menu, destaque dos pilares) continua.
  */
@@ -1482,17 +1408,9 @@ main:focus {
 
 @media (prefers-reduced-motion: reduce) {
   .animacao-entrada,
-  .animacao-titulo,
-  .animacao-ao-rolar {
+  .animacao-titulo {
     animation: entrada-reduzida var(--mov-rapido) var(--ease-rolagem) both;
-    animation-timeline: auto;
-    animation-range: normal;
-  }
-
-  .escalonar > .animacao-entrada,
-  .escalonar > * > .animacao-entrada,
-  .hero-apoio > * {
-    animation-delay: initial !important;
+    animation-delay: initial;
   }
 
   .hero-conteudo,
@@ -1502,11 +1420,14 @@ main:focus {
   .hud-cursor {
     animation: none;
   }
-}
 
-@media (prefers-reduced-motion: reduce) and (max-width: 47.99rem) {
-  .barra-grade[data-menu="aberto"] .barra-ancoras > li {
-    animation: entrada-reduzida var(--mov-rapido) var(--ease-rolagem) both;
-    animation-delay: initial;
+  .botao,
+  .botao:hover,
+  .botao:active {
+    transform: none;
+  }
+
+  .link-alvo::after {
+    transition: none;
   }
 }

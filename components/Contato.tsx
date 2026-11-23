@@ -26,7 +26,6 @@ export function Contato({ lang, numero }: Props) {
       numero={numero}
       titulo={contato.titulo}
       classe="secao-fechamento"
-      animar
     >
       <p className="fechamento-linha">{t.linhaDoFechamento}</p>
       <a href={`mailto:${contato.email}`} className="fechamento-email">

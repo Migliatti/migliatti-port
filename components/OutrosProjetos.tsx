@@ -15,13 +15,13 @@ export function OutrosProjetos({
 
   return (
     <Secao numero={numero} idDoTitulo="outros-projetos" titulo={t.titulo}>
-      <ul className="outros-lista escalonar">
+      <ul className="outros-lista">
         {projetos.map((projeto) => (
           <li
             key={projeto.id}
             data-testid="outro-projeto"
             data-projeto={projeto.id}
-            className="ilha animacao-ao-rolar"
+            className="ilha"
           >
             <p>
               <span className="outro-titulo">{projeto.titulo}</span>

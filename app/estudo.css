@@ -195,12 +195,12 @@
 }
 
 .estudo-hero[data-enter] > .estudo-hero-texto {
-  animation-delay: var(--mov-escalonar);
+  animation-delay: var(--mov-onda-1);
 }
 
 .estudo-hero[data-enter] > .estudo-hero-visual {
   animation: estudo-entrada-visual var(--mov-cena) var(--ease-orbita) both;
-  animation-delay: calc(2 * var(--mov-escalonar));
+  animation-delay: var(--mov-onda-2);
 }
 
 @keyframes estudo-entrada {

@@ -18,14 +18,13 @@ export function ExperienciaProfissional({ lang, numero }: Props) {
       testId="experiencia"
       numero={numero}
       titulo={t.secoes.experiencia}
-      animar
     >
-      <ol className="cargos-lista escalonar">
+      <ol className="cargos-lista">
         {cargos.map((cargo) => (
           <li
             key={`${cargo.empresa}-${cargo.periodo}`}
             data-testid="cargo"
-            className="ilha animacao-ao-rolar"
+            className="ilha"
           >
             <h3 className="cargo-titulo">{cargo.cargo}</h3>
             <p className="text-muted">
@@ -54,12 +53,12 @@ export function Competencias({ lang, numero }: Props) {
       numero={numero}
       titulo={t.secoes.competencias}
     >
-      <div className="competencias-grade escalonar">
+      <div className="competencias-grade">
         {grupos.map((grupo) => (
           <div
             key={grupo.nome}
             data-testid="grupo-de-competencias"
-            className="ilha animacao-ao-rolar"
+            className="ilha"
           >
             <h3 className="grupo-titulo">{grupo.nome}</h3>
             <ul className="mt-2 flex flex-wrap gap-2">

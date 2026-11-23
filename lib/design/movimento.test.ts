@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { AMBIENTE, DURACAO, EASE, EASE_CSS, ESCALONAR_CSS } from "@/components/animacao/movimento";
+import { AMBIENTE, DURACAO, EASE, EASE_CSS, ONDA } from "@/components/animacao/movimento";
 
 const css = readFileSync("app/globals.css", "utf8");
 const raiz = css.match(/:root\s*{([^}]*)}/)![1];
@@ -13,7 +13,7 @@ function propriedade(nome: string): string {
 
 describe("tokens de movimento (ADR 0005)", () => {
   it("as durações de CSS e de TypeScript são as mesmas", () => {
-    for (const k of ["rapido", "medio", "lento", "cena"] as const) {
+    for (const k of ["toque", "rapido", "medio", "lento", "cena"] as const) {
       expect(propriedade(`mov-${k}`), k).toBe(`${DURACAO[k]}ms`);
     }
   });
@@ -23,7 +23,21 @@ describe("tokens de movimento (ADR 0005)", () => {
     expect(propriedade("ease-ambiente")).toBe(EASE_CSS.ambiente);
     expect(propriedade("ease-rolagem")).toBe(EASE_CSS.rolagem);
     expect(propriedade("mov-piscar")).toBe(`${AMBIENTE.piscar}ms`);
-    expect(propriedade("mov-escalonar")).toBe(`${ESCALONAR_CSS}ms`);
+  });
+
+  it("a onda da entrada é a mesma nos dois lados e os intervalos encolhem", () => {
+    for (let i = 1; i < ONDA.length; i++) {
+      expect(propriedade(`mov-onda-${i}`), `onda ${i}`).toBe(`${ONDA[i]}ms`);
+    }
+    const intervalos = ONDA.slice(1).map((t, i) => t - ONDA[i]);
+    for (let i = 1; i < intervalos.length; i++) {
+      expect(intervalos[i]).toBeLessThan(intervalos[i - 1]);
+    }
+  });
+
+  it("o escalonamento uniforme das entradas ao rolar saiu (ADR 0008, item 4)", () => {
+    const semComentarios = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(semComentarios).not.toMatch(/--mov-escalonar|\.escalonar\b|animacao-ao-rolar/);
   });
 
   it("as curvas do anime.js aproximam as de CSS (mesmo par orbita/ambiente)", () => {

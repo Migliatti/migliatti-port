@@ -26,6 +26,8 @@ O **Portfólio** funciona, mas lê como uma página de cartões equivalentes: a 
 
 A fase 1 (este ADR, fontes, papéis de cor, alvos de toque e rótulos de no mínimo 13px, atributos da skill) entra primeiro. Os itens 3 e 4 entram nas fases 2 (Hero) e 3 (seções da home); até lá o código das entradas ao rolar continua como está.
 
+**Item 4, entregue (fase 6, movimento):** saíram `animacao-ao-rolar`, o `.escalonar` das listas (e o `--mov-escalonar`), a entrada ao montar das seções e o parallax do fundo de pontos (`components/fundo/grade.ts`); o fundo de pontos fica, parado, em CSS. Fora da cena da Hero (entrada, céu e saída ao rolar) e dos capítulos fixados, nada se move porque a página rolou. A entrada única usa a onda `--mov-onda-1..3` (100, 180 e 240 ms, intervalos que encolhem) e cada parte nova tem caminho reduzido (ADR 0007).
+
 ## Consequências
 
 - `tests/e2e/identidade.spec.ts`, `tests/e2e/azul-na-ui.spec.ts` e `tests/e2e/layout-editorial.spec.ts` passam a esperar Chivo/Chivo Mono e o botão primário azul.

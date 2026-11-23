@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { DURACAO, EASE_CSS, ESCALONAR, ESCALONAR_CSS } from "@/components/animacao/movimento";
+import { DURACAO, EASE_CSS, ESCALONAR, ONDA } from "@/components/animacao/movimento";
 import {
   aoMudarMovimentoReduzido,
   movimentoReduzido,
@@ -57,7 +57,7 @@ export function NumeroQueRola({ valor, ordem }: Props) {
           ],
           {
             duration: DURACAO.cena + coluna * ESCALONAR.fino,
-            delay: ordem * ESCALONAR_CSS,
+            delay: ONDA[Math.min(ordem, ONDA.length - 1)],
             easing: EASE_CSS.orbita,
             fill: "forwards",
           },

@@ -10,8 +10,6 @@ type Props = {
   /** Id da própria `<section>`, quando a âncora é ela (ex.: `contato`). */
   id?: string;
   testId?: string;
-  /** Entrada curta ao montar (`animacao-entrada`, ADR 0001). */
-  animar?: boolean;
   /** Classe extra da seção (ex.: o layout próprio de uma seção da home). */
   classe?: string;
   /** Momento da taste-skill que a seção hospeda (`data-moment`, ADR 0008). */
@@ -30,12 +28,12 @@ export function Secao({
   titulo,
   id,
   testId,
-  animar = false,
   classe,
   momento,
   children,
 }: Props) {
-  const classes = ["secao", animar && "animacao-entrada", classe].filter(Boolean).join(" ");
+  // Sem entrada própria: a página entra uma vez, pela Hero (ADR 0008, item 4).
+  const classes = ["secao", classe].filter(Boolean).join(" ");
   return (
     <section
       id={id}

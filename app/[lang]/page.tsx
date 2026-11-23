@@ -62,7 +62,6 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
           testId="projetos-em-destaque"
           classe="secao-destaques"
           momento="pinned-chapters"
-          animar
         >
           <CapitulosDosDestaques projetos={destaques} lang={lang} />
         </Secao>
