@@ -442,7 +442,7 @@
   transition: transform var(--mov-rapido) var(--ease-orbita);
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .estudo-link:hover .estudo-link-seta {
     transform: translate(2px, -2px);
   }
@@ -572,10 +572,21 @@
     border-color var(--mov-rapido) var(--ease-orbita);
 }
 
-@media (hover: hover) {
+/* Cartão linkado: sobe 2px no hover e afunda de leve no clique (0.99, um
+   cartão grande pede menos que um botão), em --mov-toque. */
+.estudo-proximo:active {
+  transform: scale(0.99);
+  transition-duration: var(--mov-toque);
+}
+
+@media (hover: hover) and (pointer: fine) {
   .estudo-proximo:hover {
     transform: translateY(-2px);
     border-color: var(--muted);
+  }
+
+  .estudo-proximo:hover:active {
+    transform: translateY(-2px) scale(0.99);
   }
 }
 
@@ -638,5 +649,10 @@
   .estudo-hero[data-enter] > .estudo-hero-visual {
     animation: entrada-reduzida var(--mov-rapido) var(--ease-rolagem) both;
     animation-delay: initial;
+  }
+
+  /* O cartão responde só com a borda, sem se deslocar. */
+  .estudo-proximo {
+    transform: none !important;
   }
 }

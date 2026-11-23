@@ -51,8 +51,18 @@ for (const path of ["/pt", "/en"]) {
         .poll(() => primeiro.evaluate((n) => Math.round(n.getBoundingClientRect().top)))
         .toBe(Math.round(fixo));
       await expect
-        .poll(() => primeiro.evaluate((n) => Number(n.style.getPropertyValue("--coberto"))))
+        .poll(() => primeiro.evaluate((n) => Number((n as HTMLElement).dataset.coberto)))
         .toBeGreaterThan(0.9);
+      // O coberto recua e escurece com escrita direta de `scale` e `opacity`
+      // (só composição), não com uma variável CSS herdada pelo capítulo todo.
+      const recuo = await primeiro.evaluate((n) => ({
+        scale: Number(getComputedStyle(n).scale),
+        veu: Number(getComputedStyle(n.querySelector(".capitulo-veu")!).opacity),
+        variavel: (n as HTMLElement).style.getPropertyValue("--coberto"),
+      }));
+      expect(recuo.scale).toBeLessThan(0.96);
+      expect(recuo.veu).toBeGreaterThan(0.5);
+      expect(recuo.variavel).toBe("");
       // O segundo está por cima, onde o primeiro está fixado.
       const noTopo = await page.evaluate((y) => {
         const el = document.elementFromPoint(720, y + 200);

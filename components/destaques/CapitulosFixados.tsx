@@ -5,14 +5,18 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 /** Onde o capítulo se fixa: tela larga e alta o bastante para um capítulo inteiro. */
 const TELA_QUE_FIXA = "(min-width: 64rem) and (min-height: 40rem)";
 const REDUZIDO = "(prefers-reduced-motion: reduce)";
+/** Quanto o capítulo coberto encolhe (1 - RECUO) e escurece, no fim. */
+const RECUO = 0.05;
+const ESCURECER = 0.6;
 
 /**
  * Mecânica do momento `pinned-chapters` (taste-skill, ADR 0008), portada para
  * React e CSS: em tela larga, com JavaScript e sem movimento reduzido, a lista
  * vira `data-capitulos="vivo"` e cada capítulo se fixa (`position: sticky`,
  * app/home.css) no topo enquanto o seguinte sobe por cima dele, então a seção
- * fica parada e os capítulos trocam. O capítulo coberto recua um pouco e
- * escurece (`--coberto`, de 0 a 1, ligado à rolagem dentro da seção). A rolagem
+ * fica parada e os capítulos trocam. O capítulo coberto recua um pouco
+ * (`scale` até 0.95) e escurece (o véu `.capitulo-veu` até 0.6), na proporção
+ * em que o seguinte o cobre. A rolagem
  * da página continua nativa e cada capítulo mantém sua posição natural, então
  * Tab, âncoras e cliques funcionam como numa lista comum.
  *
@@ -40,19 +44,30 @@ export function CapitulosFixados({ children }: { children: ReactNode }) {
     const el = lista.current;
     if (!vivo || !el) return;
     const capitulos = [...el.children] as HTMLElement[];
+    const veus = capitulos.map((c) => c.querySelector<HTMLElement>(".capitulo-veu"));
+    const anteriores = capitulos.map(() => -1);
     let quadro = 0;
 
+    // Uma leitura de todos e depois uma escrita de todos, num quadro só: nada
+    // de ler o layout entre escritas. As escritas vão direto em `scale` e
+    // `opacity` de cada elemento (propriedades só de composição), e não numa
+    // variável CSS herdada, que recalcularia o estilo de todo o capítulo a
+    // cada quadro. O topo não muda com o `scale` (origem no topo) e a altura
+    // vem de `offsetHeight`, que ignora transformações.
     const medir = () => {
       quadro = 0;
+      const topos = capitulos.map((c) => c.getBoundingClientRect().top);
+      const alturas = capitulos.map((c) => c.offsetHeight);
       for (let i = 0; i < capitulos.length - 1; i++) {
-        const atual = capitulos[i].getBoundingClientRect();
-        const proximo = capitulos[i + 1].getBoundingClientRect();
         // 0 enquanto o próximo está a uma altura de distância; 1 quando o cobre.
-        const coberto = 1 - (proximo.top - atual.top) / atual.height;
-        capitulos[i].style.setProperty(
-          "--coberto",
-          Math.min(1, Math.max(0, coberto)).toFixed(3),
-        );
+        const bruto = 1 - (topos[i + 1] - topos[i]) / alturas[i];
+        const coberto = Math.round(Math.min(1, Math.max(0, bruto)) * 1000) / 1000;
+        if (coberto === anteriores[i]) continue;
+        anteriores[i] = coberto;
+        capitulos[i].dataset.coberto = String(coberto);
+        capitulos[i].style.scale = String(1 - coberto * RECUO);
+        const veu = veus[i];
+        if (veu) veu.style.opacity = String(coberto * ESCURECER);
       }
     };
     const agendar = () => {
@@ -90,7 +105,11 @@ export function CapitulosFixados({ children }: { children: ReactNode }) {
       window.removeEventListener("scroll", agendar);
       window.removeEventListener("resize", agendar);
       el.removeEventListener("focusin", aoFocar);
-      for (const c of capitulos) c.style.removeProperty("--coberto");
+      capitulos.forEach((c, i) => {
+        c.style.removeProperty("scale");
+        delete c.dataset.coberto;
+        veus[i]?.style.removeProperty("opacity");
+      });
     };
   }, [vivo]);
 

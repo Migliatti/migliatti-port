@@ -89,4 +89,29 @@ test.describe("movimento reduzido", () => {
     expect(caso.length).toBeGreaterThan(0);
     for (const atraso of caso) expect(atraso).toBe(0);
   });
+  test("botões e cartões linkados respondem sem se deslocar; o sublinhado aparece sem desenhar", async ({
+    page,
+  }) => {
+    await page.goto("/pt");
+    const botao = page.locator("a.botao-secundario").first();
+    await botao.hover();
+    await page.waitForTimeout(300);
+    expect(await botao.evaluate((n) => getComputedStyle(n).transform)).toBe("none");
+    await page.mouse.down();
+    expect(await botao.evaluate((n) => getComputedStyle(n).transform)).toBe("none");
+    await page.mouse.up();
+
+    const link = page.locator("#contato a.link-alvo").first();
+    await link.scrollIntoViewIfNeeded();
+    expect(
+      await link.evaluate((n) => getComputedStyle(n, "::after").transitionDuration),
+    ).toBe("0s");
+
+    await page.goto("/pt/projetos/labreserve");
+    const cartao = page.locator(".estudo-proximo").first();
+    await cartao.scrollIntoViewIfNeeded();
+    await cartao.hover();
+    await page.waitForTimeout(300);
+    expect(await cartao.evaluate((n) => getComputedStyle(n).transform)).toBe("none");
+  });
 });

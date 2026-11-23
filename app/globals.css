@@ -251,25 +251,74 @@ main:focus {
 }
 
 /*
- * Botões (ADR 0005): vivos. O hover levanta e cresce, o clique afunda, só com
- * mouse (hover: hover). Só transform.
+ * Botões (ADR 0005, refinados na fase 6 do ADR 0008): no hover o botão sobe
+ * um degrau de 2px; no clique ele desce e afunda (0.97) em --mov-toque, mais
+ * rápido que o hover, para responder no mesmo instante. Só transform, só com
+ * ponteiro fino que passa o mouse (no toque o hover ficaria preso). O afundar
+ * do clique vale em qualquer ponteiro.
  */
 .botao {
   transition: transform var(--mov-rapido) var(--ease-orbita);
 }
 
 .botao:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
+  transition-duration: var(--mov-toque);
 }
 
-/* Hover só onde existe ponteiro que passa o mouse: no toque o botão não fica levantado. */
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .botao:hover {
-    transform: translateY(-3px) scale(1.03);
+    transform: translateY(-2px);
   }
 
   .botao:hover:active {
-    transform: scale(0.95);
+    transform: scale(0.97);
+  }
+}
+
+/*
+ * Sublinhado que se desenha (links de ação com alvo de 44px: Repositório,
+ * Demo, LinkedIn, GitHub). O sublinhado de repouso continua sendo o
+ * `text-decoration` (cinza, ou azul no demo); no hover ou no foco por teclado
+ * um traço azul de 2px se desenha por cima dele, da esquerda para a direita,
+ * e se recolhe para a direita ao sair. Só transform (scaleX).
+ */
+.link-alvo {
+  position: relative;
+}
+
+.link-alvo::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* O texto é uma linha centrada no alvo: o traço fica logo abaixo dela. */
+  top: calc(50% + 0.5lh - 0.3125rem);
+  height: 2px;
+  border-radius: 1px;
+  background: var(--azul);
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform var(--mov-medio) var(--ease-orbita);
+}
+
+.link-alvo:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link-alvo:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+
+/* Alto contraste: o sublinhado nativo basta; o traço desenhado sai. */
+@media (forced-colors: active) {
+  .link-alvo::after {
+    display: none;
   }
 }
 

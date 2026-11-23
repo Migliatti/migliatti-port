@@ -243,8 +243,12 @@
 /*
  * Vivo (CapitulosFixados, só com JavaScript, tela >= 64rem x 40rem e sem
  * movimento reduzido): cada capítulo se fixa sob a barra com a altura da tela
- * e o seguinte sobe por cima dele. O coberto recua e escurece com
- * `--coberto` (0 a 1). Sem isso, os capítulos ficam empilhados e parados.
+ * e o seguinte sobe por cima dele. O coberto recua (`scale`, escrito pelo
+ * componente) e escurece (o véu, `opacity`), na proporção da rolagem dentro
+ * da seção: o movimento é a própria rolagem, sem curva nem duração. Só os
+ * capítulos e os véus ganham camada própria (`will-change`), porque mudam a cada
+ * quadro enquanto a seção rola; parados e no celular, nenhum. Sem isso, os
+ * capítulos ficam empilhados e parados.
  */
 .capitulos[data-capitulos="vivo"] {
   gap: 2rem;
@@ -255,17 +259,22 @@
   top: calc(var(--altura-barra) + 0.75rem);
   height: calc(100svh - var(--altura-barra) - 2rem);
   transform-origin: 50% 0;
-  scale: calc(1 - var(--coberto, 0) * 0.05);
+  will-change: scale;
 }
 
-.capitulos[data-capitulos="vivo"] > .capitulo::after {
-  content: "";
+.capitulo-veu {
+  display: none;
+}
+
+.capitulos[data-capitulos="vivo"] .capitulo-veu {
+  display: block;
   position: absolute;
   inset: -1px;
   border-radius: inherit;
   background: var(--background);
-  opacity: calc(var(--coberto, 0) * 0.6);
+  opacity: 0;
   pointer-events: none;
+  will-change: opacity;
 }
 
 /* A evidência cabe no capítulo fixado: o desenho encolhe pela altura. */

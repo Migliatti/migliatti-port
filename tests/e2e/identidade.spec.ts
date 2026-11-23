@@ -256,7 +256,7 @@ test.describe("correções da revisão final", () => {
 test.describe("movimento dos botões", () => {
   const transformar = (n: Element) => getComputedStyle(n).transform;
 
-  test("hover eleva 3px e cresce 3%, o clique afunda", async ({
+  test("hover sobe um degrau de 2px, o clique desce e afunda (0.97)", async ({
     page,
   }) => {
     await page.goto("/pt");
@@ -265,12 +265,39 @@ test.describe("movimento dos botões", () => {
     await botao.hover();
     await expect
       .poll(() => botao.evaluate(transformar))
-      .toBe("matrix(1.03, 0, 0, 1.03, 0, -3)");
+      .toBe("matrix(1, 0, 0, 1, 0, -2)");
     await page.mouse.down();
     await expect
       .poll(() => botao.evaluate(transformar))
-      .toBe("matrix(0.95, 0, 0, 0.95, 0, 0)");
+      .toBe("matrix(0.97, 0, 0, 0.97, 0, 0)");
+    // O clique responde mais rápido que o hover (--mov-toque < --mov-rapido).
+    expect(
+      await botao.evaluate((n) => parseFloat(getComputedStyle(n).transitionDuration)),
+    ).toBeLessThan(0.2);
     await page.mouse.up();
+  });
+
+  test("o link de ação desenha o sublinhado azul no hover", async ({ page }) => {
+    await page.goto("/pt");
+    const link = page.locator("#contato a.link-alvo").first();
+    await link.scrollIntoViewIfNeeded();
+    const traco = () =>
+      link.evaluate((n) => new DOMMatrix(getComputedStyle(n, "::after").transform).a);
+    expect(await traco()).toBe(0);
+    await link.hover();
+    await expect.poll(traco).toBe(1);
+    expect(await link.evaluate((n) => getComputedStyle(n, "::after").backgroundColor)).toBe(
+      "rgb(102, 164, 245)",
+    );
+  });
+
+  test("o cartão linkado do estudo de caso sobe 2px no hover", async ({ page }) => {
+    await page.goto("/pt/projetos/labreserve");
+    const cartao = page.locator(".estudo-proximo").first();
+    await cartao.scrollIntoViewIfNeeded();
+    await esperarAnimacoesFinitas(page);
+    await cartao.hover();
+    await expect.poll(() => cartao.evaluate(transformar)).toBe("matrix(1, 0, 0, 1, 0, -2)");
   });
 
   test("a elevação por hover só vale para ponteiro com hover", async ({

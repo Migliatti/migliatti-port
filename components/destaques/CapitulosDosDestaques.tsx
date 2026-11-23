@@ -82,6 +82,8 @@ export function CapitulosDosDestaques({ projetos, lang }: Props) {
                 />
               )}
             </div>
+            {/* Véu do capítulo coberto (CapitulosFixados); decorativo. */}
+            <span aria-hidden="true" className="capitulo-veu" />
           </li>
         );
       })}
