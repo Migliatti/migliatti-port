@@ -2,7 +2,7 @@
 
 ### Issue tracker
 
-Issues e specs vivem no GitHub Issues de `Migliatti/portfolio`, via `gh`. See `docs/agents/issue-tracker.md`.
+Issues e specs vivem no GitHub Issues de `Migliatti/migliatti-port`, via `gh`. See `docs/agents/issue-tracker.md`.
 
 ### Domain docs
 
