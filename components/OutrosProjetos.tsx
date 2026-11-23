@@ -36,11 +36,11 @@ export function OutrosProjetos({
             </p>
             <p className="text-muted">{projeto.resumo}</p>
             <p className="mt-1 flex gap-4 text-sm">
-              <a href={projeto.repositorio} className="underline">
+              <a href={projeto.repositorio} className="link-alvo underline">
                 {t.repositorio}
               </a>
               {projeto.demo && (
-                <a href={projeto.demo} className="link-demo underline">
+                <a href={projeto.demo} className="link-demo link-alvo underline">
                   {t.demo}
                 </a>
               )}

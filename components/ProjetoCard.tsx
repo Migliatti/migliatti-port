@@ -27,7 +27,7 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
       </span>
       <div className="projeto-cartao-texto flex min-w-0 flex-col gap-3">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h3 className="text-2xl font-semibold sm:text-4xl">
+          <h3 className="text-2xl sm:text-4xl">
             {projeto.titulo}
           </h3>
         </div>
@@ -51,7 +51,7 @@ export function ProjetoCard({ projeto, lang, posicao }: Props) {
               href={projeto.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="link-demo underline underline-offset-4"
+              className="link-demo link-alvo underline underline-offset-4"
             >
               {dict.verDemo}
             </a>

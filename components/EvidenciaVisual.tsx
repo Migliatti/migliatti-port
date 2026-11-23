@@ -64,7 +64,7 @@ export function EvidenciaVisual({ evidencia, lang, prefixo, compacta = false, de
       </div>
       <figcaption className="text-muted">
         {evidencia.tipo === "ilustracao" && (
-          <span data-testid="rotulo-ilustracao" className="mr-2 rounded border border-muted/40 px-1.5 py-0.5 text-xs uppercase">
+          <span data-testid="rotulo-ilustracao" className="mr-2 rounded border border-muted/40 px-1.5 py-0.5 text-[0.8125rem] uppercase">
             {dict.ilustracao}
           </span>
         )}

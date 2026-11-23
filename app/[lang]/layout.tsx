@@ -1,22 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
+import { Chivo, Chivo_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { obterTextosHome, validarConteudo } from "@/lib/content";
 import { getDictionary, isLocale, locales } from "@/lib/dictionary";
 import { metadadosDaPagina, urlDoSite } from "@/lib/seo";
 import "../globals.css";
 
-const fonteTitulo = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--fonte-titulo",
-  display: "swap",
-});
-const fonteCorpo = Geist({
+// Par "chivo" da taste-skill (ADR 0008): Chivo nos títulos e no corpo,
+// Chivo Mono em números, rótulos e HUD. Chivo é variável: uma instância serve
+// títulos (400) e corpo (400 e 500); as duas variáveis mantêm os nomes que o
+// globals.css já usa.
+const fonteChivo = Chivo({
   subsets: ["latin"],
   variable: "--fonte-corpo",
   display: "swap",
 });
-const fonteMono = Geist_Mono({
+const fonteMono = Chivo_Mono({
   subsets: ["latin"],
   variable: "--fonte-mono",
   display: "swap",
@@ -48,6 +47,8 @@ export async function generateMetadata({
       titulo: textos.titulo,
       descricao: textos.descricao,
     }),
+    // Tipo de página para as checagens da taste-skill (ADR 0008).
+    other: { "page-type": "software", "site-kind": "software" },
   };
 }
 
@@ -62,7 +63,10 @@ export default async function RootLayout({
   return (
     <html
       lang={dict.htmlLang}
-      className={`${fonteTitulo.variable} ${fonteCorpo.variable} ${fonteMono.variable}`}
+      data-type="software"
+      data-radius="soft"
+      data-buttons="pill"
+      className={`${fonteChivo.variable} ${fonteMono.variable}`}
     >
       <body className="min-h-screen antialiased">
         <a href="#conteudo" className="pular-para-conteudo">

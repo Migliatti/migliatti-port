@@ -75,7 +75,7 @@ export default async function EstudoDeCasoPage({
       <main id="conteudo" tabIndex={-1} className="estudo estudo-grade relative flex flex-col pb-24">
         <FundoDasSecoes />
         <div className="estudo-cabecalho">
-          <h1 className="estudo-titulo animacao-titulo font-extrabold">
+          <h1 className="estudo-titulo animacao-titulo">
             {projeto.titulo}
           </h1>
           <div className="estudo-apoio flex flex-col gap-5">

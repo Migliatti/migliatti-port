@@ -5,7 +5,7 @@ const paths = ["/pt", "/en"];
 
 for (const path of paths) {
   test.describe(`identidade visual ${path}`, () => {
-    test("títulos em Bricolage, corpo em Geist, com fonte de reserva", async ({
+    test("títulos e corpo em Chivo, com fonte de reserva (ADR 0008)", async ({
       page,
     }) => {
       await page.goto(path);
@@ -16,8 +16,8 @@ for (const path of paths) {
       const corpo = await page.evaluate(
         () => getComputedStyle(document.body).fontFamily,
       );
-      expect(h1).toContain("Bricolage");
-      expect(corpo).toContain("Geist");
+      expect(h1).toContain("Chivo");
+      expect(corpo).toContain("Chivo");
       expect(corpo).toContain("system-ui");
     });
 
@@ -36,7 +36,7 @@ for (const path of paths) {
         expect(cores, tema).toEqual({
           fundo: "rgb(23, 23, 23)",
           esquema: "dark",
-          primario: "rgb(230, 230, 230)",
+          primario: "rgb(102, 164, 245)", // --azul (ADR 0008)
         });
       }
     });
@@ -200,7 +200,7 @@ test("estudo de caso usa a fonte de títulos e chips na stack", async ({
     .locator("h1")
     .first()
     .evaluate((n) => getComputedStyle(n).fontFamily);
-  expect(h1).toContain("Bricolage");
+  expect(h1).toContain("Chivo");
   await expect(page.locator("main .chip").first()).toBeVisible();
 });
 
@@ -234,7 +234,7 @@ test.describe("correções da revisão final", () => {
     for (const d of duracoes) expect(d).toBeLessThanOrEqual(0.8);
   });
 
-  test("o botão primário tem pílula clara e texto escuro", async ({
+  test("o botão primário é a pílula azul com texto escuro (ADR 0008)", async ({
     page,
   }) => {
     await page.goto("/pt");
@@ -247,7 +247,7 @@ test.describe("correções da revisão final", () => {
       };
     });
     expect(r.larguraBorda).toBe("1px");
-    expect(r.borda).toBe("rgb(230, 230, 230)");
+    expect(r.borda).toBe("rgb(102, 164, 245)");
     expect(r.texto).toBe("rgb(23, 23, 23)");
   });
 });
@@ -328,3 +328,36 @@ for (const path of paths) {
     ).toContain("ui-sans-serif");
   });
 }
+
+test.describe("taste-skill (ADR 0008)", () => {
+  for (const path of ["/pt", "/en/projetos/kepler-lab"]) {
+    test(`declara tipo de página, raio e botões ${path}`, async ({ page }) => {
+      await page.goto(path);
+      const html = page.locator("html");
+      await expect(html).toHaveAttribute("data-type", "software");
+      await expect(html).toHaveAttribute("data-radius", "soft");
+      await expect(html).toHaveAttribute("data-buttons", "pill");
+      await expect(page.locator('meta[name="page-type"]')).toHaveAttribute("content", "software");
+      await expect(page.locator('meta[name="site-kind"]')).toHaveAttribute("content", "software");
+    });
+  }
+
+  test("títulos em peso 400 com espaçamento -0.03em", async ({ page }) => {
+    await page.goto("/pt");
+    for (const seletor of ["h1", ".secao-titulo", '[data-testid="projeto-card-kepler-lab"] h3']) {
+      const r = await page.locator(seletor).first().evaluate((n) => {
+        const css = getComputedStyle(n);
+        return { peso: css.fontWeight, espaco: parseFloat(css.letterSpacing) / parseFloat(css.fontSize) };
+      });
+      expect(r.peso, seletor).toBe("400");
+      expect(r.espaco, seletor).toBeCloseTo(-0.03, 3);
+    }
+  });
+
+  test("números e rótulos em Chivo Mono", async ({ page }) => {
+    await page.goto("/pt");
+    expect(
+      await page.locator(".secao-numero").first().evaluate((n) => getComputedStyle(n).fontFamily),
+    ).toContain("Chivo Mono");
+  });
+});

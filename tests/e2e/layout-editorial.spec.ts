@@ -41,7 +41,7 @@ for (const home of homes) {
           .locator(".secao-numero")
           .first()
           .evaluate((n) => getComputedStyle(n).fontFamily);
-        expect(fonte).toContain("Geist Mono");
+        expect(fonte).toContain("Chivo Mono");
 
         // Cartão é ilha elevada com número e Evidência visual.
         const cartao = page.getByTestId("projeto-card-kepler-lab");

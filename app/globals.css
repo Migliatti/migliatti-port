@@ -69,7 +69,9 @@
   --color-estado-aviso: var(--estado-aviso);
   --color-estado-erro: var(--estado-erro);
   --font-sans: var(--fonte-corpo), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--fonte-titulo), ui-sans-serif, system-ui, sans-serif;
+  /* Chivo nos títulos e no corpo (ADR 0008): uma família, papéis por peso e
+     espaçamento. */
+  --font-display: var(--fonte-corpo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--fonte-mono), ui-monospace, monospace;
 }
 
@@ -102,7 +104,8 @@ body {
   h5,
   h6 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    font-weight: 400;
+    letter-spacing: -0.03em;
     text-wrap: balance;
     scroll-margin-top: calc(var(--altura-barra) + 1.5rem);
   }
@@ -232,10 +235,15 @@ main:focus {
   transform: none;
 }
 
-/* Controles da identidade Sinal: pílula, um acento só. */
+/*
+ * Botões (ADR 0008): pílulas de no mínimo 44px de altura. O azul marca a ação
+ * primária; a pílula neutra é o estilo secundário.
+ */
 .botao {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
   border-radius: 9999px;
   padding: 0.7rem 1.25rem;
   font-size: 0.95rem;
@@ -245,14 +253,24 @@ main:focus {
 }
 
 .botao-primario {
-  border: 1px solid var(--accent);
-  background: var(--accent);
-  color: var(--on-accent);
+  border: 1px solid var(--azul);
+  background: var(--azul);
+  color: var(--on-azul);
 }
 
+/* Secundário: pílula de contorno neutro. Um só botão preenchido por vista
+   (taste-skill). */
 .botao-secundario {
-  border: 1px solid var(--foreground);
+  border: 1px solid var(--accent);
+  background: transparent;
   color: var(--foreground);
+}
+
+/* Link de texto com alvo de toque de 44px (Repositório, Demo). */
+.link-alvo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }
 
 /* Link para o demo publicado: o único link de corpo em azul (ADR 0005). */
@@ -268,7 +286,7 @@ main:focus {
   background: var(--surface);
   padding: 0.2rem 0.65rem;
   color: var(--muted);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 
 /* Sinal de estado (ADR 0004: âmbar só em sinais pontuais): "Rascunho". */
@@ -277,7 +295,7 @@ main:focus {
   background: transparent;
   color: var(--estado-aviso);
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   line-height: 1.2;
 }
 
@@ -960,7 +978,7 @@ main:focus {
 .secao-titulo {
   font-size: 1.5rem;
   line-height: 2rem;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 @media (min-width: 40rem) {
@@ -1121,7 +1139,7 @@ main:focus {
  */
 .hud {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   line-height: 1.25;
   color: var(--muted);
 }
@@ -1225,7 +1243,7 @@ main:focus {
 .nota-rascunho {
   color: var(--estado-aviso);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .barra-marca {
@@ -1347,7 +1365,7 @@ main:focus {
   overflow: hidden;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

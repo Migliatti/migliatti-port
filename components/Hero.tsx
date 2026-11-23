@@ -23,7 +23,7 @@ export function Hero({ lang, nome, posicionamento }: Props) {
       <CeuDaHero />
       <BuracoNegroDaHero />
       <div className="hero-conteudo">
-        <h1 className="animacao-titulo hero-nome font-extrabold leading-[1.02] tracking-tight">
+        <h1 className="animacao-titulo hero-nome leading-[1.02]">
           {nome}
         </h1>
         <div className="hero-apoio">
