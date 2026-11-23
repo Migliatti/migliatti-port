@@ -12,6 +12,10 @@ type Props = {
   testId?: string;
   /** Entrada curta ao montar (`animacao-entrada`, ADR 0001). */
   animar?: boolean;
+  /** Classe extra da seção (ex.: o layout próprio de uma seção da home). */
+  classe?: string;
+  /** Momento da taste-skill que a seção hospeda (`data-moment`, ADR 0008). */
+  momento?: "pinned-chapters" | "counter-rolls";
   children: ReactNode;
 };
 
@@ -27,14 +31,18 @@ export function Secao({
   id,
   testId,
   animar = false,
+  classe,
+  momento,
   children,
 }: Props) {
+  const classes = ["secao", animar && "animacao-entrada", classe].filter(Boolean).join(" ");
   return (
     <section
       id={id}
       aria-labelledby={idDoTitulo}
       data-testid={testId}
-      className={animar ? "secao animacao-entrada" : "secao"}
+      data-moment={momento}
+      className={classes}
     >
       <NumeroDaSecao numero={numero} />
       <h2 id={idDoTitulo} className="secao-titulo">

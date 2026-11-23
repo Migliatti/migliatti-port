@@ -102,11 +102,17 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
   });
 }
 
-test("no desktop não há botão e as âncoras ficam na linha da barra", async ({ page }) => {
+test("no desktop não há botão e as âncoras ficam na linha da barra, centradas", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/pt");
   await expect(page.getByTestId("barra-hamburguer")).toBeHidden();
-  await expect(page.getByTestId("barra-marca")).toBeHidden();
+  // nav-centre (ADR 0008): a marca GM empilhada à esquerda, as âncoras no eixo da página.
+  await expect(page.getByTestId("barra-marca")).toBeVisible();
+  const eixo = await page.locator("header.barra-fixa .barra-ancoras").evaluate((n) => {
+    const r = n.getBoundingClientRect();
+    return (r.left + r.right) / 2;
+  });
+  expect(Math.abs(eixo - 720)).toBeLessThanOrEqual(2);
   await expect(page.locator("header.barra-fixa .barra-ancora")).toHaveCount(5);
   const topos = await page
     .locator("header.barra-fixa .barra-ancora")

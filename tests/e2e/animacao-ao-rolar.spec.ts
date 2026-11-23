@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 
+// Os Projetos em destaque saíram daqui: viraram o momento pinned-chapters
+// (ADR 0008; tests/e2e/momentos.spec.ts).
 const cartoes = [
-  "projeto-card-kepler-lab",
   "cargo",
   "grupo-de-competencias",
 ];

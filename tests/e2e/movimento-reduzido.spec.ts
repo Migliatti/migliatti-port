@@ -52,4 +52,14 @@ test.describe("movimento reduzido", () => {
     await page.waitForTimeout(600);
     expect(await corpo.getAttribute("transform")).toBe(antes);
   });
+
+  test("a cena do buraco negro entra só com o fade curto, e os momentos ficam parados", async ({ page }) => {
+    await aparelhoForte(page);
+    await page.goto("/pt");
+    const cena = page.locator(".hero-buraco-negro-cena");
+    await expect(cena).toBeAttached();
+    expect(await cena.evaluate((n) => getComputedStyle(n).animationName)).toBe("entrada-reduzida");
+    await expect(page.getByTestId("capitulos")).toHaveAttribute("data-capitulos", "parado");
+    await expect(page.locator(".contador-faixa")).toHaveCount(0);
+  });
 });

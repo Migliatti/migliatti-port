@@ -87,16 +87,14 @@ async function focarCorpo(page: Page, id: string) {
 
 for (const path of ["/pt", "/en"]) {
   test.describe(`Vitrine ${path}`, () => {
-    test("vem logo depois dos Projetos em destaque", async ({ page }) => {
+    test("vem depois dos Projetos em destaque e dos números", async ({ page }) => {
       await page.goto(path);
-      const depoisDosDestaques = await page.evaluate(
-        () =>
-          (
-            document.querySelector('section[aria-labelledby="destaques"]')
-              ?.nextElementSibling as HTMLElement | null
-          )?.dataset.testid,
-      );
-      expect(depoisDosDestaques).toBe("vitrine");
+      const depoisDosDestaques = await page.evaluate(() => {
+        const numeros = document.querySelector('section[aria-labelledby="destaques"]')
+          ?.nextElementSibling as HTMLElement | null;
+        return [numeros?.dataset.testid, (numeros?.nextElementSibling as HTMLElement | null)?.dataset.testid];
+      });
+      expect(depoisDosDestaques).toEqual(["numeros", "vitrine"]);
       await expect(
         page.getByRole("heading", { level: 2, name: /Vitrine|Showcase/ }),
       ).toBeVisible();

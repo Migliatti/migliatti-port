@@ -565,11 +565,35 @@ main:focus {
   padding-top: 0.75rem;
 }
 
+/*
+ * Desktop (>= 48rem): nav-centre (ADR 0008). Três trilhas: a marca (ou a
+ * volta) na borda esquerda, as âncoras no eixo da página e o idioma na borda
+ * direita. O painel e o miolo somem do fluxo (`display: contents`), então os
+ * dois <nav> viram células da grade.
+ */
 @media (min-width: 48rem) {
   .barra-grade {
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     gap: 0 0.75rem;
     padding: 0.5rem 1rem;
+  }
+
+  .barra-grade > :first-child {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  .barra-grade .barra-secoes {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .barra-grade .barra-painel-miolo > nav:first-child {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
   }
 
   .barra-hamburguer {
@@ -593,7 +617,6 @@ main:focus {
   }
 
   .barra-secoes {
-    margin-left: auto;
     padding-top: 0;
   }
 }
@@ -657,12 +680,18 @@ main:focus {
   .barra-ancora {
     display: block;
     min-height: 0;
-    padding: 0.25rem 0.875rem;
+    padding: 0.25rem 0.625rem;
     font-size: 0.875rem;
   }
 
   .barra-grade[data-menu="aberto"] .barra-ancoras > li {
     animation: none;
+  }
+}
+
+@media (min-width: 64rem) {
+  .barra-ancora {
+    padding-inline: 0.875rem;
   }
 }
 
@@ -1035,28 +1064,6 @@ main:focus {
   }
 }
 
-/* Cartão de Projeto em destaque: uma ilha com o número em coluna estreita. */
-.projeto-cartao {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0.5rem;
-  padding: 1.5rem;
-}
-
-.projeto-cartao-numero {
-  align-self: start;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  color: var(--accent-text);
-}
-
-@media (min-width: 48rem) {
-  .projeto-cartao {
-    grid-template-columns: 3rem minmax(0, 1fr);
-    gap: 1.5rem;
-  }
-}
-
 /*
  * Estudo de caso no layout editorial (issue #37): mesma barra fixa e mesmo
  * grid de seção numerada da home. O cabeçalho não ocupa a tela inteira; o
@@ -1228,16 +1235,85 @@ main:focus {
   overflow-wrap: anywhere;
 }
 
-/* Fechamento tipográfico, no fundo plano das páginas. */
+/*
+ * Rodapé em colunas (footer-columns, ADR 0008), no fundo plano das páginas: a
+ * marca com o nome e o Posicionamento, as seções da home e os canais; abaixo,
+ * a linha final. Duas colunas lado a lado no celular, quatro trilhas no desktop.
+ */
 .rodape {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-block: 2rem;
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 4rem;
+  padding-block: 3rem 2rem;
+  border-top: 1px solid var(--borda);
   color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.rodape-colunas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 1.5rem;
+}
+
+.rodape-marca {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 0.5rem;
+  justify-items: start;
+  max-width: 24rem;
+}
+
+.rodape-nome {
+  margin-top: 0.5rem;
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.rodape-coluna-titulo {
+  margin-bottom: 0.25rem;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Cada link do rodapé tem alvo de toque de 44px. */
+.rodape-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--foreground);
+}
+
+.rodape-link:not(:hover) {
+  text-decoration-color: var(--muted);
+}
+
+.rodape-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  border-top: 1px solid var(--borda);
+  padding-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+@media (min-width: 48rem) {
+  .rodape-colunas {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .rodape-marca {
+    grid-column: auto;
+  }
 }
 
 .nota-rascunho {
@@ -1246,47 +1322,52 @@ main:focus {
   font-size: 0.875rem;
 }
 
-.barra-marca {
-  font-family: var(--font-display);
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+/*
+ * Marca "stack" (ADR 0008): o monograma GM empilhado, G sobre M, numa placa
+ * de cantos suaves. Na barra e no rodapé; decorativa (aria-hidden).
+ */
+.marca-gm {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--borda);
+  border-radius: 0.75rem;
+  background: var(--surface-alta);
   color: var(--foreground);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  grid-auto-rows: 0.92em;
+  align-content: center;
 }
 
-.hud, .secao-numero, .projeto-cartao-numero {
+.marca-gm > span {
+  display: block;
+}
+
+.hud, .secao-numero {
   font-variant-numeric: tabular-nums;
 }
 
-.destaques-grade, .competencias-grade {
+.competencias-grade {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 
-.destaques-grade > li, .competencias-grade > * {
+.competencias-grade > * {
   min-width: 0;
-}
-
-.destaques-grade .projeto-cartao {
-  height: 100%;
 }
 
 .contato-conteudo {
   overflow-wrap: anywhere;
 }
 
-@media (min-width: 48rem) {
-  .barra-marca { display: none; }
-}
 
 @media (min-width: 64rem) {
-  .destaques-grade {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .destaques-grade > li:first-child {
-    grid-column: 1 / -1;
-  }
   .competencias-grade {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1304,13 +1385,6 @@ main:focus {
 .projeto-evidencia figcaption { font-size: 0.9375rem; }
 
 @media (min-width: 64rem) {
-  .destaques-grade > li:first-child .projeto-cartao-com-evidencia {
-    grid-template-columns: 2rem minmax(0, 1fr) minmax(12rem, 0.85fr);
-    align-items: start;
-  }
-  .destaques-grade > li:not(:first-child) .projeto-evidencia {
-    grid-column: 2;
-  }
   .estudo-grade {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1383,13 +1457,6 @@ main:focus {
 .evidencia-visual figcaption {
   padding-inline: 0.25rem;
   line-height: 1.6;
-}
-
-@media (min-width: 64rem) {
-  .destaques-grade > li:first-child .projeto-cartao-com-evidencia {
-    grid-template-columns: 2rem minmax(0, 0.9fr) minmax(0, 1.1fr);
-    align-items: center;
-  }
 }
 
 /*

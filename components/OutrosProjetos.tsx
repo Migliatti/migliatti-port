@@ -15,7 +15,7 @@ export function OutrosProjetos({
 
   return (
     <Secao numero={numero} idDoTitulo="outros-projetos" titulo={t.titulo}>
-      <ul className="escalonar flex flex-col gap-3">
+      <ul className="outros-lista escalonar">
         {projetos.map((projeto) => (
           <li
             key={projeto.id}
@@ -24,7 +24,7 @@ export function OutrosProjetos({
             className="ilha animacao-ao-rolar"
           >
             <p>
-              <span className="font-medium">{projeto.titulo}</span>
+              <span className="outro-titulo">{projeto.titulo}</span>
               {projeto.estado === "em-desenvolvimento" && (
                 <span
                   data-testid="em-desenvolvimento"
@@ -46,7 +46,7 @@ export function OutrosProjetos({
               )}
             </p>
             {projeto.evidencias.filter(ehEvidenciaVisual).map((evidencia, i) => (
-              <div key={evidencia.url} className="outro-projeto-evidencia mt-4 max-w-2xl">
+              <div key={evidencia.url} className="outro-projeto-evidencia">
                 <EvidenciaVisual demo={projeto.demo} evidencia={evidencia} lang={lang} prefixo={`outro-${projeto.id}-${i}`} compacta />
               </div>
             ))}

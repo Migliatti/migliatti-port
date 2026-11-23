@@ -33,6 +33,21 @@ export type Dictionary = {
   /** Rótulos dos botões do hero. */
   falarComigo: string;
   verProjetos: string;
+  /** Fato verificável da Hero: vem depois do número de repositórios públicos. */
+  fatoDaHero: string;
+  /** Seção "Em números" (counter-rolls): título e rótulo de cada número. */
+  numeros: {
+    titulo: string;
+    /** De onde vêm os números (uma linha, abaixo do título). */
+    nota: string;
+    estudos: string;
+    tecnologias: string;
+    demos: string;
+  };
+  /** Linha do fechamento (Contato), sob o título. */
+  linhaDoFechamento: string;
+  /** Rodapé em colunas: títulos das colunas. */
+  colunasDoRodape: { secoes: string; canais: string };
   repositorio: string;
   voltar: string;
   rodape: { voltarAoTopo: string };
@@ -103,10 +118,20 @@ const dictionaries: Record<Locale, Dictionary> = {
     menu: "Menu",
     pularParaConteudo: "Pular para o conteúdo",
     projetosEmDestaque: "Projetos em destaque",
-    verEstudoDeCaso: "Ver estudo de caso",
+    verEstudoDeCaso: "Ler estudo de caso",
     verDemo: "Ver demo",
     falarComigo: "Falar comigo",
     verProjetos: "Ver projetos",
+    fatoDaHero: "projetos com repositório público no GitHub",
+    numeros: {
+      titulo: "Em números",
+      nota: "Contados do conteúdo deste site a cada build, não digitados à mão.",
+      estudos: "estudos de caso publicados",
+      tecnologias: "tecnologias distintas nas stacks dos projetos",
+      demos: "projetos com demo no ar",
+    },
+    linhaDoFechamento: "Aberto a trabalho 100% remoto. O e-mail é o caminho mais curto.",
+    colunasDoRodape: { secoes: "Nesta página", canais: "Canais" },
     repositorio: "Repositório",
     voltar: "Voltar para a home",
     rodape: { voltarAoTopo: "Voltar ao topo" },
@@ -167,10 +192,20 @@ const dictionaries: Record<Locale, Dictionary> = {
     menu: "Menu",
     pularParaConteudo: "Skip to content",
     projetosEmDestaque: "Featured projects",
-    verEstudoDeCaso: "View case study",
+    verEstudoDeCaso: "Read case study",
     verDemo: "View demo",
     falarComigo: "Talk to me",
     verProjetos: "See projects",
+    fatoDaHero: "projects with a public repository on GitHub",
+    numeros: {
+      titulo: "In numbers",
+      nota: "Counted from this site's content on every build, not typed by hand.",
+      estudos: "published case studies",
+      tecnologias: "distinct technologies across the project stacks",
+      demos: "projects with a live demo",
+    },
+    linhaDoFechamento: "Open to 100% remote work. Email is the shortest way.",
+    colunasDoRodape: { secoes: "On this page", canais: "Channels" },
     repositorio: "Repository",
     voltar: "Back to home",
     rodape: { voltarAoTopo: "Back to top" },

@@ -86,12 +86,13 @@ for (const path of paths) {
       ).toBe("animacao-titulo");
     });
 
-    test("CTAs levam ao contato e aos projetos", async ({ page }) => {
+    test("CTAs levam aos projetos (primária) e ao contato", async ({ page }) => {
       await page.goto(path);
       const primario = page.locator("a.botao-primario").first();
       const secundario = page.locator("a.botao-secundario").first();
-      await expect(primario).toHaveAttribute("href", "#contato");
-      await expect(secundario).toHaveAttribute("href", "#destaques");
+      // ADR 0008: "Ver projetos" é a ação primária azul; "Falar comigo", a secundária.
+      await expect(primario).toHaveAttribute("href", "#destaques");
+      await expect(secundario).toHaveAttribute("href", "#contato");
       await expect(primario).not.toBeEmpty();
       await expect(secundario).not.toBeEmpty();
     });

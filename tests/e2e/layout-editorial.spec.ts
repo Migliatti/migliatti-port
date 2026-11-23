@@ -43,25 +43,29 @@ for (const home of homes) {
           .evaluate((n) => getComputedStyle(n).fontFamily);
         expect(fonte).toContain("Chivo Mono");
 
-        // Cartão é ilha elevada com número e Evidência visual.
+        // Cada Projeto em destaque é um capítulo (pinned-chapters, ADR 0008):
+        // ilha elevada com contagem e Evidência visual, todos com a mesma
+        // largura, um depois do outro na ordem do conteúdo.
         const cartao = page.getByTestId("projeto-card-kepler-lab");
         await expect(cartao).toBeVisible();
         expect(
           await cartao.evaluate((n) => getComputedStyle(n).borderLeftWidth),
         ).toBe("1px");
-        await expect(cartao.locator(".projeto-cartao-numero")).toHaveText(/^\d\d$/);
+        await expect(cartao.locator(".capitulo-contagem")).toHaveText(/^\d\d \/ \d\d$/);
         await expect(cartao.locator('[data-slot="evidencia"]')).toHaveCount(1);
 
-        const [primeiro, segundo, terceiro] = await page
-          .locator('[data-testid^="projeto-card-"]')
-          .evaluateAll((els) => els.map((el) => {
-            const { top, bottom, left, right, width } = el.getBoundingClientRect();
-            return { top, bottom, left, right, width };
-          }));
-        expect(primeiro.width).toBeGreaterThan(segundo.width * 1.8);
-        expect(segundo.top).toBeCloseTo(terceiro.top, 0);
-        expect(terceiro.left - segundo.right).toBeGreaterThanOrEqual(15);
-        expect(segundo.top - primeiro.bottom).toBeGreaterThanOrEqual(15);
+        const capitulos = page.locator('[data-testid^="projeto-card-"]');
+        expect(
+          await capitulos.evaluateAll((els) => els.map((el) => el.getAttribute("data-testid"))),
+        ).toEqual([
+          "projeto-card-kepler-lab",
+          "projeto-card-labreserve",
+          "projeto-card-grimoire",
+        ]);
+        const larguras = await capitulos.evaluateAll((els) =>
+          els.map((el) => Math.round(el.getBoundingClientRect().width)),
+        );
+        expect(new Set(larguras).size).toBe(1);
 
         const grupos = await page.getByTestId("grupo-de-competencias")
           .evaluateAll((els) => els.map((el) => {

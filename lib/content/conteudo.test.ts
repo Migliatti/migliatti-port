@@ -374,12 +374,14 @@ describe.each(locales)("labreserve em %s", (lang) => {
 });
 
 describe.each(locales)("estatísticas do conteúdo em %s", (lang) => {
-  it("conta projetos, destaques e itens de stack distintos", () => {
+  it("conta projetos, destaques, itens de stack distintos, demos e repositórios", () => {
     const projetos = todosOsProjetos(lang);
     expect(estatisticasDoConteudo(lang)).toEqual({
       projetos: DESTAQUES.length + OUTROS.length,
       destaques: DESTAQUES.length,
       tecnologias: new Set(projetos.flatMap((p) => p.stack)).size,
+      comDemo: projetos.filter((p) => p.demo).length,
+      comRepositorio: projetos.filter((p) => p.repositorio).length,
     });
   });
 });
