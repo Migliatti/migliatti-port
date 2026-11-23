@@ -83,7 +83,11 @@ body {
 }
 
 @layer base {
-  p {
+  p,
+  li,
+  dd,
+  figcaption,
+  blockquote {
     text-wrap: pretty;
   }
 
@@ -93,7 +97,10 @@ body {
 
   h1,
   h2,
-  h3 {
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
     text-wrap: balance;
@@ -122,7 +129,9 @@ body {
 /*
  * Animação de entrada (regra em docs/adr/0001-animacao-de-entrada.md, revista
  * pelo ADR 0005). Só transform e opacity; o texto nunca começa invisível
- * (opacity inicial >= 0.7). Sem prefers-reduced-motion: o site anima sempre.
+ * (opacity inicial >= 0.7). Com prefers-reduced-motion: reduce, a entrada vira
+ * um fade curto só de opacidade, sem deslocamento (bloco no fim deste
+ * arquivo; ADR 0007, que substitui o "anima sempre" do ADR 0005).
  */
 .animacao-entrada {
   animation: animacao-entrada var(--mov-lento) var(--ease-orbita) both;
@@ -259,8 +268,7 @@ main:focus {
   background: var(--surface);
   padding: 0.2rem 0.65rem;
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
 }
 
 /* Sinal de estado (ADR 0004: âmbar só em sinais pontuais): "Rascunho". */
@@ -269,7 +277,7 @@ main:focus {
   background: transparent;
   color: var(--estado-aviso);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   line-height: 1.2;
 }
 
@@ -354,7 +362,8 @@ main:focus {
 }
 
 /* O rastro de luz só existe com a peça animada. */
-.vitrine-peca:not([data-estado="carregada"]) .vitrine-rastro {
+.vitrine-peca:not([data-estado="carregada"]) .vitrine-rastro,
+.vitrine-peca[data-movimento="reduzido"] .vitrine-rastro {
   display: none;
 }
 
@@ -427,8 +436,8 @@ main:focus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   margin-left: auto;
   border: 1px solid var(--borda);
   border-radius: 999px;
@@ -631,7 +640,7 @@ main:focus {
     display: block;
     min-height: 0;
     padding: 0.25rem 0.875rem;
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
   }
 
   .barra-grade[data-menu="aberto"] .barra-ancoras > li {
@@ -964,7 +973,7 @@ main:focus {
 .secao-numero {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   color: var(--accent-text);
 }
 
@@ -1210,7 +1219,7 @@ main:focus {
   padding-block: 2rem;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
 }
 
 .nota-rascunho {
@@ -1274,7 +1283,7 @@ main:focus {
 .projeto-evidencia { min-width: 0; }
 .evidencia-imagem { display: block; width: 100%; height: auto; }
 .evidencia-ilustracao-compacta > svg { display: block; width: 100%; height: auto; max-height: 20rem; }
-.projeto-evidencia figcaption { font-size: 0.75rem; }
+.projeto-evidencia figcaption { font-size: 0.9375rem; }
 
 @media (min-width: 64rem) {
   .destaques-grade > li:first-child .projeto-cartao-com-evidencia {
@@ -1338,7 +1347,7 @@ main:focus {
   overflow: hidden;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1347,10 +1356,10 @@ main:focus {
   display: grid;
   align-items: center;
   min-height: 12rem;
-  padding: clamp(0.75rem, 2vw, 1.5rem);
-  border: 1px solid var(--borda);
-  border-radius: 0.875rem;
-  background: var(--background);
+  /* Sem borda nem fundo: o diagrama já mora numa ilha (nada de cartão dentro
+     de cartão). A moldura é só o recorte do próprio desenho. */
+  overflow: hidden;
+  border-radius: 0.5rem;
 }
 
 .evidencia-visual figcaption {
@@ -1362,5 +1371,57 @@ main:focus {
   .destaques-grade > li:first-child .projeto-cartao-com-evidencia {
     grid-template-columns: 2rem minmax(0, 0.9fr) minmax(0, 1.1fr);
     align-items: center;
+  }
+}
+
+/*
+ * Movimento reduzido (ADR 0007, substitui o "anima sempre" do ADR 0005).
+ * Com prefers-reduced-motion: reduce:
+ * - entradas (animacao-entrada, animacao-titulo, animacao-ao-rolar e as
+ *   âncoras do menu) viram um fade curto só de opacidade, sem deslocamento e
+ *   sem escalonar; o texto segue legível desde o primeiro quadro;
+ * - o que acompanha a rolagem (saída da Hero, traço do separador) fica parado
+ *   no estado de repouso;
+ * - o cursor do HUD deixa de piscar;
+ * - as peças em JavaScript desenham só o quadro parado (components/animacao/movimento-reduzido.ts).
+ * Feedback de estado (hover, foco, abrir o menu, destaque dos pilares) continua.
+ */
+@keyframes entrada-reduzida {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animacao-entrada,
+  .animacao-titulo,
+  .animacao-ao-rolar {
+    animation: entrada-reduzida var(--mov-rapido) var(--ease-rolagem) both;
+    animation-timeline: auto;
+    animation-range: normal;
+  }
+
+  .escalonar > .animacao-entrada,
+  .escalonar > * > .animacao-entrada,
+  .hero-apoio > * {
+    animation-delay: initial !important;
+  }
+
+  .hero-conteudo,
+  .hero-ceu,
+  .hero-buraco-negro,
+  .secao::after,
+  .hud-cursor {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 47.99rem) {
+  .barra-grade[data-menu="aberto"] .barra-ancoras > li {
+    animation: entrada-reduzida var(--mov-rapido) var(--ease-rolagem) both;
+    animation-delay: initial;
   }
 }
