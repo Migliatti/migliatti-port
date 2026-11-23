@@ -11,6 +11,9 @@ export type ItemDeSecao = {
   ancora?: string;
 };
 
+/** Distância do fim da página (px) que ainda conta como "no fim". */
+const FOLGA_DO_FIM = 48;
+
 /**
  * Id da seção atual da home (a que cruza a faixa de leitura perto do topo), ou
  * `null` no Hero e antes da hidratação. Usa IntersectionObserver e, no fim da
@@ -39,7 +42,12 @@ export function useSecaoAtual(itens: ItemDeSecao[]): string | null {
           if (entrada.isIntersecting) dentro.add(id);
           else dentro.delete(id);
         }
-        if (noFimDaPagina()) return;
+        // No fim da página a última seção ganha, mesmo sem a rolagem ter mudado
+        // (a primeira leitura do observer acontece assim que ele é criado).
+        if (noFimDaPagina()) {
+          setAtual(ultima);
+          return;
+        }
         // Vence a última seção da ordem do documento dentro da faixa.
         const vencedora = [...ids].reverse().find((id) => dentro.has(id));
         if (vencedora) setAtual(vencedora === "inicio" ? null : vencedora);
@@ -49,14 +57,18 @@ export function useSecaoAtual(itens: ItemDeSecao[]): string | null {
     for (const { el } of alvos) observer.observe(el);
 
     // No fim da página a última seção (curta) nunca alcança a faixa de leitura.
+    // A folga absorve a altura que ainda muda depois do carregamento (~20px).
     const ultima = itens[itens.length - 1]?.id ?? null;
     const noFimDaPagina = () =>
       window.innerHeight + window.scrollY >=
-      document.documentElement.scrollHeight - 2;
+      document.documentElement.scrollHeight - FOLGA_DO_FIM;
     const aoRolar = () => {
       if (noFimDaPagina()) setAtual(ultima);
     };
     window.addEventListener("scroll", aoRolar, { passive: true });
+    // A página pode já estar no fim antes deste efeito existir (rolagem feita
+    // antes da hidratação não gera evento de scroll).
+    aoRolar();
     return () => {
       window.removeEventListener("scroll", aoRolar);
       observer.disconnect();
