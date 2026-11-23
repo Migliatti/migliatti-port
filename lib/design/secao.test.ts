@@ -1,11 +1,11 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { join, sep } from "node:path";
 import { describe, expect, it } from "vitest";
 
 function arquivos(dir: string): string[] {
   return readdirSync(dir).flatMap((nome) => {
     const caminho = join(dir, nome);
-    return statSync(caminho).isDirectory() ? arquivos(caminho) : [caminho];
+    return statSync(caminho).isDirectory() ? arquivos(caminho) : [caminho.split(sep).join("/")];
   });
 }
 

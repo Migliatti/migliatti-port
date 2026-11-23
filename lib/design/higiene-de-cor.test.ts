@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { join, sep } from "node:path";
 import { describe, expect, it } from "vitest";
 
 function arquivos(dir: string): string[] {
@@ -8,7 +8,7 @@ function arquivos(dir: string): string[] {
     if (statSync(caminho).isDirectory()) return arquivos(caminho);
     const ehCodigo = /\.(tsx?|css)$/.test(nome);
     const ehTeste = /\.test\.tsx?$/.test(nome);
-    return ehCodigo && !ehTeste ? [caminho] : [];
+    return ehCodigo && !ehTeste ? [caminho.split(sep).join("/")] : [];
   });
 }
 
