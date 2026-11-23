@@ -12,7 +12,7 @@
 //
 // Uso: npm run ilustracoes. O arquivo gerado é versionado.
 
-import { writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { instance } from "@viz-js/viz";
@@ -20,6 +20,10 @@ import { instance } from "@viz-js/viz";
 const PASTA = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "public", "ilustracoes");
 const SAIDA = path.join(PASTA, "labreserve-arquitetura.svg");
 const SAIDA_FLUXO = path.join(PASTA, "labreserve-fluxo-de-reserva.svg");
+// Versão para os cartões da home: o mesmo desenho, refeito numa tela de 360 de
+// largura para o texto ficar legível no tamanho em que o cartão o mostra.
+const PASTA_CARD = path.join(PASTA, "card");
+const SAIDA_CARD = path.join(PASTA_CARD, "labreserve-arquitetura.svg");
 
 /** Módulos do estudo de caso, conforme docs/ARCHITECTURE.md do repositório. */
 const NOS = {
@@ -96,8 +100,8 @@ function defs(cssExtra = "") {
       .caixa { fill: #242424; stroke: #4a82d4; stroke-width: 1.5; }
       .centro { fill: #242424; stroke: #a9cdfa; stroke-width: 2.5; }
       .nome { font: 600 18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #f0f0f0; }
-      .det { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #a6a6a6; }
-      .rotulo { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: #66a4f5; letter-spacing: 0.08em; }
+      .det { font: 14px ui-sans-serif, system-ui, sans-serif; fill: #a6a6a6; }
+      .rotulo { font: 600 12px ui-sans-serif, system-ui, sans-serif; fill: #66a4f5; letter-spacing: 0.04em; }
       .linha { stroke: #66a4f5; stroke-width: 1.75; fill: none; marker-end: url(#seta); }
       .tracejada { stroke: #66a4f5; stroke-width: 1.75; fill: none; stroke-dasharray: 6 4; marker-end: url(#seta); }${cssExtra}
     </style>
@@ -239,7 +243,7 @@ const cssFluxo = `
       .ok { fill: #242424; stroke: #a9cdfa; stroke-width: 2.5; }
       .erro { fill: #242424; stroke: #e08080; stroke-width: 1.5; }
       .erro-txt { font: 600 12px ${MONO}; fill: #f0b0b0; }
-      .nota { font: 12px ${MONO}; fill: #a6a6a6; }
+      .nota { font: 13px ui-sans-serif, system-ui, sans-serif; fill: #a6a6a6; }
       .txt { font: 600 14px ${MONO}; fill: #f0f0f0; }
       .transacao { fill: none; stroke: #a6a6a6; stroke-width: 1.2; stroke-dasharray: 5 4; }`;
 
@@ -345,3 +349,87 @@ ${passo({ y: 622, h: 44, classe: "ok", linhas: [['201 { "data": reservation }', 
 
 writeFileSync(SAIDA_FLUXO, fluxo);
 console.log(`Gerado ${path.relative(process.cwd(), SAIDA_FLUXO)} (${F.largura}x${F.altura})`);
+
+// ---------------------------------------------------------------------------
+// Arquitetura compacta, para o cartão do projeto na home. O cartão mostra o
+// desenho com ~310-380px de largura (e no máximo 20rem de altura); por isso a
+// tela é de 360 de largura (escala perto de 1) e o texto tem 16px, em vez
+// dos 14-18px de uma tela de 560 reduzida a ~60%. Mesmos módulos e mesmas
+// setas, com rótulos abreviados (os textos longos ficam no texto alternativo).
+
+const C = { largura: 360, altura: 350 };
+const CAIXAS_CARD = [
+  { id: "web", x: 10, y: 40, w: 166, h: 60, nome: "web/", linhas: ["React + Vite"] },
+  { id: "server", x: 184, y: 40, w: 166, h: 60, nome: "server/", linhas: ["node:http, routes"] },
+  { id: "application", x: 70, y: 130, w: 220, h: 60, nome: "application/", linhas: ["LabReserveService"] },
+  {
+    id: "domain",
+    x: 10,
+    y: 220,
+    w: 192,
+    h: 76,
+    nome: "domain/",
+    linhas: ["TimeInterval", "no HTTP, React, SQLite"],
+    centro: true,
+  },
+  { id: "persistence", x: 210, y: 220, w: 140, h: 76, nome: "persistence/", linhas: ["SQLite"] },
+];
+
+const caixasCard = CAIXAS_CARD.map((c) => {
+  const linhas = c.linhas
+    .map((t, i) => `  <text x="${c.x + 10}" y="${c.y + 47 + i * 18}" class="det">${t}</text>`)
+    .join("\n");
+  return `  <!-- ${c.id} -->
+  <rect x="${c.x}" y="${c.y}" width="${c.w}" height="${c.h}" rx="8" class="${c.centro ? "centro" : "caixa"}" filter="url(#brilho)"/>
+  <text x="${c.x + 10}" y="${c.y + 26}" class="nome">${c.nome}</text>
+${linhas}`;
+}).join("\n\n");
+
+const estrelasCard = [
+  [0.04, 0.2, 1.2, 0.7],
+  [0.96, 0.22, 1.5, 0.8],
+  [0.5, 0.17, 1, 0.5],
+  [0.05, 0.6, 1, 0.5],
+  [0.95, 0.56, 1.2, 0.6],
+  [0.52, 0.64, 1.2, 0.6],
+  [0.08, 0.97, 1.2, 0.6],
+  [0.93, 0.95, 1, 0.5],
+]
+  .map(([fx, fy, r, o]) => `    <circle cx="${Math.round(fx * C.largura)}" cy="${Math.round(fy * C.altura)}" r="${r}" opacity="${o}"/>`)
+  .join("\n");
+
+// Tamanhos de texto sobrescritos (a regra mais tarde vence): 16px nesta tela.
+const cssCard = `
+      .nome { font-size: 16px; }
+      .det { font-size: 16px; }
+      .rotulo { font-size: 16px; }`;
+
+const card = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${C.largura} ${C.altura}" width="${C.largura}" height="${C.altura}" role="img" aria-labelledby="t d" data-cor-do-pulso="#66a4f5">
+  <title id="t">LabReserve: modular monolith (illustration)</title>
+  <desc id="d">Modules web, server, application, domain and persistence. Dependencies point inward: web and server depend on application; application depends on domain; persistence implements the contracts. The domain imports nothing from HTTP, React or SQLite.</desc>
+${defs(cssCard)}  <rect width="${C.largura}" height="${C.altura}" fill="url(#fundo)"/>
+  <rect width="${C.largura}" height="${C.altura}" fill="url(#grade)"/>
+
+  <!-- estrelas -->
+  <g fill="#f0f0f0" aria-hidden="true">
+${estrelasCard}
+  </g>
+
+  <text x="10" y="24" class="rotulo">ILUSTRAÇÃO · ILLUSTRATION</text>
+
+${caixasCard}
+
+  <!-- web -> application, server -> application, application -> domain, persistence -> application (implementa contratos) -->
+  <path d="M93,100 C100,112 112,120 124,129" class="linha"/>
+  <path d="M267,100 C260,112 248,120 236,129" class="linha"/>
+  <path d="M124,190 C112,200 104,210 100,219" class="linha"/>
+  <path d="M280,219 C272,208 258,198 246,190" class="tracejada"/>
+
+  <text x="${C.largura / 2}" y="${C.altura - 32}" class="det" text-anchor="middle">──▶ depende de · depends on</text>
+  <text x="${C.largura / 2}" y="${C.altura - 12}" class="det" text-anchor="middle">- -▶ implementa · implements</text>
+</svg>
+`;
+
+mkdirSync(PASTA_CARD, { recursive: true });
+writeFileSync(SAIDA_CARD, card);
+console.log(`Gerado ${path.relative(process.cwd(), SAIDA_CARD)} (${C.largura}x${C.altura})`);

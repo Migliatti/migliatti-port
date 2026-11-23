@@ -400,6 +400,17 @@ function carregarProjeto(
           erros.push(`${local}: "alt" deve ter um texto por idioma (${locales.join(", ")})`);
         }
         evidencia.alt = texto(alts, lang, `${local} alt`, erros);
+        // Opcional: descreve o diagrama compacto dos cartões. Se existir, deve
+        // ter um texto em todos os idiomas.
+        if (ilustracao && ev.altCompacto !== undefined) {
+          if (!ehObjeto(ev.altCompacto)) {
+            if (lang === locales[0]) {
+              erros.push(`${local}: "altCompacto" deve ter um texto por idioma (${locales.join(", ")})`);
+            }
+          } else {
+            evidencia.altCompacto = texto(ev.altCompacto, lang, `${local} altCompacto`, erros);
+          }
+        }
       }
       if (capturaOuGif) {
         for (const campo of ["largura", "altura"] as const) {

@@ -34,6 +34,11 @@ export type Evidencia = {
   url: string;
   /** Texto alternativo por idioma (obrigatório em toda Evidência visual). */
   alt?: string;
+  /**
+   * Texto alternativo do diagrama compacto dos cartões (só em `ilustracao`,
+   * opcional, por idioma). Sem ele, o cartão usa `alt`.
+   */
+  altCompacto?: string;
   /** Dimensões originais em pixels (obrigatórias em `captura` e `gif`). */
   largura?: number;
   altura?: number;

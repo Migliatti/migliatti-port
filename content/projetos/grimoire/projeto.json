@@ -37,6 +37,10 @@
       "alt": {
         "pt": "Diagrama com duas colunas. À esquerda, o manifesto chains/business-direction.md e as 8 skills da chain, com business-direction como entrypoint. À direita, as 7 skills avulsas: route-context, evolve-skills, model-routing-policy, project-design, web-design-psychology, github-issues e gamification-psychology.",
         "en": "Two-column diagram. On the left, the chains/business-direction.md manifest and the chain's 8 skills, with business-direction as the entrypoint. On the right, the 7 standalone skills: route-context, evolve-skills, model-routing-policy, project-design, web-design-psychology, github-issues and gamification-psychology."
+      },
+      "altCompacto": {
+        "pt": "Diagrama do catálogo de 15 skills. Um bloco reúne o manifesto chains/business-direction.md, com 8 skills e business-direction como entrypoint; outro bloco mostra as 7 skills avulsas, citando route-context, evolve-skills e mais 5.",
+        "en": "Diagram of the 15-skill catalog. One block holds the chains/business-direction.md manifest, with 8 skills and business-direction as the entrypoint; another block shows the 7 standalone skills, naming route-context, evolve-skills and 5 more."
       }
     },
     {

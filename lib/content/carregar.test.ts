@@ -163,6 +163,26 @@ describe("rejeita conteúdo incompleto", () => {
     expect(errosAoCarregar()).toContainEqual(expect.stringContaining('alt: campo obrigatório "en"'));
   });
 
+  it("Ilustração com altCompacto em um idioma só", () => {
+    editarJson("projetos/grimoire/projeto.json", (d) => {
+      const evidencia = (d.evidencias as Record<string, unknown>[]).find(
+        (e) => e.tipo === "ilustracao",
+      )!;
+      evidencia.altCompacto = { pt: "Versão compacta" };
+    });
+    expect(errosAoCarregar()).toContainEqual(expect.stringContaining('altCompacto: campo obrigatório "en"'));
+  });
+
+  it("Ilustração com altCompacto que não é por idioma", () => {
+    editarJson("projetos/grimoire/projeto.json", (d) => {
+      const evidencia = (d.evidencias as Record<string, unknown>[]).find(
+        (e) => e.tipo === "ilustracao",
+      )!;
+      evidencia.altCompacto = "Versão compacta";
+    });
+    expect(errosAoCarregar()).toContainEqual(expect.stringContaining('"altCompacto" deve ter um texto por idioma'));
+  });
+
   it("Ilustração com caminho que não é local", () => {
     editarJson("projetos/grimoire/projeto.json", (d) => {
       const evidencia = (d.evidencias as Record<string, unknown>[]).find(

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" width="360" height="300" role="img" aria-labelledby="t d" data-cor-do-pulso="#66a4f5">
+  <title id="t">Grimoire: catálogo de 15 skills (ilustração) · Grimoire: catalog of 15 skills (illustration)</title>
+  <desc id="d">O manifesto chains/business-direction.md reúne 8 skills, com business-direction como entrypoint; 7 skills são avulsas. · The chains/business-direction.md manifest groups 8 skills, with business-direction as the entrypoint; 7 skills are standalone.</desc>
+  <defs>
+    <radialGradient id="fundo" cx="50%" cy="46%" r="75%">
+      <stop offset="0" stop-color="#242424"/>
+      <stop offset="1" stop-color="#171717"/>
+    </radialGradient>
+    <pattern id="grade" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28,0 L0,0 L0,28" fill="none" stroke="#66a4f5" stroke-opacity="0.13" stroke-width="1"/>
+    </pattern>
+    <filter id="brilho" x="-10%" y="-30%" width="120%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .caixa { fill: #242424; stroke: #4a82d4; stroke-width: 1.5; }
+      .grupo { stroke: #66a4f5; stroke-width: 2; }
+      .centro { fill: #242424; stroke: #a9cdfa; stroke-width: 2.5; }
+      .nome { font: 600 16px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #f0f0f0; }
+      .item { font: 16px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #f0f0f0; }
+      .det { font: 16px ui-sans-serif, system-ui, sans-serif; fill: #a6a6a6; }
+      .rotulo { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: #66a4f5; letter-spacing: 0.04em; }
+    </style>
+  </defs>
+  <rect width="360" height="300" fill="url(#fundo)"/>
+  <rect width="360" height="300" fill="url(#grade)"/>
+
+  <!-- estrelas -->
+  <g fill="#f0f0f0" aria-hidden="true">
+    <circle cx="14" cy="120" r="1.2" opacity="0.7"/>
+    <circle cx="346" cy="30" r="1.5" opacity="0.8"/>
+    <circle cx="180" cy="22" r="1" opacity="0.5"/>
+    <circle cx="346" cy="188" r="1.2" opacity="0.6"/>
+    <circle cx="14" cy="288" r="1.5" opacity="0.7"/>
+    <circle cx="346" cy="290" r="1" opacity="0.5"/>
+  </g>
+
+  <text x="10" y="24" class="rotulo">ILUSTRAÇÃO · ILLUSTRATION</text>
+
+  <rect x="10" y="40" width="340" height="60" rx="8" class="caixa grupo" filter="url(#brilho)"/>
+  <text x="24" y="66" class="nome">chains/business-direction.md</text>
+  <text x="24" y="88" class="det">manifesto · manifest: 8 skills</text>
+  <rect x="10" y="110" width="340" height="38" rx="8" class="centro" filter="url(#brilho)"/>
+  <text x="24" y="134" class="nome">business-direction</text>
+  <text x="338" y="134" class="det" text-anchor="end">entrypoint</text>
+  <rect x="10" y="158" width="340" height="34" rx="8" class="caixa"/>
+  <text x="24" y="180" class="item">+ 7 skills da chain · in chain</text>
+
+  <rect x="10" y="208" width="340" height="60" rx="8" class="caixa grupo" filter="url(#brilho)"/>
+  <text x="24" y="234" class="nome">avulsas · standalone (7)</text>
+  <text x="24" y="256" class="det">route-context, evolve-skills, +5</text>
+
+  <text x="180" y="290" class="det" text-anchor="middle">Fonte · Source: README.md, skills/</text>
+</svg>

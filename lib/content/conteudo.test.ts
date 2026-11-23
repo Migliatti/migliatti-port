@@ -292,6 +292,12 @@ describe.each(locales)("grimoire em %s", (lang) => {
     }
   });
 
+  it("descreve o diagrama compacto do catálogo com texto alternativo próprio", () => {
+    const catalogo = grimoire().evidencias.find((e) => e.url === "/ilustracoes/grimoire-catalogo.svg")!;
+    naoVazio(catalogo.altCompacto ?? "");
+    expect(catalogo.altCompacto).not.toBe(catalogo.alt);
+  });
+
   it("tem o resultado real dos testes e trechos de código do repositório", () => {
     const evidencias = grimoire().evidencias;
     const testes = evidencias.find((e) => e.tipo === "testes");
@@ -336,6 +342,12 @@ describe.each(locales)("labreserve em %s", (lang) => {
       naoVazio(ilustracao.alt ?? "");
       expect(existsSync(path.join(process.cwd(), "public", ilustracao.url))).toBe(true);
     }
+  });
+
+  it("descreve o diagrama compacto da arquitetura com texto alternativo próprio", () => {
+    const arquitetura = labreserve().evidencias.find((e) => e.url === "/ilustracoes/labreserve-arquitetura.svg")!;
+    naoVazio(arquitetura.altCompacto ?? "");
+    expect(arquitetura.altCompacto).not.toBe(arquitetura.alt);
   });
 
   it("não apresenta nada gerado como captura ou GIF do projeto rodando", () => {

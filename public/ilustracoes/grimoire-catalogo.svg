@@ -19,8 +19,8 @@
       .centro { fill: #242424; stroke: #a9cdfa; stroke-width: 2.5; }
       .nome { font: 600 18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #f0f0f0; }
       .item { font: 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #f0f0f0; }
-      .det { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #a6a6a6; }
-      .rotulo { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: #66a4f5; letter-spacing: 0.08em; }
+      .det { font: 14px ui-sans-serif, system-ui, sans-serif; fill: #a6a6a6; }
+      .rotulo { font: 600 12px ui-sans-serif, system-ui, sans-serif; fill: #66a4f5; letter-spacing: 0.04em; }
     </style>
   </defs>
   <rect width="560" height="650" fill="url(#fundo)"/>

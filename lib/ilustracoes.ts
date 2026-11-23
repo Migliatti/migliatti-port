@@ -15,7 +15,7 @@
 // `.linha` e `.det` com regras diferentes). O nome acessível passa a ser o
 // texto alternativo do conteúdo, no idioma da página.
 
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 /** Classes dos arquivos que marcam setas, e o tipo de traço de cada uma. */
@@ -161,4 +161,19 @@ export function prepararIlustracao(bruto: string, { prefixo, alt }: Opcoes): str
 export function carregarIlustracao(url: string, opcoes: Opcoes): string {
   const arquivo = path.join(process.cwd(), "public", ...url.split("/").filter(Boolean));
   return prepararIlustracao(readFileSync(arquivo, "utf8"), opcoes);
+}
+
+/**
+ * Caminho da versão para cartão de uma ilustração: `/ilustracoes/x.svg` vira
+ * `/ilustracoes/card/x.svg`, quando o arquivo existe. Os cartões da home
+ * mostram o desenho com ~1/3 do tamanho do estudo de caso; a versão compacta é
+ * redesenhada para esse tamanho (tela de ~360px, rótulos curtos, texto de
+ * 15-16px) e tem os mesmos módulos e o mesmo conteúdo, só abreviado. Sem ela,
+ * o cartão usa o desenho completo.
+ */
+export function urlDaIlustracaoCompacta(url: string): string {
+  const compacta = url.replace(/^\/ilustracoes\/([^/]+)$/, "/ilustracoes/card/$1");
+  if (compacta === url) return url;
+  const arquivo = path.join(process.cwd(), "public", ...compacta.split("/").filter(Boolean));
+  return existsSync(arquivo) ? compacta : url;
 }

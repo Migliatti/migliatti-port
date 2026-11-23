@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { carregarIlustracao, prepararIlustracao } from "./ilustracoes";
+import { carregarIlustracao, prepararIlustracao, urlDaIlustracaoCompacta } from "./ilustracoes";
 
 const PASTA = path.join(process.cwd(), "public", "ilustracoes");
 const arquivos = readdirSync(PASTA).filter((f) => f.endsWith(".svg"));
@@ -125,5 +125,46 @@ describe("prepararIlustracao", () => {
     const svg = carregarIlustracao("/ilustracoes/grimoire-catalogo.svg", { prefixo: "p", alt: "Catálogo" });
     expect(svg).toMatch(/^<svg\b/);
     expect(svg).toContain('aria-label="Catálogo"');
+  });
+
+  describe("versões compactas dos cartões", () => {
+    const PASTA_CARD = path.join(PASTA, "card");
+    const compactas = readdirSync(PASTA_CARD).filter((f) => f.endsWith(".svg"));
+
+    it("existe uma compacta para cada ilustração mostrada em cartão", () => {
+      expect(compactas.sort()).toEqual(["grimoire-catalogo.svg", "labreserve-arquitetura.svg"]);
+      expect(urlDaIlustracaoCompacta("/ilustracoes/labreserve-arquitetura.svg")).toBe(
+        "/ilustracoes/card/labreserve-arquitetura.svg",
+      );
+      expect(urlDaIlustracaoCompacta("/ilustracoes/grimoire-catalogo.svg")).toBe(
+        "/ilustracoes/card/grimoire-catalogo.svg",
+      );
+      // Sem versão compacta, o cartão usa o desenho completo.
+      expect(urlDaIlustracaoCompacta("/ilustracoes/labreserve-fluxo-de-reserva.svg")).toBe(
+        "/ilustracoes/labreserve-fluxo-de-reserva.svg",
+      );
+    });
+
+    for (const arquivo of compactas) {
+      it(`${arquivo}: mesma linguagem visual e texto legível no tamanho do cartão`, () => {
+        const bruto = readFileSync(path.join(PASTA_CARD, arquivo), "utf8");
+        expect(bruto).toContain('data-cor-do-pulso="#66a4f5"');
+        expect(bruto).toContain("#171717");
+        expect(bruto).toContain("#242424");
+        expect(bruto).toContain("ILUSTRAÇÃO · ILLUSTRATION");
+        expect(bruto).toContain("<title");
+        expect(bruto).toContain("<desc");
+        const largura = Number(/viewBox="0 0 (\d+) /.exec(bruto)?.[1]);
+        // Cartão: ~310px (celular) a ~380px (desktop); a tela é de ~360, escala ≥ ~0.85.
+        expect(largura).toBeLessThanOrEqual(380);
+        // Tamanho efetivo por classe (a última regra vence).
+        const porClasse = new Map<string, number>();
+        for (const [, classe, , tamanho] of bruto.matchAll(/\.(\w+)\s*\{[^}]*?font(-size)?:\s*(?:\d+\s+)?(\d+)px/g)) {
+          porClasse.set(classe, Number(tamanho));
+        }
+        expect(porClasse.size).toBeGreaterThan(0);
+        for (const t of porClasse.values()) expect(t).toBeGreaterThanOrEqual(16);
+      });
+    }
   });
 });
