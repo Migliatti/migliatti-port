@@ -65,7 +65,36 @@
   margin-top: 0.75rem;
 }
 
-.home .hero-apoio > :nth-child(3) {
+/*
+ * Entrada única da Hero (choreograph): uma onda só, no carregamento.
+ *
+ *   parte            papel       começa        dura            movimento
+ *   nome             principal   0              --mov-lento     0.7→1, sobe 40px
+ *   céu              decoração   0              --mov-lento     só fade (ceu.ts)
+ *   Posicionamento   apoio       --mov-onda-1   --mov-lento     0.7→1, sobe 20px
+ *   buraco negro     cena        --mov-onda-1   --mov-cena      fade e 0.88→1
+ *   fato             apoio       --mov-onda-2   --mov-lento     0.7→1, sobe 14px
+ *   ações            apoio       --mov-onda-3   --mov-lento     0.7→1, sobe 10px
+ *
+ * Os intervalos encolhem (100, 80, 60 ms) e cada parte sobe menos que a
+ * anterior, para o grupo ler como um gesto e não como uma fila. Tudo com
+ * --ease-orbita; o texto nunca começa abaixo de 0.7 e os botões funcionam
+ * desde o primeiro quadro. O buraco negro chega quando o módulo dele carrega
+ * e se alinha à onda pelo relógio da entrada do nome
+ * (components/animacao/onda.ts); se chegar tarde, entra na hora.
+ */
+.home .hero-posicionamento {
+  --entrada-distancia: 20px;
+  animation-delay: var(--mov-onda-1);
+}
+
+.home .hero-fato {
+  --entrada-distancia: 14px;
+  animation-delay: var(--mov-onda-2);
+}
+
+.home .hero-acoes {
+  --entrada-distancia: 10px;
   animation-delay: var(--mov-onda-3);
 }
 
@@ -458,12 +487,19 @@
 /* ------------------------------------------- Movimento reduzido --- */
 
 /*
- * ADR 0007: a cena da Hero entra só com um fade curto; os capítulos já não se
+ * ADR 0007: a cena da Hero entra só com um fade curto, junto com o texto e
+ * sem a onda; os capítulos já não se
  * fixam (CapitulosFixados lê a preferência) e os números ficam parados
  * (NumeroQueRola).
  */
 @media (prefers-reduced-motion: reduce) {
   .home .hero[data-enter] .hero-buraco-negro-cena {
     animation: entrada-reduzida var(--mov-rapido) var(--ease-rolagem) both;
+  }
+
+  /* Sem a onda: tudo entra junto, só com o fade. */
+  .home .hero-apoio > *,
+  .home .hero[data-enter] .hero-buraco-negro-cena {
+    animation-delay: initial !important;
   }
 }

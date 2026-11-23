@@ -131,11 +131,14 @@ for (const path of ["/pt", "/en"]) {
             rotateZ: (Math.asin(r.m12) * 180) / Math.PI,
           };
         });
-      // Espera a entrada terminar (antes dela o plano ainda está de pé, a 90°).
+      // Espera a entrada terminar (antes dela o plano ainda está de pé, a 90°,
+      // e sem inclinação). As duas poses abrem juntas: espera as duas, senão
+      // um quadro do fim da entrada passa com o plano pronto e a inclinação
+      // ainda a caminho.
       await expect
         .poll(async () => {
-          const { rotateX } = await pose();
-          return rotateX > 64 && rotateX < 69;
+          const { rotateX, rotateZ } = await pose();
+          return rotateX > 64 && rotateX < 69 && rotateZ < -11;
         }, { timeout: 8000 })
         .toBe(true);
       const final = await pose();

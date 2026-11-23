@@ -17,7 +17,9 @@
 
 import { versaoParaEsteAparelho, type Versao } from "../animacao/aparelho";
 import { corAleatoria } from "../animacao/cor-aleatoria";
+import { DURACAO, EASE_CSS, ONDA } from "../animacao/movimento";
 import { movimentoReduzido } from "../animacao/movimento-reduzido";
+import { atrasoNaOnda } from "../animacao/onda";
 import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk deste módulo. */
@@ -107,12 +109,15 @@ export function iniciarCeu(moldura: HTMLElement): PecaAnimada {
     return { canvas, estrelas: gerarEstrelas(def, 41 + i * 17), fator: def.fator, cintilar };
   });
 
-  // Entrada suave da camada (decorativa; o texto da Hero não depende dela).
+  // Entrada suave da camada (decorativa; o texto da Hero não depende dela):
+  // só fade, junto com o nome (passo 0 da onda da Hero, app/home.css).
   const entrada = reduzido
     ? null
     : moldura.animate([{ opacity: 0 }, { opacity: 1 }], {
-        duration: 900,
-        easing: "ease-out",
+        duration: DURACAO.lento,
+        delay: atrasoNaOnda(moldura, ONDA[0]),
+        easing: EASE_CSS.orbita,
+        fill: "backwards",
       });
 
   function desenhar() {

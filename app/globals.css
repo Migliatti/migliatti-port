@@ -143,10 +143,12 @@ body {
   animation: animacao-entrada var(--mov-lento) var(--ease-orbita) both;
 }
 
+/* `--entrada-distancia` deixa cada parte de uma onda subir um pouco menos
+   que a anterior (app/home.css); o padrão é 24px. */
 @keyframes animacao-entrada {
   from {
     opacity: 0.7;
-    transform: translateY(24px);
+    transform: translateY(var(--entrada-distancia, 24px));
   }
   to {
     opacity: 1;
@@ -1421,10 +1423,8 @@ main:focus {
     animation: none;
   }
 
-  .botao,
-  .botao:hover,
-  .botao:active {
-    transform: none;
+  .botao {
+    transform: none !important;
   }
 
   .link-alvo::after {

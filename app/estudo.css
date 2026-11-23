@@ -189,24 +189,36 @@
   }
 }
 
-/* Entrada única no carregamento: título, apoio e evidência, nessa ordem. */
+/*
+ * Entrada única no carregamento: a mesma onda da Hero da home, mais curta.
+ *
+ *   parte                papel       começa        dura          movimento
+ *   sobretítulo + título principal   0              --mov-medio   0.7→1, sobe 16px
+ *   resumo, ações, fatos apoio       --mov-onda-1   --mov-medio   0.7→1, sobe 10px
+ *   evidência            apoio       --mov-onda-2   --mov-lento   0.7→1, sobe 24px, 0.98→1
+ *
+ * Tudo com --ease-orbita; o texto nunca começa abaixo de 0.7 e as ações
+ * funcionam desde o primeiro quadro.
+ */
 .estudo-hero[data-enter] > * {
-  animation: estudo-entrada var(--mov-lento) var(--ease-orbita) both;
+  --entrada-distancia: 1rem;
+  animation: estudo-entrada var(--mov-medio) var(--ease-orbita) both;
 }
 
 .estudo-hero[data-enter] > .estudo-hero-texto {
+  --entrada-distancia: 0.625rem;
   animation-delay: var(--mov-onda-1);
 }
 
 .estudo-hero[data-enter] > .estudo-hero-visual {
-  animation: estudo-entrada-visual var(--mov-cena) var(--ease-orbita) both;
+  animation: estudo-entrada-visual var(--mov-lento) var(--ease-orbita) both;
   animation-delay: var(--mov-onda-2);
 }
 
 @keyframes estudo-entrada {
   from {
     opacity: 0.7;
-    transform: translateY(1.5rem);
+    transform: translateY(var(--entrada-distancia));
   }
   to {
     opacity: 1;
@@ -217,7 +229,7 @@
 @keyframes estudo-entrada-visual {
   from {
     opacity: 0.7;
-    transform: translateY(2.5rem) scale(0.97);
+    transform: translateY(1.5rem) scale(0.98);
   }
   to {
     opacity: 1;
@@ -619,7 +631,7 @@
 /* ------------------------------------------------------------ movimento reduzido */
 
 /* ADR 0007: a entrada vira um fade curto só de opacidade, sem deslocamento e
-   sem escalonar; o hover continua (é resposta ao leitor). */
+   sem a onda (tudo junto); o hover continua, só com cor e borda. */
 @media (prefers-reduced-motion: reduce) {
   .estudo-hero[data-enter] > *,
   .estudo-hero[data-enter] > .estudo-hero-texto,

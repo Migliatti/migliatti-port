@@ -62,4 +62,31 @@ test.describe("movimento reduzido", () => {
     await expect(page.getByTestId("capitulos")).toHaveAttribute("data-capitulos", "parado");
     await expect(page.locator(".contador-faixa")).toHaveCount(0);
   });
+  test("a onda da entrada some: Hero e cabeçalho do caso entram juntos, só com fade", async ({
+    page,
+  }) => {
+    await aparelhoForte(page);
+    await page.goto("/pt");
+    await expect(page.locator(".hero-buraco-negro-cena")).toBeAttached();
+    const hero = await page.evaluate(() =>
+      [".hero-nome", ".hero-posicionamento", ".hero-fato", ".hero-acoes", ".hero-buraco-negro-cena"].map(
+        (sel) => {
+          const css = getComputedStyle(document.querySelector(sel)!);
+          return { nome: css.animationName, atraso: parseFloat(css.animationDelay), transform: css.transform };
+        },
+      ),
+    );
+    for (const p of hero) {
+      expect(p.nome).toBe("entrada-reduzida");
+      expect(p.atraso).toBe(0);
+    }
+    for (const p of hero.slice(0, 4)) expect(p.transform).toBe("none");
+
+    await page.goto("/pt/projetos/grimoire");
+    const caso = await page
+      .locator(".estudo-hero > *")
+      .evaluateAll((els) => els.map((el) => parseFloat(getComputedStyle(el).animationDelay)));
+    expect(caso.length).toBeGreaterThan(0);
+    for (const atraso of caso) expect(atraso).toBe(0);
+  });
 });
