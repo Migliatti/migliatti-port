@@ -56,12 +56,13 @@ for (const { lang, outraLang, problema, outro } of idiomas) {
       await expect(page).toHaveURL(`/${outraLang}/projetos/kepler-lab`);
     });
 
-    test("Outro projeto Rubicon mostra a captura real com nome e dimensões", async ({ page }) => {
+    test("Outro projeto Rubicon mostra a captura real com nome e dimensões, sem legenda", async ({ page }) => {
       await page.goto(`/${lang}`);
       const projeto = page.locator('[data-projeto="rubicon-archive"]');
       await projeto.scrollIntoViewIfNeeded();
       await verificarCaptura(projeto.locator("img"));
-      await expect(projeto.locator("figcaption")).not.toBeEmpty();
+      // Sem legenda sob a captura: o que ela mostra está no alt.
+      await expect(projeto.locator("figcaption")).toHaveCount(0);
     });
   });
 }

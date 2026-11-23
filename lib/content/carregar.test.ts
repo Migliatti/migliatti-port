@@ -47,7 +47,6 @@ describe.each(["captura", "gif"])("Evidência visual real: %s", (tipo) => {
       d.evidencias = [{
         tipo,
         url: `/capturas/kepler-lab.${tipo === "gif" ? "gif" : "jpg"}`,
-        legenda: { pt: "Projeto rodando", en: "Running project" },
         alt: { pt: "Tela do projeto", en: "Project screen" },
         largura: 1440,
         altura: 900,
@@ -66,6 +65,13 @@ describe.each(["captura", "gif"])("Evidência visual real: %s", (tipo) => {
       (d.evidencias as Record<string, unknown>[])[0].url = "https://exemplo.com/projeto.png";
     });
     expect(() => carregarConteudo(raiz)).not.toThrow();
+  });
+
+  it("rejeita legenda sob a imagem: o que ela mostra vai no alt", () => {
+    editarJson("projetos/kepler-lab/projeto.json", (d) => {
+      (d.evidencias as Record<string, unknown>[])[0].legenda = { pt: "Projeto rodando", en: "Running project" };
+    });
+    expect(errosAoCarregar()).toContainEqual(expect.stringContaining('Evidência visual não tem "legenda"'));
   });
 
   it("rejeita texto alternativo ausente em um idioma", () => {

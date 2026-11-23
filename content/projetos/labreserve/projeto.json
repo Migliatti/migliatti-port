@@ -12,29 +12,21 @@
     {
       "tipo": "ilustracao",
       "url": "/ilustracoes/labreserve-arquitetura.svg",
-      "legenda": {
-        "pt": "Arquitetura: monólito modular com dependências apontando para dentro, conforme docs/ARCHITECTURE.md do repositório.",
-        "en": "Architecture: modular monolith with dependencies pointing inward, as described in the repository's docs/ARCHITECTURE.md."
-      },
       "alt": {
-        "pt": "Diagrama com os módulos web, server, application, domain e persistence. web e server dependem de application; application depende de domain; persistence implementa os contratos de application com SQLite. O domain não importa HTTP, React nem SQLite.",
-        "en": "Diagram of the web, server, application, domain and persistence modules. web and server depend on application; application depends on domain; persistence implements application's contracts with SQLite. The domain imports no HTTP, React or SQLite."
+        "pt": "Arquitetura do LabReserve, um monólito modular com dependências apontando para dentro, conforme docs/ARCHITECTURE.md. Diagrama com os módulos web, server, application, domain e persistence. web e server dependem de application; application depende de domain; persistence implementa os contratos de application com SQLite. O domain não importa HTTP, React nem SQLite.",
+        "en": "LabReserve architecture, a modular monolith with dependencies pointing inward, as described in docs/ARCHITECTURE.md. Diagram of the web, server, application, domain and persistence modules. web and server depend on application; application depends on domain; persistence implements application's contracts with SQLite. The domain imports no HTTP, React or SQLite."
       },
       "altCompacto": {
-        "pt": "Diagrama com cinco módulos: web (React + Vite), server (node:http, rotas), application (LabReserveService), domain (TimeInterval; sem HTTP, React nem SQLite) e persistence (SQLite). Setas de dependência apontam para dentro: web e server dependem de application, que depende de domain; persistence implementa os contratos, em linha tracejada.",
-        "en": "Diagram with five modules: web (React + Vite), server (node:http, routes), application (LabReserveService), domain (TimeInterval; no HTTP, React or SQLite) and persistence (SQLite). Dependency arrows point inward: web and server depend on application, which depends on domain; persistence implements the contracts, shown as a dashed line."
+        "pt": "Arquitetura do LabReserve, um monólito modular, conforme docs/ARCHITECTURE.md. Diagrama com cinco módulos: web (React + Vite), server (node:http, rotas), application (LabReserveService), domain (TimeInterval; sem HTTP, React nem SQLite) e persistence (SQLite). Setas de dependência apontam para dentro: web e server dependem de application, que depende de domain; persistence implementa os contratos, em linha tracejada.",
+        "en": "LabReserve architecture, a modular monolith, as described in docs/ARCHITECTURE.md. Diagram with five modules: web (React + Vite), server (node:http, routes), application (LabReserveService), domain (TimeInterval; no HTTP, React or SQLite) and persistence (SQLite). Dependency arrows point inward: web and server depend on application, which depends on domain; persistence implements the contracts, shown as a dashed line."
       }
     },
     {
       "tipo": "ilustracao",
       "url": "/ilustracoes/labreserve-fluxo-de-reserva.svg",
-      "legenda": {
-        "pt": "Fluxo de criação de reserva: validação do intervalo, checagem de conflito e gravação atômica da reserva e do evento.",
-        "en": "Booking creation flow: interval validation, conflict check and atomic write of the booking and its event."
-      },
       "alt": {
-        "pt": "Fluxograma: POST /api/reservations valida o intervalo (inválido: 400 INVALID_TIME_RANGE). Numa transação, verifica o recurso (ausente: 404), procura reserva CONFIRMED do mesmo recurso com novoInício < fimExistente e novoFim > inícioExistente (conflito: 409 RESERVATION_CONFLICT) e grava a reserva e o evento RESERVATION_CREATED, respondendo 201. Reservas canceladas não bloqueiam e limites iguais são permitidos.",
-        "en": "Flowchart: POST /api/reservations validates the interval (invalid: 400 INVALID_TIME_RANGE). In one transaction it checks the resource (missing: 404), looks for a CONFIRMED booking of the same resource with newStart < existingEnd and newEnd > existingStart (conflict: 409 RESERVATION_CONFLICT) and writes the booking and the RESERVATION_CREATED event, answering 201. Cancelled bookings don't block and equal limits are allowed."
+        "pt": "Fluxo de criação de reserva do LabReserve, com a reserva e o evento gravados de forma atômica. Fluxograma: POST /api/reservations valida o intervalo (inválido: 400 INVALID_TIME_RANGE). Numa transação, verifica o recurso (ausente: 404), procura reserva CONFIRMED do mesmo recurso com novoInício < fimExistente e novoFim > inícioExistente (conflito: 409 RESERVATION_CONFLICT) e grava a reserva e o evento RESERVATION_CREATED, respondendo 201. Reservas canceladas não bloqueiam e limites iguais são permitidos.",
+        "en": "LabReserve booking creation flow, writing the booking and its event atomically. Flowchart: POST /api/reservations validates the interval (invalid: 400 INVALID_TIME_RANGE). In one transaction it checks the resource (missing: 404), looks for a CONFIRMED booking of the same resource with newStart < existingEnd and newEnd > existingStart (conflict: 409 RESERVATION_CONFLICT) and writes the booking and the RESERVATION_CREATED event, answering 201. Cancelled bookings don't block and equal limits are allowed."
       }
     },
     {

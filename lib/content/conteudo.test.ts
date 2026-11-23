@@ -69,7 +69,9 @@ describe.each(locales)("conteúdo em %s", (lang) => {
       linkValido(projeto.repositorio);
       if (projeto.demo !== undefined) linkValido(projeto.demo);
       for (const evidencia of projeto.evidencias) {
-        naoVazio(evidencia.legenda);
+        // A legenda é o texto do link; Evidência visual não tem legenda.
+        if (["ilustracao", "captura", "gif"].includes(evidencia.tipo)) expect(evidencia.legenda).toBeUndefined();
+        else naoVazio(evidencia.legenda ?? "");
         // Evidências visuais podem ser arquivos públicos locais.
         if (evidencia.url.startsWith("/")) {
           naoVazio(evidencia.url);
@@ -286,7 +288,7 @@ describe.each(locales)("grimoire em %s", (lang) => {
       "/ilustracoes/grimoire-empacotamento.svg",
     ]);
     for (const ilustracao of ilustracoes) {
-      naoVazio(ilustracao.legenda);
+      expect(ilustracao.legenda).toBeUndefined();
       naoVazio(ilustracao.alt ?? "");
       expect(existsSync(path.join(process.cwd(), "public", ilustracao.url))).toBe(true);
     }
@@ -338,7 +340,7 @@ describe.each(locales)("labreserve em %s", (lang) => {
       "/ilustracoes/labreserve-fluxo-de-reserva.svg",
     ]);
     for (const ilustracao of ilustracoes) {
-      naoVazio(ilustracao.legenda);
+      expect(ilustracao.legenda).toBeUndefined();
       naoVazio(ilustracao.alt ?? "");
       expect(existsSync(path.join(process.cwd(), "public", ilustracao.url))).toBe(true);
     }
