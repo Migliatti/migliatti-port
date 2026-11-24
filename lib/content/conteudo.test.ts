@@ -23,6 +23,8 @@ const OUTROS = [
   "n8n-support-triage",
   "relogio-do-lead",
   "ong-maos-que-transformam",
+  "qa-playwright-demo",
+  "atendimento-sp156-dados",
 ];
 const COM_DEMO = ["kepler-lab", "rubicon-archive"];
 
@@ -125,9 +127,9 @@ describe.each(locales)("conteúdo em %s", (lang) => {
     }
   });
 
-  it("lista 4 Outros projetos, com links de repositório e Demo onde há", () => {
+  it("lista 6 Outros projetos, com links de repositório e Demo onde há", () => {
     const outros = listarOutrosProjetos(lang);
-    expect(outros).toHaveLength(4);
+    expect(outros).toHaveLength(6);
     const rubicon = outros.find((p) => p.id === "rubicon-archive")!;
     expect(rubicon.demo).toBe("https://rubicon-archive.vercel.app");
     expect(rubicon.repositorio).toBe(

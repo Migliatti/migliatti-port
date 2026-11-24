@@ -41,11 +41,11 @@ for (const home of homes) {
       );
     });
 
-    test("lista os 4 Outros projetos com links", async ({ page }) => {
+    test("lista os 6 Outros projetos com links", async ({ page }) => {
       await page.goto(home.path);
 
       const itens = page.getByTestId("outro-projeto");
-      await expect(itens).toHaveCount(4);
+      await expect(itens).toHaveCount(6);
 
       const rubicon = page.locator('[data-projeto="rubicon-archive"]');
       await expect(rubicon.getByRole("link", { name: "Demo" })).toHaveAttribute(
@@ -63,6 +63,8 @@ for (const home of homes) {
         "n8n-support-triage",
         "relogio-do-lead",
         "ong-maos-que-transformam",
+        "qa-playwright-demo",
+        "atendimento-sp156-dados",
       ]) {
         const item = page.locator(`[data-projeto="${id}"]`);
         await expect(

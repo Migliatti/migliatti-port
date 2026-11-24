@@ -1,0 +1,4 @@
+{
+  "titulo": "Automated tests with Playwright",
+  "resumo": "UI and API tests written with Playwright and TypeScript, run in GitHub Actions against two public practice sites (25 tests). Study project, built with AI assistance."
+}

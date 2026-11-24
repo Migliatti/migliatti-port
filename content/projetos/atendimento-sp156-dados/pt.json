@@ -1,0 +1,4 @@
+{
+  "titulo": "Análise de chamados do SP156 em SQL e Python",
+  "resumo": "Análise reproduzível de dados públicos do atendimento 156 da cidade de São Paulo: limpeza, carga em SQLite, 8 consultas SQL, gráficos e um relatório curto. Projeto de estudo, feito com apoio de IA."
+}

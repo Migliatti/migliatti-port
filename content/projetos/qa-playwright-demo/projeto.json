@@ -1,0 +1,20 @@
+{
+  "ordem": 8,
+  "tipo": "outro",
+  "estado": "concluido",
+  "stack": [
+    "TypeScript",
+    "Playwright"
+  ],
+  "repositorio": "https://github.com/Migliatti/qa-playwright-demo",
+  "evidencias": [
+    {
+      "tipo": "repositorio",
+      "url": "https://github.com/Migliatti/qa-playwright-demo",
+      "legenda": {
+        "pt": "Testes, plano de testes e README no GitHub",
+        "en": "Tests, test plan and README on GitHub"
+      }
+    }
+  ]
+}
