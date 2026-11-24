@@ -1,0 +1,20 @@
+{
+  "ordem": 9,
+  "tipo": "outro",
+  "estado": "concluido",
+  "stack": [
+    "Python",
+    "SQL"
+  ],
+  "repositorio": "https://github.com/Migliatti/atendimento-sp156-dados",
+  "evidencias": [
+    {
+      "tipo": "repositorio",
+      "url": "https://github.com/Migliatti/atendimento-sp156-dados",
+      "legenda": {
+        "pt": "Pipeline, consultas SQL e relatório no GitHub",
+        "en": "Pipeline, SQL queries and report on GitHub"
+      }
+    }
+  ]
+}
