@@ -9,7 +9,7 @@
       "Separar implementação, documentação, testes e integração por plataforma."
     ],
     "resultado": "Catálogo open source com 15 skills, uma delas orquestrando um workflow composto (chain), empacotado para Claude Code, Codex, Pi e Hermes Agent, com suíte de 41 testes em Python.",
-    "aprendizado": "Definir contratos estáveis entre ferramentas diferentes e testar o comportamento de agentes, não só o código.",
+    "aprendizado": "Aprendi a definir contratos estáveis entre ferramentas diferentes e testar o comportamento de agentes, não só o código.",
     "usoDeIA": {
       "texto": "O produto são instruções para agentes de IA, então as mudanças nas skills são avaliadas com agentes: cada cenário tem critérios observáveis, roda contra as skills atuais para registrar o resultado RED e roda de novo depois da menor correção para registrar o GREEN, em contexto novo e sandbox isolado. Nenhum cenário é dado como aprovado só pela leitura do SKILL.md. Os contratos estruturais do repositório são verificados por testes em Python.",
       "links": [

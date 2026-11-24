@@ -2,7 +2,7 @@
   "titulo": "Kepler Lab",
   "resumo": "3D web experience to explore the Milky Way, with 22 astronomical destinations and curated scientific content.",
   "estudoDeCaso": {
-    "problema": "Astronomy content is usually in long texts or in simulators that are hard to use. The goal was a visual way, in Portuguese, to explore the Milky Way with reliable information.",
+    "problema": "Astronomy content is usually in long texts or in simulators that are hard to use. Kepler Lab offers a visual way, in Portuguese, to explore the Milky Way with reliable information.",
     "decisoes": [
       "Three.js with React to render the 3D scene and keep the interface organized in components.",
       "Vite and JavaScript for fast builds.",
@@ -10,7 +10,7 @@
       "Support for reduced motion and high contrast mode from the start."
     ],
     "resultado": "App published on Vercel with 22 astronomical destinations, unit tests and accessibility features.",
-    "aprendizado": "Balancing 3D graphics with accessibility and organizing scientific content for non-experts.",
+    "aprendizado": "I learned to balance 3D graphics with accessibility and to organize scientific content for non-experts.",
     "usoDeIA": {
       "texto": "Built with Claude Code from a CLAUDE.md holding the project's principles, architecture and commands; AGENTS.md only points to it. Each phase followed a plan under docs/superpowers/plans, executed task by task with TDD. A project skill, /verify, runs tests, build and lint before any change is declared done, and a hook in .claude/settings.json runs the linter after every edit.",
       "links": [

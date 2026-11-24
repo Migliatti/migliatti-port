@@ -35,7 +35,9 @@
 
 import { animate, createTimeline, stagger, type JSAnimation, type Timeline } from "animejs";
 import { versaoParaEsteAparelho, type Versao } from "../animacao/aparelho";
+import { ONDA } from "../animacao/movimento";
 import { movimentoReduzido } from "../animacao/movimento-reduzido";
+import { atrasoNaOnda } from "../animacao/onda";
 import type { PecaAnimada } from "../animacao/usePecaPreguicosa";
 
 /** Marca gravada na moldura; o e2e usa para achar o chunk deste módulo. */
@@ -413,7 +415,14 @@ export function iniciarBuracoNegro(moldura: HTMLElement): PecaAnimada {
     if (pausada) for (const a of continuas) a.pause();
   }
 
+  // A cena entra junto com o Posicionamento (passo 1 da onda da Hero,
+  // app/home.css): o mesmo atraso vale para o crescimento da cena em CSS e
+  // para a timeline das camadas, para os dois começarem no mesmo quadro.
+  const atraso = atrasoNaOnda(moldura, ONDA[1]);
+  cena.style.animationDelay = `${atraso}ms`;
+
   const entrada = createTimeline({
+    delay: atraso,
     defaults: { ease: "outQuad" },
     onComplete: iniciarMovimentoContinuo,
   });

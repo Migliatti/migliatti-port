@@ -12,6 +12,8 @@ type Props = {
   compacta?: boolean;
   /** Demo real que identifica a janela da captura. */
   demo?: string;
+  /** Evidência principal no primeiro ecrã do Estudo de caso: a captura carrega já, sem `lazy`. */
+  prioritaria?: boolean;
 };
 
 export function ehEvidenciaVisual(evidencia: Evidencia) {
@@ -19,7 +21,7 @@ export function ehEvidenciaVisual(evidencia: Evidencia) {
 }
 
 /** Mantém imagens reais e diagramas identificados também fora do estudo de caso. */
-export function EvidenciaVisual({ evidencia, lang, prefixo, compacta = false, demo }: Props) {
+export function EvidenciaVisual({ evidencia, lang, prefixo, compacta = false, demo, prioritaria = false }: Props) {
   if (!ehEvidenciaVisual(evidencia)) return null;
   const dict = getDictionary(lang);
   const urlCompacta = compacta ? urlDaIlustracaoCompacta(evidencia.url) : evidencia.url;
@@ -57,19 +59,20 @@ export function EvidenciaVisual({ evidencia, lang, prefixo, compacta = false, de
             alt={evidencia.alt ?? ""}
             width={evidencia.largura}
             height={evidencia.altura}
-            loading="lazy"
+            loading={prioritaria ? "eager" : "lazy"}
+            fetchPriority={prioritaria ? "high" : undefined}
             decoding="async"
           />
         )}
       </div>
-      <figcaption className="text-muted">
-        {evidencia.tipo === "ilustracao" && (
-          <span data-testid="rotulo-ilustracao" className="mr-2 rounded border border-muted/40 px-1.5 py-0.5 text-xs uppercase">
+      {/* Sem legenda sob a imagem: só o rótulo visível de Ilustração (CONTEXT.md, Evidência); o que ela mostra está no alt. */}
+      {evidencia.tipo === "ilustracao" && (
+        <figcaption className="text-muted">
+          <span data-testid="rotulo-ilustracao" className="mr-2 rounded border border-muted/40 px-1.5 py-0.5 text-[0.8125rem] uppercase">
             {dict.ilustracao}
           </span>
-        )}
-        {evidencia.legenda}
-      </figcaption>
+        </figcaption>
+      )}
     </figure>
   );
 }

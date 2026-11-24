@@ -154,3 +154,27 @@ describe("tema único escuro grafite (ADR 0004)", () => {
     }
   });
 });
+
+describe("estudo de caso (app/estudo.css)", () => {
+  const estudo = readFileSync("app/estudo.css", "utf8");
+
+  it("texto e rótulos passam AA no fundo, nos cartões e na pílula de estado", () => {
+    // Fatos, índices e rótulos em muted; títulos, enunciados e estado em
+    // foreground; cartões dos outros estudos e da stack vão de surface-alta
+    // a surface.
+    for (const fundo of [t.background, t.surface, t["surface-alta"]]) {
+      expect(razaoDeContraste(t.muted, fundo)).toBeGreaterThanOrEqual(4.5);
+      expect(razaoDeContraste(t.foreground, fundo)).toBeGreaterThanOrEqual(7);
+    }
+  });
+
+  it("o ladrilho claro dos ícones se destaca do fundo e dos cartões (3:1)", () => {
+    const percentual = Number(
+      estudo.match(/\.estudo-ladrilho\s*{[^}]*var\(--foreground\)\s+(\d+)%/)![1],
+    );
+    const ladrilho = misturar(t.foreground, t.background, percentual / 100);
+    for (const fundo of [t.background, t.surface, t["surface-alta"]]) {
+      expect(razaoDeContraste(ladrilho, fundo)).toBeGreaterThanOrEqual(3);
+    }
+  });
+});

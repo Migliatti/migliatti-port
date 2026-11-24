@@ -72,15 +72,20 @@ for (const path of ["/pt", "/en"]) {
       }) => {
         await page.setViewportSize({ width: largura, height: altura });
         await page.goto(path);
-        await page.evaluate(() =>
-          window.scrollTo(0, document.documentElement.scrollHeight),
-        );
-        await page.waitForTimeout(150);
-        const escalas = await page.locator("main .secao").evaluateAll((nos) =>
-          nos.map((n) => new DOMMatrix(getComputedStyle(n, "::after").transform).a),
-        );
-        expect(escalas).toHaveLength(7);
-        for (const e of escalas) expect(e).toBeGreaterThan(0.99);
+        // Os capítulos fixados (ADR 0008) deixam a página mais alta depois da
+        // hidratação: rola até o fim de novo a cada tentativa.
+        await expect
+          .poll(async () => {
+            await page.evaluate(() =>
+              window.scrollTo(0, document.documentElement.scrollHeight),
+            );
+            await page.waitForTimeout(150);
+            const escalas = await page.locator("main .secao").evaluateAll((nos) =>
+              nos.map((n) => new DOMMatrix(getComputedStyle(n, "::after").transform).a),
+            );
+            return escalas.length === 7 && escalas.every((e) => e > 0.99);
+          })
+          .toBe(true);
       });
     }
 

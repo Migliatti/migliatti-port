@@ -30,7 +30,11 @@ export type TipoDeEvidencia = (typeof tiposDeEvidencia)[number];
  */
 export type Evidencia = {
   tipo: TipoDeEvidencia;
-  legenda: string;
+  /**
+   * Texto do link da Evidência (trecho de código, testes, repositório), por
+   * idioma. Evidência visual não tem legenda: o que a imagem mostra vai no `alt`.
+   */
+  legenda?: string;
   url: string;
   /** Texto alternativo por idioma (obrigatório em toda Evidência visual). */
   alt?: string;

@@ -34,10 +34,18 @@ for (const { lang, outraLang, problema, evidencias, ilustracao, verNoRepositorio
       await expect(card.getByTestId("rotulo-ilustracao")).toHaveText(ilustracao);
       await expect(card.getByRole("img")).toBeVisible();
       expect((await card.getByRole("img").getAttribute("aria-label"))?.trim()).toBeTruthy();
-      // Só o link do Estudo de caso: nenhum Demo.
-      await expect(card.locator("a")).toHaveCount(1);
+      // O Estudo de caso e o Repositório: nenhum Demo.
+      await expect(card.locator("a")).toHaveCount(2);
+      await expect(card.locator("a.link-demo")).toHaveCount(0);
+      await expect(card.getByRole("link", { name: /Reposit/ })).toHaveAttribute(
+        "href",
+        "https://github.com/Migliatti/labreserve",
+      );
 
-      await card.locator(`a[href="/${lang}/projetos/labreserve"]`).click();
+      // O capítulo do meio fica sob o seguinte enquanto os capítulos estão
+      // fixados (pinned-chapters, ADR 0008): segue o link pelo teclado.
+      await card.locator(`a[href="/${lang}/projetos/labreserve"]`).focus();
+      await page.keyboard.press("Enter");
       await expect(page).toHaveURL(`/${lang}/projetos/labreserve`);
     });
 

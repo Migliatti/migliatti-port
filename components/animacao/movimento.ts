@@ -9,6 +9,8 @@
 
 /** Durações de interação e entrada, em ms. */
 export const DURACAO = {
+  /** Resposta ao clique (botão e cartão pressionados). */
+  toque: 140,
   rapido: 200,
   medio: 500,
   lento: 800,
@@ -34,8 +36,13 @@ export const SOBREPOR = {
   leve: DURACAO.medio,
 } as const;
 
-/** Intervalo entre irmãos que entram em sequência no CSS (`--mov-escalonar`), em ms. */
-export const ESCALONAR_CSS = 90;
+/**
+ * A onda da entrada única (Hero da home, cabeçalho do estudo de caso e os
+ * números de "Em números"): quando cada parte começa depois da primeira, em
+ * ms (`--mov-onda-1..3`). Os intervalos encolhem (100, 80, 60) para o grupo
+ * ler como uma onda, não como uma fila de metrônomo.
+ */
+export const ONDA = [0, 100, 180, 240] as const;
 
 /** Intervalo entre elementos de um mesmo grupo (`stagger`), em ms. */
 export const ESCALONAR = {

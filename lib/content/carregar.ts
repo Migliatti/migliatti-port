@@ -379,10 +379,6 @@ function carregarProjeto(
       }
       // Campos comuns aos idiomas: valida uma vez só.
       const errosComuns: Erros = lang === locales[0] ? erros : [];
-      const legendas = ehObjeto(ev.legenda) ? ev.legenda : {};
-      if (!ehObjeto(ev.legenda) && lang === locales[0]) {
-        erros.push(`${local}: "legenda" deve ter um texto por idioma (${locales.join(", ")})`);
-      }
       const tipoDaEvidencia = umDe(ev, "tipo", tiposDeEvidencia, local, errosComuns);
       const ilustracao = tipoDaEvidencia === "ilustracao";
       const capturaOuGif = tipoDaEvidencia === "captura" || tipoDaEvidencia === "gif";
@@ -391,10 +387,23 @@ function carregarProjeto(
         url: ilustracao || (capturaOuGif && typeof ev.url === "string" && ev.url.startsWith("/"))
           ? caminhoLocal(ev, "url", local, errosComuns)
           : link(ev, "url", local, errosComuns),
-        legenda: texto(legendas, lang, `${local} legenda`, erros),
       };
       if (ilustracao || capturaOuGif) {
-        // O texto alternativo é por idioma, como a legenda.
+        // Imagem não leva legenda (só o rótulo de Ilustração): o que ela
+        // mostra está no texto alternativo.
+        if (ev.legenda !== undefined && lang === locales[0]) {
+          erros.push(`${local}: Evidência visual não tem "legenda"; descreva a imagem em "alt"`);
+        }
+      } else {
+        // Nas demais, a legenda é o texto do link (trecho, testes, repositório).
+        const legendas = ehObjeto(ev.legenda) ? ev.legenda : {};
+        if (!ehObjeto(ev.legenda) && lang === locales[0]) {
+          erros.push(`${local}: "legenda" deve ter um texto por idioma (${locales.join(", ")})`);
+        }
+        evidencia.legenda = texto(legendas, lang, `${local} legenda`, erros);
+      }
+      if (ilustracao || capturaOuGif) {
+        // O texto alternativo é por idioma.
         const alts = ehObjeto(ev.alt) ? ev.alt : {};
         if (!ehObjeto(ev.alt) && lang === locales[0]) {
           erros.push(`${local}: "alt" deve ter um texto por idioma (${locales.join(", ")})`);

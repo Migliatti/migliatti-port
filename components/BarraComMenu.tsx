@@ -70,8 +70,10 @@ export function BarraComMenu({ topo, children, rotulo }: Props) {
       className="barra-grade"
     >
       {topo ?? (
-        <span className="barra-marca" data-testid="barra-marca" aria-hidden="true">
-          GM
+        // Marca "stack" (ADR 0008): o monograma GM empilhado.
+        <span className="barra-marca marca-gm" data-testid="barra-marca" aria-hidden="true">
+          <span>G</span>
+          <span>M</span>
         </span>
       )}
       <button

@@ -41,12 +41,15 @@
   --cor-buraco-negro-nucleo: hsl(208 100% 93%);
   /* Movimento (ADR 0005): os mesmos valores vivem em
      components/animacao/movimento.ts; lib/design/movimento.test.ts compara. */
+  --mov-toque: 140ms;
   --mov-rapido: 200ms;
   --mov-medio: 500ms;
   --mov-lento: 800ms;
   --mov-cena: 1200ms;
   --mov-piscar: 1100ms;
-  --mov-escalonar: 90ms;
+  --mov-onda-1: 100ms;
+  --mov-onda-2: 180ms;
+  --mov-onda-3: 240ms;
   --ease-orbita: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-ambiente: cubic-bezier(0.37, 0, 0.63, 1);
   --ease-rolagem: linear;
@@ -69,7 +72,9 @@
   --color-estado-aviso: var(--estado-aviso);
   --color-estado-erro: var(--estado-erro);
   --font-sans: var(--fonte-corpo), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--fonte-titulo), ui-sans-serif, system-ui, sans-serif;
+  /* Chivo nos títulos e no corpo (ADR 0008): uma família, papéis por peso e
+     espaçamento. */
+  --font-display: var(--fonte-corpo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--fonte-mono), ui-monospace, monospace;
 }
 
@@ -102,7 +107,8 @@ body {
   h5,
   h6 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    font-weight: 400;
+    letter-spacing: -0.03em;
     text-wrap: balance;
     scroll-margin-top: calc(var(--altura-barra) + 1.5rem);
   }
@@ -137,64 +143,12 @@ body {
   animation: animacao-entrada var(--mov-lento) var(--ease-orbita) both;
 }
 
+/* `--entrada-distancia` deixa cada parte de uma onda subir um pouco menos
+   que a anterior (app/home.css); o padrão é 24px. */
 @keyframes animacao-entrada {
   from {
     opacity: 0.7;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/*
- * Escalonar: os filhos diretos entram em sequência, cada um --mov-escalonar
- * depois do anterior (até o 8º). `--i` também vale para a entrada ao rolar.
- */
-.escalonar > :nth-child(1) { --i: 0; }
-.escalonar > :nth-child(2) { --i: 1; }
-.escalonar > :nth-child(3) { --i: 2; }
-.escalonar > :nth-child(4) { --i: 3; }
-.escalonar > :nth-child(5) { --i: 4; }
-.escalonar > :nth-child(6) { --i: 5; }
-.escalonar > :nth-child(7) { --i: 6; }
-.escalonar > :nth-child(n + 8) { --i: 7; }
-
-.escalonar > .animacao-entrada,
-.escalonar > * > .animacao-entrada {
-  animation-delay: calc(var(--i, 0) * var(--mov-escalonar));
-}
-
-/* Hero: o Posicionamento e os botões entram logo depois do nome. */
-.hero-apoio > :nth-child(1) {
-  animation-delay: var(--mov-escalonar);
-}
-
-.hero-apoio > :nth-child(2) {
-  animation-delay: calc(2 * var(--mov-escalonar));
-}
-
-/*
- * Entrada ao rolar (issue #58): cartões de projeto, cargos e grupos de
- * competências usam os mesmos keyframes, ligados à posição na tela por uma
- * linha do tempo de visão (CSS puro, sem JavaScript). Sobe 48px e cresce de
- * 0.97 a 1 ao longo da entrada; com `escalonar` no pai, cada irmão começa um
- * pouco depois do anterior. Sem suporte a animation-timeline o cartão aparece
- * parado.
- */
-@supports (animation-timeline: view()) {
-  .animacao-ao-rolar {
-    animation: animacao-ao-rolar var(--mov-medio) var(--ease-rolagem) both;
-    animation-timeline: view();
-    animation-range: entry calc(var(--i, 0) * 6%) entry calc(30rem + var(--i, 0) * 6%);
-  }
-}
-
-@keyframes animacao-ao-rolar {
-  from {
-    opacity: 0.7;
-    transform: translateY(48px) scale(0.97);
+    transform: translateY(var(--entrada-distancia, 24px));
   }
   to {
     opacity: 1;
@@ -232,10 +186,15 @@ main:focus {
   transform: none;
 }
 
-/* Controles da identidade Sinal: pílula, um acento só. */
+/*
+ * Botões (ADR 0008): pílulas de no mínimo 44px de altura. O azul marca a ação
+ * primária; a pílula neutra é o estilo secundário.
+ */
 .botao {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
   border-radius: 9999px;
   padding: 0.7rem 1.25rem;
   font-size: 0.95rem;
@@ -245,14 +204,24 @@ main:focus {
 }
 
 .botao-primario {
-  border: 1px solid var(--accent);
-  background: var(--accent);
-  color: var(--on-accent);
+  border: 1px solid var(--azul);
+  background: var(--azul);
+  color: var(--on-azul);
 }
 
+/* Secundário: pílula de contorno neutro. Um só botão preenchido por vista
+   (taste-skill). */
 .botao-secundario {
-  border: 1px solid var(--foreground);
+  border: 1px solid var(--accent);
+  background: transparent;
   color: var(--foreground);
+}
+
+/* Link de texto com alvo de toque de 44px (Repositório, Demo). */
+.link-alvo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }
 
 /* Link para o demo publicado: o único link de corpo em azul (ADR 0005). */
@@ -268,7 +237,7 @@ main:focus {
   background: var(--surface);
   padding: 0.2rem 0.65rem;
   color: var(--muted);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 
 /* Sinal de estado (ADR 0004: âmbar só em sinais pontuais): "Rascunho". */
@@ -277,30 +246,79 @@ main:focus {
   background: transparent;
   color: var(--estado-aviso);
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   line-height: 1.2;
 }
 
 /*
- * Botões (ADR 0005): vivos. O hover levanta e cresce, o clique afunda, só com
- * mouse (hover: hover). Só transform.
+ * Botões (ADR 0005, refinados na fase 6 do ADR 0008): no hover o botão sobe
+ * um degrau de 2px; no clique ele desce e afunda (0.97) em --mov-toque, mais
+ * rápido que o hover, para responder no mesmo instante. Só transform, só com
+ * ponteiro fino que passa o mouse (no toque o hover ficaria preso). O afundar
+ * do clique vale em qualquer ponteiro.
  */
 .botao {
   transition: transform var(--mov-rapido) var(--ease-orbita);
 }
 
 .botao:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
+  transition-duration: var(--mov-toque);
 }
 
-/* Hover só onde existe ponteiro que passa o mouse: no toque o botão não fica levantado. */
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .botao:hover {
-    transform: translateY(-3px) scale(1.03);
+    transform: translateY(-2px);
   }
 
   .botao:hover:active {
-    transform: scale(0.95);
+    transform: scale(0.97);
+  }
+}
+
+/*
+ * Sublinhado que se desenha (links de ação com alvo de 44px: Repositório,
+ * Demo, LinkedIn, GitHub). O sublinhado de repouso continua sendo o
+ * `text-decoration` (cinza, ou azul no demo); no hover ou no foco por teclado
+ * um traço azul de 2px se desenha por cima dele, da esquerda para a direita,
+ * e se recolhe para a direita ao sair. Só transform (scaleX).
+ */
+.link-alvo {
+  position: relative;
+}
+
+.link-alvo::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* O texto é uma linha centrada no alvo: o traço fica logo abaixo dela. */
+  top: calc(50% + 0.5lh - 0.3125rem);
+  height: 2px;
+  border-radius: 1px;
+  background: var(--azul);
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform var(--mov-medio) var(--ease-orbita);
+}
+
+.link-alvo:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link-alvo:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+
+/* Alto contraste: o sublinhado nativo basta; o traço desenhado sai. */
+@media (forced-colors: active) {
+  .link-alvo::after {
+    display: none;
   }
 }
 
@@ -547,11 +565,35 @@ main:focus {
   padding-top: 0.75rem;
 }
 
+/*
+ * Desktop (>= 48rem): nav-centre (ADR 0008). Três trilhas: a marca (ou a
+ * volta) na borda esquerda, as âncoras no eixo da página e o idioma na borda
+ * direita. O painel e o miolo somem do fluxo (`display: contents`), então os
+ * dois <nav> viram células da grade.
+ */
 @media (min-width: 48rem) {
   .barra-grade {
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     gap: 0 0.75rem;
     padding: 0.5rem 1rem;
+  }
+
+  .barra-grade > :first-child {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  .barra-grade .barra-secoes {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .barra-grade .barra-painel-miolo > nav:first-child {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
   }
 
   .barra-hamburguer {
@@ -575,7 +617,6 @@ main:focus {
   }
 
   .barra-secoes {
-    margin-left: auto;
     padding-top: 0;
   }
 }
@@ -613,23 +654,6 @@ main:focus {
   color: var(--on-azul);
 }
 
-/* As âncoras entram em sequência cada vez que o painel abre (celular). */
-.barra-grade[data-menu="aberto"] .barra-ancoras > li {
-  animation: barra-item var(--mov-medio) var(--ease-orbita) both;
-  animation-delay: calc(var(--i, 0) * var(--mov-escalonar));
-}
-
-@keyframes barra-item {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 @media (min-width: 48rem) {
   .barra-ancoras {
     flex-direction: row;
@@ -639,12 +663,14 @@ main:focus {
   .barra-ancora {
     display: block;
     min-height: 0;
-    padding: 0.25rem 0.875rem;
+    padding: 0.25rem 0.625rem;
     font-size: 0.875rem;
   }
+}
 
-  .barra-grade[data-menu="aberto"] .barra-ancoras > li {
-    animation: none;
+@media (min-width: 64rem) {
+  .barra-ancora {
+    padding-inline: 0.875rem;
   }
 }
 
@@ -837,10 +863,8 @@ main:focus {
 /*
  * Fundo de pontos das seções (components/fundo): atrás do conteúdo, sem
  * receber ponteiro, cobrindo o <main> abaixo da Hero (que tem o céu próprio).
- * Os pontos são só CSS, então já aparecem parados sem JavaScript e em
- * celular fraco; o parallax (grade.ts) só mexe no
- * `transform` da camada interna, que é 35% mais alta que a moldura
- * (o curso do parallax de rolagem).
+ * Os pontos são só CSS e ficam parados: nada se move porque a página rolou
+ * (ADR 0008, item 4, que tirou o parallax).
  */
 .fundo-secoes {
   position: absolute;
@@ -872,14 +896,12 @@ main:focus {
 .fundo-secoes-pontos {
   position: absolute;
   inset: 0;
-  height: 135%;
   background-image: radial-gradient(
     circle at center,
     color-mix(in srgb, currentColor 14%, transparent) 1px,
     transparent 1.5px
   );
   background-size: 28px 28px;
-  will-change: transform;
 }
 
 /*
@@ -960,7 +982,7 @@ main:focus {
 .secao-titulo {
   font-size: 1.5rem;
   line-height: 2rem;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 @media (min-width: 40rem) {
@@ -1014,28 +1036,6 @@ main:focus {
 @media (hover: hover) {
   .ilha:hover {
     border-color: var(--muted);
-  }
-}
-
-/* Cartão de Projeto em destaque: uma ilha com o número em coluna estreita. */
-.projeto-cartao {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0.5rem;
-  padding: 1.5rem;
-}
-
-.projeto-cartao-numero {
-  align-self: start;
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  color: var(--accent-text);
-}
-
-@media (min-width: 48rem) {
-  .projeto-cartao {
-    grid-template-columns: 3rem minmax(0, 1fr);
-    gap: 1.5rem;
   }
 }
 
@@ -1121,7 +1121,7 @@ main:focus {
  */
 .hud {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   line-height: 1.25;
   color: var(--muted);
 }
@@ -1210,65 +1210,139 @@ main:focus {
   overflow-wrap: anywhere;
 }
 
-/* Fechamento tipográfico, no fundo plano das páginas. */
+/*
+ * Rodapé em colunas (footer-columns, ADR 0008), no fundo plano das páginas: a
+ * marca com o nome e o Posicionamento, as seções da home e os canais; abaixo,
+ * a linha final. Duas colunas lado a lado no celular, quatro trilhas no desktop.
+ */
 .rodape {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-block: 2rem;
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 4rem;
+  padding-block: 3rem 2rem;
+  border-top: 1px solid var(--borda);
   color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.rodape-colunas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 1.5rem;
+}
+
+.rodape-marca {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 0.5rem;
+  justify-items: start;
+  max-width: 24rem;
+}
+
+.rodape-nome {
+  margin-top: 0.5rem;
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.rodape-coluna-titulo {
+  margin-bottom: 0.25rem;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Cada link do rodapé tem alvo de toque de 44px. */
+.rodape-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--foreground);
+}
+
+.rodape-link:not(:hover) {
+  text-decoration-color: var(--muted);
+}
+
+.rodape-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  border-top: 1px solid var(--borda);
+  padding-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+@media (min-width: 48rem) {
+  .rodape-colunas {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .rodape-marca {
+    grid-column: auto;
+  }
 }
 
 .nota-rascunho {
   color: var(--estado-aviso);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-}
-
-.barra-marca {
-  font-family: var(--font-display);
   font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--foreground);
 }
 
-.hud, .secao-numero, .projeto-cartao-numero {
+/*
+ * Marca "stack" (ADR 0008): o monograma GM empilhado, G sobre M, numa placa
+ * de cantos suaves. Na barra e no rodapé; decorativa (aria-hidden).
+ */
+.marca-gm {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--borda);
+  border-radius: 0.75rem;
+  background: var(--surface-alta);
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  grid-auto-rows: 0.92em;
+  align-content: center;
+}
+
+.marca-gm > span {
+  display: block;
+}
+
+.hud, .secao-numero {
   font-variant-numeric: tabular-nums;
 }
 
-.destaques-grade, .competencias-grade {
+.competencias-grade {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 
-.destaques-grade > li, .competencias-grade > * {
+.competencias-grade > * {
   min-width: 0;
-}
-
-.destaques-grade .projeto-cartao {
-  height: 100%;
 }
 
 .contato-conteudo {
   overflow-wrap: anywhere;
 }
 
-@media (min-width: 48rem) {
-  .barra-marca { display: none; }
-}
 
 @media (min-width: 64rem) {
-  .destaques-grade {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .destaques-grade > li:first-child {
-    grid-column: 1 / -1;
-  }
   .competencias-grade {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1286,13 +1360,6 @@ main:focus {
 .projeto-evidencia figcaption { font-size: 0.9375rem; }
 
 @media (min-width: 64rem) {
-  .destaques-grade > li:first-child .projeto-cartao-com-evidencia {
-    grid-template-columns: 2rem minmax(0, 1fr) minmax(12rem, 0.85fr);
-    align-items: start;
-  }
-  .destaques-grade > li:not(:first-child) .projeto-evidencia {
-    grid-column: 2;
-  }
   .estudo-grade {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1347,7 +1414,7 @@ main:focus {
   overflow: hidden;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1367,22 +1434,17 @@ main:focus {
   line-height: 1.6;
 }
 
-@media (min-width: 64rem) {
-  .destaques-grade > li:first-child .projeto-cartao-com-evidencia {
-    grid-template-columns: 2rem minmax(0, 0.9fr) minmax(0, 1.1fr);
-    align-items: center;
-  }
-}
-
 /*
  * Movimento reduzido (ADR 0007, substitui o "anima sempre" do ADR 0005).
  * Com prefers-reduced-motion: reduce:
- * - entradas (animacao-entrada, animacao-titulo, animacao-ao-rolar e as
- *   âncoras do menu) viram um fade curto só de opacidade, sem deslocamento e
- *   sem escalonar; o texto segue legível desde o primeiro quadro;
+ * - a entrada única (animacao-entrada, animacao-titulo, cabeçalho do estudo
+ *   de caso) vira um fade curto só de opacidade, sem deslocamento e sem a
+ *   onda: tudo junto; o texto segue legível desde o primeiro quadro;
  * - o que acompanha a rolagem (saída da Hero, traço do separador) fica parado
  *   no estado de repouso;
  * - o cursor do HUD deixa de piscar;
+ * - botões e cartões respondem ao hover e ao clique só com cor e borda, sem
+ *   se deslocar; o sublinhado aparece sem se desenhar;
  * - as peças em JavaScript desenham só o quadro parado (components/animacao/movimento-reduzido.ts).
  * Feedback de estado (hover, foco, abrir o menu, destaque dos pilares) continua.
  */
@@ -1397,17 +1459,9 @@ main:focus {
 
 @media (prefers-reduced-motion: reduce) {
   .animacao-entrada,
-  .animacao-titulo,
-  .animacao-ao-rolar {
+  .animacao-titulo {
     animation: entrada-reduzida var(--mov-rapido) var(--ease-rolagem) both;
-    animation-timeline: auto;
-    animation-range: normal;
-  }
-
-  .escalonar > .animacao-entrada,
-  .escalonar > * > .animacao-entrada,
-  .hero-apoio > * {
-    animation-delay: initial !important;
+    animation-delay: initial;
   }
 
   .hero-conteudo,
@@ -1417,11 +1471,12 @@ main:focus {
   .hud-cursor {
     animation: none;
   }
-}
 
-@media (prefers-reduced-motion: reduce) and (max-width: 47.99rem) {
-  .barra-grade[data-menu="aberto"] .barra-ancoras > li {
-    animation: entrada-reduzida var(--mov-rapido) var(--ease-rolagem) both;
-    animation-delay: initial;
+  .botao {
+    transform: none !important;
+  }
+
+  .link-alvo::after {
+    transition: none;
   }
 }

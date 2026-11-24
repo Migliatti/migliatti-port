@@ -41,7 +41,7 @@ Seção com uma peça de animação de assinatura, desenvolvida com IA. Mostra o
 _Avoid_: Demo (já significa projeto publicado), Galeria
 
 **Animação decorativa**:
-Animação cuja remoção não muda o significado do conteúdo. É tudo o que fica fora da **Vitrine**. Nunca esconde texto; segue as regras dos ADRs 0003, 0005 e 0007 (parada com movimento reduzido). Cor de reserva azul; pontos do céu, da constelação e da Vitrine sorteiam o próprio matiz. Inclui o fundo de pontos tênues das seções, com parallax leve só na versão completa.
+Animação cuja remoção não muda o significado do conteúdo. É tudo o que fica fora da **Vitrine**. Nunca esconde texto; segue as regras dos ADRs 0003, 0005 e 0007 (parada com movimento reduzido). Cor de reserva azul; pontos do céu, da constelação e da Vitrine sorteiam o próprio matiz. Inclui o fundo de pontos tênues das seções, parado: fora da cena da Hero e dos capítulos fixados de Projetos em destaque, nada se move porque a página rolou (`docs/adr/0008-redesign-estrondoso.md`, item 4).
 _Avoid_: Efeito
 
 **HUD**:
@@ -49,7 +49,7 @@ Painel de dados só verificáveis, que existe só na **Vitrine** (não na barra 
 _Avoid_: Dashboard, métricas
 
 **Animação de entrada**:
-Animação curta (até ~800ms, em CSS) aplicada com a classe `animacao-entrada`. Texto legível desde o primeiro quadro. Regra em `docs/adr/0001-animacao-de-entrada.md`, revista em parte por `docs/adr/0003-editorial-espacial-animejs.md`.
+Animação curta (até ~800ms, em CSS) que acontece uma vez por página, no carregamento: a Hero da home (nome, Posicionamento, fato, ações e o buraco negro numa só onda) e o cabeçalho do estudo de caso. As seções e os cartões não têm entrada própria. Texto legível desde o primeiro quadro. Regra em `docs/adr/0001-animacao-de-entrada.md`, revista em parte por `docs/adr/0003-editorial-espacial-animejs.md` e `docs/adr/0008-redesign-estrondoso.md`.
 _Avoid_: Efeito, transição de página
 
 **Experiência profissional**:

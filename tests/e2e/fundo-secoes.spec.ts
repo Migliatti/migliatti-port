@@ -1,9 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 
-// Fundo sutil nas seções (issue #60): pontos em CSS atrás do conteúdo, com
-// parallax leve só na versão completa. Regras em
-// docs/adr/0003-editorial-espacial-animejs.md.
-const MARCA_DA_GRADE = "grade-de-fundo"; // components/fundo/grade.ts
+// Fundo sutil nas seções (issue #60): pontos em CSS atrás do conteúdo,
+// parados. O parallax saiu no redesign (ADR 0008, item 4): nada se move
+// porque a página rolou, fora da Hero e dos capítulos fixados.
+const MARCA_ANTIGA_DA_GRADE = "grade-de-fundo"; // o extinto components/fundo/grade.ts
 
 function registrarChunks(page: Page) {
   const corpos: Promise<string>[] = [];
@@ -58,32 +58,20 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       expect(acerto.every(Boolean)).toBe(true);
     });
 
-    test("parallax acompanha a rolagem, mais devagar, só com transform", async ({
+    test("os pontos ficam parados enquanto a página rola (sem parallax)", async ({
       page,
     }) => {
       await aparelhoForte(page);
       await page.setViewportSize({ width: 1280, height: 800 });
       const chunks = registrarChunks(page);
       await page.goto(path);
-      const fundo = page.getByTestId("fundo-secoes");
-      await expect(fundo).toHaveAttribute("data-estado", "carregada");
-      await expect(fundo).toHaveAttribute("data-grade", MARCA_DA_GRADE);
-      await expect(fundo).toHaveAttribute("data-versao", "completa");
-      expect(await chunks.baixado(MARCA_DA_GRADE)).toBe(true);
-
-      const pontos = fundo.locator(".fundo-secoes-pontos");
-      const deslocamento = () =>
-        pontos.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m42);
-
-      const rolagem = 1500;
-      await page.evaluate((y) => window.scrollTo(0, y), rolagem);
-      // Sobe de forma visível (mais de 100px), mas bem menos do que a página rolou.
-      await expect.poll(deslocamento).toBeLessThan(-100);
-      expect(await deslocamento()).toBeGreaterThan(-rolagem);
-
-      // Volta ao topo: a camada volta ao lugar.
-      await page.evaluate(() => window.scrollTo(0, 0));
-      await expect.poll(deslocamento).toBeGreaterThan(-1);
+      const pontos = page.locator(".fundo-secoes-pontos");
+      await page.evaluate(() => window.scrollTo(0, 1500));
+      await page.waitForTimeout(300);
+      expect(await pontos.evaluate((el) => getComputedStyle(el).transform)).toBe("none");
+      expect(await pontos.evaluate((el) => getComputedStyle(el).willChange)).toBe("auto");
+      // O módulo do parallax saiu: nenhum chunk com a marca dele.
+      expect(await chunks.baixado(MARCA_ANTIGA_DA_GRADE)).toBe(false);
     });
 
     test("sem JavaScript os pontos já aparecem parados", async ({ browser }) => {
@@ -94,22 +82,6 @@ for (const path of ["/pt", "/en", "/pt/projetos/kepler-lab"]) {
       await expect(pontos).toHaveCSS("background-image", /radial-gradient/);
       await expect(page.getByTestId("fundo-secoes")).toHaveAttribute("aria-hidden", "true");
       await contexto.close();
-    });
-  });
-
-  test.describe(`fundo das seções ${path} em celular (pointer: coarse)`, () => {
-    test.use({ hasTouch: true, isMobile: true });
-
-    test("versão leve: grade estática, sem parallax", async ({ page }) => {
-      await page.goto(path);
-      const fundo = page.getByTestId("fundo-secoes");
-      await expect(fundo).toHaveAttribute("data-versao", "leve");
-      await page.mouse.wheel(0, 1500);
-      expect(
-        await fundo
-          .locator(".fundo-secoes-pontos")
-          .evaluate((el) => getComputedStyle(el).transform),
-      ).toBe("none");
     });
   });
 }

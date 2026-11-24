@@ -1,17 +1,17 @@
 {
   "titulo": "Showcase",
-  "descricao": "An animation piece built with AI. Explore the three bodies to see what I deliver: websites, automations and diagnostics.",
+  "descricao": "An animation piece built with AI. Each orbiting body is one line of what I deliver: websites, automations and diagnostics. Hover or focus a body to highlight it in the text.",
   "rotuloDaPeca": "Orbital system: three bodies circle a core on their own orbits, one for websites, one for automations and one for diagnostics.",
   "pilares": [
     {
       "id": "site",
       "nome": "Websites",
-      "texto": "Fast, accessible, bilingual websites, from layout to deploy."
+      "texto": "Accessible, bilingual websites, from layout to deploy."
     },
     {
       "id": "automacao",
       "nome": "Automations",
-      "texto": "Workflows that take repetitive work off someone's hands."
+      "texto": "n8n workflows and PowerShell scripts that take over the repetitive part of a routine."
     },
     {
       "id": "diagnostico",

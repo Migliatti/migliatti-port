@@ -71,7 +71,9 @@ describe.each(locales)("conteúdo em %s", (lang) => {
       linkValido(projeto.repositorio);
       if (projeto.demo !== undefined) linkValido(projeto.demo);
       for (const evidencia of projeto.evidencias) {
-        naoVazio(evidencia.legenda);
+        // A legenda é o texto do link; Evidência visual não tem legenda.
+        if (["ilustracao", "captura", "gif"].includes(evidencia.tipo)) expect(evidencia.legenda).toBeUndefined();
+        else naoVazio(evidencia.legenda ?? "");
         // Evidências visuais podem ser arquivos públicos locais.
         if (evidencia.url.startsWith("/")) {
           naoVazio(evidencia.url);
@@ -288,7 +290,7 @@ describe.each(locales)("grimoire em %s", (lang) => {
       "/ilustracoes/grimoire-empacotamento.svg",
     ]);
     for (const ilustracao of ilustracoes) {
-      naoVazio(ilustracao.legenda);
+      expect(ilustracao.legenda).toBeUndefined();
       naoVazio(ilustracao.alt ?? "");
       expect(existsSync(path.join(process.cwd(), "public", ilustracao.url))).toBe(true);
     }
@@ -340,7 +342,7 @@ describe.each(locales)("labreserve em %s", (lang) => {
       "/ilustracoes/labreserve-fluxo-de-reserva.svg",
     ]);
     for (const ilustracao of ilustracoes) {
-      naoVazio(ilustracao.legenda);
+      expect(ilustracao.legenda).toBeUndefined();
       naoVazio(ilustracao.alt ?? "");
       expect(existsSync(path.join(process.cwd(), "public", ilustracao.url))).toBe(true);
     }
@@ -376,12 +378,14 @@ describe.each(locales)("labreserve em %s", (lang) => {
 });
 
 describe.each(locales)("estatísticas do conteúdo em %s", (lang) => {
-  it("conta projetos, destaques e itens de stack distintos", () => {
+  it("conta projetos, destaques, itens de stack distintos, demos e repositórios", () => {
     const projetos = todosOsProjetos(lang);
     expect(estatisticasDoConteudo(lang)).toEqual({
       projetos: DESTAQUES.length + OUTROS.length,
       destaques: DESTAQUES.length,
       tecnologias: new Set(projetos.flatMap((p) => p.stack)).size,
+      comDemo: projetos.filter((p) => p.demo).length,
+      comRepositorio: projetos.filter((p) => p.repositorio).length,
     });
   });
 });

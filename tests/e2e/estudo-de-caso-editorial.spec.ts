@@ -61,13 +61,23 @@ for (const idioma of idiomas) {
             numeros.map((_, i) => String(i + 1).padStart(2, "0")),
           );
 
+          // Redesign (fase 4): uma ideia por bloco. Cada seção ocupa a
+          // largura toda, uma abaixo da outra, com número e título numa
+          // coluna à esquerda e o conteúdo à direita.
           const [problema, decisoes] = await page.locator("main section.secao")
             .evaluateAll((els) => els.slice(0, 2).map((el) => {
-              const { top, left, right } = el.getBoundingClientRect();
-              return { top, left, right };
+              const caixa = (s: string) => el.querySelector(s)!.getBoundingClientRect();
+              const { top, bottom, left, right } = el.getBoundingClientRect();
+              return {
+                top, bottom, left, right,
+                titulo: caixa(":scope > .secao-titulo"),
+                conteudo: caixa(":scope > :not(.secao-numero):not(.secao-titulo)"),
+              };
             }));
-          expect(problema.top).toBeCloseTo(decisoes.top, 0);
-          expect(decisoes.left - problema.right).toBeGreaterThanOrEqual(24);
+          expect(decisoes.top).toBeGreaterThan(problema.bottom);
+          expect(problema.left).toBeCloseTo(decisoes.left, 0);
+          expect(problema.right).toBeCloseTo(decisoes.right, 0);
+          expect(problema.conteudo.left - problema.titulo.right).toBeGreaterThanOrEqual(24);
 
           const nav = barra.getByRole("navigation", { name: idioma.barra });
           await expect(nav.getByRole("link")).toHaveCount(5);

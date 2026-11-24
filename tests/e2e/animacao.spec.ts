@@ -42,11 +42,13 @@ for (const path of ["/pt", "/en"]) {
   });
 }
 
-const secoesAnimadas = ["projetos-em-destaque", "experiencia", "contato"];
+// ADR 0008, item 4: a página entra uma vez, pela Hero. As seções e os
+// cartões já não têm entrada própria (nem ao montar nem ao rolar): estão
+// parados e inteiros desde o primeiro quadro.
+const secoes = ["projetos-em-destaque", "experiencia", "contato"];
 
 for (const path of ["/pt", "/en"]) {
-  test.describe(`animação nas demais seções ${path}`, () => {
-    // O Posicionamento agora fica dentro da Hero (section), não filho direto de main.
+  test.describe(`seções sem entrada própria ${path}`, () => {
     test("ordem final da home", async ({ page }) => {
       await page.goto(path);
       const ordem = await page.evaluate(() =>
@@ -71,36 +73,31 @@ for (const path of ["/pt", "/en"]) {
       ]);
     });
 
-    for (const id of secoesAnimadas) {
-      test(`${id} anima e o texto já está legível no primeiro quadro`, async ({
-        page,
-      }) => {
-        await page.goto(path);
-        const el = page.getByTestId(id);
-        await expect(el).toBeVisible();
-        expect(
-          await el.evaluate((n) => getComputedStyle(n).animationName),
-        ).toBe("animacao-entrada");
-
-        const inicio = await el.evaluate((node) => {
-          const anim = node
-            .getAnimations()
-            .find((a) => (a as CSSAnimation).animationName === "animacao-entrada");
-          if (!anim) return null;
-          anim.pause();
-          anim.currentTime = 0;
-          const css = getComputedStyle(node);
-          return {
-            opacity: Number(css.opacity),
-            visibility: css.visibility,
-          };
-        });
-        if (inicio) {
-          expect(inicio.opacity).toBeGreaterThanOrEqual(0.7);
-          expect(inicio.visibility).toBe("visible");
+    test("nada se move porque a página rolou: seções e cartões parados e legíveis", async ({
+      page,
+    }) => {
+      await page.goto(path);
+      for (const id of [...secoes, "cargo", "grupo-de-competencias", "outro-projeto"]) {
+        const itens = page.getByTestId(id);
+        const total = await itens.count();
+        for (let i = 0; i < total; i++) {
+          const el = itens.nth(i);
+          await el.evaluate((n) => n.scrollIntoView({ block: "center" }));
+          const css = await el.evaluate((n) => {
+            const c = getComputedStyle(n);
+            return {
+              animacao: c.animationName,
+              linha: c.getPropertyValue("animation-timeline") || "auto",
+              opacidade: Number(c.opacity),
+              visibilidade: c.visibility,
+            };
+          });
+          expect(css.animacao, id).toBe("none");
+          expect(css.linha, id).toBe("auto");
+          expect(css.opacidade, id).toBe(1);
+          expect(css.visibilidade, id).toBe("visible");
         }
-      });
-
-    }
+      }
+    });
   });
 }

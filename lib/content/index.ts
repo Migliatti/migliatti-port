@@ -90,18 +90,22 @@ export function obterVitrine(lang: Locale): TextosDaVitrine {
   return conteudo()[lang].vitrine;
 }
 
-/** Números do conteúdo publicado, exibidos no HUD. Tudo é contado do conteúdo. */
+/** Números do conteúdo publicado, exibidos no HUD, na Hero e em "Em números". Tudo é contado do conteúdo. */
 export type EstatisticasDoConteudo = {
   /** Todos os projetos (destaques e outros). */
   projetos: number;
   /** Itens de stack distintos entre os projetos. */
   tecnologias: number;
-  /** Projetos em destaque. */
+  /** Projetos em destaque (cada um tem Estudo de caso). */
   destaques: number;
+  /** Projetos com Demo publicado. */
+  comDemo: number;
+  /** Projetos com repositório público. */
+  comRepositorio: number;
 };
 
 /**
- * Conta projetos, itens de stack distintos e destaques. A stack não muda com
+ * Conta projetos, itens de stack distintos, destaques, demos e repositórios. A stack não muda com
  * o idioma, então o resultado é o mesmo em pt e en.
  */
 export function estatisticasDoConteudo(lang: Locale): EstatisticasDoConteudo {
@@ -110,5 +114,7 @@ export function estatisticasDoConteudo(lang: Locale): EstatisticasDoConteudo {
     projetos: projetos.length,
     tecnologias: new Set(projetos.flatMap((p) => p.stack)).size,
     destaques: projetos.filter((p) => p.tipo === "destaque").length,
+    comDemo: projetos.filter((p) => p.demo).length,
+    comRepositorio: projetos.filter((p) => p.repositorio).length,
   };
 }

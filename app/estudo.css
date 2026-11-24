@@ -1,0 +1,658 @@
+/*
+ * Estudo de caso (fase 4 do redesign, docs/redesign/PLANO.md e ADR 0008).
+ * Importado só pela página do caso (app/[lang]/projetos/[id]/page.tsx).
+ *
+ * - Cabeçalho como hero do caso: título grande, resumo, ações e a evidência
+ *   principal no mesmo ecrã. Entra uma vez no carregamento (`data-enter`), com
+ *   o texto legível desde o primeiro quadro (opacidade >= 0.7) e o caminho
+ *   reduzido do ADR 0007 no fim deste arquivo.
+ * - Narrativa em seções numeradas, uma ideia por bloco: número em mono e
+ *   título grande à esquerda, o conteúdo à direita.
+ * - Cores só pelos tokens de app/globals.css; durações e curvas só pelos
+ *   tokens de movimento (lib/design/estudo-css.test.ts).
+ */
+
+.estudo {
+  padding-bottom: 0;
+}
+
+/* ------------------------------------------------------------ hero do caso */
+
+.estudo-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 2rem;
+  padding-top: calc(var(--altura-barra) + 2.5rem);
+  padding-bottom: 1rem;
+}
+
+.estudo-sobretitulo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.estudo-sobretitulo-traco {
+  width: 2.5rem;
+  height: 1px;
+  background: var(--borda);
+}
+
+.estudo .estudo-titulo {
+  margin-top: 1rem;
+  font-size: clamp(2.75rem, 13vw, 9.5rem);
+  line-height: 0.92;
+}
+
+.estudo-hero-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  min-width: 0;
+}
+
+.estudo-resumo {
+  max-width: 34rem;
+  font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+.estudo-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (max-width: 39.99rem) {
+  .estudo-acoes .botao {
+    flex: 1 1 10rem;
+  }
+}
+
+/* Fatos do projeto: tabela curta, rótulo em mono à esquerda e valor à direita. */
+.estudo-fatos {
+  display: flex;
+  flex-direction: column;
+  max-width: 34rem;
+}
+
+.estudo-fatos > div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  min-height: 3.25rem;
+  border-top: 1px solid var(--borda);
+}
+
+.estudo-fatos > div:last-child {
+  border-bottom: 1px solid var(--borda);
+}
+
+.estudo-fatos dt {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.estudo-fatos dd {
+  font-size: 1rem;
+}
+
+/* Estado: a pílula neutra de sempre, com um ponto de sinal (decorativo). */
+.estudo-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--foreground);
+}
+
+.estudo-estado::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.estudo-estado[data-estado="concluido"]::before,
+.estudo-estado[data-estado="evolucao-constante"]::before {
+  background: var(--estado-ok);
+}
+
+.estudo-estado[data-estado="em-desenvolvimento"]::before {
+  background: var(--estado-aviso);
+}
+
+/* Evidência principal: grande, na moldura própria (janela de app ou desenho). */
+.estudo-hero-visual {
+  min-width: 0;
+}
+
+.estudo-hero-visual .evidencia-janela {
+  border-radius: 1.25rem;
+  box-shadow: 0 24px 60px var(--sombra-borda);
+}
+
+.estudo-hero-visual .ilustracao {
+  border-color: var(--borda);
+  border-radius: 1.25rem;
+  box-shadow: 0 24px 60px var(--sombra-borda);
+}
+
+@media (min-width: 64rem) {
+  .estudo-hero {
+    min-height: 100svh;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(2.5rem, 5vw, 4.5rem);
+    row-gap: 2.5rem;
+    padding-top: calc(var(--altura-barra) + 3rem);
+    padding-bottom: 3rem;
+  }
+
+  .estudo-hero-cabeca {
+    grid-column: 1 / -1;
+  }
+
+  .estudo-hero-texto {
+    align-self: start;
+  }
+
+  .estudo-hero-visual {
+    align-self: start;
+  }
+
+  /* Desenho: a altura que sobra no ecrã manda; a moldura abraça o desenho
+     na linha da coluna e a legenda usa a coluna toda. */
+  .estudo-hero-visual .evidencia-visual:has(.ilustracao) {
+    align-items: flex-start;
+  }
+
+  .estudo-hero-visual .ilustracao:has(> svg[data-compacta]) {
+    width: auto;
+    margin: 0;
+  }
+
+  .estudo-hero-visual .ilustracao > svg {
+    width: auto;
+    height: clamp(18rem, calc(100svh - 30rem), 34rem);
+  }
+}
+
+/*
+ * Entrada única no carregamento: a mesma onda da Hero da home, mais curta.
+ *
+ *   parte                papel       começa        dura          movimento
+ *   sobretítulo + título principal   0              --mov-medio   0.7→1, sobe 16px
+ *   resumo, ações, fatos apoio       --mov-onda-1   --mov-medio   0.7→1, sobe 10px
+ *   evidência            apoio       --mov-onda-2   --mov-lento   0.7→1, sobe 24px, 0.98→1
+ *
+ * Tudo com --ease-orbita; o texto nunca começa abaixo de 0.7 e as ações
+ * funcionam desde o primeiro quadro.
+ */
+.estudo-hero[data-enter] > * {
+  --entrada-distancia: 1rem;
+  animation: estudo-entrada var(--mov-medio) var(--ease-orbita) both;
+}
+
+.estudo-hero[data-enter] > .estudo-hero-texto {
+  --entrada-distancia: 0.625rem;
+  animation-delay: var(--mov-onda-1);
+}
+
+.estudo-hero[data-enter] > .estudo-hero-visual {
+  animation: estudo-entrada-visual var(--mov-lento) var(--ease-orbita) both;
+  animation-delay: var(--mov-onda-2);
+}
+
+@keyframes estudo-entrada {
+  from {
+    opacity: 0.7;
+    transform: translateY(var(--entrada-distancia));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes estudo-entrada-visual {
+  from {
+    opacity: 0.7;
+    transform: translateY(1.5rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------ seções numeradas */
+
+.estudo .secao {
+  margin-top: clamp(5rem, 11vw, 9rem);
+  padding-top: 1.5rem;
+  row-gap: 1rem;
+}
+
+.estudo .secao-numero {
+  font-size: clamp(2.25rem, 5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.estudo .secao-titulo {
+  font-size: clamp(2rem, 3.6vw, 3.25rem);
+  line-height: 1.05;
+}
+
+@media (min-width: 48rem) {
+  .estudo .secao {
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .estudo .secao {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: clamp(2.5rem, 5vw, 4.5rem);
+    row-gap: 1.25rem;
+  }
+
+  .estudo .secao > .secao-numero {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .estudo .secao > .secao-titulo {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .estudo .secao > :not(.secao-numero, .secao-titulo) {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+  }
+
+  /* Evidências ocupam a largura toda, abaixo do título. */
+  .estudo .secao[aria-labelledby="evidencias"] > :not(.secao-numero, .secao-titulo) {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    margin-top: 2rem;
+  }
+}
+
+/* Uma frase por bloco, em corpo grande. */
+.estudo-enunciado {
+  max-width: 40rem;
+  font-size: clamp(1.375rem, 2.3vw, 2rem);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+}
+
+.estudo-texto {
+  max-width: 42rem;
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+
+/* Decisões: linhas numeradas, separadas por fio. */
+.estudo-decisoes {
+  display: flex;
+  flex-direction: column;
+}
+
+.estudo-decisoes > li {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--borda);
+  font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  line-height: 1.45;
+}
+
+.estudo-decisoes > li:last-child {
+  border-bottom: 1px solid var(--borda);
+}
+
+.estudo-indice {
+  padding-top: 0.3em;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Stack: ícone real da tecnologia num ladrilho claro, nome ao lado. */
+.estudo-stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
+  gap: 0.75rem;
+}
+
+.estudo-stack > li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--borda);
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, var(--surface-alta), var(--surface));
+}
+
+.estudo-stack-nome {
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.estudo-ladrilho {
+  --ladrilho: 3rem;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--ladrilho);
+  height: var(--ladrilho);
+  border-radius: calc(var(--ladrilho) * 0.28);
+  background: color-mix(in oklab, var(--foreground) 94%, var(--background));
+}
+
+.estudo-ladrilho-pequeno {
+  --ladrilho: 2rem;
+}
+
+.estudo-ladrilho > img {
+  display: block;
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+.estudo-ladrilho-paisagem > img {
+  width: 70%;
+}
+
+.estudo-ladrilho-larga {
+  width: calc(var(--ladrilho) * 2);
+}
+
+.estudo-ladrilho-larga > img {
+  width: 80%;
+  height: 58%;
+}
+
+/* Uso de IA e links de evidência: linhas com alvo de 44px. */
+.estudo-ia {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.estudo-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.estudo-links > li {
+  border-top: 1px solid var(--borda);
+}
+
+.estudo-links > li:last-child {
+  border-bottom: 1px solid var(--borda);
+}
+
+.estudo-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.75rem;
+  padding-block: 0.85rem;
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.estudo-link > span:first-child {
+  text-decoration: underline;
+  text-decoration-color: var(--muted);
+  text-underline-offset: 0.25em;
+  transition: text-decoration-color var(--mov-rapido) var(--ease-orbita);
+}
+
+.estudo-link:hover > span:first-child {
+  text-decoration-color: var(--azul);
+}
+
+.estudo-link-seta {
+  flex: none;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  transition: transform var(--mov-rapido) var(--ease-orbita);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .estudo-link:hover .estudo-link-seta {
+    transform: translate(2px, -2px);
+  }
+}
+
+.estudo-link-curto {
+  display: inline-flex;
+  justify-content: flex-start;
+  padding-block: 0.5rem;
+}
+
+/* ------------------------------------------------------------ evidências */
+
+.estudo-evidencias {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 6vw, 5rem);
+}
+
+.estudo-evidencia {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.estudo .estudo-codigo {
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  border: 1px solid var(--borda);
+  border-radius: 1.25rem;
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+.estudo-evidencia-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  color: var(--muted);
+}
+
+.estudo-evidencia-rodape > p {
+  max-width: 42rem;
+}
+
+.estudo-evidencia-rodape .estudo-link {
+  color: var(--foreground);
+}
+
+.estudo-evidencia-testes > .estudo-link,
+.estudo-evidencia-repositorio > .estudo-link {
+  border-block: 1px solid var(--borda);
+}
+
+.estudo-evidencia-repositorio > .estudo-link {
+  min-height: 5rem;
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  letter-spacing: -0.02em;
+}
+
+.estudo-evidencias .ilustracao {
+  border-radius: 1.25rem;
+}
+
+/* ------------------------------------------------------------ fim do caso */
+
+.estudo-proximos {
+  position: relative;
+  display: grid;
+  gap: 1.5rem;
+  margin-top: clamp(6rem, 12vw, 10rem);
+  padding-top: 1.5rem;
+  padding-bottom: 5rem;
+}
+
+.estudo-proximos::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: color-mix(in srgb, var(--foreground) 25%, transparent);
+}
+
+.estudo-proximos-rotulo {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.estudo-proximos-lista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .estudo-proximos-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.estudo-proximo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  min-height: 18rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--borda);
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, var(--surface-alta), var(--surface));
+  box-shadow:
+    inset 0 1px 0 var(--detalhe),
+    0 4px 14px var(--sombra-borda);
+  color: var(--foreground);
+  text-decoration: none;
+  transition:
+    transform var(--mov-rapido) var(--ease-orbita),
+    border-color var(--mov-rapido) var(--ease-orbita);
+}
+
+/* Cartão linkado: sobe 2px no hover e afunda de leve no clique (0.99, um
+   cartão grande pede menos que um botão), em --mov-toque. */
+.estudo-proximo:active {
+  transform: scale(0.99);
+  transition-duration: var(--mov-toque);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .estudo-proximo:hover {
+    transform: translateY(-2px);
+    border-color: var(--muted);
+  }
+
+  .estudo-proximo:hover:active {
+    transform: translateY(-2px) scale(0.99);
+  }
+}
+
+.estudo-proximo-numero {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.estudo-proximo-titulo {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.estudo-proximo-resumo {
+  max-width: 30rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.estudo-proximo-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.estudo-proximo-icones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.estudo-proximo-acao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  font-weight: 500;
+}
+
+.estudo-voltar {
+  justify-self: start;
+  gap: 0.25rem;
+}
+
+/* ------------------------------------------------------------ movimento reduzido */
+
+/* ADR 0007: a entrada vira um fade curto só de opacidade, sem deslocamento e
+   sem a onda (tudo junto); o hover continua, só com cor e borda. */
+@media (prefers-reduced-motion: reduce) {
+  .estudo-hero[data-enter] > *,
+  .estudo-hero[data-enter] > .estudo-hero-texto,
+  .estudo-hero[data-enter] > .estudo-hero-visual {
+    animation: entrada-reduzida var(--mov-rapido) var(--ease-rolagem) both;
+    animation-delay: initial;
+  }
+
+  /* O cartão responde só com a borda, sem se deslocar. */
+  .estudo-proximo {
+    transform: none !important;
+  }
+}
